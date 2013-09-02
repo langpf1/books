@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<outlook>
+	<module text="图形控件包" icon="xujun/control/images/outlookpanel/module_unselected.png" selected_icon="xujun/control/images/outlookpanel/module_selected.png">
+        <submodule text="图形模版设计一" tooltip="This is a tooltip of a button" icon="xujun/control/images/submodule.png" action="Chart1"/>
+        <submodule text="图形模版设计二" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/chart.png" action="Chart2"/>
+        <submodule text="区域地图模版" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/user.png" action="Map"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/submodule.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/chart.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/user.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/submodule.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/chart.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/user.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/submodule.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/chart.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/user.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/submodule.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/chart.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/user.png" action="C001"/>
+	</module>
+    <module text="工作流引擎" icon="xujun/control/images/outlookpanel/module_unselected.png" selected_icon="xujun/control/images/outlookpanel/module_selected.png">
+        <submodule text="Purchasing Box" tooltip="This is a tooltip of a button" icon="xujun/control/images/submodule.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/chart.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/user.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/submodule.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/chart.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/user.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/submodule.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/chart.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/user.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/submodule.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/chart.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/user.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/submodule.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/chart.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/user.png" action="C001"/>
+	</module>
+    <module text="多线程样例" icon="xujun/control/images/outlookpanel/module_unselected.png" selected_icon="xujun/control/images/outlookpanel/module_selected.png" >
+        <submodule text="Sales Box" tooltip="This is a tooltip of a button" icon="xujun/control/images/submodule.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/chart.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/user.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/submodule.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/chart.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/user.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/submodule.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/chart.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/user.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/submodule.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/chart.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/user.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/submodule.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/chart.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/user.png" action="C001"/>
+	</module>
+    <module text="通讯服务器" icon="xujun/control/images/outlookpanel/module_unselected.png" selected_icon="xujun/control/images/outlookpanel/module_selected.png" >
+        <submodule text="Warehouse Box" tooltip="This is a tooltip of a button" icon="xujun/control/images/submodule.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/chart.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/user.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/submodule.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/chart.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/user.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/submodule.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/chart.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/user.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/submodule.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/chart.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/user.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/submodule.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/chart.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/user.png" action="C001"/>
+	</module>
+    <module text="分布式缓存" icon="xujun/control/images/outlookpanel/module_unselected.png" selected_icon="xujun/control/images/outlookpanel/module_selected.png" >
+        <submodule text="Work Order Box" tooltip="This is a tooltip of a button" icon="xujun/control/images/submodule.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/chart.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/user.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/submodule.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/chart.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/user.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/submodule.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/chart.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/user.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/submodule.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/chart.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/user.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/submodule.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/chart.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/user.png" action="C001"/>
+	</module>
+    <module text="模块开发" icon="xujun/control/images/outlookpanel/module_unselected.png" selected_icon="xujun/control/images/outlookpanel/module_selected.png">
+        <submodule text="Manufacturing Box" tooltip="This is a tooltip of a button" icon="xujun/control/images/submodule.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/chart.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/user.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/submodule.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/chart.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/user.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/submodule.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/chart.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/user.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/submodule.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/chart.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/user.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/submodule.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/chart.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/user.png" action="C001"/>
+	</module>
+    <module text="等待后续" icon="xujun/control/images/outlookpanel/module_unselected.png" selected_icon="xujun/control/images/outlookpanel/module_selected.png">
+        <submodule text="Quality Box" tooltip="This is a tooltip of a button" icon="xujun/control/images/submodule.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/chart.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/user.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/submodule.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/chart.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/user.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/submodule.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/chart.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/user.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/submodule.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/chart.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/user.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/submodule.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/chart.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/user.png" action="C001"/>
+	</module>
+    <module text="等待后续" icon="xujun/control/images/outlookpanel/module_unselected.png" selected_icon="xujun/control/images/outlookpanel/module_selected.png">
+        <submodule text="Accounting Box" tooltip="This is a tooltip of a button" icon="xujun/control/images/submodule.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/chart.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/user.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/submodule.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/chart.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/user.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/submodule.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/chart.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/user.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/submodule.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/chart.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/user.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/submodule.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/chart.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/user.png" action="C001"/>
+	</module>
+    <module text="等待后续" icon="xujun/control/images/outlookpanel/module_unselected.png" selected_icon="xujun/control/images/outlookpanel/module_selected.png" >
+        <submodule text="Security Box" tooltip="This is a tooltip of a button" icon="xujun/control/images/submodule.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/chart.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/user.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/submodule.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/chart.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/user.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/submodule.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/chart.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/user.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/submodule.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/chart.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/user.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/submodule.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/chart.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/user.png" action="C001"/>
+	</module>
+    <module text="等待后续" icon="xujun/control/images/outlookpanel/module_unselected.png" selected_icon="xujun/control/images/outlookpanel/module_selected.png" >
+        <submodule text="Control Panel Box" tooltip="This is a tooltip of a button" icon="xujun/control/images/submodule.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/chart.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/user.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/submodule.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/chart.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/user.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/submodule.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/chart.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/user.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/submodule.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/chart.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/user.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/submodule.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/chart.png" action="C001"/>
+        <submodule text="等待后续" tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/user.png" action="C001"/>
+	</module>
+</outlook>

@@ -1,0 +1,36 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=gb2312" />
+<title>Fixed固定位置的悬浮</title>
+<style>
+* { font-size:12px; font-family:Verdana,宋体; }
+html, body { margin:0px; padding:0px; overflow:hidden; }
+.b { margin:0px; padding:0px; overflow:auto; }
+.line0 { line-height:20px; background-color:lightyellow; padding:0px 15px; }
+.line1 { line-height:18px; background-color:lightblue; padding:0px 10px; }
+.w { position:absolute; right:10px; bottom:10px; width:160px; height:240px; overflow:hidden; border:2px groove #281; cursor:default; -moz-user-select:none; }
+.t { line-height:20px; height:20px; width:160px; overflow:hidden; background-color:#27C; color:white; font-weight:bold; border-bottom:1px outset blue; text-align:center; }
+.winBody { height:218px; width:160px; overflow-x:hidden; overflow-y:auto; border-top:1px inset blue; padding:10px; text-indent:10px; background-color:white; }
+</style>
+</head>
+<body>
+<div class="w">
+  <div class="t">Demo Win - Fixed</div>
+  <div class="winBody">Hello world</div>
+</div>
+<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>sssssssssssssssss<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>sssssssssssssssss
+</body>
+<script>
+//代码如下：
+new function(w,b,c,d,o){
+d=document;b=d.body;o=b.childNodes;c="className";
+b.appendChild(w=d.createElement("div"))[c]= "b";
+for(var i=0; i<o.length-1; i++)if(o[i][c]!="w")w.appendChild(o[i]),i--;
+(window.onresize = function(){
+w.style.width = d.documentElement.clientWidth + "px";
+w.style.height = d.documentElement.clientHeight + "px";
+})();
+}
+</script>
+</html>

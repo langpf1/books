@@ -1,0 +1,10 @@
+get-reference:http://gitref.org/creating/;
+PHP简介:      http://www.w3school.com.cn/php/php_intro.asp;
+酷壳:         http://coolshell.cn/featured_posts;
+ant手册:      http://ant.apache.org/manual/;
+java开源大全: http://www.open-open.com/;
+开源中国:     http://www.oschina.net/;
+虫师博客:     http://www.cnblogs.com/fnng/;
+51CTO:        http://www.51cto.com/;
+CSDN:         http://www.csdn.net/;
+我的博客:     http://justlpf.blog.51cto.com/;

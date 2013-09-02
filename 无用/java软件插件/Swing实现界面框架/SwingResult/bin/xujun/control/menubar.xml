@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<menubar>
+	<menu text="系统设置">
+		<menu text="菜单">
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+        </menu>
+        <menu text="菜单">
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+        </menu>
+        <menuitem text="Add User" tooltip="Create a new user" icon="xujun/control/Images/email.png" action="A001"/>
+    </menu>
+
+    <menu text="工作流引擎">
+        <menu text="One Sub Module">
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+        </menu>
+      
+        <menu text="One Sub Module">
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+        </menu>
+        <menuitem text="Add User" tooltip="Create a new user" icon="xujun/control/Images/email.png" action="A001"/>
+    </menu>
+
+    
+
+    <menu text="实时监控图表">
+       
+        <menu text="One Sub Module">
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+           
+        </menu>
+        <menu text="One Sub Module">
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            
+        </menu>
+        <menuitem text="Add User" tooltip="Create a new user" icon="xujun/control/Images/email.png" action="A001"/>
+    </menu>
+
+    <menu text="企业报表">
+       
+        <menu text="One Sub Module">
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+        </menu>
+     
+        <menuitem text="Add User" tooltip="Create a new user" icon="xujun/control/Images/email.png" action="A001"/>
+    </menu>
+
+    <menu text="水电调度">
+        
+        <menu text="One Sub Module">
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+        </menu>
+       
+        <menuitem text="Add User" tooltip="Create a new user" icon="xujun/control/Images/email.png" action="A001"/>
+    </menu>
+
+    <menu text="效益分析">
+       
+        <menu text="One Sub Module">
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+        </menu>
+       
+        <menuitem text="Add User" tooltip="Create a new user" icon="xujun/control/Images/email.png" action="A001"/>
+    </menu>
+
+ <menu text="数据分析">
+	
+        <menu text="One Sub Module">
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+        </menu>
+        <menuitem text="Add User" tooltip="Create a new user" icon="xujun/control/Images/email.png" action="A001"/>
+    </menu>
+    <menu text="品质分析">
+       
+        <menu text="One Sub Module">
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+        </menu>
+        
+        
+        <menuitem text="Add User" tooltip="Create a new user" icon="xujun/control/Images/email.png" action="A001"/>
+    </menu>
+
+    <menu text="人员管理">
+	
+        <menu text="One Sub Module">
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+        </menu>
+        <menuitem text="Add User" tooltip="Create a new user" icon="xujun/control/Images/email.png" action="A001"/>
+    </menu>
+	
+
+    <menu text="安全">
+	
+        <menu text="One Sub Module">
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+        </menu>
+        <menuitem text="Add User" tooltip="Create a new user" icon="xujun/control/Images/email.png" action="A001"/>
+    </menu>
+
+    <menu text="帮助">
+	
+        <menu text="One Sub Module">
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>      
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+            <menuitem text="Test Report Item" tooltip="This is a test report" icon="xujun/control/Images/email.png" action="A001"/>
+        </menu>
+        <menuitem text="Add User" tooltip="Create a new user" icon="xujun/control/Images/email.png" action="A001"/>
+    </menu>
+    <logo image="xujun/control/Images/logo_company.png" tooltip="WPT Power Transmission" />
+</menubar>

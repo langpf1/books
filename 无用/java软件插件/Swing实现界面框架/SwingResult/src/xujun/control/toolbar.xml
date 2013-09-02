@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<toolbar>
+	<button tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/message.png" action="message" />
+	<separator/>
+    <button tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/user.png" action="user" />
+	<separator/>
+    <button tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/email.png" action="email" />
+	<separator/>
+    <button tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/viewer.png" action="viewer" />
+	<separator/>
+    <button tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/chart.png" action="chart" />
+	<separator/>
+    <button tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/capture.png" action="capture" />
+	<separator/>
+    <button tooltip="This is a tooltip of a button" icon="xujun/control/images/toolbar/image_edit.png" action="image_edit" />
+	<separator/>
+</toolbar>

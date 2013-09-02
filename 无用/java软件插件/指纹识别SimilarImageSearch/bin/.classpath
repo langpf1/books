@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="var" path="RATIONAL_FT_JRE_LIB" sourcepath="JRE_SRC"/>
+	<classpathentry kind="var" path="JRE_LIB_CORE" sourcepath="JRE_LIB_CORE"/>
+	<classpathentry kind="var" path="JRE_LIB_SECURITY" sourcepath="JRE_LIB_SECURITY"/>
+	<classpathentry kind="var" path="JRE_LIB_RESOURCE" sourcepath="JRE_LIB_RESOURCE"/>
+	<classpathentry kind="var" path="JRE_LIB_GRAPHICS" sourcepath="JRE_LIB_GRAPHICS"/>
+	<classpathentry kind="var" path="JRE_LIB_SERVER" sourcepath="JRE_LIB_SERVER"/>
+	<classpathentry kind="var" path="JRE_LIB_XML" sourcepath="JRE_LIB_XML"/>
+	<classpathentry kind="var" path="RATIONAL_FT_LIB" sourcepath="RATIONAL_FT_SRC">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/C:\Program Files\IBM\IBMIMShared\plugins\com.rational.test.ft.api.help_8.1.0.v20090615_2310.jar!/ApiReference"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="var" path="RATIONAL_SAP_LIB" sourcepath="RATIONAL_SAP_SRC">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/C:\Program Files\IBM\IBMIMShared\plugins\com.rational.test.ft.api.help_8.1.0.v20090615_2310.jar!/ApiReference"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="var" path="RATIONAL_FT_SAP_WEBPORTAL_LIB" sourcepath="RATIONAL_FT_SAP_WEBPORTAL_SRC">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/C:\Program Files\IBM\IBMIMShared\plugins\com.rational.test.ft.api.help_8.1.0.v20090615_2310.jar!/ApiReference"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="var" path="RATIONAL_WPF_LIB" sourcepath="RATIONAL_WPF_SRC">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/C:\Program Files\IBM\IBMIMShared\plugins\com.rational.test.ft.api.help_8.1.0.v20090615_2310.jar!/ApiReference"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="var" path="RATIONAL_SIEBEL_LIB" sourcepath="RATIONAL_SIEBEL_SRC">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:file:/C:\Program Files\IBM\IBMIMShared\plugins\com.rational.test.ft.api.help_8.1.0.v20090615_2310.jar!/ApiReference"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" path=""/>
+	<classpathentry kind="var" path="RATIONAL_FT_DATAPOOL_LIB" sourcepath="RATIONAL_FT_DATAPOOL_LIB"/>
+	<classpathentry kind="lib" path="C:/Documents and Settings/All Users/Application Data/IBM/RFT/customization/com.ibm.terminal.tester.ft.jar" sourcepath="C:/Documents and Settings/All Users/Application Data/IBM/RFT/customization/com.ibm.terminal.tester.ft.jar"/>
+	<classpathentry kind="lib" path="F:/RFTCaseManager/lib/XStream_bin.jar"/>
+	<classpathentry kind="lib" path="F:/RFTCaseManager/lib/basic.jar"/>
+	<classpathentry kind="lib" path="F:/RFTCaseManager/lib/classes12.jar"/>
+	<classpathentry kind="lib" path="F:/RFTCaseManager/lib/jaxen-1.1-beta-6.jar"/>
+	<classpathentry kind="lib" path="F:/RFTCaseManager/lib/jxl.jar"/>
+	<classpathentry kind="lib" path="F:/RFTCaseManager/lib/log4j-1.2.9.jar"/>
+	<classpathentry kind="lib" path="F:/RFTCaseManager/lib/mail.jar"/>
+	<classpathentry kind="lib" path="F:/RFTCaseManager/lib/monitor.jar"/>
+	<classpathentry kind="lib" path="F:/RFTCaseManager/lib/ncdepend.jar"/>
+	<classpathentry kind="lib" path="F:/RFTCaseManager/lib/ojdbc14.jar"/>
+	<classpathentry kind="lib" path="F:/RFTCaseManager/lib/rational_ft.jar"/>
+	<classpathentry kind="lib" path="F:/RFTCaseManager/lib/rftCaseManager2.5.2.jar"/>
+	<classpathentry kind="lib" path="F:/RFTCaseManager/lib/xpp3.jar"/>
+	<classpathentry kind="lib" path="F:/RFTCaseManager/lib/rftCaseManager2.5.1.jar"/>
+	<classpathentry kind="lib" path="F:/RFTCaseManager/lib/rftCaseManager2.5.jar"/>
+	<classpathentry kind="output" path=""/>
+</classpath>
