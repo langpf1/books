@@ -1,0 +1,507 @@
+<SCRIPT LANGUAGE="JavaScript" SRC="/-fs0/sys/pop-up.js"></SCRIPT>
+
+<SCRIPT LANGUAGE="JavaScript" SRC="/-fs0/sys/pop-up-all.js"></SCRIPT>
+
+<html>
+<head>
+<title>易都网--Java 2 图形设计卷Ⅱ：SWING</title>
+<LINK rel="stylesheet" href="../../../_public/javaa.css">
+<meta http-equiv="Content-Type" content="text/html; charset=GBK">
+<script language="JavaScript" src="../../../_public/javaa.js"></script>
+<meta name="keywords" content="Java,JSP,ASP,PHP,J2EE,EJB,JavaScript,C/C++,ASM,CSS,HTML,XML,网络安全,MySQL,ACCESS">
+</head>
+<body bgcolor="#FFFFFF">
+<table border=0 cellpadding=0 cellspacing=0 width="100%">
+  <tbody> 
+  <script language="javascript">print2()</script>
+  <tr> 
+    <td width="100%"> 
+      <table bgcolor=#EEEEEE border=0 cellpadding=3 cellspacing=0 width="100%">
+        <tbody> 
+        <tr> 
+          <td class=f1 id=thetd width="100%"> 
+            <p>[<a href="index.html" target="_self">目录</a>][<a href="s16.htm">上一页</a>][<a href="s18.htm">下一页</a>]</p>
+            <p align="center"> <b>第17章 列表</b></p>
+            <p>　　由JList类代表的Swing列表显示一个可选取对象列表，它支持三种选取模式：单选取、单间隔选取和多间隔选取。<br>
+              　　JList类把维护和绘制列表的工作委托给一个对象来完成。一个列表的模型维护一个对象列表，列表单元绘制器将这些对象绘制在列表单元中。<br>
+              　　缺省情况下，列表单元绘制器是DefaultListCellRenderrer的实例，它绘制表17-1中列出的对象。图标和字符串按原样显示，而所有其他类型对象的绘制方式是：通过显示从这些对象的toString返回的字符串来绘制这些对象。 
+            </p>
+            <p align="center"><b>例 17-1 一个简单的列表样例</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import javax.swing.event.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class Test extends JApplet {<br>
+              public void init() {<br>
+              Container contentPane = getContentPane();<br>
+              Object[] items = { &quot;item one&quot;, &quot;item two&quot;, &quot;item 
+              three&quot;, <br>
+              &quot;item four&quot;, &quot;item five&quot;, &quot;item six&quot;,<br>
+              &quot;item seven&quot;, &quot;item eight&quot;, <br>
+              &quot;item nine&quot;, &quot;item ten&quot; };</p>
+            <p> JList list = new JList(items);<br>
+              JScrollPane sp = new JScrollPane(list);</p>
+            <p> list.setVisibleRowCount(7);</p>
+            <p> contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(sp);<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 17.1 列表模型</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例 17-2 一个带有缺省列表模型的列表</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;<br>
+            import javax.swing.event.*;
+            <p>public class Test extends JApplet {<br>
+              private JList list = new JList();</p>
+            <p> String[] items = { &quot;item[0]&quot;, &quot;item[1]&quot;, &quot;item[2]&quot;, 
+              <br>
+              &quot;item[3]&quot;, &quot;item[4]&quot;, &quot;item[5]&quot;,<br>
+              &quot;item[6]&quot;, &quot;item[7]&quot;, <br>
+              &quot;item[8]&quot;, &quot;item[9]&quot; };</p>
+            <p> public void init() {<br>
+              Container contentPane = getContentPane();<br>
+              JPanel controlPanel = new ControlPanel(list);</p>
+            <p> contentPane.add(controlPanel, BorderLayout.NORTH);<br>
+              contentPane.add(new JScrollPane(list), <br>
+              BorderLayout.CENTER);<br>
+              populateList();<br>
+              }<br>
+              public void populateList() {<br>
+              DefaultListModel model = new DefaultListModel();</p>
+            <p> for(int i=0; i &lt; items.length; ++i)<br>
+              model.addElement(items[i]);</p>
+            <p> list.setModel(model);<br>
+              }<br>
+              }<br>
+              class ControlPanel extends JPanel {<br>
+              JButton remove = new JButton(&quot;remove selected items&quot;);<br>
+              JButton add = new JButton(&quot;add item&quot;);</p>
+            <p> public ControlPanel(final JList list) {<br>
+              add(remove);<br>
+              add(add);</p>
+            <p> remove.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              int[] selected = list.getSelectedIndices();<br>
+              DefaultListModel model =<br>
+              (DefaultListModel)list.getModel();</p>
+            <p> for(int i=0; i &lt; selected.length; ++i) {<br>
+              model.removeElementAt(selected[i] - i);<br>
+              }<br>
+              }<br>
+              });<br>
+              add.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              final DefaultListModel model = <br>
+              (DefaultListModel)list.getModel();</p>
+            <p> String s = JOptionPane.showInputDialog(<br>
+              list,<br>
+              &quot;Enter item text:&quot;);</p>
+            <p> model.addElement(s);</p>
+            <p> SwingUtilities.invokeLater(new Runnable() {<br>
+              public void run() {<br>
+              list.ensureIndexIsVisible(<br>
+              model.getSize()-1);<br>
+              }<br>
+              });<br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 17.1.1 AbstractListModel</p>
+            <p>&nbsp;</p>
+            <p> 17.1.2 DefaultListModel</p>
+            <p>&nbsp;</p>
+            <p> 17.2 列表选取</p>
+            <p>&nbsp;</p>
+            <p> 17.3 列表单绘制器</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例17-3 实现一个定制列表单元绘制器</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;<br>
+            import javax.swing.border.*;
+            <p>public class Test extends JApplet {<br>
+              private String[] names = new String[] {<br>
+              &quot;baseball player&quot;, &quot;basketball player&quot;,<br>
+              &quot;beach player&quot;, &quot;chef&quot;,<br>
+              &quot;hockey player&quot;, &quot;software developer&quot;,<br>
+              &quot;construction worker&quot;, &quot;martial artist&quot;,<br>
+              &quot;soccer&quot;, &quot;movie star&quot;<br>
+              };<br>
+              private String[] pics = new String[] {<br>
+              &quot;baseball.gif&quot;, &quot;basketball.gif&quot;,<br>
+              &quot;beach_umbrella.gif&quot;, &quot;dining.gif&quot;,<br>
+              &quot;hockey.gif&quot;, &quot;mad_hacker.gif&quot;,<br>
+              &quot;men_at_work.gif&quot;, &quot;punch.gif&quot;,<br>
+              &quot;soccer.gif&quot;, &quot;filmstrip.gif&quot; <br>
+              };</p>
+            <p> public void init() {<br>
+              Container contentPane = getContentPane();<br>
+              ListModel model = <br>
+              new NameAndPictureListModel(names, pics);</p>
+            <p> ListCellRenderer renderer = <br>
+              new NameAndPictureListCellRenderer();</p>
+            <p> JList list = new JList(model);</p>
+            <p> list.setCellRenderer(renderer);<br>
+              list.setVisibleRowCount(5);</p>
+            <p> contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(new JScrollPane(list));<br>
+              }<br>
+              }<br>
+              class NameAndPictureListModel extends DefaultListModel {<br>
+              public NameAndPictureListModel(String[] names,String[] pics) {<br>
+              for(int i=0; i &lt; names.length; ++i) {<br>
+              addElement(new Object[] { <br>
+              names[i], new ImageIcon(pics[i]) } );<br>
+              }<br>
+              }<br>
+              public String getName(Object object) {<br>
+              Object[] array = (Object[])object;<br>
+              return (String)array[0];<br>
+              }<br>
+              public Icon getIcon(Object object) {<br>
+              Object[] array = (Object[])object;<br>
+              return (Icon)array[1];<br>
+              }<br>
+              }<br>
+              class NameAndPictureListCellRenderer extends JLabel <br>
+              implements ListCellRenderer {<br>
+              private Border <br>
+              lineBorder = BorderFactory.createLineBorder(Color.red, 2),<br>
+              emptyBorder = BorderFactory.createEmptyBorder(2,2,2,2);</p>
+            <p> public NameAndPictureListCellRenderer() {<br>
+              setOpaque(true);<br>
+              }<br>
+              public Component getListCellRendererComponent(<br>
+              JList list,<br>
+              Object value,<br>
+              int index,<br>
+              boolean isSelected,<br>
+              boolean cellHasFocus) {<br>
+              NameAndPictureListModel model = <br>
+              (NameAndPictureListModel)list.getModel();</p>
+            <p> setText(model.getName(value));<br>
+              setIcon(model.getIcon(value));</p>
+            <p> if(isSelected) {<br>
+              setForeground(list.getSelectionForeground());<br>
+              setBackground(list.getSelectionBackground());<br>
+              }<br>
+              else {<br>
+              setForeground(list.getForeground());<br>
+              setBackground(list.getBackground());<br>
+              }</p>
+            <p> if(cellHasFocus) setBorder(lineBorder);<br>
+              else setBorder(emptyBorder);</p>
+            <p> return this;<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 17.3.1 JList属性</p>
+            <p>&nbsp;</p>
+            <p> 17.3.2 JList事件</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例17-4 检测列表选取的调整值</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import javax.swing.*;<br>
+            import javax.swing.event.*;
+            <p>public class Test extends JApplet {<br>
+              public void init() {<br>
+              Container contentPane = getContentPane();</p>
+            <p> String[] items = { &quot;item[0]&quot;, &quot;item[1]&quot;, &quot;item[2]&quot;, 
+              <br>
+              &quot;item[3]&quot;, &quot;item[4]&quot;, &quot;item[5]&quot;,<br>
+              &quot;item[6]&quot;, &quot;item[7]&quot;, <br>
+              &quot;item[8]&quot;, &quot;item[9]&quot; };</p>
+            <p> JList list = new JList(items);</p>
+            <p> contentPane.add(new JScrollPane(list), <br>
+              BorderLayout.CENTER);</p>
+            <p> list.addListSelectionListener(<br>
+              new ListSelectionListener() {<br>
+              public void valueChanged(ListSelectionEvent e) {<br>
+              String s;</p>
+            <p> if(e.getValueIsAdjusting()) {<br>
+              s = &quot;adjusting selection ...&quot;;<br>
+              }<br>
+              else {<br>
+              s = &quot;selection from &quot; + e.getFirstIndex() + <br>
+              &quot; to &quot; + e.getLastIndex();<br>
+              }<br>
+              showStatus(s);<br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p align="center"><b>例17-5 处理列表选取事件</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;<br>
+            import javax.swing.event.*;
+            <p>public class Test extends JApplet {<br>
+              private ControlPanel controlPanel;</p>
+            <p> public void init() {<br>
+              Container contentPane = getContentPane();<br>
+              JPanel listPanel = new JPanel();</p>
+            <p> String[] items = { &quot;item[0]&quot;, &quot;item[1]&quot;, &quot;item[2]&quot;, 
+              <br>
+              &quot;item[3]&quot;, &quot;item[4]&quot;, &quot;item[5]&quot;,<br>
+              &quot;item[6]&quot;, &quot;item[7]&quot;, <br>
+              &quot;item[8]&quot;, &quot;item[9]&quot; };</p>
+            <p> JList list = new JList(items);</p>
+            <p> list.setPrototypeCellValue(&quot;MMMMMMM&quot;);</p>
+            <p> controlPanel = new ControlPanel(list);<br>
+              controlPanel.update();</p>
+            <p> listPanel.setBorder(BorderFactory.createEtchedBorder());<br>
+              listPanel.add(new JScrollPane(list));</p>
+            <p> contentPane.add(controlPanel, BorderLayout.NORTH);<br>
+              contentPane.add(listPanel, BorderLayout.CENTER);</p>
+            <p> list.addListSelectionListener(<br>
+              new ListSelectionListener() {<br>
+              public void valueChanged(ListSelectionEvent e) {<br>
+              controlPanel.update();<br>
+              }<br>
+              });<br>
+              }<br>
+              }<br>
+              class ControlPanel extends JPanel {<br>
+              private JComboBox mode = new JComboBox();<br>
+              private JButton clear = new JButton(&quot;clear selection&quot;);</p>
+            <p> private String single = &quot;SINGLE_SELECTION&quot;,<br>
+              singleInterval = &quot;SINGLE_INTERVAL_SELECTION&quot;,<br>
+              multipleInterval = &quot;MULTIPLE_INTERVAL_SELECTION&quot;;</p>
+            <p> private JLabel leadLabel = new JLabel(),<br>
+              anchorLabel = new JLabel(),<br>
+              minLabel = new JLabel(),<br>
+              maxLabel = new JLabel(),<br>
+              selIndicesLabel = new JLabel();</p>
+            <p> private JList list;</p>
+            <p> public ControlPanel(JList l) {<br>
+              JPanel top = new JPanel(), <br>
+              mid = new JPanel(),<br>
+              bottom = new JPanel();</p>
+            <p> this.list = l;</p>
+            <p> setLayout(new BoxLayout(this, BoxLayout.Y_AXIS)); <br>
+              setBorder(BorderFactory.createEtchedBorder());</p>
+            <p> top.add(mode);<br>
+              top.add(clear);</p>
+            <p> mid.add(new JLabel(&quot;Lead:&quot;)); mid.add(leadLabel);<br>
+              mid.add(new JLabel(&quot;Anchor:&quot;)); mid.add(anchorLabel);<br>
+              mid.add(new JLabel(&quot;Minimum:&quot;)); mid.add(minLabel);<br>
+              mid.add(new JLabel(&quot;Maximum:&quot;)); mid.add(maxLabel);</p>
+            <p> add(top);<br>
+              add(mid);<br>
+              add(bottom);</p>
+            <p> mode.addItem(single);<br>
+              mode.addItem(singleInterval);<br>
+              mode.addItem(multipleInterval);<br>
+              initializeSelectionMode();</p>
+            <p> bottom.add(new JLabel(&quot;Selected Indices:&quot;));<br>
+              bottom.add(selIndicesLabel);</p>
+            <p> mode.addItemListener(new ItemListener() {<br>
+              public void itemStateChanged(ItemEvent e) {<br>
+              if(e.getStateChange() == ItemEvent.SELECTED)<br>
+              setSelectionMode((String)e.getItem());<br>
+              }<br>
+              });<br>
+              clear.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              list.clearSelection();<br>
+              }<br>
+              });<br>
+              }<br>
+              public void update() {<br>
+              int lead = list.getLeadSelectionIndex(),<br>
+              min = list.getMinSelectionIndex(),<br>
+              max = list.getMaxSelectionIndex(),<br>
+              anchor = list.getAnchorSelectionIndex();</p>
+            <p> leadLabel.setText(Integer.toString(lead) + &quot; / &quot;);<br>
+              anchorLabel.setText(Integer.toString(anchor) + &quot; / &quot;);<br>
+              minLabel.setText(Integer.toString(min) + &quot; / &quot;);<br>
+              maxLabel.setText(Integer.toString(max) + &quot; / &quot;);</p>
+            <p> int[] selected = list.getSelectedIndices();<br>
+              String s = new String();</p>
+            <p> for(int i = 0; i &lt; selected.length; ++i) {<br>
+              s += Integer.toString(selected[i]);</p>
+            <p> if(i &lt; selected.length-1)<br>
+              s += &quot;,&quot;;<br>
+              }<br>
+              selIndicesLabel.setText(s);<br>
+              validate();<br>
+              }<br>
+              private void initializeSelectionMode() {<br>
+              int m = list.getSelectionMode();</p>
+            <p> switch(m) {<br>
+              case ListSelectionModel.SINGLE_SELECTION:<br>
+              mode.setSelectedItem(single);<br>
+              break;<br>
+              case ListSelectionModel.SINGLE_INTERVAL_SELECTION:<br>
+              mode.setSelectedItem(singleInterval);<br>
+              break;<br>
+              case ListSelectionModel.MULTIPLE_INTERVAL_SELECTION:<br>
+              mode.setSelectedItem(multipleInterval);<br>
+              break;<br>
+              }<br>
+              }<br>
+              private void setSelectionMode(String s) {<br>
+              if(s.equals(&quot;SINGLE_SELECTION&quot;)) {<br>
+              list.setSelectionMode(<br>
+              ListSelectionModel.SINGLE_SELECTION);<br>
+              }<br>
+              else if(s.equals(&quot;SINGLE_INTERVAL_SELECTION&quot;)) {<br>
+              list.setSelectionMode(<br>
+              ListSelectionModel.SINGLE_INTERVAL_SELECTION);<br>
+              }<br>
+              else if(s.equals(&quot;MULTIPLE_INTERVAL_SELECTION&quot;)) {<br>
+              list.setSelectionMode(<br>
+              ListSelectionModel.MULTIPLE_INTERVAL_SELECTION);<br>
+              }<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p align="center"><b>例17-6 处理列表数据事件</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;<br>
+            import javax.swing.event.*;
+            <p>public class Test extends JApplet {<br>
+              private JList list = new JList();</p>
+            <p> private String[] items = { <br>
+              &quot;item one&quot;, &quot;item two&quot;, &quot;item three&quot;, 
+              <br>
+              &quot;item four&quot;, &quot;item five&quot;, &quot;item six&quot;,<br>
+              &quot;item seven&quot;, &quot;item eight&quot;, <br>
+              &quot;item nine&quot;, &quot;item ten&quot; <br>
+              };</p>
+            <p> public void init() {<br>
+              Container contentPane = getContentPane();</p>
+            <p> JPanel controlPanel = new ControlPanel(this, list);</p>
+            <p> contentPane.add(controlPanel, BorderLayout.NORTH);<br>
+              contentPane.add(new JScrollPane(list), <br>
+              BorderLayout.CENTER);<br>
+              populateList();<br>
+              }<br>
+              public void populateList() {<br>
+              final DefaultListModel model = new DefaultListModel();</p>
+            <p> for(int i=0; i &lt; items.length; ++i)<br>
+              model.addElement(items[i]);</p>
+            <p> list.setModel(model);</p>
+            <p> if(list.isShowing())<br>
+              list.revalidate();</p>
+            <p> model.addListDataListener(new ListDataListener() {<br>
+              public void contentsChanged(ListDataEvent e) {<br>
+              showStatus(&quot;contents changed&quot;);<br>
+              }<br>
+              public void intervalRemoved(ListDataEvent e) {<br>
+              Object[] message = new Object[] {<br>
+              &quot;Removed item at index &quot; + e.getIndex0(),<br>
+              &quot; &quot;,<br>
+              &quot;There are now &quot; + model.getSize() + &quot; items&quot;<br>
+              };<br>
+              JOptionPane.showMessageDialog(Test.this,<br>
+              message,<br>
+              &quot;Items Removed&quot;, // title<br>
+              JOptionPane.INFORMATION_MESSAGE); // type<br>
+              }<br>
+              public void intervalAdded(ListDataEvent e) {<br>
+              showStatus(&quot;interval added&quot;);<br>
+              }<br>
+              });<br>
+              }<br>
+              }<br>
+              class ControlPanel extends JPanel {<br>
+              JButton remove = new JButton(&quot;remove selected items&quot;);<br>
+              JButton repopulate = new JButton(&quot;repopulate&quot;);</p>
+            <p> public ControlPanel(final Test applet, final JList list) {<br>
+              add(remove);<br>
+              add(repopulate);</p>
+            <p> remove.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              int[] selected = list.getSelectedIndices();<br>
+              DefaultListModel model =<br>
+              (DefaultListModel)list.getModel();</p>
+            <p> for(int i=0; i &lt; selected.length; ++i) {<br>
+              model.removeElementAt(selected[i] - i);<br>
+              }<br>
+              }<br>
+              });<br>
+              repopulate.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              applet.populateList();<br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p>&nbsp;</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例17-7 处理鼠标双击和三击</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;<br>
+            import javax.swing.event.*;
+            <p>public class Test extends JApplet {<br>
+              public void init() {<br>
+              Container contentPane = getContentPane();</p>
+            <p> String[] items = { &quot;item one&quot;, &quot;item two&quot;, 
+              &quot;item three&quot;, <br>
+              &quot;item four&quot;, &quot;item five&quot;, &quot;item six&quot;,<br>
+              &quot;item seven&quot;, &quot;item eight&quot;, <br>
+              &quot;item nine&quot;, &quot;item ten&quot; };</p>
+            <p> JList list = new JList(items);</p>
+            <p> contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(new JScrollPane(list));</p>
+            <p> list.addMouseListener(new MouseAdapter() {<br>
+              public void mouseClicked(MouseEvent e) {<br>
+              JList theList = (JList)e.getSource();<br>
+              ListModel model = theList.getModel();</p>
+            <p> int index = theList.locationToIndex(e.getPoint());<br>
+              String itemString = <br>
+              (String)model.getElementAt(index);</p>
+            <p> String s = new String(&quot; for &quot; + <br>
+              model.getElementAt(index));</p>
+            <p> switch(e.getClickCount()) {<br>
+              case 1:<br>
+              showStatus(&quot;Single Click&quot; + s);<br>
+              break;<br>
+              case 2:<br>
+              showStatus(&quot;Double Click&quot; + s);<br>
+              break;<br>
+              case 3:<br>
+              showStatus(&quot;Triple Click&quot; + s);<br>
+              break;<br>
+              }<br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 17.3.3 JList类总结</p>
+            <p>&nbsp;</p>
+            <p> 17.3.4 AWT兼容</p>
+            <p>&nbsp;</p>
+            <p> 17.4 本章回顾</p>
+            <p>&nbsp;</p>
+            <p>[<a href="index.html" target="_self">目录</a>][<a href="s16.htm">上一页</a>][<a href="s18.htm">下一页</a>](飒龙收藏/2002.5.18) 
+            </p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </td>
+  </tr>
+</tbody>
+</table>
+<script language="javascript">bottomprint()</script>
+</body>
+</html>

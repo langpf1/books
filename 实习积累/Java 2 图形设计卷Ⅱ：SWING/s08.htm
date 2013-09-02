@@ -1,0 +1,721 @@
+<SCRIPT LANGUAGE="JavaScript" SRC="/-fs0/sys/pop-up.js"></SCRIPT>
+
+<SCRIPT LANGUAGE="JavaScript" SRC="/-fs0/sys/pop-up-all.js"></SCRIPT>
+
+<html>
+<head>
+<title>易都网--Java 2 图形设计卷Ⅱ：SWING</title>
+<LINK rel="stylesheet" href="../../../_public/javaa.css">
+<meta http-equiv="Content-Type" content="text/html; charset=GBK">
+<script language="JavaScript" src="../../../_public/javaa.js"></script>
+<meta name="keywords" content="Java,JSP,ASP,PHP,J2EE,EJB,JavaScript,C/C++,ASM,CSS,HTML,XML,网络安全,MySQL,ACCESS">
+</head>
+<body bgcolor="#FFFFFF">
+<table border=0 cellpadding=0 cellspacing=0 width="100%">
+  <tbody> 
+  <script language="javascript">print2()</script>
+  <tr> 
+    <td width="100%"> 
+      <table bgcolor=#EEEEEE border=0 cellpadding=3 cellspacing=0 width="100%">
+        <tbody> 
+        <tr> 
+          <td class=f1 id=thetd width="100%"> 
+            <p>[<a href="index.html" target="_self">目录</a>][<a href="s07.htm">上一页</a>][<a href="s09.htm">下一页</a>]第二部分 
+              Swing组件</p>
+            <p align="center"><b>第8章 标签与按钮</b></p>
+            <p>　　Swing的标签和按钮分别用JLabel和JButton类表示，它们是能够显示文本或图标的简单组件。缺省时，标签没有边框，可以显示一个字符串，一个图标或同时显示字符串和图标。除了用于修饰文本域等不重要的小事情外，Swing的标签还能起到图像画布(显示一个图像的组件)的作用。由于AWT的图像不是组件，不能把它们添加到一个容器中。因此，使用AWT的开发人员实现了各种不同的图像画布类；然而，在Swing中，可以把JLabel类当作图像画面使用(注：有关图像画面的更多信息参见4.3.1“Swing组件中的定制绘制”一节)。<br>
+              　　按钮大概是使用最为普遍的用户界面组件。按钮通常带有某种边框，且可以被鼠标或快捷键激活。Swing按钮比Swing标签要复杂得多，不仅因为能够激活它们来完成某个功能，而且很多其他Swing组件都是AbstractButton类的扩展，而AbstractButton类是Swing按钮的基类。 
+            </p>
+            <p> <b>8.1 JLabel与JBution</b></p>
+            <p>&nbsp;</p>
+            <p> <b>8.2 JLabel</b></p>
+            <p align="center"><b>例8-1 运行中的JLabel</b></p>
+            <hr noshade size="1"><pre>import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class Test extends JApplet {
+	public Test() {
+		Container contentPane = getContentPane();
+		JLabel imageOnly = new JLabel(new ImageIcon(this.getClass().getResource("dogs.gif")));
+		JLabel textAndImage = new JLabel("Vote!", 
+						new ImageIcon(this.getClass().getResource("ballot_box.gif")),
+						JLabel.RIGHT);
+
+		JScrollPane scrollPane = new JScrollPane(imageOnly);
+		scrollPane.setPreferredSize(new Dimension(270,200));
+
+		contentPane.setLayout(
+			new FlowLayout(FlowLayout.CENTER, 25, 25));
+
+		contentPane.add(textAndImage);
+		contentPane.add(scrollPane);
+	}
+}
+</pre>
+            <hr noshade size="1">
+            <p><br>
+            </p>
+            <p> <b>8.2.1 内容排列</b></p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例8-2 设置Swing标签的排列属性</b></p>
+            <hr noshade size="1"><pre>import java.net.URL;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.border.*;
+
+public class Test extends JApplet implements SwingConstants {
+	JLabel        	label 	= new JLabel("Action!");
+	JPanel       	controlPanel 	= new JPanel();
+	JComboBox     	alignmentHorizontal 	= new JComboBox();
+	JComboBox 		alignmentVertical 	= new JComboBox();
+
+	public void init() {
+		Container contentPane = getContentPane();
+		ImageIcon icon = new ImageIcon(this.getClass().getResource("slate.gif"));
+
+		label.setIcon(icon);
+		label.setHorizontalAlignment(CENTER);
+		label.setFont(new Font("Times-Roman", Font.ITALIC, 20));
+
+		label.setMaximumSize(new Dimension(0, 150));
+
+		setupComboBoxes();
+		setupControlPanel();
+
+		contentPane.setLayout(new BorderLayout());
+		contentPane.add(controlPanel, "North");
+		contentPane.add(label, "Center");
+
+		alignmentVertical.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent event) {
+				JComboBox b = (JComboBox)event.getSource();
+				String    s = (String)b.getSelectedItem();
+				int       c = getSwingConstantByName(s);
+
+				label.setVerticalAlignment(c);
+			}
+		});
+		alignmentHorizontal.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent event) {
+				JComboBox b = (JComboBox)event.getSource();
+				String    s = (String)b.getSelectedItem();
+				int       c = getSwingConstantByName(s);
+				
+				label.setHorizontalAlignment(c);
+			}
+		});
+	}
+	void setupComboBoxes() {
+		alignmentVertical.addItem("Top");
+		alignmentVertical.addItem("Center");
+		alignmentVertical.addItem("Bottom");
+
+		alignmentHorizontal.addItem("Left");
+		alignmentHorizontal.addItem("Center");
+		alignmentHorizontal.addItem("Right");
+
+		alignmentVertical.setSelectedItem(
+			getSwingConstantName(
+				label.getVerticalAlignment()));
+
+		alignmentHorizontal.setSelectedItem(
+			getSwingConstantName(
+				label.getHorizontalAlignment()));
+	}
+	void setupControlPanel() {
+		controlPanel.setBorder(
+			BorderFactory.createTitledBorder("Alignment"));
+
+		controlPanel.add(new JLabel(
+						"Vertical:"));
+		controlPanel.add(alignmentVertical);
+		controlPanel.add(Box.createHorizontalStrut(5));
+
+		controlPanel.add(Box.createHorizontalStrut(25));
+
+		controlPanel.add(new JLabel(
+						"Horizontal:"));
+		controlPanel.add(Box.createHorizontalStrut(5));
+
+		controlPanel.add(alignmentHorizontal);
+	}
+	int getSwingConstantByName(String s) {
+		if(s.equalsIgnoreCase("left"))        	return LEFT;
+		else if(s.equalsIgnoreCase("center")) 	return CENTER;
+		else if(s.equalsIgnoreCase("right"))  	return RIGHT;
+		else if(s.equalsIgnoreCase("top"))    	return TOP;
+		else if(s.equalsIgnoreCase("bottom")) 	return BOTTOM;
+
+		return -1;
+	}
+	String getSwingConstantName(int c) {
+		if(c == LEFT) 			return "Left";
+		else if(c == CENTER)	return "Center";
+		else if(c == RIGHT) 	return "Right";
+		else if(c == TOP) 		return "Top";
+		else if(c == BOTTOM) 	return "Bottom";
+
+		return "undefined";
+	}
+}
+</pre>
+            <hr noshade size="1">
+            <p> <b>8.2.2 文本的位置</b></p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例8-3 设置标签的文本位置</b></p>
+            <hr noshade size="1"><pre>import java.net.URL;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.border.*;
+
+public class Test extends JApplet implements SwingConstants {
+	JLabel label = new JLabel("Action!");
+	JPanel controlPanel = new JPanel();
+	JComboBox alignmentHorizontal = new JComboBox();
+	JComboBox alignmentVertical = new JComboBox();
+
+	public void init() {
+		Container contentPane = getContentPane();
+		ImageIcon icon = new ImageIcon(this.getClass().getResource("penguin.gif"));
+
+		label.setIcon(icon);
+		label.setHorizontalTextPosition(CENTER);
+		label.setFont(new Font("Times-Roman", Font.ITALIC, 20));
+
+		setupComboBoxes();
+		setupControlPanel();
+
+		label.setHorizontalAlignment(JLabel.CENTER);
+		label.setVerticalAlignment(JLabel.CENTER);
+
+		contentPane.setLayout(new BorderLayout());
+		contentPane.add(controlPanel, "North");
+		contentPane.add(label, "Center");
+
+		alignmentVertical.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent event) {
+				JComboBox b = (JComboBox)event.getSource();
+				String    s = (String)b.getSelectedItem();
+				int       c = getSwingConstantByName(s);
+
+				label.setVerticalTextPosition(c);
+			}
+		});
+		alignmentHorizontal.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent event) {
+				JComboBox b = (JComboBox)event.getSource();
+				String    s = (String)b.getSelectedItem();
+				int       c = getSwingConstantByName(s);
+				
+				label.setHorizontalTextPosition(c);
+			}
+		});
+	}
+	void setupComboBoxes() {
+		alignmentVertical.addItem("Top");
+		alignmentVertical.addItem("Center");
+		alignmentVertical.addItem("Bottom");
+
+		alignmentHorizontal.addItem("Left");
+		alignmentHorizontal.addItem("Center");
+		alignmentHorizontal.addItem("Right");
+
+		alignmentVertical.setSelectedItem(
+			getSwingConstantName(
+				label.getVerticalTextPosition()));
+
+		alignmentHorizontal.setSelectedItem(
+			getSwingConstantName(
+				label.getHorizontalTextPosition()));
+	}
+	void setupControlPanel() {
+		controlPanel.setBorder(
+			BorderFactory.createTitledBorder("Text Position"));
+
+		controlPanel.add(new JLabel( "Vertical:"));
+		controlPanel.add(alignmentVertical);
+		controlPanel.add(Box.createHorizontalStrut(5));
+
+		controlPanel.add(Box.createHorizontalStrut(25));
+
+		controlPanel.add(new JLabel("Horizontal:"));
+		controlPanel.add(Box.createHorizontalStrut(5));
+
+		controlPanel.add(alignmentHorizontal);
+	}
+	int getSwingConstantByName(String s) {
+		if(s.equalsIgnoreCase("left"))        	return LEFT;
+		else if(s.equalsIgnoreCase("center")) 	return CENTER;
+		else if(s.equalsIgnoreCase("right"))  	return RIGHT;
+		else if(s.equalsIgnoreCase("top"))    	return TOP;
+		else if(s.equalsIgnoreCase("bottom")) 	return BOTTOM;
+
+		return -1;
+	}
+	String getSwingConstantName(int c) {
+		if(c == LEFT) 			return "Left";
+		else if(c == CENTER)	return "Center";
+		else if(c == RIGHT) 	return "Right";
+		else if(c == TOP) 		return "Top";
+		else if(c == BOTTOM) 	return "Bottom";
+
+		return "undefined";
+	}
+}
+</pre>
+            <hr noshade size="1">
+            <p> <b>8.2.3 图标/文本间隙</b></p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例8-4 设置一个标签的图标/文本间隙</b></p>
+            <hr noshade size="1"><pre>import java.net.URL;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.border.*;
+
+public class Test extends JApplet implements SwingConstants {
+	public void init() {
+		Container contentPane = getContentPane();
+		JComboBox iconTextGap = new JComboBox();
+		JPanel controlPanel = new JPanel();
+		ImageIcon icon = new ImageIcon(this.getClass().getResource("ladybug.gif"));
+
+		final JLabel label = new JLabel("Lady Bug", icon, CENTER);
+
+		label.setFont(new Font("Times-Roman", Font.ITALIC, 20));
+
+		iconTextGap.addItem("4"); 
+		iconTextGap.addItem("10");
+		iconTextGap.addItem("15");
+		iconTextGap.addItem("20");
+		iconTextGap.addItem("25");
+
+		controlPanel.add(new JLabel("Icon/Text Gap:"));
+		controlPanel.add(iconTextGap);
+
+		contentPane.setLayout(new BorderLayout());
+		contentPane.add(controlPanel, "North");
+		contentPane.add(label, "Center");
+
+		iconTextGap.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent event) {
+				JComboBox b = (JComboBox)event.getSource();
+				String    s = (String)b.getSelectedItem();
+				int       gap = Integer.parseInt(s);
+				
+				label.setIconTextGap(gap);
+			}
+		});
+	}
+}
+</pre>
+            <hr noshade size="1">
+            <p> 8.2.4 许可状态</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例8-5 设置一个标签的许可状态</b></p>
+            <hr noshade size="1"><pre>import java.net.URL;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.border.*;
+
+public class Test extends JApplet implements SwingConstants {
+	public void init() {
+		Container contentPane = getContentPane();
+		JComboBox iconTextGap = new JComboBox();
+		JPanel controlPanel = new JPanel();
+		ImageIcon icon = new ImageIcon(this.getClass().getResource("ladybug.gif"));
+
+		final JLabel label = new JLabel("Lady Bug", icon, CENTER);
+
+		label.setFont(new Font("Times-Roman", Font.ITALIC, 20));
+
+		iconTextGap.addItem("4"); 
+		iconTextGap.addItem("10");
+		iconTextGap.addItem("15");
+		iconTextGap.addItem("20");
+		iconTextGap.addItem("25");
+
+		controlPanel.add(new JLabel("Icon/Text Gap:"));
+		controlPanel.add(iconTextGap);
+
+		contentPane.setLayout(new BorderLayout());
+		contentPane.add(controlPanel, "North");
+		contentPane.add(label, "Center");
+
+		iconTextGap.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent event) {
+				JComboBox b = (JComboBox)event.getSource();
+				String    s = (String)b.getSelectedItem();
+				int       gap = Integer.parseInt(s);
+				
+				label.setIconTextGap(gap);
+			}
+		});
+	}
+}
+</pre>
+            <hr noshade size="1">
+            <p> 8.2.5 JLabel属性</p>
+            <p>&nbsp;</p>
+            <p> 8.2.6 JLabel事件</p>
+            <p>&nbsp;</p>
+            <p> 8.2.7 JLabel类总结</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例8-6 创建JLabel实例</b></p>
+            <hr noshade size="1"><pre>import java.net.URL;
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.border.*;
+
+public class Test extends JApplet implements SwingConstants {
+	public void init() {
+		Container contentPane = getContentPane();
+		JComboBox iconTextGap = new JComboBox();
+		JPanel controlPanel = new JPanel();
+		ImageIcon icon = new ImageIcon(this.getClass().getResource("ladybug.gif"));
+
+		final JLabel label = new JLabel("Lady Bug", icon, CENTER);
+
+		label.setFont(new Font("Times-Roman", Font.ITALIC, 20));
+
+		iconTextGap.addItem("4"); 
+		iconTextGap.addItem("10");
+		iconTextGap.addItem("15");
+		iconTextGap.addItem("20");
+		iconTextGap.addItem("25");
+
+		controlPanel.add(new JLabel("Icon/Text Gap:"));
+		controlPanel.add(iconTextGap);
+
+		contentPane.setLayout(new BorderLayout());
+		contentPane.add(controlPanel, "North");
+		contentPane.add(label, "Center");
+
+		iconTextGap.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent event) {
+				JComboBox b = (JComboBox)event.getSource();
+				String    s = (String)b.getSelectedItem();
+				int       gap = Integer.parseInt(s);
+				
+				label.setIconTextGap(gap);
+			}
+		});
+	}
+}
+</pre>
+            <hr noshade size="1">
+            <p> 8.3 按钮</p>
+            <p>&nbsp;</p>
+            <p> 8.4 JButtion</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例8-7 一个按钮简单例子</b></p>
+            <hr noshade size="1"><pre>import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.util.*;
+
+public class Test extends JApplet {
+	JButton button = new JButton("button ...", 
+								new ImageIcon(this.getClass().getResource("exclaim.gif")));
+	int actCnt = 0;
+
+	public void init() {
+		Container contentPane = getContentPane();
+
+		contentPane.setLayout(new FlowLayout());
+		contentPane.add(button);
+
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				showStatus(event.getActionCommand() + 
+							" activated " + actCnt + " times");
+				actCnt++;
+			}
+		});
+	}
+}
+</pre>
+            <hr noshade size="1">
+            <p> 8.4.1 JButtion属性</p>
+            <p>&nbsp;</p>
+            <p> 8.4.2 JButtion事件</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例8-8 处理JButton事件</b></p>
+            <hr noshade size="1"><pre>import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.event.*;
+
+public class Test extends JApplet {
+	//Icon icon = new ImageIcon("icon.gif");
+	JButton button = new JButton("button");
+
+	public Test() {
+		Container contentPane = getContentPane();
+
+		button.setRolloverIcon(new ImageIcon(this.getClass().getResource("punch.gif")));
+		button.setIcon(new ImageIcon(this.getClass().getResource("open_hand.gif")));
+
+		contentPane.setLayout(new FlowLayout());
+		contentPane.add(button);
+
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("action!");
+			}
+		});
+		button.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				System.out.println(getButtonState());
+			}
+		});
+	}
+	private String getButtonState() {
+		ButtonModel model = button.getModel();
+		String state = "Button State: "; 
+
+		state += model.isSelected() ? "selected" : "deselected";
+		state += model.isPressed() ? ", pressed" : 
+									 ", not pressed";
+		state += model.isArmed() ? ", armed" : ", disarmed";
+		state += model.isRollover() ? ", rollover" : 
+									  ", not rollover";
+
+		return state;
+	}
+}
+</pre>
+            <hr noshade size="1">
+            <p> 8.4.3 JButtion类总结</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例8-9 创建JButton实例</b></p>
+            <hr noshade size="1"><pre>import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class Test extends JApplet {
+	Icon icon = new ImageIcon("icon.gif");
+
+	JButton noargButton = new JButton(),
+				textButton = new JButton("text"),
+				textIconButton = new JButton("text", icon),
+				iconButton = new JButton(icon);
+
+	public Test() {
+		Container contentPane = getContentPane();
+
+		contentPane.setLayout(new FlowLayout());
+		contentPane.add(noargButton);
+		contentPane.add(textButton);
+		contentPane.add(iconButton);
+		contentPane.add(textIconButton);
+	}
+}
+</pre>
+            <hr noshade size="1">
+            <p align="center"><b>例8-10 把一个按钮指定为缺省的按钮</b></p>
+            <hr noshade size="1"><pre>import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class Test extends JApplet {
+	Icon icon = new ImageIcon("icon.gif");
+
+	JButton noargButton = new JButton(),
+				textButton = new JButton("text"),
+				textIconButton = new JButton("text", icon),
+				iconButton = new JButton(icon);
+
+	public Test() {
+		Container contentPane = getContentPane();
+
+		contentPane.setLayout(new FlowLayout());
+		contentPane.add(noargButton);
+		contentPane.add(textButton);
+		contentPane.add(iconButton);
+		contentPane.add(textIconButton);
+	}
+}
+</pre>
+            <hr noshade size="1">
+            <p>&nbsp;</p>
+            <p align="center"><b>例8-11 程序方式单击一个按钮</b></p>
+            <hr noshade size="1"><pre>import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class Test extends JApplet {
+	int clickDuration = 68;
+
+	public Test() {
+		Container contentPane = getContentPane();
+		JPanel controlPanel = new JPanel();
+		JPanel buttonPanel = new JPanel();
+
+		JButton doClick = new JButton("do click");
+		final JButton clickMe = new JButton("click me");
+
+		final JComboBox comboBox = new JComboBox(new Object[] {
+				"68", "250", "500", "750", "1000"
+		});
+
+		controlPanel.add(new JLabel("Click Duration:"));
+		controlPanel.add(comboBox);
+
+		buttonPanel.add(doClick);
+		buttonPanel.add(clickMe);
+
+		contentPane.add(controlPanel, BorderLayout.NORTH);
+		contentPane.add(buttonPanel, BorderLayout.CENTER);
+
+		getRootPane().setDefaultButton(doClick);
+
+		doClick.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				clickMe.doClick(clickDuration);
+			}
+		});
+
+		comboBox.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				if(e.getStateChange() == ItemEvent.SELECTED) {
+					clickDuration = Integer.parseInt((String)
+									comboBox.getSelectedItem());
+				}
+			}
+		});
+	}
+}
+</pre>
+            <hr noshade size="1">
+            <p align="center"><b>例8-12 JButton图标</b></p>
+            <hr noshade size="1"><pre>import javax.swing.*;
+import javax.swing.border.*;
+import javax.swing.plaf.basic.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class Test extends JApplet {
+	public void init() {
+		Container contentPane = getContentPane();
+		Icon icon = new StringIcon("icon for JButton"),
+			 rolloverIcon = new StringIcon("rollover"),
+			 pressedIcon = new StringIcon("pressed"),
+			 disabledIcon = new StringIcon("disabled"),
+			 selectedIcon = new StringIcon("selected"),
+			 rolloverSelectedIcon = 
+					new StringIcon("rollover selected"),
+			 disabledSelectedIcon = 
+			 		new StringIcon("disabled selected");
+
+		final JButton button = new JButton();
+
+		button.setRolloverEnabled(true);
+
+		button.setIcon(icon);
+		button.setRolloverIcon(rolloverIcon);
+		button.setRolloverSelectedIcon(rolloverSelectedIcon);
+		button.setSelectedIcon(selectedIcon);
+		button.setPressedIcon(pressedIcon);
+		button.setDisabledIcon(disabledIcon);
+		button.setDisabledSelectedIcon(disabledSelectedIcon);
+
+		JComboBox cb = new JComboBox();
+		cb.addItem("enabled");
+		cb.addItem("disabled");
+
+		cb.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent e) {
+				if(e.getStateChange() == ItemEvent.SELECTED) {
+					String item = (String)e.getItem();
+
+					if(item.equals("enabled")) {
+						button.setEnabled(true);
+					}
+					else {
+						button.setEnabled(false);
+					}
+				}
+			}
+		});
+		contentPane.setLayout(new FlowLayout());
+		contentPane.add(cb);
+		contentPane.add(button);
+	}
+}
+class StringIcon implements Icon {
+	private String s;
+
+	public StringIcon(String s) {
+		this.s = s;
+	}
+	public int getIconWidth() { return 100; }
+	public int getIconHeight() { return 100; }
+
+	public void paintIcon(Component c, Graphics g, int x, int y) {
+		FontMetrics fm = g.getFontMetrics();
+		g.setColor(c.getForeground());
+		g.drawString(s, 10, fm.getHeight());
+	}
+}
+</pre>
+            <hr noshade size="1">
+            <p>&nbsp;</p>
+            <p align="center"><b>例8-13 设置按钮边距</b></p>
+            <hr noshade size="1"><pre>import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class Test extends JApplet {
+	public Test() {
+		Container contentPane = getContentPane();
+		JButton button = new JButton("button");
+
+		button.setMargin(new Insets(50,25,10,5));
+		contentPane.setLayout(new FlowLayout());
+		contentPane.add(button);
+	}
+}
+</pre>
+            <hr noshade size="1">
+            <p align="center"><b>例8-14 按钮助记符</b></p>
+            <hr noshade size="1"><pre>import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class Test extends JApplet {
+	public Test() {
+		Container contentPane = getContentPane();
+		JButton button = new JButton("button With Mnemonic");
+
+		button.setMnemonic('M');
+
+		contentPane.setLayout(new FlowLayout());
+		contentPane.add(button);
+	}
+}
+</pre>
+            <hr noshade size="1">
+            <p>&nbsp;</p>
+            <p> 8.4.4 AWT兼容</p>
+            <p>&nbsp;</p>
+            <p> 8.5 本章回顾</p>
+            <p>&nbsp;</p>
+            <p> [<a href="index.html" target="_self">目录</a>][<a href="s07.htm">上一页</a>][<a href="s09.htm">下一页</a>](飒龙收藏/2002.5.18) 
+            </p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </td>
+  </tr>
+</tbody>
+</table>
+<script language="javascript">bottomprint()</script>
+</body>
+</html>

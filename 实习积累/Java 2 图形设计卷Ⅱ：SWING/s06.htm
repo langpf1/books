@@ -1,0 +1,1018 @@
+<SCRIPT LANGUAGE="JavaScript" SRC="/-fs0/sys/pop-up.js"></SCRIPT>
+
+<SCRIPT LANGUAGE="JavaScript" SRC="/-fs0/sys/pop-up-all.js"></SCRIPT>
+
+<html>
+<head>
+<title>易都网--Java 2 图形设计卷Ⅱ：SWING</title>
+<LINK rel="stylesheet" href="../../../_public/javaa.css">
+<meta http-equiv="Content-Type" content="text/html; charset=GBK">
+<script language="JavaScript" src="../../../_public/javaa.js"></script>
+<meta name="keywords" content="Java,JSP,ASP,PHP,J2EE,EJB,JavaScript,C/C++,ASM,CSS,HTML,XML,网络安全,MySQL,ACCESS">
+</head>
+<body bgcolor="#FFFFFF">
+<table border=0 cellpadding=0 cellspacing=0 width="100%">
+  <tbody> 
+  <script language="javascript">print2()</script>
+  <tr> 
+    <td width="100%"> 
+      <table bgcolor=#EEEEEE border=0 cellpadding=3 cellspacing=0 width="100%">
+        <tbody> 
+        <tr> 
+          <td class=f1 id=thetd width="100%"> 
+            <p>[<a href="index.html" target="_self">目录</a>][<a href="s05.htm">上一页</a>][<a href="s07.htm">下一页</a>]</p>
+            <p align="center"><b>第6章 实用工具</b></p>
+            <p>　　Swing包括许多实用工具，本章将介绍这些实用工具。其中有些实用工具（如计时器和由SwingUtilties类提供的static方法）在Swing内部使用，而进度监视器和进度监视器流等其他的实用工具则不是内容使用的。使用Swing的开发人员可以使用本章介绍的所有实用工具。</p>
+            <p><b>6.1 计时器</b></p>
+            <p align="center"><b>例6-1 使用Swing计时器</b><br>
+            </p>
+            <hr noshade size="1">
+            <p>import java.awt.*;<br>
+              import java.awt.event.*;<br>
+              import javax.swing.*;</p>
+            <p>public class Test implements ActionListener {<br>
+              private int seconds=1;</p>
+            <p> public Test() {<br>
+              Timer oneSecondTimer = new Timer(1000, this);<br>
+              Timer timerWithInitialDelay = new Timer(2000, <br>
+              new TimerWithDelayListener());<br>
+              Timer oneTimeTimer = new Timer(10000, <br>
+              new OneTimeListener());</p>
+            <p> timerWithInitialDelay.setInitialDelay(5000);<br>
+              oneTimeTimer.setRepeats(false);</p>
+            <p> oneSecondTimer.start();<br>
+              timerWithInitialDelay.start();<br>
+              oneTimeTimer.start();<br>
+              }<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              if(seconds == 0)<br>
+              System.out.println(&quot;Time: &quot; + seconds + &quot; second&quot;);<br>
+              else<br>
+              System.out.println(&quot;Time: &quot; + seconds + &quot; seconds&quot;);</p>
+            <p> seconds++;<br>
+              }<br>
+              public static void main(String args[]) {<br>
+              new Test();<br>
+              while(true);<br>
+              }<br>
+              }<br>
+              class TimerWithDelayListener implements ActionListener { <br>
+              public void actionPerformed(ActionEvent e) {<br>
+              System.out.println(&quot;Timer with Delay Ringing&quot;);<br>
+              }<br>
+              }<br>
+              class OneTimeListener implements ActionListener { <br>
+              public void actionPerformed(ActionEvent e) {<br>
+              System.out.println(&quot;One Time Timer Ringing&quot;);<br>
+              }<br>
+              } </p>
+            <hr noshade size="1">
+            <p>&nbsp;</p><p align="center"><b>例6-2 重载构造计时器时所指定的延迟</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class Test implements ActionListener {<br>
+              public Test() {<br>
+              Timer oneSecondTimer = new Timer(1000, this);</p>
+            <p> oneSecondTimer.setInitialDelay(10000);<br>
+              oneSecondTimer.setRepeats(false);<br>
+              oneSecondTimer.start();<br>
+              }<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              System.out.println(&quot;ring ...&quot;);<br>
+              }<br>
+              public static void main(String args[]) {<br>
+              new Test();<br>
+              while(true);<br>
+              }<br>
+              }<br>
+            </p>
+            <hr noshade size="1">
+            <p>&nbsp;</p><p align="center"><b>例6-3 计时器日志</b></p>
+            <hr noshade size="1">
+            <br>
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class Test implements ActionListener {<br>
+              public Test() {<br>
+              Timer.setLogTimers(true);</p>
+            <p> Timer oneSecondTimer = new MyTimer(1000, this);<br>
+              oneSecondTimer.start();<br>
+              }<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              System.out.println(&quot;ring ...&quot;);<br>
+              }<br>
+              public static void main(String args[]) {<br>
+              new Test();<br>
+              while(true);<br>
+              }<br>
+              }<br>
+              class MyTimer extends Timer {<br>
+              public MyTimer(int delay, ActionListener listener) {<br>
+              super(delay, listener);<br>
+              }<br>
+              public String toString() {<br>
+              return &quot;MyTimer&quot;;<br>
+              }<br>
+              }</p>
+            <hr noshade size="1">
+            <p>&nbsp;</p>
+            <p align="center"><b>例6-4 与单个计时器相关联的多个动作监听器</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class Test implements ActionListener {<br>
+              private int seconds=1;</p>
+            <p> public Test() {<br>
+              Timer oneSecondTimer = new Timer(1000, this);</p>
+            <p> oneSecondTimer.addActionListener(new SecondListener());<br>
+              oneSecondTimer.addActionListener(new ThirdListener());<br>
+              oneSecondTimer.start();<br>
+              }<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              if(seconds == 0)<br>
+              System.out.println(&quot;Time: &quot; + seconds + &quot; second&quot;);<br>
+              else<br>
+              System.out.println(&quot;Time: &quot; + seconds + &quot; seconds&quot;);<br>
+              seconds++;<br>
+              }<br>
+              public static void main(String args[]) {<br>
+              new Test();<br>
+              while(true);<br>
+              }<br>
+              }<br>
+              class SecondListener implements ActionListener { <br>
+              public void actionPerformed(ActionEvent e) {<br>
+              System.out.println(&quot;Second Listener&quot;);<br>
+              }<br>
+              }<br>
+              class ThirdListener implements ActionListener { <br>
+              public void actionPerformed(ActionEvent e) {<br>
+              System.out.println(&quot;Third Listener&quot;);<br>
+              }<br>
+              }<br>
+            </p>
+            <hr noshade size="1">
+            <p></p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例6-5 合并计时器事件</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class Test implements ActionListener {<br>
+              private boolean firstRing = true;<br>
+              private int ring = 1;</p>
+            <p> public Test() {<br>
+              Timer.setLogTimers(true);</p>
+            <p> Timer oneSecondTimer = new Timer(1000, this);</p>
+            <p> // comment out the following line for colaescing<br>
+              oneSecondTimer.setCoalesce(false);</p>
+            <p> System.out.println(&quot;Timer is coalescing: &quot; + <br>
+              oneSecondTimer.isCoalesce());</p>
+            <p> oneSecondTimer.start();<br>
+              }<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              System.out.println(&quot;ring #&quot; + ring++);</p>
+            <p> if(firstRing) {<br>
+              // simulate a time consuming operation by sleeping<br>
+              // for 10 seconds ...<br>
+              try {<br>
+              Thread.currentThread().sleep(10000);<br>
+              }<br>
+              catch(InterruptedException ex) {<br>
+              ex.printStackTrace();<br>
+              }<br>
+              firstRing = false;<br>
+              }<br>
+              }<br>
+              public static void main(String args[]) {<br>
+              new Test();<br>
+              while(true);<br>
+              }<br>
+              }<br>
+            </p>
+            <hr noshade size="1">
+            <p></p>
+            <p></p>
+            <p>&nbsp; </p>
+            <p> 6.2 事件监听器列表</p>
+            <p>&nbsp;</p>
+            <p> 6.3 Swing实用工具</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例6-6 计算两个矩形之间的差集、交集和并集</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              Rectangle r1 = new Rectangle(20,20,150,75);<br>
+              Rectangle r2 = new Rectangle(100,40,100,150);<br>
+              Rectangle destination;</p>
+            <p> public Test() {<br>
+              destination = new Rectangle(r2);</p>
+            <p> // print out the intersection of r1 and r2 ...</p>
+            <p> System.out.println(&quot;Intersection: &quot; + <br>
+              SwingUtilities.computeIntersection(r1.x,r1.y,<br>
+              r1.width,r1.height,destination));<br>
+              System.out.println();</p>
+            <p> // print out the union of r1 and r2 ...</p>
+            <p> System.out.println(&quot;Union: &quot; + <br>
+              SwingUtilities.computeUnion(r1.x,r1.y,<br>
+              r1.width,r1.height,destination));<br>
+              System.out.println();</p>
+            <p> // print out the difference of r1 and r2 ...</p>
+            <p> Rectangle[] difference =<br>
+              SwingUtilities.computeDifference(r1, r2);</p>
+            <p> System.out.println(&quot;Difference:&quot;);</p>
+            <p> for(int i=0; i &lt; difference.length; ++i) {<br>
+              System.out.println(difference[i]);<br>
+              }<br>
+              }<br>
+              public void paint(Graphics g) {<br>
+              g.setColor(Color.red); <br>
+              g.fillRect(r1.x, r1.y, r1.width, r1.height);</p>
+            <p> g.setColor(Color.yellow); <br>
+              g.fillRect(r2.x, r2.y, r2.width, r2.height);<br>
+              }<br>
+              }</p>
+            <hr noshade size="1">
+            <p><br>
+              　　<applet code="Test.class" archive="s06_tu02.jar" width=600 height=550></applet>
+<br>　　　图6-2 转换坐标系统</p>
+            <p align="center"><b>例6-7 转换鼠标坐标</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              private Point lastScreenPt = null;<br>
+              private final Container contentPane = getContentPane();<br>
+              private PanelWithString <br>
+              outer = new PanelWithString(Color.orange),<br>
+              inner = new PanelWithString(Color.red),<br>
+              innermost = new PanelWithString(Color.yellow);</p>
+            <p> public Test() {<br>
+              Font font = new Font(&quot;Times-Roman&quot;, Font.ITALIC, 26);</p>
+            <p> contentPane.setLayout(new OverlayLayout(contentPane));<br>
+              contentPane.add(innermost);<br>
+              contentPane.add(inner);<br>
+              contentPane.add(outer);</p>
+            <p> innermost.setMaximumSize(new Dimension(350,50));<br>
+              inner.setMaximumSize(new Dimension(450,200));<br>
+              outer.setMaximumSize(new Dimension(550,400));</p>
+            <p> setFont(font);<br>
+              innermost.setFont(font);<br>
+              inner.setFont(font);<br>
+              outer.setFont(font);</p>
+            <p> contentPane.addMouseMotionListener(<br>
+              new MouseMotionAdapter() {<br>
+              public void mouseMoved(MouseEvent e) {<br>
+              Point pt = e.getPoint();</p>
+            <p> outer.setString(SwingUtilities.convertPoint(<br>
+              contentPane, pt, outer).toString());</p>
+            <p> inner.setString(SwingUtilities.convertPoint(<br>
+              contentPane, pt, inner).toString());</p>
+            <p> innermost.setString(SwingUtilities.convertPoint(<br>
+              contentPane, pt, innermost).toString());</p>
+            <p> SwingUtilities.convertPointToScreen(<br>
+              pt, contentPane);</p>
+            <p> lastScreenPt = pt;<br>
+              repaint();<br>
+              }<br>
+              });<br>
+              }<br>
+              public void paint(Graphics g) {<br>
+              super.paint(g);</p>
+            <p> if(lastScreenPt != null) {<br>
+              String s = new String(&quot;Screen: &quot; + lastScreenPt);</p>
+            <p> g.setColor(getForeground());<br>
+              g.drawString(s,10,g.getFontMetrics().getHeight());</p>
+            <p> SwingUtilities.convertPointFromScreen(lastScreenPt,<br>
+              contentPane);</p>
+            <p> s = &quot;Content Pane: &quot; + lastScreenPt;</p>
+            <p> g.drawString(s,10,g.getFontMetrics().getHeight()*2);<br>
+              }<br>
+              else {<br>
+              g.setColor(getForeground());<br>
+              g.drawString(&quot;MOVE THE MOUSE IN HERE&quot;,10,<br>
+              g.getFontMetrics().getHeight());<br>
+              }<br>
+              }<br>
+              }<br>
+              class PanelWithString extends JPanel {<br>
+              String s;<br>
+              Color color;</p>
+            <p> public PanelWithString(Color color) {<br>
+              this.color = color;<br>
+              }<br>
+              public void setString(String s) {<br>
+              this.s = s;<br>
+              }<br>
+              public void paintComponent(Graphics g) {<br>
+              super.paintComponent(g);</p>
+            <p> Dimension size = getSize();</p>
+            <p> g.setColor(color);<br>
+              g.fillRect(0,0,size.width,size.height);</p>
+            <p> if(s != null) {<br>
+              g.setColor(getForeground());<br>
+              g.drawString(s,10,g.getFontMetrics().getHeight());<br>
+              }<br>
+              }<br>
+              }</p>
+            <hr noshade size="1">
+            <p align="center">&nbsp; </p>
+            <p></p>
+            <p></p>
+            <p></p>
+            <p> 6.4 Swing常量</p>
+            <p>&nbsp;</p>
+            <p> 6.5 Borlayout和Box类</p>
+            <p>&nbsp;</p>
+            <p align="center">&nbsp; </p>
+            <p align="center"></p>
+            <p> 6.5.1 BoxLayout类</p>
+            <p>　　<applet code="Test.class" archive="s06_tu03.jar" width=400 height=250>
+              </applet><br>
+              　　　　　　　图6-3 两个使用BoxLayout的容器</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例6-8 使用BoxLayout</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              public Test() {<br>
+              Container contentPane = getContentPane();<br>
+              ContainerWithBoxLayout yaxis = <br>
+              new ContainerWithBoxLayout(BoxLayout.Y_AXIS);</p>
+            <p> ContainerWithBoxLayout xaxis = <br>
+              new ContainerWithBoxLayout(BoxLayout.X_AXIS);</p>
+            <p> contentPane.setLayout(new FlowLayout());</p>
+            <p> xaxis.add(new JButton(new ImageIcon(&quot;reach.gif&quot;)));<br>
+              xaxis.add(new JButton(new ImageIcon(&quot;punch.gif&quot;)));<br>
+              xaxis.add(new JButton(new ImageIcon(&quot;open_hand.gif&quot;)));</p>
+            <p> yaxis.add(new JButton(new ImageIcon(&quot;ladybug.gif&quot;)));<br>
+              yaxis.add(new JButton(new ImageIcon(&quot;crab.gif&quot;)));<br>
+              yaxis.add(new JButton(new ImageIcon(&quot;frog.gif&quot;)));<br>
+              yaxis.add(new JButton(new ImageIcon(&quot;snail.gif&quot;)));</p>
+            <p> contentPane.add(xaxis);<br>
+              contentPane.add(yaxis);<br>
+              }<br>
+              }<br>
+              class ContainerWithBoxLayout extends JPanel { <br>
+              public ContainerWithBoxLayout(int orientation) {<br>
+              setLayout(new BoxLayout(this, orientation));<br>
+              }<br>
+              }</p>
+            <hr noshade size="1">
+            <p> 6.5.2 Box类</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例6-9 使用水平和垂直的膨胀体</b></p>
+            <hr noshade size="1">
+            <hr noshade size="1">
+            <p> 6.6 进度监视器</p>
+            <p>&nbsp;</p>
+            <p> 6.6.1 ProgressMonitor</p>
+            <p>　　　　<a href="s06_tu05.jar">图6-5</a> 使用一个进度监视器（注：此为一可点击执行的.jar文件，但需要下载到你的电脑上方可点击执行）</p>
+            <p align="center"><b>例6-10 使用一个进度监视器</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import java.util.*;<br>
+            import java.io.*;
+            <p>public class Test extends JFrame {<br>
+              private JButton readButton = new JButton(&quot;read file&quot;);<br>
+              private BufferedInputStream in;<br>
+              private ProgressMonitor pm;<br>
+              private String fileName = &quot;Test.java&quot;;</p>
+            <p> public Test() {<br>
+              final Container contentPane = getContentPane();</p>
+            <p> contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(readButton);</p>
+            <p> readButton.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              try {<br>
+              in = new BufferedInputStream(<br>
+              new FileInputStream(fileName));</p>
+            <p> pm = new ProgressMonitor(contentPane,<br>
+              &quot;Reading File:&quot;,<br>
+              fileName,<br>
+              0, in.available());<br>
+              }<br>
+              catch(FileNotFoundException fnfx) {<br>
+              fnfx.printStackTrace();<br>
+              }<br>
+              catch(IOException iox) {<br>
+              iox.printStackTrace();<br>
+              }</p>
+            <p> ReadThread t = new ReadThread();<br>
+              t.start();<br>
+              }<br>
+              });<br>
+              }<br>
+              class ReadThread extends Thread {<br>
+              int i, cnt=0;<br>
+              String s;</p>
+            <p> public void run() {<br>
+              try {<br>
+              readButton.setEnabled(false);</p>
+            <p> while(!pm.isCanceled() &amp;&amp; (i = in.read()) != -1) {<br>
+              try {<br>
+              Thread.currentThread().sleep(25);<br>
+              }<br>
+              catch(InterruptedException ex) {<br>
+              ex.printStackTrace();<br>
+              }<br>
+              System.out.print((char)i);</p>
+            <p> SwingUtilities.invokeLater(new Runnable(){<br>
+              public void run() {<br>
+              pm.setProgress(++cnt);<br>
+              }<br>
+              });<br>
+              }<br>
+              if(pm.isCanceled())<br>
+              JOptionPane.showMessageDialog(<br>
+              Test.this,<br>
+              &quot;Operation Canceled!&quot;,<br>
+              &quot;Cancellation&quot;,<br>
+              JOptionPane.ERROR_MESSAGE);<br>
+              }<br>
+              catch(IOException ex) {<br>
+              ex.printStackTrace();<br>
+              }<br>
+              finally {<br>
+              try {<br>
+              in.close();<br>
+              }<br>
+              catch(IOException ex2) {<br>
+              ex2.printStackTrace();<br>
+              }<br>
+              }<br>
+              readButton.setEnabled(true);<br>
+              }<br>
+              }<br>
+              public static void main(String args[]) {<br>
+              GJApp.launch(new Test(), <br>
+              &quot;Using Progress Monitors&quot;,300,300,450,300);<br>
+              }<br>
+              }<br>
+              class GJApp extends WindowAdapter {<br>
+              static private JPanel statusArea = new JPanel();<br>
+              static private JLabel status = new JLabel(&quot; &quot;);<br>
+              static private ResourceBundle resources;</p>
+            <p> public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h) {<br>
+              launch(f,title,x,y,w,h,null); <br>
+              }<br>
+              public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h,<br>
+              String propertiesFilename) {<br>
+              f.setTitle(title);<br>
+              f.setBounds(x,y,w,h);<br>
+              f.setVisible(true);</p>
+            <p> statusArea.setBorder(BorderFactory.createEtchedBorder());<br>
+              statusArea.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));<br>
+              statusArea.add(status);<br>
+              status.setHorizontalAlignment(JLabel.LEFT);</p>
+            <p> f.setDefaultCloseOperation(<br>
+              WindowConstants.DISPOSE_ON_CLOSE);</p>
+            <p> if(propertiesFilename != null) {<br>
+              resources = ResourceBundle.getBundle(<br>
+              propertiesFilename, Locale.getDefault());<br>
+              }</p>
+            <p> f.addWindowListener(new WindowAdapter() {<br>
+              public void windowClosed(WindowEvent e) {<br>
+              System.exit(0);<br>
+              }<br>
+              });<br>
+              }<br>
+              static public JPanel getStatusArea() {<br>
+              return statusArea;<br>
+              }<br>
+              static public void showStatus(String s) {<br>
+              status.setText(s);<br>
+              }<br>
+              static Object getResource(String key) {<br>
+              if(resources != null) {<br>
+              return resources.getString(key);<br>
+              }<br>
+              return null;<br>
+              }<br>
+              }</p>
+            <hr noshade size="1">
+            <p> 6.6.2 PropressMonitorInputStream</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例6-11 使用ProgressMonitorInputStream</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import java.util.*;<br>
+            import java.io.*;
+            <p>public class Test extends JFrame {<br>
+              private ProgressMonitorInputStream in;<br>
+              private JButton readButton = new JButton(&quot;read file&quot;);</p>
+            <p> public Test() {<br>
+              final Container contentPane = getContentPane();<br>
+              final String fileName = &quot;Test.java&quot;;</p>
+            <p> contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(readButton);</p>
+            <p> readButton.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              try {<br>
+              in = new ProgressMonitorInputStream(<br>
+              contentPane,<br>
+              &quot;Reading &quot; + fileName,<br>
+              new FileInputStream(fileName));<br>
+              }<br>
+              catch(FileNotFoundException ex) {<br>
+              ex.printStackTrace();<br>
+              }</p>
+            <p> ReadThread t = new ReadThread();<br>
+              readButton.setEnabled(false);<br>
+              t.start();<br>
+              }<br>
+              });<br>
+              }<br>
+              class ReadThread extends Thread {<br>
+              public void run() {<br>
+              int i;</p>
+            <p> try {<br>
+              while((i = in.read()) != -1) {<br>
+              System.out.print((char)i);<br>
+              try {<br>
+              Thread.currentThread().sleep(10);<br>
+              }<br>
+              catch(Exception ex) {<br>
+              ex.printStackTrace();<br>
+              }<br>
+              }<br>
+              in.close();<br>
+              }<br>
+              catch(IOException ex) {<br>
+              JOptionPane.showMessageDialog(<br>
+              Test.this,<br>
+              &quot;Operation Canceled!&quot;,<br>
+              &quot;Cancellation&quot;,<br>
+              JOptionPane.ERROR_MESSAGE);<br>
+              }<br>
+              readButton.setEnabled(true);<br>
+              }<br>
+              }<br>
+              public static void main(String args[]) {<br>
+              GJApp.launch(new Test(), <br>
+              &quot;Using ProgressMonitorInputStream&quot;,<br>
+              300,300,450,300);<br>
+              }<br>
+              }<br>
+              class GJApp extends WindowAdapter {<br>
+              static private JPanel statusArea = new JPanel();<br>
+              static private JLabel status = new JLabel(&quot; &quot;);<br>
+              static private ResourceBundle resources;</p>
+            <p> public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h) {<br>
+              launch(f,title,x,y,w,h,null); <br>
+              }<br>
+              public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h,<br>
+              String propertiesFilename) {<br>
+              f.setTitle(title);<br>
+              f.setBounds(x,y,w,h);<br>
+              f.setVisible(true);</p>
+            <p> statusArea.setBorder(BorderFactory.createEtchedBorder());<br>
+              statusArea.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));<br>
+              statusArea.add(status);<br>
+              status.setHorizontalAlignment(JLabel.LEFT);</p>
+            <p> f.setDefaultCloseOperation(<br>
+              WindowConstants.DISPOSE_ON_CLOSE);</p>
+            <p> if(propertiesFilename != null) {<br>
+              resources = ResourceBundle.getBundle(<br>
+              propertiesFilename, Locale.getDefault());<br>
+              }</p>
+            <p> f.addWindowListener(new WindowAdapter() {<br>
+              public void windowClosed(WindowEvent e) {<br>
+              System.exit(0);<br>
+              }<br>
+              });<br>
+              }<br>
+              static public JPanel getStatusArea() {<br>
+              return statusArea;<br>
+              }<br>
+              static public void showStatus(String s) {<br>
+              status.setText(s);<br>
+              }<br>
+              static Object getResource(String key) {<br>
+              if(resources != null) {<br>
+              return resources.getString(key);<br>
+              }<br>
+              return null;<br>
+              }<br>
+              }</p>
+            <hr noshade size="1">
+            <p> 6.7 撤消/重复</p>
+            <p>&nbsp;</p>
+            <p> 6.7.1 一个简单的撤消/重复样例</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例6-12 一个简单的撤消/重复样例</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import javax.swing.undo.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class Test extends JApplet {<br>
+              private JPanel colorPanel = new JPanel();<br>
+              private BackgroundColorEdit undo = new BackgroundColorEdit();<br>
+              private Color oldColor;</p>
+            <p> public void init() {<br>
+              colorPanel.setBorder(<br>
+              BorderFactory.createTitledBorder(<br>
+              &quot;Change color and subsequently undo &quot; +<br>
+              &quot;from the Edit menu&quot;));</p>
+            <p> makeMenuBar();<br>
+              getContentPane().add(colorPanel, BorderLayout.CENTER);<br>
+              }<br>
+              private void makeMenuBar() {<br>
+              JMenuBar menuBar = new JMenuBar();<br>
+              JMenu editMenu = new JMenu(&quot;Edit&quot;);</p>
+            <p> editMenu.add(new SetColorAction());<br>
+              editMenu.add(new UndoAction());</p>
+            <p> menuBar.add(editMenu);<br>
+              setJMenuBar(menuBar);<br>
+              }<br>
+              class SetColorAction extends AbstractAction {<br>
+              public SetColorAction() {<br>
+              super(&quot;Set color ...&quot;);<br>
+              }<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              Color color = JColorChooser.showDialog(<br>
+              Test.this, // parent component<br>
+              &quot;Pick A Color&quot;, // dialog title<br>
+              null); // initial color</p>
+            <p> if(color != null) { <br>
+              oldColor = colorPanel.getBackground();<br>
+              colorPanel.setBackground(color);<br>
+              }<br>
+              }<br>
+              }<br>
+              class UndoAction extends AbstractAction {<br>
+              public UndoAction() {<br>
+              putValue(Action.NAME, undo.getUndoPresentationName());<br>
+              }<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              String name = (String)getValue(Action.NAME);<br>
+              boolean isUndo = name.equals(<br>
+              undo.getUndoPresentationName());</p>
+            <p> if(isUndo) {<br>
+              undo.undo(); <br>
+              putValue(Action.NAME,<br>
+              undo.getRedoPresentationName());<br>
+              }<br>
+              else {<br>
+              undo.redo(); <br>
+              putValue(Action.NAME,<br>
+              undo.getUndoPresentationName());<br>
+              }<br>
+              }<br>
+              }<br>
+              class BackgroundColorEdit extends AbstractUndoableEdit {<br>
+              public void undo() throws CannotUndoException {<br>
+              super.undo();<br>
+              toggleColor();<br>
+              }<br>
+              public void redo() throws CannotRedoException {<br>
+              super.redo();<br>
+              toggleColor();<br>
+              }<br>
+              public String getUndoPresentationName() {<br>
+              return &quot;Undo&quot;;<br>
+              }<br>
+              public String getRedoPresentationName() {<br>
+              return &quot;Redo&quot;;<br>
+              }<br>
+              private void toggleColor() {<br>
+              Color color = colorPanel.getBackground();<br>
+              colorPanel.setBackground(oldColor);<br>
+              oldColor = color;<br>
+              }<br>
+              }<br>
+              }</p>
+            <hr noshade size="1">
+            <p> 6.7.2 UndoableEditSupport</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例6-13 使用UndoableEditSupport</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import javax.swing.event.*;<br>
+            import javax.swing.undo.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class Test extends JApplet {<br>
+              private ColorPanel colorPanel = new ColorPanel();<br>
+              private UndoAction undoAction = new UndoAction();</p>
+            <p> public void init() {<br>
+              colorPanel.setBorder(<br>
+              BorderFactory.createTitledBorder(<br>
+              &quot;Change color and subsequently undo &quot; +<br>
+              &quot;from the Edit menu&quot;));</p>
+            <p> makeMenuBar();<br>
+              colorPanel.addUndoableEditListener(undoAction);<br>
+              getContentPane().add(colorPanel, BorderLayout.CENTER);<br>
+              }<br>
+              private void makeMenuBar() {<br>
+              JMenuBar menuBar = new JMenuBar();<br>
+              JMenu editMenu = new JMenu(&quot;Edit&quot;);</p>
+            <p> editMenu.add(new SetColorAction());<br>
+              editMenu.add(undoAction);</p>
+            <p> menuBar.add(editMenu);<br>
+              setJMenuBar(menuBar);<br>
+              }<br>
+              class UndoAction extends AbstractAction <br>
+              implements UndoableEditListener {<br>
+              UndoableEdit lastEdit;</p>
+            <p> public UndoAction() {<br>
+              putValue(Action.NAME, &quot;Undo&quot;);<br>
+              setEnabled(false);<br>
+              }<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              String name = (String)getValue(Action.NAME);<br>
+              boolean isUndo = name.equals(<br>
+              lastEdit.getUndoPresentationName());<br>
+              if(isUndo) {<br>
+              lastEdit.undo(); <br>
+              putValue(Action.NAME,<br>
+              lastEdit.getRedoPresentationName());<br>
+              }<br>
+              else {<br>
+              lastEdit.redo(); <br>
+              putValue(Action.NAME,<br>
+              lastEdit.getUndoPresentationName());<br>
+              }<br>
+              }<br>
+              public void undoableEditHappened(UndoableEditEvent e) {<br>
+              lastEdit = e.getEdit();</p>
+            <p> putValue(Action.NAME, <br>
+              lastEdit.getUndoPresentationName());</p>
+            <p> if(lastEdit.canUndo())<br>
+              setEnabled(true);<br>
+              }<br>
+              }<br>
+              class SetColorAction extends AbstractAction {<br>
+              public SetColorAction() {<br>
+              super(&quot;Set color ...&quot;);<br>
+              }<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              Color color = JColorChooser.showDialog(<br>
+              Test.this, // parent component<br>
+              &quot;Pick A Color&quot;, // dialog title<br>
+              null); // initial color</p>
+            <p> if(color != null) { <br>
+              colorPanel.setBackground(color);<br>
+              }<br>
+              }<br>
+              }<br>
+              }<br>
+              class ColorPanel extends JPanel {<br>
+              UndoableEditSupport support;<br>
+              BackgroundColorEdit edit = new BackgroundColorEdit();<br>
+              Color oldColor;</p>
+            <p> public void addUndoableEditListener(<br>
+              UndoableEditListener l) {<br>
+              support.addUndoableEditListener(l);<br>
+              }<br>
+              public void removeUndoableEditListener(<br>
+              UndoableEditListener l) {<br>
+              support.removeUndoableEditListener(l);<br>
+              }<br>
+              public void setBackground(Color color) {<br>
+              oldColor = getBackground();<br>
+              super.setBackground(color);</p>
+            <p> if(support == null)<br>
+              support = new UndoableEditSupport();</p>
+            <p> support.postEdit(edit);<br>
+              }<br>
+              class BackgroundColorEdit extends AbstractUndoableEdit {<br>
+              public void undo() throws CannotUndoException {<br>
+              super.undo();<br>
+              toggleColor();<br>
+              }<br>
+              public void redo() throws CannotRedoException {<br>
+              super.redo();<br>
+              toggleColor();<br>
+              }<br>
+              public String getUndoPresentationName() {<br>
+              return &quot;Undo Background Color Change&quot;;<br>
+              }<br>
+              public String getRedoPresentationName() {<br>
+              return &quot;Redo Background Color Change&quot;;<br>
+              }<br>
+              private void toggleColor() {<br>
+              Color color = getBackground();<br>
+              setBackground(oldColor);<br>
+              oldColor = color;<br>
+              }<br>
+              }<br>
+              }</p>
+            <hr noshade size="1">
+            <p> 6.7.3 组合编辑</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例6-14 使用组合编辑</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import javax.swing.event.*;<br>
+            import javax.swing.undo.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class Test extends JApplet {<br>
+              private UndoableList list = new UndoableList();<br>
+              private JScrollPane scrollPane = new JScrollPane(list);</p>
+            <p> private JButton addButton = new JButton(&quot;Add Item&quot;),<br>
+              endButton = new JButton(&quot;End&quot;),<br>
+              undoButton = new JButton(&quot;Undo&quot;);</p>
+            <p> private UndoAction undoAction = new UndoAction();<br>
+              private CompoundEdit compoundEdit = new CompoundEdit();<br>
+              private int cnt=0;</p>
+            <p> public void init() {<br>
+              Container contentPane = getContentPane();</p>
+            <p> contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(addButton);<br>
+              contentPane.add(endButton);<br>
+              contentPane.add(undoButton);<br>
+              contentPane.add(scrollPane);</p>
+            <p> scrollPane.setPreferredSize(new Dimension(150,150));<br>
+              list.addUndoableEditListener(undoAction);</p>
+            <p> endButton.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              compoundEdit.end();<br>
+              updateButtonsEnabledState();<br>
+              }<br>
+              });<br>
+              addButton.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              list.undoableAdd(&quot;item #&quot; + cnt++);<br>
+              updateButtonsEnabledState();<br>
+              }<br>
+              });<br>
+              undoButton.addActionListener(undoAction);</p>
+            <p> endButton.setEnabled(false);<br>
+              undoButton.setEnabled(false);<br>
+              }<br>
+              private void updateButtonsEnabledState() {<br>
+              boolean inProgress = compoundEdit.isInProgress();</p>
+            <p> endButton.setEnabled(inProgress);<br>
+              addButton.setEnabled(inProgress);</p>
+            <p> if(undoButton.getText().equals(&quot;Undo&quot;))<br>
+              undoButton.setEnabled(compoundEdit.canUndo());<br>
+              else<br>
+              undoButton.setEnabled(compoundEdit.canRedo());<br>
+              }<br>
+              class UndoAction extends AbstractAction <br>
+              implements UndoableEditListener {</p>
+            <p> public UndoAction() {<br>
+              putValue(Action.NAME, &quot;Undo&quot;);<br>
+              }<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              String name = undoButton.getText();<br>
+              boolean isUndo = name.equals(&quot;Undo&quot;);</p>
+            <p> if(isUndo) compoundEdit.undo(); <br>
+              else compoundEdit.redo(); </p>
+            <p> undoButton.setText(isUndo ? &quot;Redo&quot; : &quot;Undo&quot;);<br>
+              }<br>
+              public void undoableEditHappened(UndoableEditEvent e) {<br>
+              UndoableEdit edit = e.getEdit();<br>
+              compoundEdit.addEdit(edit);<br>
+              endButton.setEnabled(true);<br>
+              }<br>
+              }<br>
+              }<br>
+              class UndoableList extends JList {<br>
+              UndoableEditSupport support = new UndoableEditSupport();<br>
+              DefaultListModel model;</p>
+            <p> public UndoableList() {<br>
+              setModel(model = new DefaultListModel());<br>
+              }<br>
+              public void addUndoableEditListener(UndoableEditListener l) {<br>
+              support.addUndoableEditListener(l);<br>
+              }<br>
+              public void removeUndoableEditListener(<br>
+              UndoableEditListener l) {<br>
+              support.removeUndoableEditListener(l);<br>
+              }<br>
+              public void undoableAdd(Object s) {<br>
+              model.addElement(s);<br>
+              support.postEdit(new AddItemEdit());<br>
+              }<br>
+              class AddItemEdit extends AbstractUndoableEdit {<br>
+              Object lastItemAdded;</p>
+            <p> public void undo() throws CannotUndoException {<br>
+              super.undo();<br>
+              lastItemAdded = model.getElementAt(model.getSize()-1);<br>
+              model.removeElement(lastItemAdded);<br>
+              }<br>
+              public void redo() throws CannotRedoException {<br>
+              super.redo();<br>
+              model.addElement(lastItemAdded);<br>
+              }<br>
+              }<br>
+              }</p>
+            <hr noshade size="1">
+            <p> 6.7.4 UndoManager</p>
+            <p>&nbsp;</p>
+            <p> 6.7.5 状态编辑</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例6-15 使用状态编辑</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import javax.swing.event.*;<br>
+            import javax.swing.undo.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import java.util.*;
+            <p>public class Test extends JApplet {<br>
+              private TextFieldPanel panel = new TextFieldPanel();<br>
+              private StateEdit stateEdit;</p>
+            <p> private JButton startButton = new JButton(&quot;Start Edit&quot;),<br>
+              endButton = new JButton(&quot;End Edit&quot;),<br>
+              undoButton = new JButton(&quot;Undo&quot;);</p>
+            <p> public void init() {<br>
+              Container contentPane = getContentPane();</p>
+            <p> contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(startButton);<br>
+              contentPane.add(endButton);<br>
+              contentPane.add(undoButton);<br>
+              contentPane.add(panel);</p>
+            <p> endButton.setEnabled(false);<br>
+              undoButton.setEnabled(false);</p>
+            <p> startButton.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              stateEdit = new StateEdit(panel);<br>
+              endButton.setEnabled(true);<br>
+              startButton.setEnabled(false);<br>
+              }<br>
+              });<br>
+              endButton.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              stateEdit.end();<br>
+              undoButton.setEnabled(true);<br>
+              endButton.setEnabled(false);<br>
+              }<br>
+              });<br>
+              undoButton.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              String name = undoButton.getText();<br>
+              boolean isUndo = name.equals(&quot;Undo&quot;);</p>
+            <p> if(isUndo) stateEdit.undo(); <br>
+              else stateEdit.redo(); </p>
+            <p> undoButton.setText(isUndo ? &quot;Redo&quot; : &quot;Undo&quot;);<br>
+              }<br>
+              });<br>
+              }<br>
+              }<br>
+              class TextFieldPanel extends JPanel implements StateEditable {<br>
+              JTextField[] fields = new JTextField[] {<br>
+              new JTextField(&quot;text field 1&quot;), <br>
+              new JTextField(&quot;text field 2&quot;),<br>
+              new JTextField(&quot;text field 3&quot;), <br>
+              new JTextField(&quot;text field 4&quot;),<br>
+              };</p>
+            <p> public TextFieldPanel() {<br>
+              setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));</p>
+            <p> for(int i=0; i &lt; fields.length; ++i)<br>
+              add(fields[i]);<br>
+              }<br>
+              public void storeState(Hashtable hashtable) {<br>
+              for(int i=0; i &lt; fields.length; ++i)<br>
+              hashtable.put(fields[i], fields[i].getText());<br>
+              }<br>
+              public void restoreState(Hashtable hashtable) {<br>
+              Enumeration keys = hashtable.keys();</p>
+            <p> while(keys.hasMoreElements()) {<br>
+              JTextField field = (JTextField)keys.nextElement();<br>
+              field.setText((String)hashtable.get(field));<br>
+              }<br>
+              }<br>
+              }</p>
+            <hr noshade size="1">
+            <p> 6.8 本章回顾</p>
+            <p>&nbsp;</p>
+            <p> [<a href="index.html" target="_self">目录</a>][<a href="s05.htm">上一页</a>][<a href="s07.htm">下一页</a>](飒龙收藏/2002.5.18) 
+            </p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </td>
+  </tr>
+</tbody>
+</table>
+<script language="javascript">bottomprint()</script>
+</body>
+</html>

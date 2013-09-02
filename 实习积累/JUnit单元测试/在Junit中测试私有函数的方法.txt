@@ -1,0 +1,27 @@
+eclipse中如何写一个测试私有方法的junit？
+假设类Summer定义如下：
+public class Summer{
+private int methodone(String argsone){
+//method code
+.......
+return 4;
+}
+}
+
+测试如下：
+public class SummerTest extends TestCase {
+public void testMethodone(){
+Object rightResult = xxxxx;
+Summer example = new Summer.newInstance();
+Method m = example .getClass().getDeclaredMethod("methodone",new Class[]{String.class});
+m.setAccessible(true);
+Object result = m.invoke(example ,new Object[] {new String(xxxx)});
+m.setAccessible(false);
+if (result.equals(rightResult)){
+//your code
+......
+}
+}
+}
+
+

@@ -1,0 +1,542 @@
+<SCRIPT LANGUAGE="JavaScript" SRC="/-fs0/sys/pop-up.js"></SCRIPT>
+
+<SCRIPT LANGUAGE="JavaScript" SRC="/-fs0/sys/pop-up-all.js"></SCRIPT>
+
+<html>
+<head>
+<title>易都网--Java 2 图形设计卷Ⅱ：SWING</title>
+<LINK rel="stylesheet" href="../../../_public/javaa.css">
+<meta http-equiv="Content-Type" content="text/html; charset=GBK">
+<script language="JavaScript" src="../../../_public/javaa.js"></script>
+<meta name="keywords" content="Java,JSP,ASP,PHP,J2EE,EJB,JavaScript,C/C++,ASM,CSS,HTML,XML,网络安全,MySQL,ACCESS">
+</head>
+<body bgcolor="#FFFFFF">
+<table border=0 cellpadding=0 cellspacing=0 width="100%">
+  <tbody> 
+  <script language="javascript">print2()</script>
+  <tr> 
+    <td width="100%"> 
+      <table bgcolor=#EEEEEE border=0 cellpadding=3 cellspacing=0 width="100%">
+        <tbody> 
+        <tr> 
+          <td class=f1 id=thetd width="100%"> 
+            <p>[<a href="index.html" target="_self">目录</a>][<a href="s06.htm">上一页</a>][<a href="s08.htm">下一页</a>]</p>
+            <p align="center"><b>第7章 插入式界面样式</b></p>
+            <p>　　插入式界面样式是建立在第3章“Swing组件体系结构”中讨论的组件体系结构基础之上的，即一个组件的界面样式是通过把一个特殊的UI代表插入这个组件来设置的。<br>
+              　　Swing还提供了一个API来管理界面样式。界面样式的管理包括如下几个方面：定义界面样式、指定当前的界面样式和为当前的界面样式添加附加界面样式等。例如，图7-1示出了一个以不同界面样式运行的小应用程序（顺时针方向，从左上开始分别是Metal、Windows、Motif和Macintoch的界面样式）。这个小应用程序提供了一个组合框，用于为该小应用程序的所有组件选取界面样式。这个小应用程序借助Swing的UIManager类，根据在该组合框中的选择安装界面样式(注：未列出图7-1中示出的小应用程序的代码，例7-3给出了一个改变界面样式的例子)。 
+            </p>
+            <p> 7.1 插入式界面样式</p>
+            <p>&nbsp;</p>
+            <p> 7.1.1 界面样式结构</p>
+            <p align="center"><b>例7-1 一个多行标签</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import javax.swing.plaf.BorderUIResource;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import java.util.*;
+            <p>public class Test extends JApplet {<br>
+              public void init() {<br>
+              Container contentPane = getContentPane();<br>
+              JLabel label = new JLabel(<br>
+              &quot;A long string that is high on verbiage and &quot; +<br>
+              &quot;low on content.&quot;);</p>
+            <p> MultilineLabel multilineLabel = new MultilineLabel(<br>
+              &quot;A long string that is high on verbiage and &quot; +<br>
+              &quot;low on content.&quot;); </p>
+            <p> contentPane.setLayout(new BorderLayout(2,10));<br>
+              <br>
+              contentPane.add(label, BorderLayout.NORTH);<br>
+              contentPane.add(multilineLabel, BorderLayout.CENTER);<br>
+              }<br>
+              }<br>
+              class MultilineLabel extends JTextArea {<br>
+              public MultilineLabel(String s) {<br>
+              super(s);<br>
+              }<br>
+              public void updateUI() {<br>
+              super.updateUI();</p>
+            <p> // turn on wrapping and disable editing and highlighting</p>
+            <p> setLineWrap(true);<br>
+              setWrapStyleWord(true);<br>
+              setHighlighter(null);<br>
+              setEditable(false);</p>
+            <p> // Set the text area's border, colors and font to<br>
+              // that of a label</p>
+            <p> LookAndFeel.installBorder(this, &quot;Label.border&quot;);</p>
+            <p> LookAndFeel.installColorsAndFont(this, <br>
+              &quot;Label.background&quot;, <br>
+              &quot;Label.foreground&quot;,<br>
+              &quot;Label.font&quot;);<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 7.1.2 界面样式缺省值</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例7-2 修改UI缺省值</b></p>
+            <hr noshade size="1">
+            import java.awt.Color;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              public void init() {<br>
+              UIManager.put(&quot;Tree.background&quot;, Color.lightGray);<br>
+              UIManager.put(&quot;Tree.textBackground&quot;, Color.lightGray);</p>
+            <p> //ScrollBar.width is peculiar to Metal L&amp;F<br>
+              UIManager.put(&quot;ScrollBar.width&quot;, new Integer(25));<br>
+              getContentPane().add(new JScrollPane(new JTree()));<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 7.1.3 UI管理器</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例7-3 变换一个组件树的界面样式</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import java.util.*;
+            <p>import com.sun.java.swing.plaf.motif.MotifLookAndFeel;<br>
+              import com.sun.java.swing.plaf.windows.WindowsLookAndFeel;<br>
+              import javax.swing.plaf.metal.MetalLookAndFeel;</p>
+            <p>import javax.swing.plaf.ColorUIResource;</p>
+            <p>public class Test extends JApplet {<br>
+              public void init() {<br>
+              Container contentPane = getContentPane();</p>
+            <p> contentPane.add(new ControlPanel(), BorderLayout.NORTH);<br>
+              contentPane.add(new ComponentPanel(), <br>
+              BorderLayout.CENTER);<br>
+              }<br>
+              class ComponentPanel extends JPanel {<br>
+              public ComponentPanel() {<br>
+              JList list;<br>
+              JScrollBar sb;</p>
+            <p> setBorder(<br>
+              BorderFactory.createTitledBorder(&quot;Components&quot;));</p>
+            <p> add(new JCheckBox(&quot;check Me&quot;));<br>
+              add(new JRadioButton(&quot;radio button&quot;));<br>
+              add(new JButton(&quot;button&quot;));<br>
+              add(new JLabel(&quot;A Label:&quot;));<br>
+              add(new JTextField(&quot;text field&quot;));<br>
+              add(new JScrollPane(list = new JList(new Object[] {<br>
+              &quot;item 1&quot;, &quot;item 2&quot;, &quot;item 3&quot;,<br>
+              &quot;item 4&quot;, &quot;item 5&quot;, &quot;item 6&quot;,<br>
+              &quot;item 7&quot;, &quot;item 8&quot;, &quot;item 9&quot;,<br>
+              })));<br>
+              add(sb = new JScrollBar(SwingConstants.HORIZONTAL));<br>
+              sb.setPreferredSize(new Dimension(150,17));</p>
+            <p> add(sb = new JScrollBar(SwingConstants.VERTICAL));<br>
+              sb.setPreferredSize(new Dimension(20,175));</p>
+            <p> list.setVisibleRowCount(5);<br>
+              }<br>
+              }<br>
+              class ControlPanel extends JPanel {<br>
+              JCheckBox checkBox = new JCheckBox(&quot;UIResource&quot;);<br>
+              JRadioButton motifButton = new JRadioButton(&quot;Motif&quot;),<br>
+              windowsButton = new JRadioButton(&quot;Windows&quot;),<br>
+              metalButton = new JRadioButton(&quot;Metal&quot;);</p>
+            <p> public ControlPanel() {<br>
+              ActionListener listener = new RadioHandler();<br>
+              ButtonGroup group = new ButtonGroup();</p>
+            <p> group.add(motifButton);<br>
+              group.add(windowsButton);<br>
+              group.add(metalButton);</p>
+            <p> motifButton.addActionListener(listener);<br>
+              windowsButton.addActionListener(listener);<br>
+              metalButton.addActionListener(listener);</p>
+            <p> add(motifButton);<br>
+              add(windowsButton);<br>
+              add(metalButton);<br>
+              }<br>
+              class RadioHandler implements ActionListener {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              JRadioButton src = (JRadioButton)e.getSource();</p>
+            <p> try {<br>
+              if(src == motifButton)<br>
+              UIManager.setLookAndFeel(<br>
+              &quot;com.sun.java.swing.plaf.&quot; +<br>
+              &quot;motif.MotifLookAndFeel&quot;);</p>
+            <p> else if(src == windowsButton)<br>
+              UIManager.setLookAndFeel(<br>
+              &quot;com.sun.java.swing.plaf.&quot; +<br>
+              &quot;windows.WindowsLookAndFeel&quot;);</p>
+            <p> else if(src == metalButton)<br>
+              UIManager.setLookAndFeel(<br>
+              &quot;javax.swing.plaf.metal.&quot; +<br>
+              &quot;MetalLookAndFeel&quot;);<br>
+              }<br>
+              catch(Exception ex) {<br>
+              ex.printStackTrace();<br>
+              }<br>
+              SwingUtilities.updateComponentTreeUI(<br>
+              getContentPane());<br>
+              }<br>
+              }<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 7.1.4 UI资源</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例7-4 UI资源</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import java.util.*;
+            <p>import com.sun.java.swing.plaf.motif.MotifLookAndFeel;<br>
+              import javax.swing.plaf.metal.MetalLookAndFeel;</p>
+            <p>import javax.swing.plaf.ColorUIResource;</p>
+            <p>public class Test extends JApplet {<br>
+              private JButton button = new JButton(&quot;App Resource&quot;);</p>
+            <p> public void init() {<br>
+              Container contentPane = getContentPane();</p>
+            <p> contentPane.add(new ControlPanel(), BorderLayout.NORTH);<br>
+              contentPane.add(button, BorderLayout.CENTER);<br>
+              }<br>
+              class ControlPanel extends JPanel {<br>
+              boolean resource = false;<br>
+              JButton colorSetButton = new JButton(&quot;Set Color ...&quot;);<br>
+              JCheckBox checkBox = new JCheckBox(&quot;UIResource&quot;);<br>
+              JRadioButton motifButton = new JRadioButton(&quot;Motif&quot;),<br>
+              metalButton = new JRadioButton(&quot;Metal&quot;);</p>
+            <p> public ControlPanel() {<br>
+              ActionListener listener = new RadioHandler();<br>
+              ButtonGroup group = new ButtonGroup();</p>
+            <p> group.add(motifButton);<br>
+              group.add(metalButton);</p>
+            <p> motifButton.addActionListener(listener);<br>
+              metalButton.addActionListener(listener);</p>
+            <p> metalButton.setSelected(true);</p>
+            <p> add(motifButton);<br>
+              add(metalButton);<br>
+              add(Box.createHorizontalStrut(25));<br>
+              add(colorSetButton);<br>
+              add(checkBox);</p>
+            <p> Font buttonFont = button.getFont();<br>
+              button.setFont(new Font(buttonFont.getFamily(),<br>
+              Font.ITALIC, 56));</p>
+            <p> colorSetButton.addActionListener(new ActionListener(){<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              updateButtonColor();<br>
+              }<br>
+              });<br>
+              checkBox.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              resource = checkBox.isSelected();<br>
+              updateButtonColor();<br>
+              }<br>
+              });<br>
+              }<br>
+              private void updateButtonColor() {<br>
+              Color c = JColorChooser.showDialog(<br>
+              getContentPane(), // parent component<br>
+              &quot;Choose a Color&quot;, // title<br>
+              getBackground()); // initial color</p>
+            <p> if(resource) {<br>
+              button.setText(&quot;UI Resource&quot;);<br>
+              button.setForeground(new ColorUIResource(c));<br>
+              }<br>
+              else {<br>
+              button.setText(&quot;App Resource&quot;);<br>
+              button.setForeground(c);<br>
+              }<br>
+              }<br>
+              class RadioHandler implements ActionListener {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              JRadioButton src = (JRadioButton)e.getSource();</p>
+            <p> try {<br>
+              if(src == motifButton)<br>
+              UIManager.setLookAndFeel(<br>
+              &quot;com.sun.java.swing.plaf.&quot; +<br>
+              &quot;motif.MotifLookAndFeel&quot;);<br>
+              else if(src == metalButton)<br>
+              UIManager.setLookAndFeel(<br>
+              &quot;javax.swing.plaf.metal.&quot; +<br>
+              &quot;MetalLookAndFeel&quot;);<br>
+              }<br>
+              catch(Exception ex) {<br>
+              ex.printStackTrace();<br>
+              }<br>
+              SwingUtilities.updateComponentTreeUI(<br>
+              getContentPane());<br>
+              }<br>
+              }<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 7.2 Java界面样式</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例7-5 Metal客户属性</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import java.util.*;
+            <p>public class Test extends JApplet {<br>
+              JDesktopPane desktopPane = new JDesktopPane();</p>
+            <p> JInternalFrame jif = new JInternalFrame(<br>
+              &quot;Internal Frame &quot;, // title<br>
+              true, // resizable<br>
+              true, // closable<br>
+              true, // maximizable<br>
+              true); // iconifiable</p>
+            <p> JScrollBar scrollbar = new JScrollBar();<br>
+              JSlider slider = new JSlider();<br>
+              JToolBar toolbar = new JToolBar();<br>
+              JTree tree = new JTree();</p>
+            <p> public void init() {<br>
+              Container contentPane = getContentPane();</p>
+            <p><br>
+              jif.setPreferredSize(new Dimension(550, 450));<br>
+              jif.getContentPane().setLayout(new FlowLayout());<br>
+              jif.getContentPane().add(new ComponentPanel());</p>
+            <p> desktopPane.setLayout(new FlowLayout());<br>
+              desktopPane.add(jif);</p>
+            <p> contentPane.add(new ControlPanel(), BorderLayout.NORTH);<br>
+              contentPane.add(desktopPane, BorderLayout.CENTER);</p>
+            <p> }<br>
+              class ComponentPanel extends JPanel {<br>
+              public ComponentPanel() {<br>
+              JPanel panel = new JPanel();</p>
+            <p> setLayout(new BorderLayout());<br>
+              add(toolbar, BorderLayout.NORTH);<br>
+              add(panel, BorderLayout.CENTER);</p>
+            <p> panel.add(scrollbar);<br>
+              panel.add(slider);<br>
+              panel.add(new JScrollPane(tree));</p>
+            <p> tree.setPreferredSize(new Dimension(200,100));</p>
+            <p> toolbar.add(new JButton(&quot;button&quot;));<br>
+              }<br>
+              }<br>
+              class ControlPanel extends JPanel {<br>
+              JCheckBox rollover = new JCheckBox(<br>
+              &quot;JToolBar.rollover&quot;);<br>
+              JCheckBox palette = new JCheckBox(<br>
+              &quot;JInternalFrame.palette&quot;);<br>
+              JCheckBox filled = new JCheckBox(<br>
+              &quot;JSlider.isFilled&quot;);<br>
+              JCheckBox freeStanding = new JCheckBox(<br>
+              &quot; JScrollBar.freeStanding&quot;);</p>
+            <p> JRadioButton none = new JRadioButton(&quot;none&quot;);<br>
+              JRadioButton horizontal = new JRadioButton(&quot;horizontal&quot;);<br>
+              JRadioButton angled = new JRadioButton(&quot;angled&quot;);</p>
+            <p> public ControlPanel() {<br>
+              ActionListener checkBoxListener = <br>
+              new CheckBoxListener();<br>
+              ActionListener radioButtonListener = <br>
+              new RadioButtonListener();</p>
+            <p> palette.addActionListener(checkBoxListener);<br>
+              filled.addActionListener(checkBoxListener);<br>
+              rollover.addActionListener(checkBoxListener);<br>
+              freeStanding.addActionListener(checkBoxListener);</p>
+            <p> none.addActionListener(radioButtonListener);<br>
+              horizontal.addActionListener(radioButtonListener);<br>
+              angled.addActionListener(radioButtonListener);</p>
+            <p> ButtonGroup group = new ButtonGroup();<br>
+              group.add(none);<br>
+              group.add(horizontal);<br>
+              group.add(filled);</p>
+            <p> none.setSelected(true);<br>
+              freeStanding.setSelected(true);<br>
+              <br>
+              add(palette);<br>
+              add(filled);<br>
+              add(rollover);<br>
+              add(freeStanding);<br>
+              add(Box.createHorizontalStrut(10));<br>
+              add(new JLabel(&quot;Tree: &quot;));<br>
+              add(none);<br>
+              add(horizontal);<br>
+              add(angled);<br>
+              }<br>
+              class RadioButtonListener implements ActionListener {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              JRadioButton rb = (JRadioButton)e.getSource();</p>
+            <p> if(rb == none) {<br>
+              tree.putClientProperty(<br>
+              &quot;JTree.lineStyle&quot;, &quot;None&quot;);<br>
+              }<br>
+              if(rb == horizontal) {<br>
+              tree.putClientProperty(<br>
+              &quot;JTree.lineStyle&quot;, &quot;Horizontal&quot;);<br>
+              }<br>
+              if(rb == angled) {<br>
+              tree.putClientProperty(<br>
+              &quot;JTree.lineStyle&quot;, &quot;Angled&quot;);<br>
+              }<br>
+              tree.repaint();<br>
+              }<br>
+              }<br>
+              class CheckBoxListener implements ActionListener {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              JCheckBox cb = (JCheckBox)e.getSource();</p>
+            <p> if(cb == palette) {<br>
+              palette.putClientProperty(<br>
+              &quot;JInternalFrame.isPalette&quot;, <br>
+              new Boolean(cb.isSelected()));</p>
+            <p> jif.revalidate();<br>
+              }<br>
+              else if(cb == filled) {<br>
+              slider.putClientProperty(<br>
+              &quot;JSlider.isFilled&quot;, <br>
+              new Boolean(cb.isSelected()));</p>
+            <p> slider.repaint();<br>
+              }<br>
+              else if(cb == rollover) {<br>
+              toolbar.putClientProperty(<br>
+              &quot;JToolBar.isRollover&quot;, <br>
+              new Boolean(cb.isSelected()));</p>
+            <p> toolbar.repaint();<br>
+              }<br>
+              else if(cb == freeStanding) {<br>
+              scrollbar.putClientProperty(<br>
+              &quot;JScrollBar.isFreeStanding&quot;, <br>
+              new Boolean(cb.isSelected()));</p>
+            <p> scrollbar.repaint();<br>
+              }<br>
+              }<br>
+              }<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 7.2.1 客户属性</p>
+            <p>&nbsp;</p>
+            <p> 7.2.2 主题</p>
+            <p align="center"><b>例7-6 一个简单的定制主题</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import javax.swing.*;<br>
+            import javax.swing.plaf.*;<br>
+            import javax.swing.plaf.metal.*;<br>
+            import javax.swing.plaf.*;
+            <p>public class Test extends JApplet {<br>
+              public void init() {<br>
+              Container contentPane = getContentPane();</p>
+            <p> contentPane.setLayout(new FlowLayout());</p>
+            <p> setMetalTheme(new ExperimentalTheme());</p>
+            <p> contentPane.add(new JButton(&quot;button&quot;));<br>
+              contentPane.add(new JCheckBox(&quot;check me&quot;));<br>
+              }<br>
+              private void setMetalTheme(MetalTheme theme) {<br>
+              MetalLookAndFeel.setCurrentTheme(new ExperimentalTheme());</p>
+            <p> // Metal Look and Feel must be (re)loaded for the<br>
+              // new theme to take effect ...</p>
+            <p> try {<br>
+              UIManager.setLookAndFeel(<br>
+              &quot;javax.swing.plaf.metal.MetalLookAndFeel&quot;);<br>
+              }<br>
+              catch(IllegalAccessException e1) {}<br>
+              catch(UnsupportedLookAndFeelException e2) {}<br>
+              catch(InstantiationException e3) {}<br>
+              catch(ClassNotFoundException e4) {}<br>
+              }<br>
+              }<br>
+              class ExperimentalTheme extends DefaultMetalTheme {<br>
+              public FontUIResource getControlTextFont() { <br>
+              return new FontUIResource(&quot;SanSerif&quot;, <br>
+              Font.BOLD + Font.ITALIC, 24);<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p>&nbsp;</p>
+            <p align="center"><b>例7-7 安装一个附加界面样式</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              public void init() {<br>
+              UIManager.addAuxiliaryLookAndFeel( <br>
+              new ExampleAuxiliaryLookAndFeel());</p>
+            <p> Container contentPane = getContentPane();<br>
+              JButton button = new JButton(&quot;button&quot;);</p>
+            <p> contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(button);<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p align="center"><b>例7-8 附加界面样式的例子</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import javax.swing.*;
+            <p>public class ExampleAuxiliaryLookAndFeel extends LookAndFeel {<br>
+              public String getDescription(){<br>
+              return &quot;example auxiliary look and feel&quot;;<br>
+              }<br>
+              public String getID() {<br>
+              return &quot;example&quot;;<br>
+              }<br>
+              public String getName() {<br>
+              return &quot;example auxiliary&quot;; <br>
+              }<br>
+              public boolean isNativeLookAndFeel() {<br>
+              return false;<br>
+              }<br>
+              public boolean isSupportedLookAndFeel() {<br>
+              return true;<br>
+              }<br>
+              public UIDefaults getDefaults() {<br>
+              UIDefaults table = new UIDefaults();</p>
+            <p> Object[] uiDefaults = {<br>
+              &quot;ButtonUI&quot;, &quot;AuxiliaryButtonUI&quot;<br>
+              };</p>
+            <p> table.putDefaults(uiDefaults);<br>
+              return table;<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p align="center"><b>例7-9 一个附加UI</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.accessibility.*;<br>
+            import javax.swing.*;<br>
+            import javax.swing.plaf.*;
+            <p>public class AuxiliaryButtonUI extends ComponentUI {<br>
+              private static ComponentUI cui = new AuxiliaryButtonUI();<br>
+              private static AuxiliaryButtonMouseListener ml = <br>
+              new AuxiliaryButtonMouseListener();</p>
+            <p> // must be implemented<br>
+              public static ComponentUI createUI(JComponent c) {<br>
+              return cui;<br>
+              }<br>
+              public void installUI(JComponent c) {<br>
+              c.addMouseListener(ml);<br>
+              }<br>
+              public void uninstallUI(JComponent c) {<br>
+              c.removeMouseListener(ml);<br>
+              }<br>
+              public void update(Graphics g, JComponent c) {<br>
+              // don't want ComponentUI default behavior, which is<br>
+              // to clear the background<br>
+              }<br>
+              }<br>
+              class AuxiliaryButtonMouseListener extends MouseAdapter {<br>
+              public void mouseEntered(MouseEvent e) {<br>
+              JComponent c = (JComponent)e.getSource();<br>
+              AccessibleContext ac = c.getAccessibleContext();<br>
+              String role = ac.getAccessibleRole().toString();<br>
+              String name = ac.getAccessibleName();</p>
+            <p> System.out.println(&quot;mouse entered component of type &quot; 
+              +<br>
+              role + &quot; named &quot; + name);<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p>&nbsp;</p>
+            <p>&nbsp;</p>
+            <p> 7.3 附加UI</p>
+            <p>&nbsp;</p>
+            <p> 7.4 本章回顾</p>
+            <p>&nbsp;</p>
+            <p>[<a href="index.html" target="_self">目录</a>][<a href="s06.htm">上一页</a>][<a href="s08.htm">下一页</a>](飒龙收藏/2002.5.18) 
+            </p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </td>
+  </tr>
+</tbody>
+</table>
+<script language="javascript">bottomprint()</script>
+</body>
+</html>

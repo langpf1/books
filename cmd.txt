@@ -1,0 +1,8 @@
+E:进入E盘
+dir: 显示所有目录
+
+Netstat -a -e -n -o -s－an
+
+dos进入E盘命令：E:
+
+netstat -an

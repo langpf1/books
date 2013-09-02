@@ -1,0 +1,76 @@
+还原的周文波给的uap65_design_backup 
+jdbc:sqlserver://20.10.129.152:1433;database=uap65_design 
+用户名密码：sa/ufsoft*123
+########################################
+65开发库:
+===========================================
+数据库信息： 
+type : sqlserver2005
+host:  20.10.80.128
+databaseName: uap65_design
+u/p:   sa/uapbd
+============================================
+65基准库:
+===========================================
+数据库信息： 
+type : sqlserver2005
+host:  20.10.80.128
+databaseName: uap65_jzk
+u/p:   sa/uapbd
+################################################
+v65基准库design数据源：
+ae_v65_design/1@ora11g_20.10.80.165
+超级管理员：super 
+管理员：1
+集团账号：admin
+密码：ufsoft*123
+普通账号：dev1~6;ae_rdi,ae_olap,ae_smart,ae_dm
+密码:ae1234
+-----------------------------------
+foodmart数据源：ae_v65_foodmart/1@ora11g_20.10.80.165
+#############################################
+v65测试库design数据源：
+ae_design/1@ora11g_20.10.80.165
+超级管理员：super 
+管理员：1
+集团账号：admin
+密码：ufsoft*123
+普通账号：dev1~6;ae_rdi,ae_olap,ae_smart,ae_dm
+密码:ae1234
+##############################################
+v63基准库design数据源：
+design数据源：ae_65_base/1@ora11g_20.10.130.235 
+超级管理员账号：super
+管理员账号:1
+集团管理员账号:admin
+密码：ufsoft*123 
+普通账号：dev1~10
+密码：ae1234
+##################################################
+zior_cube  cubemode PropertyTableModel CubeModelDesigner SchemerTreeModel 
+#############################################
+chenkund 避免double相减误差
+//        return v0 - v1;
+        BigDecimal b0 = new BigDecimal(Double.toString(v0));  
+        BigDecimal b1 = new BigDecimal(Double.toString(v1));
+        return b0.subtract(b1).doubleValue();
+#############################################
+shell编程能力、熟悉makefile编写
+网络编程能力：熟悉TCP/IP，Socket,多线程。
+PHP CSS JS mosh
+#############################################
+如何在eclipse console控制台输出SQL信息
+\NCHOME\ierp\bin   logger-config.properties   sql.level=ERROR——>sql.level=DEBUG 
+#############################################
+删除C:/Temp文件夹，才能跑ant脚本
+#############################################
+ITML  ETL
+#############################################
+rdi start   rdi stop    > 111.log  echo %RDI_HOME% 
+修改rdi.bat文件中的内容：-classpath %RDI_CLASSPATH% 为：-classpath "%RDI_CLASSPATH%"
+#####################################################
+testNG官方仓库地址：
+https://github.com/cbeust/testng.git
+###############################################
+园区网下载软件：
+\\ufnas1\cdserver 

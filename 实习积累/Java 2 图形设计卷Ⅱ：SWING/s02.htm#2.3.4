@@ -1,0 +1,957 @@
+<SCRIPT LANGUAGE="JavaScript" SRC="/-fs0/sys/pop-up.js"></SCRIPT>
+
+<SCRIPT LANGUAGE="JavaScript" SRC="/-fs0/sys/pop-up-all.js"></SCRIPT>
+
+<html>
+<head>
+<title>易都网--Java 2 图形设计卷Ⅱ：SWING</title>
+<LINK rel="stylesheet" href="../../../_public/javaa.css">
+<meta http-equiv="Content-Type" content="text/html; charset=GBK">
+<script language="JavaScript" src="../../../_public/javaa.js"></script>
+<meta name="keywords" content="Java,JSP,ASP,PHP,J2EE,EJB,JavaScript,C/C++,ASM,CSS,HTML,XML,网络安全,MySQL,ACCESS">
+</head>
+<body bgcolor="#FFFFFF">
+<table border=0 cellpadding=0 cellspacing=0 width="100%">
+  <tbody> 
+  <script language="javascript">print2()</script>
+  <tr> 
+    <td width="100%"> 
+      <table bgcolor=#EEEEEE border=0 cellpadding=3 cellspacing=0 width="100%">
+        <tbody> 
+        <tr> 
+          <td class=f1 id=thetd width="100%"> 
+            <p>[<a href="index.html" target="_self">目录</a>][<a href="s01.htm" target="_self">上一页</a>][<a href="s03.htm" target="_self">下一页</a>]</p>
+            <p align="center"><b>第2章 Swing的基本知识</b></p>
+            <p>　　本章介绍开发Swing小应用程序和应用程序时要用到的Swing的基本知识。<br>
+              　　虽然Swing是AWT的扩展，但是两者的基本概念还是有许多不同之处。首先，Swing小应用程序和应用程序的实现方式与AWT小应用程序和应用程序的实现方式有所不同。而且，如果开发人员想要开发同时使用AWT组件和Swing组件的小应用程序或应用程序，则还必须注意混合使用轻量组件和重量组件所带来的许多问题。<br>
+              　　Swing是线程不安全的，这就是说，在大多数情况下，只能从事件派发线程中访问Swing组件。本章将介绍采用这种方法的原因及使用这种方法所带来的结果，另外，本章还介绍了Swing提供的一些机制，这些机制使其他线程能从事件派发线程中执行代码。 
+            </p>
+            <p><b><a name="2.1"></a>2.1 小应用程序与应用程序</b></p>
+            <p>　　使用Swing组件的小应用程序和应用程序应该分别扩展Swing的JApplet(java.applet.Applet的一个扩展)和JFrame(java.awt.Frame的一个扩展)。JApplet和JFrame除具有它们的超类所提供的功能外，还提供对Swing的支持。虽然可以分别使用Applet类和Frame类来实现Swing的小应用程序和应用程序，但是，这样很可能出现事件处理问题和重新绘制问题。因此，应当总是使用JApplet和JFrame来实现Swing的小应用程序和应用程序。<br>
+              　　JApplet和JFrame都是只包含一个组件的容器，这个组件是JRootPane的一个实例，JRootPane在12.2节“JRootPane”中介绍。目前，只需知道JRootPane包含一个称作为内容窗格的容器即可。内容窗格包含与特定的小应用程序或应用程序有关的所有内容。这里，内容指包含在小应用程序和或应用程序中的组件。实际上，这就是说小应用程序和应用程序必须把组件添加到内容窗格中而不是把它们直接添加到小应用程序或应用程序(或根窗格)中。而且，我们不应该直接为Swing小应用程序或应用程序设置布局管理器。因为组件添加到内容窗格中，所以应该为内容窗格而不是小应用程序或应用程序设置布局管理器。<br>
+              　　包含一个JRootPane实例的Swing容器重载用来添加组件和设置布局管理器的方法。这些方法会弹出提醒人们的异常信息：不能把组件直接添加到包含一个JRootPane实例的Swing容器中，也不能为该容器设置布局管理器。 
+            </p>
+            <p><a name="2.1.1"></a><b>2.1.1 小应用程序</b></p>
+            <p>　　<a href="s02_t01.htm" target="_blank">图2-1</a>所示的小应用程序包含一个JLabel实例，该实例有一个图标和一些文本。该小应用程序扩展JApplet并通过调用JApplet.getContentPane()方法来获得对其内容窗格的引用。这个标签随后被实例化并被添加到这个内容窗格中。</p>
+            <p> 　　<applet code="Test.class" archive="s02_t01.jar" width=300 height=150>
+              </applet><br>
+              　　　　　　图2-1 Swing小应用程序</p>
+            <p> 　　例2-1列出了图2-1所示的小应用程序的代码。</p>
+            <p align="center"><b>例2-1 一个Swing小应用程序</b></p>
+            <p>　　import javax.swing.*;<br>
+              　　import java.awt.*;<br>
+              　　import java.awt.event.*;</p>
+            <p>　　public class Test extends JApplet {<br>
+              　　　public void init() {<br>
+              　　　　Container contentPane = getContentPane();<br>
+              　　　　/*原文<br>
+              　　　　Icon icon = new ImageIcon(&quot;swing.gif&quot;,&quot;An animated 
+              GIF of Duke on a swing&quot;);<br>
+              　　　　JLabel label = new JLabel(&quot;Swing!&quot;,icon,SwingConstants.CENTER);<br>
+              　　　　*/<br>
+              　　　　//修改后<br>
+              　　　　JLabel label = new JLabel(&quot;Swing!&quot;, <br>
+              　　　　new ImageIcon(getImage(getCodeBase(),&quot;swing.gif&quot;),&quot;An 
+              animated GIF of Duke on a swing&quot;),<br>
+              　　　　　SwingConstants.CENTER);<br>
+              　　　　contentPane.add(label, BorderLayout.CENTER);<br>
+              　　　}<br>
+              　　}</p>
+            <p>　　JApplet类使用BorderLayout的一个实例作为其内容窗格的布局管理器。为了强调这一点，例2-1的小应用程序指定其布局约束条件为BorderLayout.CENTER，它使标签在内容窗格中居中显示。用BorderLayout布局组件的缺省约束条件是BorderLayout.CENTER，所以，在该小应用程序中指定这个布局约束条件不是必须的。<br>
+              　　<b>注意：</b>当在Internet Explorer中使用例2-1的小应用程序时，必须使用BorderConstraints.CENTER。(我根本就找不到)<br>
+              　　JApplet的内容窗格用BorderLayout的一个实例来布局组件。记住这一点是很重要的，因为java.applet.Applet与JApplet不同，它使用FlowLayout的一个实例来布局组件。 
+            </p>
+            <p><b><a name="2.1.2"></a>2.1.2 JApplet类</b></p>
+            <p>　　Swing的JApplet类扩展java.applet.Applet并实现Accessibility接口和RootPaneContainer接口。Accessibility接口是可访问包的一部分，而RootPaneContainer接口(如其名字所指出的)是一个包含根窗格的容器。RootPaneContainer接口被所有包含一个JRootPane实例的Swing容器所实现。<br>
+              　　类总结2-1中列出了JApplet提供的public和protected方法</p>
+            <p><b>类总结 2-1 JApplet</b></p>
+            <p>　　扩展：java.applet.Applet<br>
+              　　实现：javax.accessibility.Accessible、RootPaneContainer<br>
+              　　1.构造方法<br>
+              　　public JApplet()<br>
+              　　JApplet中提供了一个不带参数的构造方法。由于小应用程序是由浏览器(或小应用程序阅读器)进行实例化的，所以，正常情况下，不需要直接把JApplet的一个实例进行实例化。要了解直接实例化一个JApplet实例的情况，请参见2.1.5节“小应用程序/应用程序组合”。<br>
+              　　2.方法<br>
+              　　(1)从java.awt.Container中重载而获得的方法<br>
+              　　protected void addImpl(Component,Object,int)<br>
+              　　public void setLayout(LayoutManager)<br>
+              　　public void addNotify()<br>
+              　　public void removeNotify()<br>
+              　　上面列出的四种方法都是重载java.awt.Container类中的方法而得到。<br>
+              　　AddImpl()是最终把组件添加到容器中的方法。如果直接把组件添加到小应用程序中，那么JApplet.addImpl()将弹出一个异常信息。这个异常中所显示的消息是定制的(注：消息是通过JApplet的扩展的名字定制的)。例如，如果例2-1小应用程序中的标签直接添加到该小应用程序中，那么异常信息将如下显示：<br>
+              　　java.lang.Error:Do not use Test.add()use Test.getContentPane().add)instead<br>
+              　　　　at javax.swing.JApplet.createRootPaneException(JApplet.java:198)<br>
+              　　　　at javax.swing.JApplet.addImpl(JApplet.java:220)<br>
+              　　　　at java.awt.Container.add(Container.java:179)<br>
+              　　　　at Test.init(Test.java:11)<br>
+              　　与JApplet重载addImpl()的原因一样，JApplet也重载setLayout()。如果设置了小应用程序的布局管理器，setLayout()将会弹出一个异常信息。如果修改例2-1的小应用程序，让该小应用程序试图设置它的布局管理器，则将弹出带有下面错误消息的异常信息：<br>
+              　　java.lang.Error:Do not use Test.setLayout()use Test.getContentPane().setLayout()instead<br>
+              　　　　at javax.swing.JApplet.createRootPaneexception(JApplet.java:198)<br>
+              　　　　at javax.swing.JApplet.setLayout(JApplet.java:244)<br>
+              　　　　at Test.init(Test.java:10)<br>
+              　　　　at sun.applet.AppletPanel.run(AppletPanel.java:287)<br>
+              　　　　at java.lang.Thread.run(Thread.java:474)<br>
+              　　当实例化一个组件的对等组件时，将调用addNotify()方法。JApplet重载addNotify()以激发键盘事件并把小应用程序的可见性设置为true。<br>
+              　　(2)根窗格/内容窗格/玻璃窗格<br>
+              　　protected JRootPane createRootPane()<br>
+              　　protected boolean isRootPaneCheckingEnabled()<br>
+              　　protected void setRootPaneCheckingEnabled(boolean)<br>
+              　　public Container getContentPane()<br>
+              　　public Component getGlassPane()<br>
+              　　public JLayeredPane getLayeredPane()<br>
+              　　public JRootPane getRootPane()<br>
+              　　public void setContentPane(Container)<br>
+              　　public void setGlassPane(Component)<br>
+              　　public void setLayeredPane(JLayeredPane)<br>
+              　　public void setRootPane(JRootPane)<br>
+              　　Swing小应用程序通过调用protected JApplet.createRootPane方法，接着，这个方法又调用setRootPane()方法来创建根窗格。createRootPane方法可以被JApple的扩展所重载，以便替代JRootPane类的扩展作为该小应用程序的根窗格。<br>
+              　　如前所述，把组件直接添加到JApplet的一个实例中或显式地设置其布局管理器都可能会信息弹出一个异常。然而，有时必须把JRootPane的一个实例直接添加到小应用程序中，并且不信息。通过调用以boolean值为为参数的setRootPaneCheckingEnabled()方法来设置一个标志，该标志跟踪是否允许根窗格检查。如果这个boolean值是true，则说明允许根窗格检查，如果这个boolean值是false，则说明禁止根窗格检查。<br>
+              　　isRootPaneCheckingEnabled()方法返回最后传送给setRootPaneCheckingEnabled()方法的boolean值。 
+              <br>
+              　　注意：setRootPaneCheckingEnabled()和isRootPaneCheckingEnabled()都是protected方法。虽然不可能把组件直接添加到JApplet的一个实例中或显式地设置其布局管理器，但是，实现可以控制是否允许根窗格检查的JApplet的扩展是可能的。这种功能使JAppelt的扩展能够在需要时直接添加组件或设置小应用程序的布局管理器。<br>
+              　　实际中，很少重载JApplet.createRootPane()，JApplet的扩展也很少用setRootPaneCheckingEnabled()来直接添加组件或设置小应用程序的布局管理器。<br>
+              　　上面列出的第二组方法是由RootPaneContainer接口定义的，这些方法能够获取和设置包含在JRootPane的一个实例中的容器。JRootPane和RootPaneContainer将在第12章和12.2节“JRootPane” 
+              中介绍。<br>
+              　　(3)可访问的相关内容/菜单栏/键盘事件/更新<br>
+              　　public AccessableContext getAccessableContext()<br>
+              　　public JMenuBar getMenuBar()<br>
+              　　public void setMenuBar(JMenuBar)<br>
+              　　proteted voidprocessKeyEvent(KeyEvent)<br>
+              　　public void update(Graphics)<br>
+              　　getAccessibleContext()返回AccessibleContext的一个实例，这个实例把小应用程序的可访问信息提供给可访问工具。<br>
+              －－－－－－－－ <br>
+              　　JApplet实例可以有一个菜单栏，它是由setJMenuBar方法指定的。注意，Swing小应用程序能有一个菜单栏，而AWT小应用程序却不能。参见图2-2。<br>
+              　　实际上有两种方法把菜单栏添加到Swing小应用程序中的方法。一种方法当然是调用JApplet.setJMenuBar，另一种方法是获得对小应用程序根窗格的引用，然后把菜单栏直接添加到根窗格中。<br>
+              　　重载ProcessKeyEvent()来处理键绑定问题。有关Swing组件中键击处理的更多信息，请参见4.8节“键出处理”。<br>
+              　　重载JApplet.update方法以便直接调用paint()。缺省时，AWT组件将实现它们的update方法以便擦除背景，然后调用paint()。这种技术在组件反复更新时，会导致许多闪烁。有关绘制和更新AWT组件的更多信息，请参见《Java 
+              2 图形设计，卷Ⅰ:AWT》。</p>
+            <p><b>Swing提示</b></p>
+            <p><b>JApplet和JFrame的内容窗格使用一个BorderLayout实例</b><br>
+              　　如果你用AWT开发过应用程序，就一定熟悉这样一个事实：java.applet.Applet使用一个FlowLayout实例作为其布局管理器，而java.awt.Frame则使用一个BorderLayout实例作为其布局管理器。<br>
+              　　由于AWT小应用程序和应用程序使用不同的布局管理器，所以，当把小应用程序移植为应用程序时或把应用程序移植为小应用程序时，就可造成混乱，这里还没有涉及到实现一个小应用程序和应用程序组合的情况。相比之下，Swing在小应用程序和应用程序的内容窗格中使用相同的布局管理器（即一个BorderLayout实例）。 
+            </p>
+            <p> <b><a name="2.1.3"></a>2.1.3 应用程序</b></p>
+            <p>　　例2-2所示的应用程序与例2-1所示的小应用程序在功能上是完成相同的。它们都把JLabel的一个实例添加到它们的根窗格的内容窗格中。<br>
+              　　例2-3列出了<a href="s02_t03.jar" target="_blank">图2-3</a>所用的应用程序的代码。</p>
+            <p align="center"><b>例2-3 一个Swing应用程序</b></p>
+            <p>　　import javax.swing.*;<br>
+              　　import java.awt.*;<br>
+              　　import java.awt.event.*;</p>
+            <p>　　public class Test extends JFrame {<br>
+              　　　public Test() {<br>
+              　　　　super(&quot;An Application&quot;);</p>
+            <p> 　　　　Container contentPane = getContentPane();<br>
+              　　　　/*原文:<br>
+              　　　　Icon icon = new ImageIcon(&quot;swing.gif&quot;, <br>
+              　　　　　&quot;An animated GIF of Duke on a swing&quot;);</p>
+            <p> 　　　　JLabel label = new JLabel(&quot;Swing!&quot;, icon,<br>
+              　　　　　SwingConstants.CENTER);<br>
+              　　　　----*/ </p>
+            <p>　　　　//修改成：<br>
+              　　　　java.net.URL codebase=getClass().getResource("swing.gif");<br>
+              　　　　JLabel label = new JLabel("Swing!"，new ImageIcon(codebase), 
+              SwingConstants.CENTER); <br>
+              　　　　//---<br>
+              　　　　contentPane.add(label, BorderLayout.CENTER);<br>
+              　　　}<br>
+              　　　public static void main(String args[]) {<br>
+              　　　　final JFrame f = new Test();</p>
+            <p> 　　　　f.setBounds(100,100,300,250);<br>
+              　　　　f.setVisible(true);<br>
+              　　　　f.setDefaultCloseOperation(DISPOSE_ON_CLOSE);</p>
+            <p> 　　　　f.addWindowListener(new WindowAdapter() {<br>
+              　　　　　public void windowClosed(WindowEvent e) {<br>
+              　　　　　　System.exit(0);<br>
+              　　　　　}<br>
+              　　　　});<br>
+              　　　}<br>
+              　　}</p>
+            <p>　　应用程序比小应用程序要稍微复杂些，这是因为它们不是在浏览器内部运行的，即浏览器不启动它们也不设置它们的大小。应用程序必须提供main方法，必须把一个窗体实例化，随后确定该窗体的大小(注：可使用JFrame.pack()显式地给出窗体的大小)并使该窗体可见。<br>
+              　　例2-2中的应用程序还设置窗体的缺省关闭操作并添加一个窗口监听器，该监听器在窗体被关闭后会退出这个应用程序。有关Swing窗体的缺省关闭操作的更多信息，请参见2.1.4节“JFrame类”。<br>
+              　　Swing小应用程序和应用程序有许多共同点。它们都含有一个JRootPane实例，都必须把组件添加到根窗格的内容窗格中。而且，不能显式地设置Swing小应用程序或Swing应用程序的布局管理器。 
+            </p>
+            <p> <b><a name="2.1.4"></a>2.1.4 JFrame类</b></p>
+            <p>　　JFrame类扩展java.awt.Frame，与JApplet类似，它也实现Accessible接口和RootPaneCotainer接口。JFrame还实现Swing.WindowsConstants接口，该接口定义缺省关闭操作的常量。有关Swing常量的更多信息，请参见6.4节“Swing常量”。<br>
+              　　JFrame实惠许多在JApplet中能找到的、相同的方法。与JApplet类似，为了不显式地设置其布局管理器或不把组件直接添加到窗体中，JFrame重载setLayout和addImpl方法。JRame实现了所有在RootPaneContainer接口中定义的方法，还实现了通话和禁止根窗格检查的方法。JFrame还实惠了确定当前是束启用了根窗格检查的方法。<br>
+              　　类总结2-2总结了JFrame类。</p>
+            <p><br>
+              <b>类总结2-2 JFrame</b></p>
+            <p>　　扩展：java.applet.Frame<br>
+              　　实现：javax.accessibility.Accessible、RootPaneContainer<br>
+              　　1.构造方法<br>
+              　　public JFrame()<br>
+              　　public JFrame(String title)<br>
+              　　JFrame有两个构造方法，一个构造方法不带参数，一个构造方法以一个字符串为参数，该字符串代表窗体的标题。<br>
+              　　浏览器或小应用程序的阅读器会调用Swing小应用程序的构造方法，因此，通常不需要开发人员编写代码来调用它的构造方法，但是，应用程序必须负责构造窗体并负责设置窗体的大小。通常为JFrame的实例选择带一个字符串的构造方法，不带参数的构造方法将产生没有标题的窗体。 
+              <br>
+              　　(1)与JApplet交叠的方法<br>
+              　　protected void addImpl(Component,Object,int)<br>
+              　　prrotected JRootPane createRootPane()<br>
+              　　public AccessibleContext getAccessibleContext()<br>
+              　　public Container getContentPane()<br>
+              　　public Component getGlassPane()<br>
+              　　public JMenuBar getMenuBar()<br>
+              　　public JLayeredPane getLayeredPane()<br>
+              　　public JRootPane getRootPane()<br>
+              　　protected boolean isRootPaneCheckingEnabled()<br>
+              　　protected void processKeyEvent(KeyEvent)<br>
+              　　public void setContentPane(Container)<br>
+              　　public void setGlassPane(Component)<br>
+              　　public void setMenuBar(JMenu Bar)<br>
+              　　public void setLayeredPanec(JlayeredPane)<br>
+              　　public void setLayout(LayoutManager)<br>
+              　　protected void setRootPane(JRootPane)<br>
+              　　protected void setRootPaneCheckingEnabled(boolean)<br>
+              　　public void update(Graphics)<br>
+              　　上面列出的JFrame方法与JApplet中定义的方法交叠。其中的大部分方法与JApplet中相应方法的实现方式是相同的。例如，如果允许根窗格检查，则JFrame.setLayout和JFrame.addImpl都将弹出一个异常信息。<br>
+              　　有关上述方法的更多信息，请参见“类总结2-1JApplet”。<br>
+              　　(2)窗体初始化/缺省的关闭操作/窗口事件 <br>
+              　　protected void frameInit()<br>
+              　　public int getDefaultCloseOperation()<br>
+              　　protected void setDefaultCloseOperation(int)<br>
+              　　protected void processWindowEvent(WindowEvent)<br>
+              　　JFrame构造方法调用frameInit方法来初始化窗体。JFrame的frameInit()方法允许窗体的键盘事件和窗口事件，设置窗体的根窗格和背景色，并允许根窗格检查。如果缺省的设置不令人满意的话，也可扩展JFrame以重载frameInit()。</p>
+            <p> 　　使用AWT窗体时，开发人要负责处理窗口关闭事件。通常，这需要重载事件处理方法，需要简单地隐藏窗口或隐藏窗口并清除其本地资源。而Swing通过把一个缺省关闭操作与每一个JFrame实例相关联来使窗口的关闭事件较容易处理。可以用setDefaultCloseOperation方法来设置缺省的关闭操作，而且可以用getDefaultCloseOperation()来获取缺省的关闭操作。可以传送给setDefaultCloseOperation()的integer值在WindowConstants类中定义，表2-1，表2-1列出了integer值。</p>
+            <p>　　　　　　　　<b>表2-1 WindowContants public常数</b><br>
+              　　━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br>
+              　　<b>方法名　　　　　　　　　　实现 </b><br>
+              　　─────────────────────────────────<br>
+              　　DO_NOTHNG_ON_CLOSE　　关闭窗口时什么也不做<br>
+              　　HIDE_ON_CLOSE　　　　　关闭窗口隐藏该窗口<br>
+              　　DISPOSE_ON_CLOSE　　　关闭窗口时隐藏该窗口并清除其本地资源 <br>
+              　　━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</p>
+            <p>　　如果没有显式地设置JFrame的缺省关闭操作，则缺省值是DO_NOTHING_ON_CLOSE。<br>
+              　　DISPOSE_ON_CLOSE隐藏窗体并清除与这个窗体有关的系统资源。如果该窗体是应用程序窗体，则在该窗体清除后，应用程序将继续运行。例如，例2-2所列的应用程序把应用程序窗体的缺省关闭操作设置为DISPOSE_ON_CLOSE，但是，应用程序仍然负责处理窗体关闭事件。到应用程序得到窗体已关闭(当调用windowClosed方法时)窗体已隐藏并清除通知时，应用程序仍在运行；结果，应用程序在windowClosed方法中调用System.exit()。</p>
+            <p> <b><a name="2.1.5"></a>2.1.5 小应用程序/应用程序的组合</b></p>
+            <p>　　有时需要实现这样一个源文件，它既可作为应用程序运行又可作为小应用程序运行。例2-3示出了一种实现小应用程序/应用程序组合的方法。</p>
+            <p align="center"><b>例2-3 Swing小应用程序/应用程序组合</b></p>
+            <p>　　import javax.swing.*;<br>
+              　　import java.awt.*;<br>
+              　　import java.awt.event.*;</p>
+            <p>　　public class Test extends JApplet {<br>
+              　　　public void init() {<br>
+              　　　　Container contentPane = getContentPane();<br>
+              　<br>
+              　　　　/*原文<br>
+              　　　　Icon icon = new ImageIcon(&quot;swing.gif&quot;);<br>
+              　　　　JLabel label = new JLabel(icon);<br>
+              　　　　*/<br>
+              　　　　//原文如不修改，不能正常显示图标 </p>
+            <p>　　　　//修改后--------<br>
+              　　　　java.net.URL codebase=getClass().getResource(&quot;swing.gif&quot;);<br>
+              　　　　JLabel label = new JLabel(new ImageIcon(codebase));<br>
+              　　　　//----------修改后的程序有个毛病，既作为applet使用时，不能刷新，一旦刷新图就没了。</p>
+            <p> 　　　　contentPane.setLayout(new FlowLayout()); <br>
+              　　　　contentPane.add(label);</p>
+            <p> 　　　　//contentPane.add(label);<br>
+              　　　}<br>
+              　　　public static void main(String args[]) {<br>
+              　　　　final JFrame f = new JFrame();<br>
+              　　　　JApplet applet = new Test();</p>
+            <p> 　　　　applet.init();</p>
+            <p> 　　　　f.setContentPane(applet.getContentPane());<br>
+              　　　　f.setBounds(100,100,308,199);<br>
+              　　　　f.setTitle(&quot;An Application&quot;);<br>
+              　　　　f.setVisible(true);</p>
+            <p> 　　　　f.setDefaultCloseOperation(<br>
+              　　　　WindowConstants.DISPOSE_ON_CLOSE);</p>
+            <p> 　　　　f.addWindowListener(new WindowAdapter() {<br>
+              　　　　　public void windowClosed(WindowEvent e) {<br>
+              　　　　　　System.exit(0);<br>
+              　　　　　}<br>
+              　　　　});<br>
+              　　　}<br>
+              　　}</p>
+            <p>　　其思想是实现一个小应用程序，这个小应用程序包含一个main方法。这个main方法把JFrame实例化，而且还创建这个小应用程序的一个实例。在调用小应用程序的init方法后，窗体用该小应用程序的内容窗格来替代该窗体的内容窗格。这个窗体接着设置其边界和标题。并把它的可见性设置为true。<br>
+              　　 从本质上讲，这种技术会产生共享一个内容窗格的应用程序和小应用程序。当例2-3中的代码被编译后，它可以既作为小应用程序运行又可以作为应用程序运行。<br>
+              　　应该注意的是，作为应用程序/小应用程序组合实现的应用程序，在使用main方法创建的小应用程序实例时必须非常小心。因为浏览器或小应用程序阅读器不能把这种小应用程序实例化，所以这种小应用程序是不完善的(从技术上说，它没有小应用程序的相关内容)。因此，这种小应用程序不能使用，例如，用Applet.getImage方法来获取一幅图像。实际应用中，也没有那么多限制，因为应用程序除借用小应用程序的内容窗格外不需要使用小应用程序。例如，应用程序通常使用AWT工具包来获取图像，因此，不需要使用Applet.getImage方法。</p>
+            <p><b>Swing提示</b></p>
+            <p><b>不要直接把组件添加到Swing小应用程序或应用程序中，也不要显式地设置其布局管理器</b><br>
+              　　Swing小应用程序和应用程序都有一个JRootPane实例，该实例又含有一个称作内容窗格的容器。小应用程序或应用程序的内容（即组件）必须添加到内容窗格中。如果把组件直接添加到JApplet或JFrame的实例中，则会弹出一个异常信息，指出只能把组件添加到内容窗格中。</p>
+            <p>　　Swing小应用程序和应用程序都使用BorderLayout布局管理器来布局它们的JRootPane实例，并且不允许显式地设置它们的布局管理器。如果试图显式地设置JApplet或JFrame的布局管理器，则会弹出一个异常信息，指出不可以显式地设置其布局管理器。</p>
+            <p> <b><a name="2.2"></a>2.2 GJApp</b></p>
+            <p>　　本书介绍的应用程序都是在GJApp类的帮助下实现的，该类提供了一个状态区，并能从属性文件中读取资源。<a href="s02_t04.jar" target="_blank">图2-4</a>所示的应用程序是一个JFrame扩展，这个扩展用GJApp类来访问一个状态区，这个状态区显示从GJApp.properties文件中获取一个字符串。<br>
+              　　GJApp.properties文件定义了一个属性：<br>
+              　　# Simple properties file<br>
+              　　statusAreaText=text in the status area<br>
+              　　例2-4列出了图2-4所示的应用程序的代码。</p>
+            <p align="center"><b>例2-4 使用GJApp类</b></p>
+            <p>　　import javax.swing.*;<br>
+              　　import java.awt.*;<br>
+              　　import java.awt.event.*;<br>
+              　　import java.util.*;</p>
+            <p>　　public class Test extends JFrame {<br>
+              　　　public Test() {<br>
+              　　　　Container contentPane = getContentPane();<br>
+              　　　　JPanel panel = new JPanel();</p>
+            <p> 　　　　panel.setBorder(BorderFactory.createEtchedBorder());<br>
+              　　　　contentPane.add(panel,BorderLayout.CENTER);<br>
+              　　　　contentPane.add(GJApp.getStatusArea(),BorderLayout.SOUTH);</p>
+            <p> 　　　　GJApp.showStatus(GJApp.getResource(&quot;statusAreaText&quot;));<br>
+              　　　}<br>
+              　　　public static void main(String args[]) {<br>
+              　　　　GJApp.launch(new Test(),&quot;Status Area&quot;,300,300,450,300);<br>
+              　　　}<br>
+              　　}</p>
+            <p>　　这个应用程序创建JPanel的一个实例，指定该实例为内容窗格的中心组件。用面板来突出状态区上面的空间，并且这个面板还有一个蚀该边框。<br>
+              　　应用程序通过调用static GJApp.getStatusAreas方法来获取对GJApp状态区的引用。状态区指定为内容窗格南边的组件。<br>
+              　　static GJApp.showStatus方法以statusAreaText资源的字符串为参数把这个状态区初始化。资源的字符串用static 
+              GJApp.getResource方法来获得。<br>
+              　　GJApp类有三个功能：<br>
+              　　·初始化并显示传送给static launch方法的窗体。<br>
+              　　·提供对小应用程序状态区面板的访问<br>
+              　　·从GJApp.properties文件中查找资源字符串。<br>
+              　　例2-5列出了GJApp类。 <br>
+            </p>
+            <p align="center"><b>例2-5　GJApp类</b><br>
+            </p>
+            <p>　　class GJApp {<br>
+              　　　static private JPanel statusArea = new JPanel();<br>
+              　　　static private JLabel status = new JLabel(&quot;&quot;);<br>
+              　　　static private ResourceBundle resources;</p>
+            <p> 　　　static {<br>
+              　　　　resources = ResourceBundle.getBundle(<br>
+              　　　　&quot;GJApp&quot;, Locale.getDefault());<br>
+              　　　};</p>
+            <p> 　　　private GJApp() {} // defeat instantiation <br>
+              　　　public static void launch(final JFrame f, String title,<br>
+              　　　　　　　　　　final int x, final int y, <br>
+              　　　　　　　　　　final int w, int h) {<br>
+              　　　　f.setTitle(title);<br>
+              　　　　f.setBounds(x,y,w,h);<br>
+              　　　　f.setVisible(true);</p>
+            <p> 　　　　statusArea.setBorder(BorderFactory.createEtchedBorder());<br>
+              　　　　statusArea.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));<br>
+              　　　　statusArea.add(status);<br>
+              　　　　status.setHorizontalAlignment(JLabel.LEFT);</p>
+            <p> 　　　　f.setDefaultCloseOperation(indowConstants.DISPOSE_ON_CLOSE);</p>
+            <p> 　　　　f.addWindowListener(new WindowAdapter() {<br>
+              　　　　　public void windowClosed(WindowEvent e) {<br>
+              　　　　　　System.exit(0);<br>
+              　　　　　}<br>
+              　　　　});<br>
+              　　　}<br>
+              　　　static public JPanel getStatusArea() {<br>
+              　　　　return statusArea;<br>
+              　　　}<br>
+              　　　static public void showStatus(String s) {<br>
+              　　　　status.setText(s);<br>
+              　　　}<br>
+              　　　static String getResource(String key) {<br>
+              　　　　return (resources == null) ? null : <br>
+              　　　　resources.getString(key);<br>
+              　　　}<br>
+              　　}</p>
+            <p>　　严格地说，GJApp是一个帮助类，它实现独有的static方法。GJApp的实例不能实例化，这是GJApp private构造方法强加的规定。<br>
+              　　一个static代码块（它在main()方法之前执行）试图获得对GJApp.properties文件资源包的一个引用。在GJApp.getResource方法中使用这个资源包可以获得一个与一个给定资源关键字相关的字符串。<br>
+              　　GJApp.launch方法为传送给它的窗体设置边界和标题，把这个窗休的可见性设置为true，并打开这个窗体。这个launch方法还配置状态区并把窗体的缺省关闭操作设置为WindowConstants.DISPOSE_ON_CLOSE。添加到这个窗体中的窗口监听器在窗口关闭时会退出该应用程序。<br>
+              　　GJApp类用getStatusArea方法访问其状态区面板。与小应用程序一样，GJApp类用showStatus方法来更新状态区。<br>
+              　　注意：本书以后介绍的应用程序都是在GJApp类帮助下实现的。但是，为了简短些，例2-5是本书中唯一列出了GJApp类的地方。 
+            </p>
+            <p><b><a name="2.3"></a>2.3 混合使用Swing组件和AWT组件</b></p>
+            <p>　　原来的AWT只是为重量组件设计的；在AWT1.1版本发布前，还没有轻量组件。结果，AWT不得不重做AWT，以提供轻量组件。<br>
+              　　任何软件开发人员都可证实，把一个复杂的系统和以前未预见的设计组合起来不是一个简单的任务，把轻量组件合并到AWT中也不例外。直到现在，在一个小应用程序或应用程序中混用轻量组件和重量组件还是有许多问题，尤其是把重量组件嵌入轻量容器中时更是如此。</p>
+            <p> <b><a name="2.3.1"></a>2.3.1 层序</b></p>
+            <p>　　组件的层序是同一容器中组件之间显示的层次关系。<br>
+              　　如果容器是同类的（即它包含的组件都是轻量组件或都是重量组件），则按组件被添加到容器中的顺序来确定其层序。第一个被添加到容器中的组件有最高的层序，即它在同一容器中所有其他组件的上面显示。最后添加到容顺中的组件的层序最低，即它在同一个容器中的所有其他组件的下面显示。<br>
+              　　如果容器是异类的（即它既有轻量组件又有重量组件），则事情要稍微复杂些。从第1.2节“轻量组件与重量组件的比较”中，我们知道，轻量组件不是显示在它们自己的窗口中，而是显示在它们的重量容器的窗口中。所以，轻量组件的层序与重量容器的层序相同。如果多个轻量组件被添加到一个容器中，则这些轻量组件的层序是由组件被添加到容器中的顺序来决定的。<br>
+              　　如果对此还不太明白，下面的两个小应用程序将会有助于理解。<a href="s02_t05.htm" target="_blank">图2-5</a>所示的小应用程序有七个按钮，其中四个是重量AWT按钮，其他三个是Swing轻量按钮。所有的重量按钮都显示在轻量按钮的上面，因为轻量按钮的层序与它们的容器的层序相同。<br>
+              　　例2-6列出了图2-5所示的少应用程序的代码。</p>
+            <p align="center"><b>例2-6 混合使用重量组件和轻量组件</b></p>
+            <p>　　import javax.swing.*;<br>
+              　　import java.awt.*;<br>
+              　　import java.awt.event.*;</p>
+            <p>　　public class Test extends JApplet {<br>
+              　　　Button b1, b2, b3, b4;<br>
+              　　　JButton jb1, jb2, jb3;</p>
+            <p> 　　　public void init() {<br>
+              　　　　Container contentPane = getContentPane();<br>
+              　　　　contentPane.setLayout(null);</p>
+            <p> 　　　　// create heavyweight AWT buttons<br>
+              　　　　b1 = new Button(&quot;Heavyweight Button #1&quot;);<br>
+              　　　　b2 = new Button(&quot;Heavyweight Button #2&quot;);<br>
+              　　　　b3 = new Button(&quot;Heavyweight Button #3&quot;);<br>
+              　　　　b4 = new Button(&quot;Heavyweight Button #4&quot;);</p>
+            <p> 　　　　// create lightweight Swing buttons<br>
+              　　　　jb1 = new JButton(&quot;Swing Button #1&quot;);<br>
+              　　　　jb2 = new JButton(&quot;Swing Button #2&quot;);<br>
+              　　　　jb3 = new JButton(&quot;Swing Button #3&quot;);</p>
+            <p> 　　　　// set bounds for heavyweight buttons<br>
+              　　　　b1.setBounds(10, 10, 150, 25);<br>
+              　　　　b2.setBounds(110, 25, 150, 25);<br>
+              　　　　b3.setBounds(210, 40, 150, 25);<br>
+              　　　　b4.setBounds(310, 55, 150, 25);</p>
+            <p> 　　　　// set bounds for lightweight buttons<br>
+              　　　　jb1.setBounds(85, 25, 150, 65);<br>
+              　　　　jb2.setBounds(100, 65, 150, 65);<br>
+              　　　　jb3.setBounds(115, 105, 150, 65);</p>
+            <p> 　　　　// add lightweight buttons<br>
+              　　　　contentPane.add(jb1);<br>
+              　　　　contentPane.add(jb2);<br>
+              　　　　contentPane.add(jb3);</p>
+            <p> 　　　　// add heavyweight buttons<br>
+              　　　　contentPane.add(b1);<br>
+              　　　　contentPane.add(b2);<br>
+              　　　　contentPane.add(b3);<br>
+              　　　　contentPane.add(b4);<br>
+              　　　}<br>
+              　　}</p>
+            <p>　　这个小应用程序把内容窗格的布局管理器设置为null，以便这些按钮可以显式地定位和确定大小，使这些按钮朴素重叠。然后，这个小应用程序创建按钮，设置按钮的边界并把每个按钮添加到内容窗格中。<br>
+              　　即使轻量按钮在重量按钮之前添加到内容窗格中，轻量按钮也仍在重量按钮下显示。因为轻量组件的层序与它们所在的重量容器的层序相同，所以轻量按钮和它们的容器的层序相同。轻量按钮的容器就是小应用程序的内容窗格。<br>
+              　　注意 第一个添加到内容窗格的轻量按钮在其他轻量按钮之上显示。同样，第一个添加到内容窗格的重量按钮在其他重量按钮之上显示。<br>
+              　　<a href="s02_t06.htm" target="_blank">图2-6</a>所示的小应用程序强调了这样一个事实：轻量组件的层序与它们的重量容器的层序相同。这个小应用程序几乎与图2-5所示的小应用程序一样，然而，图2-6所示的小应用程序把三个轻量按钮放在一个重量面板中。然后遭到把该面板添加到内容窗格中，使这个重量面板在第二个重量按钮之后 
+              ，在第三个重量按钮之前。结果，轻量按钮具有与它们所在的面板相同的层序，它们在第二个重量按钮之下，第三个重量按钮之上显示。<br>
+              　　例2-7列出了图2-6所示的小应用程序的代码。</p>
+            <p align="center"><b>例2-7 控制轻量按钮的层序</b></p>
+            <p>　　import javax.swing.*;<br>
+              　　import java.awt.*;<br>
+              　　import java.awt.event.*;</p>
+            <p>　　public class Test extends JApplet {<br>
+              　　　Button b1, b2, b3, b4;<br>
+              　　　JButton jb1, jb2, jb3;</p>
+            <p> 　　　public void init() {<br>
+              　　　　Container contentPane = getContentPane();<br>
+              　　　　Panel p = new BorderedPanel();</p>
+            <p> 　　　　// set layout managers for content pane and panel<br>
+              　　　　// to null so their components can be explicitly<br>
+              　　　　// positioned and sized<br>
+              　　　　contentPane.setLayout(null);<br>
+              　　　　p.setLayout(null);</p>
+            <p> 　　　　// create heavyweight AWT buttons<br>
+              　　　　b1 = new Button(&quot;Heavyweight Button #1&quot;);<br>
+              　　　　b2 = new Button(&quot;Heavyweight Button #2&quot;);<br>
+              　　　　b3 = new Button(&quot;Heavyweight Button #3&quot;);<br>
+              　　　　b4 = new Button(&quot;Heavyweight Button #4&quot;);</p>
+            <p> 　　　　// create lightweight Swing buttons<br>
+              　　　　jb1 = new JButton(&quot;Swing Button #1&quot;);<br>
+              　　　　jb2 = new JButton(&quot;Swing Button #2&quot;);<br>
+              　　　　jb3 = new JButton(&quot;Swing Button #3&quot;);</p>
+            <p> 　　　　// set bounds for heavyweights<br>
+              　　　　b1.setBounds(10, 10, 150, 25);<br>
+              　　　　b2.setBounds(110, 25, 150, 25);<br>
+              　　　　b3.setBounds(210, 40, 150, 25);<br>
+              　　　　b4.setBounds(310, 55, 150, 25);</p>
+            <p> 　　　　// set bounds for lightweights<br>
+              　　　　jb1.setBounds(5, 5, 150, 65);<br>
+              　　　　jb2.setBounds(20, 45, 150, 65);<br>
+              　　　　jb3.setBounds(35, 85, 150, 65);</p>
+            <p> 　　　　// set bounds for panel and add lightweights<br>
+              　　　　p.setBounds(85, 15, 195, 155);<br>
+              　　　　p.add(jb1);<br>
+              　　　　p.add(jb2);<br>
+              　　　　p.add(jb3);</p>
+            <p> 　　　　// add AWT buttons and panel to content pane<br>
+              　　　　contentPane.add(b1);<br>
+              　　　　contentPane.add(b2);<br>
+              　　　　contentPane.add(p);<br>
+              　　　　contentPane.add(b3);<br>
+              　　　　contentPane.add(b4);<br>
+              　　　}<br>
+              　　}<br>
+              　　class BorderedPanel extends Panel {<br>
+              　　　public void paint(Graphics g) {<br>
+              　　　　Dimension size = getSize();</p>
+            <p> 　　　　g.setColor(Color.black);<br>
+              　　　　g.drawRect(0,0,size.width-1,size.height-1);<br>
+              　　　　super.paint(g); // paint lightweights<br>
+              　　　}<br>
+              　　}</p>
+            <p>　　例2-7的小应用程序实现java.awt.Panel类的一个扩展(BorderedPanel)，BorderedPanel在面板的外面画了一个黑边框，以使面板可见。<br>
+              　　另外还要注意，BorderedPanel类调用super.paint()。无论何时扩展了一个容口并重载了它的paint方法，都必须显式地调用super.paint()，这样，容器中的轻量组件才能重新绘制(注：有关轻量组件的更多信息，请参见《Graphic 
+              Java》第1卷)。如果没有调用super.paint（）,则不会重新绘制面板中的轻量Swing按钮。 </p>
+            <p> <b><a name="2.3.2"></a>2.3.2 Swing弹出式菜单</b></p>
+            <p>　　缺省时,Swing弹出式菜单是轻量组件(注:这是一种简化的说法,但适用于此处的讨论。完整的介绍请参见10.8节“JPopupMenu”)。如果轻量弹出式菜单与重量组件重叠，则弹出式菜单将在该重量组件下面显示。如图2-7小应用程序所示。<br>
+              　　有些Swing组件使用弹出式菜单。Swing菜单组件就是一种使用弹出式菜单的组件，它在一个菜单被激活时，显示一个弹出式菜单。缺省时，如果一个与某个菜单相关联的弹出式菜单完全处在弹出式菜单所在的窗口吕，则弹出式菜单使用轻量组件。<a href="s02_t07.htm" target="_blank">图2-7</a>所示的小应用程序中与File菜单相关联的弹出式菜单是一个轻量组件，所以它在重量组件AWT按钮的下面显示。<br>
+              　　例2-8列出了图2-7所示的小应用程序的代码。</p>
+            <p align="center"><b>例2-8 在重量组件下面显示的轻量弹出式菜单</b></p>
+            <p>　　import javax.swing.*;<br>
+              　　import java.awt.*;<br>
+              　　import java.awt.event.*;</p>
+            <p>　　public class Test extends JApplet {<br>
+              　　　public void init() {<br>
+              　　　　Container contentPane = getContentPane();<br>
+              　　　　JMenuBar menubar = new JMenuBar();<br>
+              　　　　JMenu menu = new JMenu(&quot;File&quot;);</p>
+            <p> 　　　　menu.add(&quot;New ...&quot;);<br>
+              　　　　menu.add(&quot;Open ...&quot;);<br>
+              　　　　menu.add(&quot;Save As ...&quot;);<br>
+              　　　　menu.add(&quot;Save&quot;);<br>
+              　　　　menu.add(&quot;Exit&quot;);</p>
+            <p> 　　　　contentPane.setLayout(new FlowLayout(FlowLayout.LEFT));<br>
+              　　　　contentPane.add(new Button(&quot;An AWT Button ............&quot;));</p>
+            <p> 　　　　menubar.add(menu);<br>
+              　　　　setJMenuBar(menubar);<br>
+              　　　}<br>
+              　　}</p>
+            <p>　　这个小应用程序创建了一个菜单条、一个AWT按钮和一个菜单。把菜单项添加到菜单中，再把菜单添加到菜单条中，按钮则被添加到小应用程序的内容窗格中。最后，调用JApplet.setJMenuBar()，把菜单条添加到小应用程序中。<br>
+              　　幸运的是，Swing提供了一个机制，它迫使弹出式菜单是重量组件，这样，它们就不会在重量组件下面弹出来。JPopupMenu类提供了一个static方法，该方法可决定弹出式菜单是重量的还是轻量的(注：某些弹出式菜单即可以指定为轻量的，也可以指定为重量的。)<br>
+              　　JPopupMenu.setDefaultLightWeightPopupEnabled()以一个boolean值为参数，这个值指出是把弹出式菜单实例化为轻量的还是把弹出式菜单实例化为重量的，调用setDefaultLightWeightPopupEnabled()时，如果这个boolean值为true，则创建的弹出式菜单是轻量的，如果这个boolean值为false，则创建的弹出式菜单是重量的(注：这也是简化的说法，但同样适用于这里的讨论)。<br>
+              　　<a href="s02_t08.htm" target="_blank">图2-8</a>所示的小应用程序除了在菜单条被实例化之前调用了JPopupMenu.setDefaultLightWeightPopupEnabled(false)以外，其余部分都与图2-7所示的小应用程序相同。<br>
+              　　例2-9列出了图2-8所示的小应用程序的代码</p>
+            <p align="center"><b>例2-9　使用重量弹出式菜单</b></p>
+            <p>　　import javax.swing.*;<br>
+              　　import java.awt.*;<br>
+              　　import java.awt.event.*;</p>
+            <p>　　public class Test extends JApplet {<br>
+              　　　public void init() {<br>
+              　　　　JPopupMenu.setDefaultLightWeightPopupEnabled(false);</p>
+            <p> 　　　　Container contentPane = getContentPane();<br>
+              　　　　JMenuBar menubar = new JMenuBar();<br>
+              　　　　JMenu menu = new JMenu(&quot;File&quot;);</p>
+            <p> 　　　　menu.add(&quot;New ...&quot;);<br>
+              　　　　menu.add(&quot;Open ...&quot;);<br>
+              　　　　menu.add(&quot;Save As ...&quot;);<br>
+              　　　　menu.add(&quot;Save&quot;);<br>
+              　　　　menu.add(&quot;Exit&quot;);</p>
+            <p> 　　　　contentPane.setLayout(new FlowLayout(FlowLayout.LEFT));<br>
+              　　　　contentPane.add(new Button(&quot;An AWT Button ............&quot;));</p>
+            <p> 　　　　menubar.add(menu);<br>
+              　　　　setJMenuBar(menubar);<br>
+              　　　}<br>
+              　　}</p>
+            <p> <b><a name="2.3.3"></a>2.3.3 滚动</b></p>
+            <p>　　把重量组件和轻量组件混合使用时所要关心的另一个问题是滚动。<br>
+              　　Swing提供了一个替代AWT重量滚动窗格的轻量组件——JScrollPane组件。由于JScrollPane是轻量的，所以任何添加到JScrollPane实例中的重量组件都将在这个滚动窗格之上显示。如果重量组件滚动超出了JScrollPane实例的边框，则它就不能正确地显示了。<br>
+              　　<a href="s02_t09.htm" target="_blank">图2-9</a>所示的小应用程序说明了把一个重量组件添加到JScrollPane实例中并滚动重量组件使其超出滚动窗格边框的情况。<br>
+              　　图2-9中上图显示了这个小应用程序刚启动时的样子，图2-9中下图显示了滚动窗格滚动后，这个小应用程序的样子。注意，在这两种情况下，AWT按钮都没有能够正确地显示。<br>
+              　　例2-10列出了图2-9所示的小应用程序的代码。</p>
+            <p align="center"><b>例2-10用JScrollPane滚动重量组件</b></p>
+            <p>　　import javax.swing.*;<br>
+              　　import java.awt.*;<br>
+              　　import java.awt.event.*;</p>
+            <p>　　public class Test extends JApplet {<br>
+              　　　public void init() {<br>
+              　　　　JPanel panel = new JPanel();</p>
+            <p> 　　　　panel.add(new JButton(&quot;Swing Button ...&quot;));<br>
+              　　　　panel.add(new Button(&quot;AWT Button ...&quot;));</p>
+            <p> 　　　　Container contentPane = getContentPane();<br>
+              　　　　JScrollPane scrollPane = new JScrollPane(panel);</p>
+            <p> 　　　　scrollPane.setPreferredSize(new Dimension(125,50));<br>
+              　　　　contentPane.setLayout(new FlowLayout(FlowLayout.LEFT));<br>
+              　　　　contentPane.add(scrollPane);<br>
+              　　　}<br>
+              　　}</p>
+            <p>　　图2-9所示的小应用程序把一个Swing按钮和一个AWT按钮添加到一个面板中，这个面板是要滚动的组件。这个小应用程序为滚动窗格设置了首选大小，并把滚动窗格添加到其内容窗格中。<br>
+              　　图2-9所示的组件效果是我们不想要的。遗憾的是，与弹出式菜单不同，JScrollPane没有能实例化为重量组件的选项。但是，幸运的是，AWT的ScrollPane组件是一个重量滚动窗格，它和Swing的JScrollPane几乎完全相同。<br>
+              　　<a href="s02_t10.htm" target="_blank">图2-10</a>示出了与图2-9相同的小应用程序，但图2-10中的小应用程序用重量AWT的ScrollPane替代了Swing的轻量JScrollPane。由于AWT滚动窗格是重量的，所以它们滚动轻量组件和重量组件都没有问题。<br>
+              　　例2-11列出了图2-10示的小应用程序的代码</p>
+            <p align="center"><b>例2-11　使用AWT的ScrollPane来滚动重量组件</b></p>
+            <p> 　　import javax.swing.*;<br>
+              　　import java.awt.*;<br>
+              　　import java.awt.event.*;</p>
+            <p>　　public class Test extends JApplet {<br>
+              　　　public void init() {<br>
+              　　　　JPanel panel = new JPanel();</p>
+            <p> 　　　　panel.add(new JButton(&quot;Swing Button ...&quot;));<br>
+              　　　　panel.add(new Button(&quot;AWT Button ...&quot;));</p>
+            <p> 　　　　Container contentPane = getContentPane();<br>
+              　　　　SizedScrollPane scrollPane = new SizedScrollPane();</p>
+            <p> 　　　　scrollPane.add(panel);</p>
+            <p> 　　　　contentPane.setLayout(new FlowLayout(FlowLayout.LEFT));<br>
+              　　　　contentPane.add(scrollPane);<br>
+              　　　}<br>
+              　　}<br>
+              　　class SizedScrollPane extends ScrollPane {<br>
+              　　　public Dimension getPreferredSize() {<br>
+              　　　　return new Dimension(125,50);<br>
+              　　　}<br>
+              　　}<br>
+              　　注意：在例2-11列出的小应用程序中实现了java.awt.ScrollPane的一个扩展，以便把滚动窗格的大小设置为首选尺寸。有关Swing组件与AWT组件在设置首选尺寸方面的差别的更多信息，请参见4.2.2节“最小尺寸、最大尺寸和首选尺寸。” 
+            </p>
+            <p> <b><a name="2.3.4"></a>2.3.4 内部窗体</b></p>
+            <p> 　　Swing的内部窗体是包含在桌面窗格中的窗体（参见第15章“内部窗体和桌面窗格”），Swing的内部窗体是轻量组件，如果把重量组件添加到一个内部窗体，则这个窗体很可能会遇到到麻烦。<br>
+              　　<a href="s02_t11.htm" target="_blank">图2-11</a>所示的小应用程序包含两个JInternalFrame实例。它们都包含一个重量AWT画布。如果一个内部窗体与另一个内部窗体重叠，则下面的内部窗体的重量画布将会使上面的内部窗体的一部分变模糊，因为重量画布的层序比轻量内部窗体的层序高。<br>
+              　　例2-12　列出了图2-11所示的小应用程序的代码</p>
+            <p align="center"> <b>例2-12把重量组件添加到Swing内部窗体中</b></p>
+            <p>　　import java.awt.*;<br>
+              　　import java.awt.event.*;<br>
+              　　import javax.swing.*;</p>
+            <p>　　public class InternalFrameTest extends JApplet {<br>
+              　　　JDesktopPane dtp = new JDesktopPane();</p>
+            <p> 　　　public void init() {<br>
+              　　　　JPanel controlPanel = new ControlPanel(dtp);<br>
+              　　　　Container contentPane = getContentPane();<br>
+              　　　　JPanel centerPanel = new JPanel();</p>
+            <p> 　　　　contentPane.setLayout(new BorderLayout());<br>
+              　　　　contentPane.add(controlPanel, BorderLayout.NORTH);<br>
+              　　　　contentPane.add(dtp, BorderLayout.CENTER);<br>
+              　　　}<br>
+              　　}<br>
+              　　class ControlPanel extends JPanel {<br>
+              　　　private static int cnt=0;</p>
+            <p> 　　　public ControlPanel(final JDesktopPane dtp) {<br>
+              　　　　JButton b = new JButton(&quot;make frame&quot;);</p>
+            <p> 　　　　add(b);</p>
+            <p> 　　　　b.addActionListener(new ActionListener() {<br>
+              　　　　　public void actionPerformed(ActionEvent event) {<br>
+              　　　　　　JInternalFrame jif = new JInternalFrame();<br>
+              　　　　　　Container contentPane = jif.getContentPane();</p>
+            <p> 　　　　　　jif.setLocation(10,50);<br>
+              　　　　　　jif.setTitle(&quot;Internal Frame&quot; + cnt++);<br>
+              　　　　　　jif.setResizable(true);<br>
+              　　　　　　jif.setMaximizable(true);<br>
+              　　　　　　jif.setClosable(true);<br>
+              　　　　　　jif.setVisible(true);<br>
+              　　　　　　jif.setIconifiable(true);</p>
+            <p> 　　　　　　contentPane.setLayout(new FlowLayout());<br>
+              　　　　　　contentPane.add(new ColoredCanvas(), &quot;Center&quot;);<br>
+              　　　　　　jif.pack();</p>
+            <p> 　　　　　　dtp.add(jif, 2); // add at layer 2<br>
+              　　　　　}<br>
+              　　　　});<br>
+              　　　}<br>
+              　　}<br>
+              　　class ColoredCanvas extends Canvas {<br>
+              　　　public void paint(Graphics g) {<br>
+              　　　　Dimension sz = getSize();<br>
+              　　　　g.setColor(Color.blue);<br>
+              　　　　g.fillRect(0,0,sz.width,sz.height);<br>
+              　　　}<br>
+              　　　public Dimension getPreferredSize() {<br>
+              　　　　return new Dimension(200,200);<br>
+              　　　}<br>
+              　　}</p>
+            <p><b>Swing提示</b><br>
+              <b>混合使用AWT组件和Swing组件的原则</b><br>
+              　　一般不提倡把Swing轻量组件与AWT重量组件混合使用。大多数情况下，这不会是一个问题，因为Swing对所有AWT组件都提供了替代的轻量组件。对已有的、使用AWT组件的小应用程序或应用程序，最好的方法是用Swing的相应组件来替代AWT组件。如果不能替代，则必须遵守如下原则：<br>
+              　　1)如果轻量组件必须在重量组件之上显示，则不要在一个容器中混合使用轻量组件和重量组件。<br>
+              　　2)如果弹出式菜单与重量组件重叠，则必须强迫弹出式菜单成为重量组件<br>
+              　　3)如果把重量组件添加到一个JScrollPane实例中，而应该把重量组件添加到一个java.awt.ScrollPane实例中。<br>
+              　　4)不要把重量组件添加到Swing内部窗体中。 </p>
+            <p> <b><a name="2.4"></a>2.4 Swing和线程</b></p>
+            <p>　　大多数情况下，Swing是线程不安全的，即只能从单线程来访问Swing组件。首先，我们要讨论为什么Swing是线程不安全的，然后介绍在Swing开发过程中单线程设计所带来的结果。<br>
+              　　让我们面对这个事实，甚至在java中，开发多线程的应用程序也是不容易的。设计一个线程安全的工具包就更不是一个简单的事情。例如，确定如何同步对类的访问就是一个复杂的任务(注：参见Lea，Doug，“java中的并发编程”，Addison-Wesley,1997。)。同样，扩展线程安全的类需要较高的技术，对非线程编程高手的开发人员（大多数开发人员都属此范围）是充满危险的。Swing是线程不安全的一个主要原因是为了简化扩展组件的任务。<br>
+              　　Swing是线程不安全的另一个原因是由于获取和释放锁定及恢复状态所带来的开销。使用线程安全GUI工具包的所有应用程序（无论它们是否是多线程的）都必须付出同样的性能代价。<br>
+              　　线程的使用增加了调试、测试、维护和扩展的困难度。例如，测试和维护等通常已经很艰苦的工作对于大多数多线程应用程序就更困难了，有时甚至是不可能的。<br>
+              　　有些Swing组件方法确实支持多线程访问。例如，JComponent的repaint、revalidate和invalidate等方法都对放在事件派发线程上的请求进行排队。因此，可从任何线程中调用这些方法。另外，可以从多个线程把监听器添加到事件监听器列表（参见6.2节“事件监听器列表”）中或从列表中删掉。最后，有些组件方法是同步的。例如，JCheckBoxMenuItem.setState()是同步的，因此，可以从多线程中调用它。 
+            </p>
+            <p> <b><a name="2.4.1"></a>2.4.1 Swing单线程设计的结果</b></p>
+            <p>　　Swing单线程设计的主要结果是：大多数情况下，只能从事件派发线程中访问将要在屏幕上绘制的Swing组件。<br>
+              　　事件派发线程是调用paint和update等回调方法的线程，而且，它还是事件监听器接口中定义的事件处理方法。例如，ActionListener和PropertyListener接口的实现使它们的actionPerformed方法和propertyChange方法在事件派发线程中调用。 
+              <br>
+              　　技术上说，在Swing组件的对等组件创建之前（指可在屏幕上绘制之前）（注：对等组件是用addNotify方法创建的），它们可以从多个线程中访问。例如，可以有一个小应用程序的init方法中构造和操纵组件，只要在操纵它们之前，还没有使它们成为可见的。</p>
+            <p> <b><a name="2.4.2"></a>2.4.2 SwingUtilties类的invokeLater和invokeAndWait方法</b></p>
+            <p>　　由于AWT和Swing都是事件驱动工具包，所以在回调方法中更新可见的GUI就是很自然的事。例如，如果在一个按钮激活，项目列表需要更新时，则通常在与该按钮相关联的事件监听器的actionPerformed方法中来实现该列表的更新。<br>
+              　　然而，有时可能需要从事件派发线程以外的线程中更新Swing组件。例如，如果上述项目列表中包含了很多来自数据库或Internet的数据，则可能在按钮激活后还要等一段时间才能看到更新的列表。如果信息的获取是在actionPerformed中实现的，则按钮仍保持按下的状态，直到对actionPerformed的调用返回，不仅按钮的弹起需要一段时间，而且一般来说，耗时较长的操作也不应当在事件方法中的执行，因为在事件处理方法返回之前，其他的事件不能派发。<br>
+              　　有时，在独立的线程上执行耗时的操作可能更好，这将允许立即更新用户界面和释放事件派发线程去派发其他的事件，幸运的是，Swing提供了两种机制，它们都支持这种想法。<br>
+              　　SwingUtilities类提供了两个方法：invokdLater和invokdAndWait，它们都使事件派发线程上的可运行对象排队。当可运行对象排在事件派队列的队首时，就调用基run方法。其效果是允许事件派发线程调用另一个线程中的任意一个代码块。<br>
+              　　1.SwingUtilities invokeLater<br>
+              　　在介绍invokeLater和invokeAndWait方法之前，我们首先来看一个小应用程序，由于是从事件派发线程以外的线程中更新Swing组件，所以该小应用程序运行不正常。<a href="s02_t12.htm" target="_blank">图2-12</a>所示的小应用程序有一个按钮和一个进度条。当激活按钮后，就开始模仿获取信息的长操作。当获取了信息（即一个integer值）后，就用该信息来更新小应用程序的进度条。<br>
+              　　图2-12左图显示的是这个小应用程序的初始状态。图2-12右图显示的则是当激活start按钮后，这个小应用程序的样子，此时，已获取了信息，也更新了进度条。<br>
+              　　小应用程序把一个动作监听器添加到该按钮中，该监听器创建一个新线程，这个线程不断收到信息并更新进度条。每隔半秒获取一次信息，而且这个线程会获得一个对这个小应用程序进度条的引用。</p>
+            <p>　　public class Test extends JApplet {<br>
+              　　　...<br>
+              　　　public void init() {<br>
+              　　　　...<br>
+              　　　　startButton.addActionListener(new ActionListener() {<br>
+              　　　　　public void actionPerformed(ActionEvent e) {<br>
+              　　　　　　GetInfoThread t = new GetInfoThread(Test.this);<br>
+              　　　　　　t.start();</p>
+            <p> 　　　　　　// this is ok, because actionPerformed<br>
+              　　　　　　// is called on the event dispatch thread<br>
+              　　　　　　startButton.setEnabled(false);<br>
+              　　　　　}<br>
+              　　　　});<br>
+              　　　}<br>
+              　　　...<br>
+              　　} <br>
+              　　class GetInfoThread extends Thread {<br>
+              　　　Test applet;</p>
+            <p> 　　　public GetInfoThread(Test applet) {<br>
+              　　　　this.applet = applet;<br>
+              　　　}<br>
+              　　　public void run() {<br>
+              　　　　while(true) {<br>
+              　　　　　try {<br>
+              　　　　　　// simulate &quot;lengthy&quot; information retrieval<br>
+              　　　　　　Thread.currentThread().sleep(500);</p>
+            <p>　　　　　　System.out.println(&quot;.&quot;);<br>
+              　　　　　　// this is not ok, because it is not called<br>
+              　　　　　　// on the event dispatch thread<br>
+              　　　　　　applet.getProgressBar().setValue(<br>
+              　　　　　　(int)Math.random()*100);<br>
+              　　　　　}<br>
+              　　　　　catch(InterruptedException e) {<br>
+              　　　　　　e.printStackTrace();<br>
+              　　　　　}<br>
+              　　　　}<br>
+              　　　}<br>
+              　　}<br>
+              　　在该按钮的监听器启动上述线程后，监听器把按钮的允许状态设置为false。由于在事件派发线程上调用actionPerformed方法，所以，这是一个有效的操作。但是，在GetInfoThread中设置进度条是一个危险的做法，因为事件派发线程以外的线程将更新进度条。<br>
+              　　例2-13列出了图2-12所示的小应用程序的完整的代码。</p>
+            <p align="center"><b>例2-13 从另一个线程更新组件的错误方法</b></p>
+            <p> 　　import javax.swing.*;<br>
+              　　import java.awt.*;<br>
+              　　import java.awt.event.*; <br>
+              　　public class Test extends JApplet {<br>
+              　　　JProgressBar pb = new JProgressBar(); <br>
+              　　　public void init() {<br>
+              　　　　Container contentPane = getContentPane();<br>
+              　　　　final JButton startButton = new JButton(&quot;start&quot;);</p>
+            <p> 　　　　contentPane.setLayout(new FlowLayout());<br>
+              　　　　contentPane.add(startButton);<br>
+              　　　　contentPane.add(pb);</p>
+            <p> 　　　　startButton.addActionListener(new ActionListener() {<br>
+              　　　　　public void actionPerformed(ActionEvent e) {<br>
+              　　　　　　GetInfoThread t = new GetInfoThread(Test.this);<br>
+              　　　　　　t.start();</p>
+            <p> 　　　　　　// this is ok, because actionPerformed<br>
+              　　　　　　// is called on the event dispatch thread<br>
+              　　　　　　startButton.setEnabled(false);<br>
+              　　　　　}<br>
+              　　　　});<br>
+              　　　}<br>
+              　　　public JProgressBar getProgressBar() {<br>
+              　　　　return pb;<br>
+              　　　}<br>
+              　　}<br>
+              　　class GetInfoThread extends Thread {<br>
+              　　　Test applet;</p>
+            <p> 　　　public GetInfoThread(Test applet) {<br>
+              　　　　this.applet = applet;<br>
+              　　　}<br>
+              　　　public void run() {<br>
+              　　　　while(true) {<br>
+              　　　　　try {<br>
+              　　　　　　// simulate &quot;lengthy&quot; information retrieval<br>
+              　　　　　　Thread.currentThread().sleep(500);</p>
+            <p>　　　　　　System.out.println(&quot;.&quot;);<br>
+              　　　　　　// this is not ok, because it is not called<br>
+              　　　　　　// on the event dispatch thread<br>
+              　　　　　　applet.getProgressBar().setValue(<br>
+              　　　　　　(int)Math.random()*100);<br>
+              　　　　　}<br>
+              　　　　　catch(InterruptedException e) {<br>
+              　　　　　　e.printStackTrace();<br>
+              　　　　　}<br>
+              　　　　}<br>
+              　　　}<br>
+              　　}<br>
+              　　更新例2-13所示的小应用程序中的进度条的正确方法是使用SwingUtilities.invokeLater(或invokeAndWait)。下面列出的GetInfoThread类的构造方法被修改了以便实例化一个可运行的对象，该对象获取对小应用程序进度条的引用并更新进度条的值。GetInfoThread类的run方法调用SwingUtilities.invokeLater并把对进度条的引用传送给可运行对象。 
+            </p>
+            <p>　　class GetInfoThread extends Thread {<br>
+              　　　Runnable runnable;<br>
+              　　　int value;</p>
+            <p> 　　　public GetInfoThread(final Test applet) {<br>
+              　　　　runnable = new Runnable() {<br>
+              　　　　　public void run() {<br>
+              　　　　　　JProgressBar pb = applet.getProgressBar();<br>
+              　　　　　　pb.setValue(value);<br>
+              　　　　　}<br>
+              　　　　};<br>
+              　　　}<br>
+              　　　public void run() {<br>
+              　　　　while(true) {<br>
+              　　　　　try {<br>
+              　　　　　　Thread.currentThread().sleep(500);</p>
+            <p> 　　　　　　// This is okay because the runnable抯 run()<br>
+              　　　　　　// is invoked on the event dispatch thread<br>
+              　　　　　　value = (int)(Math.random() * 100);<br>
+              　　　　　　SwingUtilities.invokeLater(runnable);<br>
+              　　　　　}<br>
+              　　　　　catch(InterruptedException e) {<br>
+              　　　　　　e.printStackTrace();<br>
+              　　　　　}<br>
+              　　　　}<br>
+              　　　}<br>
+              　　}</p>
+            <p> 　　例2-14是例2-13所列的小应用程序的修改版。</p>
+            <p align="center"><b>例2-14　从另一个线程中更新组件的正确方法</b>（<a href="s02_t12_2.htm" target="_blank">演示图</a>）</p>
+            <p>　　import javax.swing.*;<br>
+              　　import java.awt.*;<br>
+              　　import java.awt.event.*;</p>
+            <p>　　public class Test extends JApplet {<br>
+              　　　JProgressBar pb = new JProgressBar();</p>
+            <p> 　　　public void init() {<br>
+              　　　　Container contentPane = getContentPane();<br>
+              　　　　final JButton startButton = new JButton(&quot;start&quot;);</p>
+            <p> 　　　　contentPane.setLayout(new FlowLayout());<br>
+              　　　　contentPane.add(startButton);<br>
+              　　　　contentPane.add(pb);</p>
+            <p> 　　　　startButton.addActionListener(new ActionListener() {<br>
+              　　　　　public void actionPerformed(ActionEvent e) {<br>
+              　　　　　　GetInfoThread t = new GetInfoThread(Test.this);<br>
+              　　　　　　t.start();</p>
+            <p> 　　　　　　// this is ok, because actionPerformed<br>
+              　　　　　　// is called on the event dispatch thread<br>
+              　　　　　　startButton.setEnabled(false);<br>
+              　　　　　}<br>
+              　　　　});<br>
+              　　　}<br>
+              　　　public JProgressBar getProgressBar() {<br>
+              　　　　return pb;<br>
+              　　　}<br>
+              　　}<br>
+              　　class GetInfoThread extends Thread {<br>
+              　　　Runnable runnable;<br>
+              　　　int value;</p>
+            <p> 　　　public GetInfoThread(final Test applet) {<br>
+              　　　　runnable = new Runnable() {<br>
+              　　　　　public void run() {<br>
+              　　　　　　JProgressBar pb = applet.getProgressBar();<br>
+              　　　　　　pb.setValue(value);<br>
+              　　　　　}<br>
+              　　　　};<br>
+              　　　}<br>
+              　　　public void run() {<br>
+              　　　　while(true) {<br>
+              　　　　　try {<br>
+              　　　　　　Thread.currentThread().sleep(500);</p>
+            <p> 　　　　　　// This is okay because the runnable抯 run()<br>
+              　　　　　　// is invoked on the event dispatch thread<br>
+              　　　　　　value = (int)(Math.random() * 100);<br>
+              　　　　　　SwingUtilities.invokeLater(runnable);<br>
+              　　　　　}<br>
+              　　　　　catch(InterruptedException e) {<br>
+              　　　　　　e.printStackTrace();<br>
+              　　　　　}<br>
+              　　　　}<br>
+              　　　}<br>
+              　　}</p>
+            <p>　　2.SwingUtilities.InvokeAndWait<br>
+              　　与invokeLater一样，SwingUtilities.InvokeAndWait也把可运行对象排入事件派发线程的队列中。虽然，invokeLater在把可运行对象放入队列后就返回，而InvokeAndWait一直等待直到已启动了可运行对象的run方法才返回。如果在另一个操作能够在另一个线程上执行之前必须从一个组件获取信息，则InvokeAndWait方法是很有用的。 
+              <br>
+              　　例如，例2-14列出的小应用程序总是更新进度条的值而不管该新值是否与当前的值相同。如果只在新值与当前值不同时才更新进度条的值，则效率更高。修改这个小应用程序，使得这个小应用程序只在新值与当前值不同时才更新进度条的值。这将使我们有机会进一步介绍InvokdAndWait方法。<br>
+              　　首先，修改GetInfoThread类以创建两个可运行的对象：一个对象获取进度条当前的值，另一个对象用于设置进度条的值。</p>
+            <p>　　class GetInfoThread extends Thread {<br>
+              　　　Runnable getValue, setValue;<br>
+              　　　int value, currentValue;</p>
+            <p> 　　　public GetInfoThread(final Test applet) {<br>
+              　　　　getValue = new Runnable() {<br>
+              　　　　　public void run() {<br>
+              　　　　　　JProgressBar pb = applet.getProgressBar();<br>
+              　　　　　　currentValue = pb.getValue();<br>
+              　　　　　}<br>
+              　　　　};<br>
+              　　　　setValue = new Runnable() {<br>
+              　　　　　public void run() {<br>
+              　　　　　　JProgressBar pb = applet.getProgressBar();<br>
+              　　　　　　pb.setValue(value);<br>
+              　　　　　}<br>
+              　　　　};<br>
+              　　　}<br>
+              　　接着，使用invokeAndWait()来修改GetInfoThread类的run方法以获取进度条的当前值。<br>
+              　　　public void run() {<br>
+              　　　　while(true) {<br>
+              　　　　　try {<br>
+              　　　　　　Thread.currentThread().sleep(500);</p>
+            <p> 　　　　　　// This is okay because the getValue's run()<br>
+              　　　　　　// is invoked on the event dispatch thread<br>
+              　　　　　　value = (int)(Math.random() * 100);</p>
+            <p> 　　　　　　try {<br>
+              　　　　　　　SwingUtilities.invokeAndWait(getValue);<br>
+              　　　　　　}<br>
+              　　　　　　catch(InvocationTargetException ite) {<br>
+              　　　　　　　ite.printStackTrace();<br>
+              　　　　　　}<br>
+              　　　　　　catch(InterruptedException ie) {<br>
+              　　　　　　　ie.printStackTrace();<br>
+              　　　　　　}</p>
+            <p> 　　　　　　if(currentValue != value) {<br>
+              　　　　　　　SwingUtilities.invokeLater(setValue);<br>
+              　　　　　　}<br>
+              　　　　　}<br>
+              　　　　　catch(InterruptedException e) {<br>
+              　　　　　　e.printStackTrace();<br>
+              　　　　　}<br>
+              　　　　}<br>
+              　　　}</p>
+            <p>　　SwingUtilities.invokeAndWait()获取进度条的当前值，invokeLater()则设置进度条的值。对InvokeAndWait的调用直到getValue可运行对象的run方法返回后才返回。<br>
+              　　SwingUtilities.invokeAndWait可能会弹出下面两个异常信息之一：InterruptedException或InvocationTargetException。无论何时使用invokeLater()都必须捕捉这些异常，否则，调用invokeLater()的方法中必须有一个throw子句。<br>
+              　　例2-15显示了这种方法的完整代码</p>
+            <p align="center"><b>例2-15 使用SwingUtilities.InvokeAndWait()</b></p>
+            <p>　　import javax.swing.*;<br>
+              　　import java.awt.*;<br>
+              　　import java.awt.event.*;<br>
+              　　import java.lang.reflect.*; // for InvocationTargetException</p>
+            <p>　　public class Test extends JApplet {<br>
+              　　　private JProgressBar pb = new JProgressBar();</p>
+            <p> 　　　public void init() {<br>
+              　　　　Container contentPane = getContentPane();<br>
+              　　　　final JButton startButton = new JButton(&quot;start&quot;);</p>
+            <p> 　　　　contentPane.setLayout(new FlowLayout());<br>
+              　　　　contentPane.add(startButton);<br>
+              　　　　contentPane.add(pb);</p>
+            <p> 　　　　startButton.addActionListener(new ActionListener() {<br>
+              　　　　　public void actionPerformed(ActionEvent e) {<br>
+              　　　　　　GetInfoThread t = new GetInfoThread(Test.this);<br>
+              　　　　　　t.start();</p>
+            <p> 　　　　　　// this is okay because actionPerformed<br>
+              　　　　　　// is called on the event dispatch thread<br>
+              　　　　　　startButton.setEnabled(false);<br>
+              　　　　　}<br>
+              　　　　});<br>
+              　　　}<br>
+              　　　public JProgressBar getProgressBar() {<br>
+              　　　　return pb;<br>
+              　　　}<br>
+              　　}<br>
+              　　class GetInfoThread extends Thread {<br>
+              　　　Runnable getValue, setValue;<br>
+              　　　int value, currentValue;</p>
+            <p> 　　　public GetInfoThread(final Test applet) {<br>
+              　　　　getValue = new Runnable() {<br>
+              　　　　　public void run() {<br>
+              　　　　　　JProgressBar pb = applet.getProgressBar();<br>
+              　　　　　　currentValue = pb.getValue();<br>
+              　　　　　}<br>
+              　　　　};<br>
+              　　　　setValue = new Runnable() {<br>
+              　　　　　public void run() {<br>
+              　　　　　　JProgressBar pb = applet.getProgressBar();<br>
+              　　　　　　pb.setValue(value);<br>
+              　　　　　}<br>
+              　　　　};<br>
+              　　　}<br>
+              　　　public void run() {<br>
+              　　　　while(true) {<br>
+              　　　　　try {<br>
+              　　　　　　Thread.currentThread().sleep(500);</p>
+            <p> 　　　　　　// This is okay because the getValue's run()<br>
+              　　　　　　// is invoked on the event dispatch thread<br>
+              　　　　　　value = (int)(Math.random() * 100);</p>
+            <p> 　　　　　　try {<br>
+              　　　　　　　SwingUtilities.invokeAndWait(getValue);<br>
+              　　　　　　}<br>
+              　　　　　　catch(InvocationTargetException ite) {<br>
+              　　　　　　　ite.printStackTrace();<br>
+              　　　　　　}<br>
+              　　　　　　catch(InterruptedException ie) {<br>
+              　　　　　　　ie.printStackTrace();<br>
+              　　　　　　}</p>
+            <p> 　　　　　　if(currentValue != value) {<br>
+              　　　　　　　SwingUtilities.invokeLater(setValue);<br>
+              　　　　　　}<br>
+              　　　　　}<br>
+              　　　　　catch(InterruptedException e) {<br>
+              　　　　　　e.printStackTrace();<br>
+              　　　　　}<br>
+              　　　　}<br>
+              　　　}<br>
+              　　}</p>
+            <p> 　　invokeLater()和invokeAndWait()之间一个重要的区别是：可以从事件派发线程中调用invokeLater()，却不能从事件派发线程中调用invokeAndWait。从事件派发线程调用invokeAndWait()所带来的问题是：invokeAndWait()锁定调用它的线程，直到可运行对象从事件派发线程中派出去并且该可运行对象的run方法激活。如果从事件派发线程调用invokeAndWait()，则将发生线程死锁的情况，因为invokeAndWait()正在等待事件派发，但是，由于是从事件派发线程中调用invokeAndWait()的，所以，直到invokeAndWait()返回后事件才能派发。</p>
+            <p><b>Swint提示</b></p>
+            <p><b>使用SwingUilities.invokeLater()和SwingUtilities.invokeAndWait()从事件派发线程之外的线程访问组件</b><br>
+              　　由于Swing是线程不安全的，所以，从事件派发线程之外的线程访问Swing组件是不安全的。SwingUtilities类提供了两个用于执行事件派发线程中代码的方法，这两种方法是invokeLater和invokeAndWait。<br>
+              　　注意：可以从事件派发线程调用SwingUtilities.invokeLater，却不能从事件派发线程调用SwingUtilities.invokeAndWait。如果从事件派发线程调用SwingUtilities.invokeAndWait，则将发生线程死锁。因为invokeAndWait正在等待可运行对象被从事件派发线程中派发出去，但是调用SwingUtilities.invokeAndWait的线程返回前事件不能派发。 
+              <br>
+            </p>
+            <p> <b><a name="2.5"></a>2.5 本章回顾</b></p>
+            <p>　　Swing的设计目标之一是为实现小应用程序和应用程序的完整性制定一些约定，大多数情况下，这个目标已经达到了。Swing小应用程序和应用程序含有JRootPane的一个实例，这意味着不能把组件直接添加到JApplet或JFrame的实例中，也不能显式地为JApplet或JFrame的实例设置布局管理器。组件应该添加到根窗格的内容窗格中，同理，必须为内容窗格设置布局管理器而不是为小应用程序和应用程序布局管理器。幸运的是，无论何时组件直接添加、或是显式地为小应用程序或窗体设置了布局管理器，JApplet和JFrame都会弹出带错误的异常消息。<br>
+              　　把Swing实现为线程不安全的决定是肯定会遭到反对的。毕竟，Java语言本身就内置了多线程特性，因此，就会有人主张应当以线程安全的模式实现Swing。<br>
+              　　然而，正是因为Java内置了对多线程的支持，但这并不意味着在Java中实现安全的多线程小应用程序或应用程序是一件简单的事情，更不用提工具包了。事实正相反，以线程安全的方式实现复杂的小应用程序和应用程序是相当困难的。另外，大多数开发人员不精通开发复杂的多线程代码。当多线程被引入到面向对象语言中以后，人们遇到的较困难的领域之一就是如何扩展线程安全的类。相比之下，Swing开发人员使用的单线程方法使得类很容易扩展。<br>
+              　　总之，禁止从事件派发线程外的其他线程访问Swing组件的决定是正确的，它产生了一个较容易扩展的、较简单的工具包。另外，除事件派发线程外的其他线程可以调度在事件派发线程上实现的可运行对象。<br>
+              　　Swing是一个可靠的、工业标准的用户界面工具包，比AWT大有改进。但是，与任何重要的软件一样，Swing很容易学习，但也有程序错误。 
+            </p>
+            <p>　　 [<a href="index.html" target="_self">目录</a>][<a href="s01.htm" target="_self">上一页</a>][<a href="s03.htm" target="_self">下一页</a>](飒龙收藏/2002.5.18) 
+            </p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </td>
+  </tr>
+</tbody>
+</table>
+<script language="javascript">bottomprint()</script>
+</body>
+</html>

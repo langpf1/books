@@ -1,0 +1,92 @@
+未看：
+《80x86汇编语言程序设计教程》（清华大学出版社，黑色封面，杨季文著）
+
+《Windows 程序设计》－北京大学出版社，Petzold著
+
+《经济学原理》曼昆
+
+《30天自制操作系统》周自恒译  出版社：人民邮电出版社
+
+《目标》
+
+《数学之美》，《数据之美》，《数据之魅》，《架构之美》
+
+《effective Java》
+
+
+《单元测试之道Java版》
+
+《JAVA测试新技术：TESTNG和高级概念 》
+
+《Next Generation Java Testing: TestNG and Advanced Co》
+
+第一名：1306票《Code Complete (2nd Ed) by Steve McConnell》，中文版《代码大全（第二版）》,两届Software Jolt Award震撼大奖得主！
+
+第二名：1161票 《The Pragmatic Programmer》，中文版《程序员修炼之道》
+
+第三名：689票 《Structure and Interpretation of Computer Programs》，中文版《计算机程序的构造和解释》
+
+第四名：557票 《The C Programming Language》，中文版《C程序设计语言》
+
+第五名：472票 《Refactoring: Improving the Design of Existing Code》，中文版《重构：改善既有代码的设计》
+
+第六名：472票 《Introduction to algorithms》，中文版《算法导论》
+
+第七名：430票 《The Mythical Man-Month》，中文版《人月神话》
+
+第八名：426票 《Design Patterns》，中文版《设计模式》
+
+第九名：386票 《The Art of Computer Programming(First Volume Hardcover)》，中文版《计算机程序设计艺术第 （第一卷）》
+
+第10名：353票 《Compilers: Principles, Techniques, and Tools 》，中文版《编译原理》
+
+第11名：329票 《Head-First Design Patterns》，中文版《Head First 设计模式》
+《80x86汇编语言程序设计教程》（清华大学出版社，黑色封面，杨季文著）
+
+《Windows 程序设计》－北京大学出版社，Petzold著
+
+《经济学原理》曼昆
+
+《30天自制操作系统》周自恒译  出版社：人民邮电出版社
+
+《目标》
+
+《数学之美》，《数据之美》，《数据之魅》，《架构之美》
+
+《effective Java》
+
+《java并发编程实践》
+
+《单元测试之道Java版》
+
+《JAVA测试新技术：TESTNG和高级概念 》
+
+《C++ Primer》
+
+《OpenGL图形学教程》
+
+《The Art of Software Testing, Second Edition》
+
+《EffectiveSoftwareTesting50SpecificWaystoImproveYourTesting》
+
+《测试的圣经》
+
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+
+《Thinking in Java》（推荐第四版）
+
+《Java2 图形设计卷Ⅱ：Swing》
+
+《Java 与模式》
+
+《Java 最佳实践》
+ 
+Head first 设计模式
+ 
+java语言程序设计基础版
+
+java语言程序设计进阶版
+
+
+

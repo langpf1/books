@@ -1,0 +1,976 @@
+<SCRIPT LANGUAGE="JavaScript" SRC="/-fs0/sys/pop-up.js"></SCRIPT>
+
+<SCRIPT LANGUAGE="JavaScript" SRC="/-fs0/sys/pop-up-all.js"></SCRIPT>
+
+<html>
+<head>
+<title>易都网--Java 2 图形设计卷Ⅱ：SWING</title>
+<LINK rel="stylesheet" href="../../../_public/javaa.css">
+<meta http-equiv="Content-Type" content="text/html; charset=GBK">
+<script language="JavaScript" src="../../../_public/javaa.js"></script>
+<meta name="keywords" content="Java,JSP,ASP,PHP,J2EE,EJB,JavaScript,C/C++,ASM,CSS,HTML,XML,网络安全,MySQL,ACCESS">
+</head>
+<body bgcolor="#FFFFFF">
+<table border=0 cellpadding=0 cellspacing=0 width="100%">
+  <tbody> 
+  <script language="javascript">print2()</script>
+  <tr> 
+    <td width="100%"> 
+      <table bgcolor=#EEEEEE border=0 cellpadding=3 cellspacing=0 width="100%">
+        <tbody> 
+        <tr> 
+          <td class=f1 id=thetd width="100%"> 
+            <p>[<a href="index.html" target="_self">目录</a>][<a href="s15.htm">上一页</a>][<a href="s17.htm">下一页</a>]</p>
+            <p align="center"> <b>第16章 选取器</b></p>
+            <p>　　本章介绍两个Swing选取器组件，它们是：JFileChooser和JColorChooser，它们分别用于选取文件和颜色。</p>
+            <p> <b>16.1 JFileChooser</b></p>
+            <p>　　文件选取器（与选项窗格一样，参见14.3节“JOptionPane”)是放置在对话框中的轻量组件。一旦创建了一个JFileChooser实例，就可以把这个实例添加到一个对话框中。而且，JFileChooser类还提供了一些方法，这些方法把已存在的文件添加到一个模态对话框中。并且显示这个对话框。这些方法返回一个integer值，指出是激活了选取器的批准按钮还是清除了这个对话框。<br>
+              　　文件选取器支持三种显示模式：只显示文件、只显示目录和显示文件及目录。另外，文件选取器还支持单文件选取和多文件选取（Swing1.1FCS不完全支持多文件选取。）<br>
+              　　可以用许多不同的方法来定制文件选取器，如图16-1所示。图１６－１中的上图显示调用JFileChooser.showSaveDialog()后显示的标准对话框。图16-1 
+            </p>
+            <p align="center"><b>例子 16-1 一个简单的文件选取器例子</b></p>
+            <hr size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import java.io.File;<br>
+            import javax.swing.*;<br>
+            import javax.swing.filechooser.*;<br>
+            import java.beans.*;
+            <p>public class Test extends JFrame {<br>
+              JFileChooser chooser = new JFileChooser();<br>
+              JButton button = new JButton(&quot;show file chooser ...&quot;);</p>
+            <p><br>
+              public Test() {<br>
+              super(&quot;Simple File Chooser Application&quot;);<br>
+              Container contentPane = getContentPane();</p>
+            <p> contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(button); </p>
+            <p> button.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              int state = chooser.showOpenDialog(null);<br>
+              File file = chooser.getSelectedFile();</p>
+            <p> if(file != null &amp;&amp;<br>
+              state == JFileChooser.APPROVE_OPTION) {<br>
+              JOptionPane.showMessageDialog(<br>
+              null, file.getPath());<br>
+              }<br>
+              else if(state == JFileChooser.CANCEL_OPTION) {<br>
+              JOptionPane.showMessageDialog(<br>
+              null, &quot;Canceled&quot;);<br>
+              }<br>
+              else if(state == JFileChooser.ERROR_OPTION) {<br>
+              JOptionPane.showMessageDialog(<br>
+              null, &quot;Error!&quot;);<br>
+              }<br>
+              }<br>
+              });<br>
+              }<br>
+              public static void main(String args[]) {<br>
+              JFrame f = new Test();<br>
+              f.setBounds(300,300,350,100);<br>
+              f.setVisible(true);</p>
+            <p> f.setDefaultCloseOperation(<br>
+              WindowConstants.DISPOSE_ON_CLOSE);<br>
+              <br>
+              f.addWindowListener(new WindowAdapter() {<br>
+              public void windowClosed(WindowEvent e) {<br>
+              System.exit(0); <br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr noshade size="1">
+            <p>&nbsp; </p>
+            <p> <b>16.1.1 文件选取器类型</b></p>
+            <p align="center"><b>例子 16-2 缺省的文件选取器类型</b></p>
+            <hr size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import java.io.File;<br>
+            import javax.swing.*;
+            <p>public class Test extends JFrame {<br>
+              JFileChooser chooser = new JFileChooser();<br>
+              JComboBox comboBox = new JComboBox();<br>
+              JButton button = new JButton(&quot;show file chooser ...&quot;);</p>
+            <p> public Test() {<br>
+              super(&quot;Standard File Chooser Types&quot;);<br>
+              Container contentPane = getContentPane();</p>
+            <p> contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(comboBox);<br>
+              contentPane.add(button); </p>
+            <p> comboBox.addItem(&quot;OPEN_DIALOG&quot;);<br>
+              comboBox.addItem(&quot;SAVE_DIALOG&quot;);<br>
+              comboBox.addItem(&quot;custom dialog&quot;);</p>
+            <p> button.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              String message = &quot;CANCELED&quot;;<br>
+              int state = showChooser(<br>
+              (String)comboBox.getSelectedItem());<br>
+              File file = chooser.getSelectedFile();</p>
+            <p> if(file != null &amp;&amp; <br>
+              state == JFileChooser.APPROVE_OPTION) {<br>
+              message = chooser.getApproveButtonText() + <br>
+              &quot; &quot; + file.getPath();<br>
+              }<br>
+              JOptionPane.showMessageDialog(null, message);<br>
+              }<br>
+              });<br>
+              }<br>
+              private int showChooser(String s) {<br>
+              int state; </p>
+            <p> if(s.equals(&quot;OPEN_DIALOG&quot;)) {<br>
+              state = chooser.showOpenDialog(null);<br>
+              }<br>
+              else if(s.equals(&quot;SAVE_DIALOG&quot;)) {<br>
+              state = chooser.showSaveDialog(null);<br>
+              }<br>
+              else { // custom dialog<br>
+              String string = JOptionPane.showInputDialog(<br>
+              null, <br>
+              &quot;Button/Title String:&quot;);</p>
+            <p> chooser.setApproveButtonMnemonic(string.charAt(1));<br>
+              state = chooser.showDialog(Test.this, string);<br>
+              }<br>
+              return state;<br>
+              }<br>
+              public static void main(String args[]) {<br>
+              JFrame f = new Test();<br>
+              f.setBounds(300,300,350,100);<br>
+              f.setVisible(true);</p>
+            <p> f.setDefaultCloseOperation(<br>
+              WindowConstants.DISPOSE_ON_CLOSE);<br>
+              <br>
+              f.addWindowListener(new WindowAdapter() {<br>
+              public void windowClosed(WindowEvent e) {<br>
+              System.exit(0); <br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr noshade size="1">
+            <p>&nbsp;</p><p> 16.1.2 可访问组件</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例子 16-3 一个图像预览器可访问组件</b></p>
+            <hr size="1">
+            import javax.swing.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import java.beans.*;<br>
+            import java.io.*;
+            <p>public class Test extends JFrame {<br>
+              JFileChooser chooser = new JFileChooser();<br>
+              ImagePreviewer previewer = new ImagePreviewer();</p>
+            <p><br>
+              public Test() {<br>
+              super(&quot;Accessory Components&quot;);<br>
+              <br>
+              Container contentPane = getContentPane();<br>
+              JButton button = new JButton(&quot;Select A File&quot;);</p>
+            <p> contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(button); </p>
+            <p> setAccessoryComponent();</p>
+            <p> button.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              chooser.showOpenDialog(null);<br>
+              }<br>
+              });<br>
+              }<br>
+              private void setAccessoryComponent() {<br>
+              JPanel previewPanel = new JPanel();</p>
+            <p> previewPanel.setLayout(new BorderLayout());<br>
+              previewPanel.add(new JLabel(&quot;Image Previewer&quot;, <br>
+              SwingConstants.CENTER),<br>
+              BorderLayout.NORTH);</p>
+            <p> previewPanel.add(previewer, BorderLayout.CENTER);</p>
+            <p> previewer.setPreferredSize(new Dimension(200,0));<br>
+              previewer.setBorder(BorderFactory.createEtchedBorder());</p>
+            <p> chooser.setAccessory(previewPanel);</p>
+            <p> new ImagePreviewerAccessoryAdapter(chooser, previewer);<br>
+              }<br>
+              public static void main(String a[]) {<br>
+              JFrame f = new Test();<br>
+              f.setBounds(300, 300, 300, 75);<br>
+              f.setVisible(true);</p>
+            <p> f.addWindowListener(new WindowAdapter() {<br>
+              public void windowClosed(WindowEvent e) {<br>
+              System.exit(0);<br>
+              }<br>
+              });<br>
+              }<br>
+              }<br>
+              class ImagePreviewerAccessoryAdapter extends Object {<br>
+              public ImagePreviewerAccessoryAdapter(<br>
+              JFileChooser chooser,<br>
+              final ImagePreviewer previewer) {<br>
+              chooser.addPropertyChangeListener(<br>
+              new PropertyChangeListener() {<br>
+              public void propertyChange(PropertyChangeEvent e) {<br>
+              if(e.getPropertyName().equals(<br>
+              JFileChooser.SELECTED_FILE_CHANGED_PROPERTY)) {<br>
+              previewer.update((File)e.getNewValue());<br>
+              }<br>
+              }<br>
+              });<br>
+              }<br>
+              }<br>
+              class ImagePreviewer extends JComponent {<br>
+              private ImageIcon icon;</p>
+            <p> public void update(File file) {<br>
+              Dimension size = getSize();<br>
+              Insets insets = getInsets();</p>
+            <p> icon = new ImageIcon(file.getPath());<br>
+              <br>
+              icon.setImage(icon.getImage().getScaledInstance(<br>
+              size.width - insets.left - insets.right, <br>
+              size.height - insets.top - insets.bottom, <br>
+              Image.SCALE_SMOOTH));</p>
+            <p> if(isShowing()) {<br>
+              repaint();<br>
+              }<br>
+              }<br>
+              public void paintComponent(Graphics g) {<br>
+              Insets insets = getInsets();</p>
+            <p> super.paintComponent(g);</p>
+            <p> if(icon != null)<br>
+              icon.paintIcon(this, g, insets.left, insets.top);<br>
+              }<br>
+              }</p>
+            <hr noshade size="1">
+            <p> 16.1.3 过滤文件类型</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例子 16-4 一个文本文件过滤器和预览器</b></p>
+            <hr size="1">
+            import javax.swing.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import java.beans.*;<br>
+            import java.io.*;<br>
+            import java.util.*;<br>
+            import java.net.*;
+            <p>public class Test extends JFrame {<br>
+              JFileChooser chooser = new JFileChooser();<br>
+              TextPreviewer previewer = new TextPreviewer();<br>
+              JPanel previewPanel = new PreviewPanel();</p>
+            <p> class PreviewPanel extends JPanel {<br>
+              public PreviewPanel() {<br>
+              JLabel label = new JLabel(&quot;Text Previewer&quot;,<br>
+              SwingConstants.CENTER);<br>
+              setPreferredSize(new Dimension(250,0));<br>
+              setBorder(BorderFactory.createEtchedBorder());</p>
+            <p> setLayout(new BorderLayout());</p>
+            <p> label.setBorder(BorderFactory.createEtchedBorder());<br>
+              add(label, BorderLayout.NORTH);<br>
+              add(previewer, BorderLayout.CENTER);<br>
+              }<br>
+              }<br>
+              public Test() {<br>
+              super(&quot;Accessory Components&quot;);<br>
+              <br>
+              Container contentPane = getContentPane();<br>
+              JButton button = new JButton(&quot;Select A File&quot;);</p>
+            <p> contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(button); </p>
+            <p> chooser.setAccessory(previewPanel);<br>
+              chooser.addPropertyChangeListener(<br>
+              new PropertyChangeListener() {<br>
+              public void propertyChange(PropertyChangeEvent e) {<br>
+              if(e.getPropertyName().equals(<br>
+              JFileChooser.SELECTED_FILE_CHANGED_PROPERTY))<br>
+              previewer.update((File)e.getNewValue());<br>
+              }<br>
+              });<br>
+              button.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              chooser.showOpenDialog(null);<br>
+              }<br>
+              });<br>
+              }<br>
+              public static void main(String a[]) {<br>
+              JFrame f = new Test();<br>
+              f.setBounds(300, 300, 300, 75);<br>
+              f.setVisible(true);</p>
+            <p> f.setDefaultCloseOperation(<br>
+              WindowConstants.DISPOSE_ON_CLOSE);</p>
+            <p> f.addWindowListener(new WindowAdapter() {<br>
+              public void windowClosed(WindowEvent e) {<br>
+              System.exit(0);<br>
+              }<br>
+              });<br>
+              }<br>
+              }<br>
+              class TextPreviewer extends JComponent {<br>
+              private ImageIcon icon;<br>
+              private JTextArea textArea = new JTextArea();</p>
+            <p> public TextPreviewer() {<br>
+              setBorder(BorderFactory.createEtchedBorder());<br>
+              setLayout(new BorderLayout());<br>
+              add(new JScrollPane(textArea), BorderLayout.CENTER);<br>
+              }<br>
+              public void update(File file) {<br>
+              textArea.setText(contentsOfFile(file));</p>
+            <p> if(isShowing()) {<br>
+              textArea.revalidate();<br>
+              }<br>
+              }<br>
+              static String contentsOfFile(File file) {<br>
+              String s = new String();<br>
+              char[] buff = new char[50000];<br>
+              InputStream is;<br>
+              InputStreamReader reader;<br>
+              URL url;</p>
+            <p> try {<br>
+              reader = new FileReader(file);</p>
+            <p> int nch;</p>
+            <p> while ((<br>
+              nch = reader.read(buff, 0, buff.length)) != -1) {<br>
+              s = s + new String(buff, 0, nch);<br>
+              }<br>
+              } <br>
+              catch (java.io.IOException ex) {<br>
+              s = &quot;Could not load file&quot;;<br>
+              }<br>
+              return s;<br>
+              }<br>
+              }</p>
+            <hr noshade size="1">
+            <p align="center"><b>例子 16-5 多种文件过滤器</b></p>
+            <hr size="1">
+            import javax.swing.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import java.beans.*;<br>
+            import java.io.*;<br>
+            import java.net.URL;
+            <p>public class Test extends JFrame {<br>
+              JFileChooser chooser = new JFileChooser();<br>
+              TextPreviewer previewer = new TextPreviewer();<br>
+              PreviewPanel previewPanel = new PreviewPanel();</p>
+            <p> class PreviewPanel extends JPanel {<br>
+              public PreviewPanel() {<br>
+              JLabel label = new JLabel(&quot;Text Previewer&quot;,<br>
+              SwingConstants.CENTER);<br>
+              setPreferredSize(new Dimension(350,0));<br>
+              setBorder(BorderFactory.createEtchedBorder());</p>
+            <p> setLayout(new BorderLayout());</p>
+            <p> label.setBorder(BorderFactory.createEtchedBorder());<br>
+              add(label, BorderLayout.NORTH);<br>
+              add(previewer, BorderLayout.CENTER);<br>
+              }<br>
+              }<br>
+              public Test() {<br>
+              super(&quot;Filtering Files&quot;);<br>
+              <br>
+              Container contentPane = getContentPane();<br>
+              JButton button = new JButton(&quot;Select A File&quot;);</p>
+            <p> contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(button); </p>
+            <p> button.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              int state = chooser.showOpenDialog(null);<br>
+              String s = &quot;CANCELED&quot;;</p>
+            <p> if(state == JFileChooser.APPROVE_OPTION) {<br>
+              s = &quot;File Selected: &quot; + <br>
+              chooser.getSelectedFile().getPath();<br>
+              }<br>
+              JOptionPane.showMessageDialog(null, s);<br>
+              }<br>
+              });</p>
+            <p> chooser.setAccessory(previewPanel);<br>
+              chooser.addChoosableFileFilter(new TextFilter());<br>
+              chooser.addChoosableFileFilter(new JavaCodeFilter());</p>
+            <p> chooser.addPropertyChangeListener(<br>
+              new PropertyChangeListener() {<br>
+              public void propertyChange(PropertyChangeEvent e) {<br>
+              if(e.getPropertyName().equals(<br>
+              JFileChooser.SELECTED_FILE_CHANGED_PROPERTY)) {<br>
+              previewer.configure((File)e.getNewValue());<br>
+              }<br>
+              }<br>
+              });<br>
+              }<br>
+              public static void main(String a[]) {<br>
+              JFrame f = new Test();<br>
+              f.setBounds(300, 300, 300, 75);<br>
+              f.setVisible(true);</p>
+            <p> f.setDefaultCloseOperation(<br>
+              WindowConstants.DISPOSE_ON_CLOSE);</p>
+            <p> f.addWindowListener(new WindowAdapter() {<br>
+              public void windowClosed(WindowEvent e) {<br>
+              System.exit(0);<br>
+              }<br>
+              });<br>
+              }<br>
+              }<br>
+              abstract class SuffixAwareFilter <br>
+              extends javax.swing.filechooser.FileFilter {<br>
+              public String getSuffix(File f) {<br>
+              String s = f.getPath(), suffix = null;<br>
+              int i = s.lastIndexOf('.');</p>
+            <p> if(i &gt; 0 &amp;&amp; i &lt; s.length() - 1)<br>
+              suffix = s.substring(i+1).toLowerCase();</p>
+            <p> return suffix;<br>
+              }<br>
+              public boolean accept(File f) {<br>
+              return f.isDirectory();<br>
+              }<br>
+              }<br>
+              class ImageFilter extends SuffixAwareFilter {<br>
+              public boolean accept(File f) {<br>
+              boolean accept = super.accept(f);</p>
+            <p> if( ! accept) {<br>
+              String suffix = getSuffix(f);</p>
+            <p> if(suffix != null)<br>
+              accept = super.accept(f) || suffix.equals(&quot;jpg&quot;)<br>
+              || suffix.equals(&quot;gif&quot;);<br>
+              }<br>
+              return accept;<br>
+              }<br>
+              public String getDescription() {<br>
+              return &quot;Java Source Code Files(*.java)&quot;;<br>
+              }<br>
+              }<br>
+              class JavaCodeFilter extends SuffixAwareFilter {<br>
+              public boolean accept(File f) {<br>
+              boolean accept = super.accept(f);</p>
+            <p> if( ! accept) {<br>
+              String suffix = getSuffix(f);</p>
+            <p> if(suffix != null)<br>
+              accept = super.accept(f) || suffix.equals(&quot;java&quot;);<br>
+              }<br>
+              return accept;<br>
+              }<br>
+              public String getDescription() {<br>
+              return &quot;Java Source Code Files(*.java)&quot;;<br>
+              }<br>
+              }<br>
+              class TextFilter extends SuffixAwareFilter {<br>
+              public boolean accept(File f) {<br>
+              String suffix = getSuffix(f);</p>
+            <p> if(suffix != null)<br>
+              return super.accept(f) || suffix.equals(&quot;txt&quot;);</p>
+            <p> return false;<br>
+              }<br>
+              public String getDescription() {<br>
+              return &quot;Text Files(*.txt)&quot;;<br>
+              }<br>
+              }<br>
+              class TextPreviewer extends JComponent {<br>
+              private JTextArea textArea = new JTextArea();<br>
+              private JScrollPane scrollPane = new JScrollPane(textArea);</p>
+            <p> public TextPreviewer() {<br>
+              textArea.setEditable(false);</p>
+            <p> setBorder(BorderFactory.createEtchedBorder());<br>
+              setLayout(new BorderLayout());<br>
+              add(scrollPane, BorderLayout.CENTER);<br>
+              }<br>
+              public void configure(File file) {<br>
+              textArea.setText(contentsOfFile(file));</p>
+            <p> SwingUtilities.invokeLater(new Runnable() {<br>
+              public void run() {<br>
+              JViewport vp = scrollPane.getViewport();</p>
+            <p> vp.setViewPosition(new Point(0,0));<br>
+              }<br>
+              });<br>
+              }<br>
+              static String contentsOfFile(File file) {<br>
+              String s = new String();<br>
+              char[] buff = new char[50000];<br>
+              InputStream is;<br>
+              InputStreamReader reader;<br>
+              URL url;</p>
+            <p> try {<br>
+              reader = new FileReader(file);</p>
+            <p> int nch;</p>
+            <p> while ((<br>
+              nch = reader.read(buff, 0, buff.length)) != -1) {<br>
+              s = s + new String(buff, 0, nch);<br>
+              }<br>
+              } <br>
+              catch (java.io.IOException ex) {<br>
+              s = &quot;Could not load file&quot;;<br>
+              }<br>
+              return s;<br>
+              }<br>
+              }</p>
+            <hr noshade size="1">
+            <p>&nbsp;</p>
+            <p> 16.1.4 文件视图</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例子 16-6 一个定制的文件视图</b></p>
+            <hr size="1">
+            import javax.swing.*;<br>
+            import javax.swing.filechooser.FileView;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import java.io.*;
+            <p>public class Test extends JFrame {<br>
+              JFileChooser chooser = new JFileChooser();<br>
+              JButton button = new JButton(&quot;show file chooser ...&quot;);</p>
+            <p> public Test() {<br>
+              super(&quot;Custom File View Example&quot;);<br>
+              Container contentPane = getContentPane();</p>
+            <p> contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(button); </p>
+            <p> chooser.setFileView(new CustomFileView());</p>
+            <p> button.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              int state = chooser.showSaveDialog(null);<br>
+              File file = chooser.getSelectedFile();<br>
+              String s = &quot;CANCELED&quot;;</p>
+            <p> if(state == JFileChooser.APPROVE_OPTION) <br>
+              s = &quot;File: &quot; + file.getPath();</p>
+            <p> JOptionPane.showMessageDialog(null, s);<br>
+              }<br>
+              });<br>
+              }<br>
+              public static void main(String args[]) {<br>
+              JFrame f = new Test();<br>
+              f.setBounds(300,300,350,100);<br>
+              f.setVisible(true);</p>
+            <p> f.setDefaultCloseOperation(<br>
+              WindowConstants.DISPOSE_ON_CLOSE);</p>
+            <p> f.addWindowListener(new WindowAdapter() {<br>
+              public void windowClosed(WindowEvent e) {<br>
+              System.exit(0); <br>
+              }<br>
+              });<br>
+              }<br>
+              }<br>
+              class CustomFileView extends FileView {<br>
+              private Icon fileIcon = new ImageIcon(&quot;file.gif&quot;), <br>
+              directoryIcon = new ImageIcon(&quot;folder.gif&quot;),<br>
+              imageIcon = new ImageIcon(&quot;photo.jpg&quot;);</p>
+            <p> public String getName(File f) { return null; }<br>
+              public String getDescription(File f) { return null; }<br>
+              public String getTypeDescription(File f) { return null; }</p>
+            <p> public Icon getIcon(File f) {<br>
+              Icon icon = null;</p>
+            <p> if(isImage(f)) icon = imageIcon;<br>
+              else if(f.isDirectory()) icon = directoryIcon;<br>
+              else icon = fileIcon;</p>
+            <p> return icon;<br>
+              }<br>
+              public Boolean isTraversable(File f) {<br>
+              Boolean b = null;</p>
+            <p> if(f.getPath().equals(&quot;D:\\file.txt&quot;)) {<br>
+              b = new Boolean(false);<br>
+              }<br>
+              else if(f.getPath().equals(&quot;D:\\books&quot;)) {<br>
+              b = new Boolean(false);<br>
+              }<br>
+              return b == null ? new Boolean(true) : b;<br>
+              }<br>
+              private boolean isImage(File f) {<br>
+              String suffix = getSuffix(f);<br>
+              boolean isImage = false;</p>
+            <p> if(suffix != null) {<br>
+              isImage = suffix.equals(&quot;gif&quot;) || <br>
+              suffix.equals(&quot;bmp&quot;) ||<br>
+              suffix.equals(&quot;jpg&quot;);<br>
+              }<br>
+              return isImage;<br>
+              }<br>
+              private String getSuffix(File file) {<br>
+              String filestr = file.getPath(), suffix = null;<br>
+              int i = filestr.lastIndexOf('.');</p>
+            <p> if(i &gt; 0 &amp;&amp; i &lt; filestr.length()) {<br>
+              suffix = filestr.substring(i+1).toLowerCase(); <br>
+              }<br>
+              return suffix;<br>
+              }<br>
+              }</p>
+            <hr noshade size="1">
+            <p> 16.1.5 多文件选取</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例子 16-7 文件选取器的多文件选取</b></p>
+            <hr size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import java.io.File;<br>
+            import javax.swing.*;<br>
+            import java.beans.*;
+            <p>public class Test extends JFrame {<br>
+              JFileChooser chooser = new JFileChooser();<br>
+              JButton button = new JButton(&quot;show file chooser ...&quot;);</p>
+            <p> public Test() {<br>
+              super(&quot;Simple File Chooser Application&quot;);<br>
+              Container contentPane = getContentPane();</p>
+            <p> contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(button); </p>
+            <p> chooser.setMultiSelectionEnabled(true);</p>
+            <p> button.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              int state = chooser.showOpenDialog(null);<br>
+              File[] files = chooser.getSelectedFiles();<br>
+              String[] filenames = getFilenames(files);</p>
+            <p> if(filenames != null &amp;&amp;<br>
+              state == JFileChooser.APPROVE_OPTION) {<br>
+              JOptionPane.showMessageDialog(null,filenames);<br>
+              }<br>
+              else if(state == JFileChooser.CANCEL_OPTION) {<br>
+              JOptionPane.showMessageDialog(<br>
+              null, &quot;Canceled&quot;);<br>
+              }<br>
+              else if(state == JFileChooser.ERROR_OPTION) {<br>
+              JOptionPane.showMessageDialog(<br>
+              null, &quot;Error!&quot;);<br>
+              }<br>
+              }<br>
+              });<br>
+              }<br>
+              private String[] getFilenames(File[] files) {<br>
+              String[] filenames = null;<br>
+              int numFiles = files.length;</p>
+            <p>System.out.println(numFiles);</p>
+            <p> if(files.length &gt; 0) {<br>
+              filenames = new String[numFiles];</p>
+            <p> for(int i=0; i &lt; numFiles; ++i) {<br>
+              filenames[i] = files[i].getPath();<br>
+              System.out.println(filenames[i]);<br>
+              }<br>
+              }<br>
+              return filenames;<br>
+              }<br>
+              public static void main(String args[]) {<br>
+              JFrame f = new Test();<br>
+              f.setBounds(300,300,350,100);<br>
+              f.setVisible(true);</p>
+            <p> f.setDefaultCloseOperation(<br>
+              WindowConstants.DISPOSE_ON_CLOSE);<br>
+              <br>
+              f.addWindowListener(new WindowAdapter() {<br>
+              public void windowClosed(WindowEvent e) {<br>
+              System.exit(0); <br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr noshade size="1">
+            <p> 16.1.6 JFileChooser属性</p>
+            <p>&nbsp;</p>
+            <p> 16.1.7 JFileChooser事件</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例子 16-8 JFileChooser动作事件</b></p>
+            <hr size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import java.io.File;<br>
+            import javax.swing.*;
+            <p>public class Test extends JFrame {<br>
+              JFileChooser chooser = new JFileChooser();<br>
+              JDialog dialog;<br>
+              JButton button = new JButton(&quot;show file chooser ...&quot;);</p>
+            <p> public Test() {<br>
+              super(&quot;Simple File Chooser Application&quot;);<br>
+              Container contentPane = getContentPane();</p>
+            <p> contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(button); </p>
+            <p> button.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              String title = chooser.getDialogTitle();</p>
+            <p> if(title == null)<br>
+              chooser.getUI().getDialogTitle(chooser);</p>
+            <p> dialog = new JDialog((Frame)null, title, false);<br>
+              <br>
+              Container dialogContentPane = <br>
+              dialog.getContentPane();</p>
+            <p> dialogContentPane.setLayout(new BorderLayout());<br>
+              dialogContentPane.add(chooser, <br>
+              BorderLayout.CENTER);<br>
+              <br>
+              dialog.setTitle(&quot;Non-Modal File Chooser&quot;);</p>
+            <p> dialog.pack();<br>
+              dialog.setLocationRelativeTo(Test.this);<br>
+              <br>
+              dialog.setVisible(true); <br>
+              }<br>
+              });<br>
+              chooser.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              String state = (String)e.getActionCommand();</p>
+            <p> if(state.equals(JFileChooser.APPROVE_SELECTION)) {<br>
+              File file = chooser.getSelectedFile();</p>
+            <p> JOptionPane.showMessageDialog(<br>
+              null, file.getPath());<br>
+              }<br>
+              else if(<br>
+              state.equals(JFileChooser.CANCEL_SELECTION)) {<br>
+              JOptionPane.showMessageDialog(<br>
+              null, &quot;Canceled&quot;);<br>
+              }<br>
+              // JFileChooser action listeners are notified<br>
+              // when one either the approve button or<br>
+              // cancel button is activated<br>
+              dialog.setVisible(false);</p>
+            <p> }<br>
+              });<br>
+              }<br>
+              public static void main(String args[]) {<br>
+              JFrame f = new Test();<br>
+              f.setBounds(300,300,350,100);<br>
+              f.setVisible(true);</p>
+            <p> f.setDefaultCloseOperation(<br>
+              WindowConstants.DISPOSE_ON_CLOSE);<br>
+              <br>
+              f.addWindowListener(new WindowAdapter() {<br>
+              public void windowClosed(WindowEvent e) {<br>
+              System.exit(0); <br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr noshade size="1">
+            <p> 16.1.8 JFileChooser类总结</p>
+            <p>&nbsp;</p>
+            <p> 16.1.9 AWT兼容</p>
+            <p>&nbsp;</p>
+            <p align="center">&nbsp; </p>
+            <p> 16.2 JColorChooser</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例16-9 在一个小应用程序中显示的颜色选取器</b></p>
+            <hr size="1">
+            import javax.swing.*;<br>
+            import javax.swing.colorchooser.*;<br>
+            import javax.swing.event.*;<br>
+            import java.awt.*;
+            <p>public class Test extends JApplet {<br>
+              JColorChooser chooser = new JColorChooser();<br>
+              ColorSelectionModel model = chooser.getSelectionModel();</p>
+            <p> public void init() {<br>
+              getContentPane().add(chooser, BorderLayout.CENTER);</p>
+            <p> model.addChangeListener(new ChangeListener() {<br>
+              public void stateChanged(ChangeEvent e) {<br>
+              showStatus(&quot;Color: &quot; + chooser.getColor());<br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr noshade size="1">
+            <p> 16.2.1 在对话框中显示颜色选取器</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例16-10 在对话框中显示的颜色选取器</b></p>
+            <hr size="1">
+            import javax.swing.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class Test extends JApplet {<br>
+              public void init() {<br>
+              getContentPane().add(new Palette(), BorderLayout.CENTER);<br>
+              }<br>
+              }<br>
+              class Palette extends JPanel {<br>
+              private Color[] defaultColors = new Color[] {<br>
+              Color.blue, Color.red, Color.yellow, Color.green,<br>
+              Color.magenta, Color.darkGray, Color.white, Color.orange,<br>
+              Color.pink, Color.cyan, Color.lightGray, Color.gray,<br>
+              };</p>
+            <p> public Palette() {<br>
+              int columns = 3;</p>
+            <p> setBorder(<br>
+              BorderFactory.createTitledBorder(&quot;Color Palette&quot;));</p>
+            <p> setLayout(new GridLayout(columns,0,1,1));</p>
+            <p> for(int i=0; i &lt; defaultColors.length; ++i)<br>
+              add(new ColorPatch(defaultColors[i]));<br>
+              } <br>
+              }<br>
+              class ColorPatch extends JPanel {<br>
+              JApplet applet;<br>
+              Color selectedColor;</p>
+            <p> public ColorPatch(Color color) {<br>
+              setBorder(BorderFactory.createEtchedBorder());<br>
+              setBackground(color);</p>
+            <p> addMouseListener(new MouseAdapter() {<br>
+              public void mousePressed(MouseEvent e) {<br>
+              selectedColor = JColorChooser.showDialog(<br>
+              ColorPatch.this, // parent comp<br>
+              &quot;Pick A Color&quot;, // dialog title<br>
+              getBackground()); // initial color</p>
+            <p> if(selectedColor == null) {<br>
+              JOptionPane.showMessageDialog(ColorPatch.this,<br>
+              &quot;ColorChooser Canceled&quot;);<br>
+              }<br>
+              else {<br>
+              setBackground(selectedColor);<br>
+              repaint();</p>
+            <p> JOptionPane.showMessageDialog(ColorPatch.this,<br>
+              &quot;Color Selected: &quot; + selectedColor);<br>
+              }<br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr noshade size="1">
+            <p> 16.2.2 定制颜色选取器</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例16-11 颜色选取器中的一个定制预览</b></p>
+            <hr size="1">
+            import javax.swing.*;<br>
+            import javax.swing.colorchooser.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class Test extends JApplet {<br>
+              private JColorChooser chooser = new JColorChooser();<br>
+              private JButton button = new JButton(&quot;Show Color Chooser&quot;);<br>
+              private JDialog dialog;</p>
+            <p> public void init() {<br>
+              Container contentPane = getContentPane();</p>
+            <p> contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(button, BorderLayout.CENTER);</p>
+            <p> chooser.setPreviewPanel(new PreviewPanel());</p>
+            <p> button.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {</p>
+            <p> if(dialog == null) <br>
+              dialog = JColorChooser.createDialog(<br>
+              Test.this, // parent comp<br>
+              &quot;Pick A Color&quot;, // dialog title<br>
+              false, // modality<br>
+              chooser, <br>
+              null, null);</p>
+            <p> dialog.setVisible(true);<br>
+              }<br>
+              });<br>
+              }<br>
+              class PreviewPanel extends JPanel {<br>
+              public PreviewPanel() {<br>
+              setPreferredSize(new Dimension(0,100));<br>
+              setBorder(BorderFactory.createRaisedBevelBorder());<br>
+              }<br>
+              public void paintComponent(Graphics g) {<br>
+              Dimension size = getSize();</p>
+            <p> g.setColor(getForeground());<br>
+              g.fillRect(0,0,size.width,size.height);<br>
+              }<br>
+              }<br>
+              }</p>
+            <hr noshade size="1">
+            <p align="center"><b>例16-12 实现一个定制颜色选取器面板</b></p>
+            <hr size="1">
+            import javax.swing.*;<br>
+            import javax.swing.event.*;<br>
+            import javax.swing.colorchooser.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class Test extends JApplet {<br>
+              private JColorChooser chooser = new JColorChooser();<br>
+              private AbstractColorChooserPanel colorPanels[] =<br>
+              new AbstractColorChooserPanel[] {<br>
+              new ListPanel(),<br>
+              };<br>
+              private JButton button = new JButton(&quot;Show Color Chooser&quot;);<br>
+              private JDialog dialog;</p>
+            <p> public void init() {<br>
+              Container contentPane = getContentPane();</p>
+            <p> contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(button, BorderLayout.CENTER);</p>
+            <p> chooser.setChooserPanels(colorPanels);</p>
+            <p> button.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              if(dialog == null) <br>
+              dialog = JColorChooser.createDialog(<br>
+              Test.this, // parent comp<br>
+              &quot;Pick A Color&quot;, // dialog title<br>
+              false, // modality<br>
+              chooser, <br>
+              null, null);</p>
+            <p> dialog.setVisible(true);<br>
+              }<br>
+              });<br>
+              }<br>
+              }<br>
+              class ListPanel extends AbstractColorChooserPanel <br>
+              implements ListSelectionListener {<br>
+              private JPanel labelPanel = new JPanel(),<br>
+              listPanel = new JPanel();</p>
+            <p> private JList redList = new JList(), blueList = new JList(), <br>
+              greenList = new JList();</p>
+            <p> private DefaultListModel redModel = new DefaultListModel(),<br>
+              blueModel = new DefaultListModel(),<br>
+              greenModel = new DefaultListModel();</p>
+            <p> private boolean isAdjusting = false;</p>
+            <p> public void updateChooser() {<br>
+              if( ! isAdjusting) {<br>
+              isAdjusting = true;</p>
+            <p> Color color = getColorFromModel();<br>
+              int r = color.getRed(), g = color.getGreen(), <br>
+              b = color.getBlue();</p>
+            <p> redList.setSelectedIndex(r);<br>
+              redList.ensureIndexIsVisible(r);</p>
+            <p> blueList.setSelectedIndex(b);<br>
+              blueList.ensureIndexIsVisible(b);</p>
+            <p> greenList.setSelectedIndex(g);<br>
+              greenList.ensureIndexIsVisible(g);</p>
+            <p> isAdjusting = false;<br>
+              }<br>
+              }<br>
+              protected void buildChooser() {<br>
+              redList.setFixedCellWidth(50);<br>
+              greenList.setFixedCellWidth(50);<br>
+              blueList.setFixedCellWidth(50);</p>
+            <p> for(int i=0; i &lt; 256; ++i) {<br>
+              redModel.addElement(Integer.toString(i));<br>
+              greenModel.addElement(Integer.toString(i));<br>
+              blueModel.addElement(Integer.toString(i));<br>
+              }</p>
+            <p> redList.setModel(redModel);<br>
+              greenList.setModel(greenModel);<br>
+              blueList.setModel(blueModel);</p>
+            <p> listPanel.setLayout(new GridLayout(0,3,10,0));</p>
+            <p> listPanel.add(new JScrollPane(redList));<br>
+              listPanel.add(new JScrollPane(blueList));<br>
+              listPanel.add(new JScrollPane(greenList));</p>
+            <p> labelPanel.setLayout(new GridLayout(0,3,10,0));</p>
+            <p> labelPanel.add(new JLabel(&quot;Red&quot;));<br>
+              labelPanel.add(new JLabel(&quot;Blue&quot;));<br>
+              labelPanel.add(new JLabel(&quot;Green&quot;));</p>
+            <p> setLayout(new BorderLayout());<br>
+              add(labelPanel, BorderLayout.NORTH);<br>
+              add(listPanel, BorderLayout.CENTER);</p>
+            <p> redList.addListSelectionListener(this);<br>
+              greenList.addListSelectionListener(this);<br>
+              blueList.addListSelectionListener(this);<br>
+              }<br>
+              public void valueChanged(ListSelectionEvent e) {<br>
+              int r = redList.getSelectedIndex(),<br>
+              b = blueList.getSelectedIndex(),<br>
+              g = greenList.getSelectedIndex();</p>
+            <p> if(r != -1 &amp;&amp; g != -1 &amp;&amp; b != -1)<br>
+              getColorSelectionModel().setSelectedColor(<br>
+              new Color(r,g,b));<br>
+              }<br>
+              public String getDisplayName() {<br>
+              return &quot;display name&quot;;<br>
+              }<br>
+              public Icon getSmallDisplayIcon() {<br>
+              return null;<br>
+              }<br>
+              public Icon getLargeDisplayIcon() {<br>
+              return null;<br>
+              }<br>
+              }</p>
+            <hr noshade size="1">
+            <p>&nbsp;</p>
+            <p> 16.2.3 JColorChooser属性</p>
+            <p>&nbsp;</p>
+            <p> 16.2.4 JColorChooser事件</p>
+            <p>&nbsp;</p>
+            <p> 16.2.5 JColorChooser类总结</p>
+            <p>&nbsp;</p>
+            <p> 16.2.6 AWT兼容</p>
+            <p>&nbsp;</p>
+            <p> 16.3 本章回顾</p>
+            <p>&nbsp;</p>
+            <p>&nbsp;</p>
+            <p> [<a href="index.html" target="_self">目录</a>][<a href="s15.htm">上一页</a>][<a href="s17.htm">下一页</a>](飒龙收藏/2002.5.18) 
+            </p>
+            <p>&nbsp; </p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </td>
+  </tr>
+</tbody>
+</table>
+<script language="javascript">bottomprint()</script>
+</body>
+</html>

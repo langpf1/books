@@ -1,0 +1,331 @@
+<SCRIPT LANGUAGE="JavaScript" SRC="/-fs0/sys/pop-up.js"></SCRIPT>
+
+<SCRIPT LANGUAGE="JavaScript" SRC="/-fs0/sys/pop-up-all.js"></SCRIPT>
+
+<html>
+<head>
+<title>易都网--Java 2 图形设计卷Ⅱ：SWING</title>
+<LINK rel="stylesheet" href="../../../_public/javaa.css">
+<meta http-equiv="Content-Type" content="text/html; charset=GBK">
+<script language="JavaScript" src="../../../_public/javaa.js"></script>
+<meta name="keywords" content="Java,JSP,ASP,PHP,J2EE,EJB,JavaScript,C/C++,ASM,CSS,HTML,XML,网络安全,MySQL,ACCESS">
+</head>
+<body bgcolor="#FFFFFF">
+<table border=0 cellpadding=0 cellspacing=0 width="100%">
+  <tbody> 
+  <script language="javascript">print2()</script>
+  <tr> 
+    <td width="100%"> 
+      <table bgcolor=#EEEEEE border=0 cellpadding=3 cellspacing=0 width="100%">
+        <tbody> 
+        <tr> 
+          <td class=f1 id=thetd width="100%"> 
+            <p>[<a href="index.html" target="_self">目录</a>][<a href="s08.htm">上一页</a>][<a href="s10.htm">下一页</a>]</p>
+            <p align="center"><b>第9章 反转按钮、复选框和单选框</b></p>
+            <p>　　本章介绍三种Swing按钮：反转按钮、复选按钮和单选按钮，它们分别由JToggleButton、JCheckBox和JRadioButton类代表。<br>
+              　　这三种按钮都是AbstractButton类的最终扩展。AbstractButton类实现了这三个类提供的几乎所有功能。有关AbstractButton类的更多信息，请参见第8章“标签与按钮”。 
+            </p>
+            <p> <b>9.1 JToggleButton类</b></p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例9-1 JToggleButton的一个简单例子</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              public Test() {<br>
+              Container contentPane = getContentPane();<br>
+              ImageIcon icon = new ImageIcon(&quot;togglebuttonImage.gif&quot;);</p>
+            <p> JToggleButton button = new JToggleButton(icon);<br>
+              contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(button);<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 9.1.1 JToggleButton属性 </p>
+            <p>&nbsp;</p>
+            <p> 9.1.2 JToggleButton事件</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例9-2 用一个子项监听器来处理反转按钮的选取操作</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;<br>
+            import javax.swing.event.*;
+            <p>public class Test extends JApplet {<br>
+              public Test() {<br>
+              Container contentPane = getContentPane();<br>
+              ImageIcon icon = new ImageIcon(&quot;togglebuttonImage.gif&quot;);<br>
+              final JToggleButton button = new JToggleButton(icon);</p>
+            <p> contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(button);</p>
+            <p> button.addItemListener(new ItemListener() {<br>
+              public void itemStateChanged(ItemEvent e) {<br>
+              int state = e.getStateChange();<br>
+              String s;</p>
+            <p> if(state == ItemEvent.SELECTED) s = &quot;selected&quot;;<br>
+              else s = &quot;deselected&quot;;</p>
+            <p> showStatus(&quot;Item Event: &quot; + s);<br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 9.1.3 JToggleButton类总结</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例9-3 创建反转按钮</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              public Test() {<br>
+              Container contentPane = getContentPane();<br>
+              Icon icon = new ImageIcon(&quot;beach_umbrella.gif&quot;);<br>
+              JToggleButton button_1 = new JToggleButton(),<br>
+              button_2 = new JToggleButton(icon),<br>
+              button_3 = new JToggleButton(icon, true),<br>
+              button_4 = new JToggleButton(&quot;beach&quot;),<br>
+              button_5 = new JToggleButton(&quot;beach&quot;,true),<br>
+              button_6 = new JToggleButton(&quot;beach&quot;,icon),<br>
+              button_7 = new JToggleButton(&quot;beach&quot;,icon,<br>
+              true);<br>
+              contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(button_1);<br>
+              contentPane.add(button_2);<br>
+              contentPane.add(button_3);<br>
+              contentPane.add(button_4);<br>
+              contentPane.add(button_5);<br>
+              contentPane.add(button_6);<br>
+              contentPane.add(button_7);<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 9.1.4 AWT兼容</p>
+            <p>&nbsp;</p>
+            <p> 9.2 按钮框</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例9-4 为相互排斥的选取行为使用一个按钮组</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              public Test() {<br>
+              Container contentPane = getContentPane();<br>
+              ButtonGroup group = new ButtonGroup();</p>
+            <p> JToggleButton[] buttons = new JToggleButton[] {<br>
+              new JToggleButton(new ImageIcon(&quot;ballot_box.gif&quot;)),<br>
+              new JToggleButton(new ImageIcon(&quot;palette.gif&quot;)),<br>
+              new JToggleButton(new ImageIcon(&quot;light_bulb1.gif&quot;)),<br>
+              new JToggleButton(new ImageIcon(&quot;dining.gif&quot;)),<br>
+              new JToggleButton(new ImageIcon(&quot;scissors.gif&quot;)),<br>
+              new JToggleButton(new ImageIcon(&quot;tricycle.gif&quot;)),<br>
+              };<br>
+              Box box = Box.createVerticalBox();<br>
+              <br>
+              for(int i=0; i &lt; buttons.length; ++i) {<br>
+              group.add(buttons[i]);<br>
+              box.add(Box.createVerticalStrut(5));<br>
+              box.add(buttons[i]);<br>
+              }<br>
+              box.add(Box.createVerticalStrut(5));<br>
+              contentPane.add(box);<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 9.3 复选框</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例9-5 运行中的Swing复选框</b></p>
+            <hr noshade size="1">
+            import javax.swing.*; <br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class Test extends JApplet {<br>
+              public void init() {<br>
+              Container contentPane = getContentPane();<br>
+              contentPane.add(new PrintOptionsPanel(this), &quot;Center&quot;);<br>
+              }<br>
+              }<br>
+              class PrintOptionsPanel extends JPanel {<br>
+              JCheckBox oddPages, evenPages, collate, lastFirst;<br>
+              Listener listener = new Listener();<br>
+              JApplet applet;</p>
+            <p> public PrintOptionsPanel(JApplet applet) {<br>
+              this.applet = applet;<br>
+              oddPages = new JCheckBox(&quot;Odd Pages&quot;);<br>
+              evenPages = new JCheckBox(&quot;Even Pages&quot;);<br>
+              collate = new JCheckBox(&quot;Collate&quot;);<br>
+              lastFirst = new JCheckBox(&quot;Last Page First&quot;);</p>
+            <p> oddPages.addItemListener (listener);<br>
+              evenPages.addItemListener(listener);<br>
+              collate.addItemListener (listener);<br>
+              lastFirst.addItemListener(listener);</p>
+            <p> add(oddPages); <br>
+              add(evenPages);<br>
+              add(collate); <br>
+              add(lastFirst);<br>
+              }<br>
+              class Listener implements ItemListener {<br>
+              public void itemStateChanged(ItemEvent event) {<br>
+              applet.showStatus(<br>
+              &quot;Odd Pages: &quot; + oddPages.isSelected() + &quot;, &quot; 
+              +<br>
+              &quot;Even Pages: &quot; + evenPages.isSelected() + &quot;, &quot; 
+              +<br>
+              &quot;Collate: &quot; + collate.isSelected() + &quot;, &quot; +<br>
+              &quot;Last Page First: &quot; + lastFirst.isSelected());<br>
+              }<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 9.3.1 JCheckBox属性</p>
+            <p>&nbsp;</p>
+            <p> 9.3.2 JCheckBox事件</p>
+            <p>&nbsp;</p>
+            <p> 9.3.3 JCheckBox类总结</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例9-6 实例化复选框</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              public Test() {<br>
+              Container contentPane = getContentPane();<br>
+              Icon icon = new ImageIcon(&quot;bulb.gif&quot;);<br>
+              JCheckBox[] checkboxes = new JCheckBox[] {<br>
+              new JCheckBox(),<br>
+              new JCheckBox(icon),<br>
+              new JCheckBox(icon, true),<br>
+              new JCheckBox(&quot;idea!&quot;),<br>
+              new JCheckBox(&quot;idea!&quot;,true),<br>
+              new JCheckBox(&quot;idea!&quot;,icon),<br>
+              new JCheckBox(&quot;idea!&quot;,icon, true)<br>
+              };<br>
+              contentPane.setLayout(new FlowLayout());</p>
+            <p> for(int i=0; i &lt; checkboxes.length; ++i) {<br>
+              checkboxes[i].setBorderPainted(true);<br>
+              contentPane.add(checkboxes[i]);</p>
+            <p> if(checkboxes[i].getIcon() != null) {<br>
+              System.out.println(&quot;setting selected icon&quot;);<br>
+              checkboxes[i].setSelectedIcon(<br>
+              new ImageIcon(&quot;bulb_bright.gif&quot;));<br>
+              }<br>
+              }<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 9.4 单选钮</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例9-7 运行中的单选钮</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              public void init() {<br>
+              Container contentPane = getContentPane();</p>
+            <p> contentPane.add(new PrintRangePanel(100, 101));<br>
+              }<br>
+              }<br>
+              class PrintRangePanel extends JPanel {<br>
+              JRadioButton printAll, printRange;<br>
+              JLabel startPage, endPage;<br>
+              JTextField startField, endField;</p>
+            <p> public PrintRangePanel(int start, int end) {<br>
+              ButtonGroup group= new ButtonGroup();</p>
+            <p> printAll = new JRadioButton(&quot;Print All&quot;);<br>
+              printRange = new JRadioButton(&quot;Print Range&quot;);</p>
+            <p> startPage = new JLabel(&quot;Start Page:&quot;);<br>
+              endPage = new JLabel(&quot;End Page:&quot;);</p>
+            <p> startField = new JTextField(Integer.toString(start));<br>
+              endField = new JTextField(Integer.toString(end));</p>
+            <p> add(printAll); add(printRange);<br>
+              add(startPage); add(startField);<br>
+              add(endPage); add(endField);</p>
+            <p> printRange.setSelected(true);</p>
+            <p> group.add(printAll);<br>
+              group.add(printRange);</p>
+            <p> printRange.addItemListener(new ItemListener() {<br>
+              public void itemStateChanged(ItemEvent event) {<br>
+              if(printRange.isSelected()) {<br>
+              startField.setEnabled(true);<br>
+              endField.setEnabled (true); <br>
+              startPage.setEnabled (true); <br>
+              endPage.setEnabled (true); </p>
+            <p> //startPage.repaint();<br>
+              //endPage.repaint();</p>
+            <p> startField.requestFocus();<br>
+              }<br>
+              }<br>
+              });<br>
+              printAll.addItemListener(new ItemListener() {<br>
+              public void itemStateChanged(ItemEvent event) {<br>
+              if(printAll.isSelected()) {<br>
+              startField.setEnabled(false);<br>
+              endField.setEnabled (false);<br>
+              startPage.setEnabled (false);<br>
+              endPage.setEnabled (false);</p>
+            <p> startPage.repaint();<br>
+              endPage.repaint();<br>
+              }<br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 9.4.1 JRadioButton属性</p>
+            <p>&nbsp;</p>
+            <p> 9.4.2 JRadioButton事件</p>
+            <p>&nbsp;</p>
+            <p> 9.4.3 JRadioButton类总结</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例9-8 实例化单选按钮</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              public Test() {<br>
+              Container contentPane = getContentPane();<br>
+              Icon icon = new ImageIcon(&quot;bulb.gif&quot;);<br>
+              JRadioButton[] radioButtons = new JRadioButton[] {<br>
+              new JRadioButton(),<br>
+              new JRadioButton(icon),<br>
+              new JRadioButton(icon, true),<br>
+              new JRadioButton(&quot;idea!&quot;),<br>
+              new JRadioButton(&quot;idea!&quot;,true),<br>
+              new JRadioButton(&quot;idea!&quot;,icon),<br>
+              new JRadioButton(&quot;idea!&quot;,icon, true)<br>
+              };<br>
+              contentPane.setLayout(new FlowLayout());</p>
+            <p> for(int i=0; i &lt; radioButtons.length; ++i) {<br>
+              radioButtons[i].setBorderPainted(true);<br>
+              contentPane.add(radioButtons[i]);</p>
+            <p> if(radioButtons[i].getIcon() != null) {<br>
+              System.out.println(&quot;setting selected icon&quot;);<br>
+              radioButtons[i].setSelectedIcon(<br>
+              new ImageIcon(&quot;bulb_bright.gif&quot;));<br>
+              }<br>
+              }<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 9.4.4 AWT兼容</p>
+            <p>&nbsp;</p>
+            <p> 9.5 本章回顾</p>
+            <p>&nbsp;</p>
+            <p> [<a href="index.html" target="_self">目录</a>][<a href="s08.htm">上一页</a>][<a href="s10.htm">下一页</a>](飒龙收藏/2002.5.18) 
+            </p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </td>
+  </tr>
+</tbody>
+</table>
+<script language="javascript">bottomprint()</script>
+</body>
+</html>

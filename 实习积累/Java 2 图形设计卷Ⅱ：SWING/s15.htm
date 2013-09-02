@@ -1,0 +1,485 @@
+<SCRIPT LANGUAGE="JavaScript" SRC="/-fs0/sys/pop-up.js"></SCRIPT>
+
+<SCRIPT LANGUAGE="JavaScript" SRC="/-fs0/sys/pop-up-all.js"></SCRIPT>
+
+<html>
+<head>
+<title>易都网--Java 2 图形设计卷Ⅱ：SWING</title>
+<LINK rel="stylesheet" href="../../../_public/javaa.css">
+<meta http-equiv="Content-Type" content="text/html; charset=GBK">
+<script language="JavaScript" src="../../../_public/javaa.js"></script>
+<meta name="keywords" content="Java,JSP,ASP,PHP,J2EE,EJB,JavaScript,C/C++,ASM,CSS,HTML,XML,网络安全,MySQL,ACCESS">
+</head>
+<body bgcolor="#FFFFFF">
+<table border=0 cellpadding=0 cellspacing=0 width="100%">
+  <tbody> 
+  <script language="javascript">print2()</script>
+  <tr> 
+    <td width="100%"> 
+      <table bgcolor=#EEEEEE border=0 cellpadding=3 cellspacing=0 width="100%">
+        <tbody> 
+        <tr> 
+          <td class=f1 id=thetd width="100%"> 
+            <p>[<a href="index.html" target="_self">目录</a>][<a href="s14.htm">上一页</a>][<a href="s16.htm">下一页</a>]</p>
+            <p align="center"><b>第15章 内部窗体和桌面窗格</b></p>
+            <p>　　Swing提供实现多文档界面（MDI）应用程序的一组组件。MDI应用程序（如Microsoft Word和Adobe FrameMaker)是用一个窗口实现的，这个窗口是应用程序中创建的文档的桌面。<br>
+              　　Swing提供带桌面的MDI功能和内部窗体，其中桌面由JDesktopPane类表示，内部窗体由JInternalFrame类表示。内部窗体在桌面上，并且可以在桌面内打开、关闭、最大化和图标化。Swing提供一个DesktopManager类，用这个类来实现桌面上的内部窗体的特定界面样式行为。 
+            </p>
+            <p> <b>15.1 JInternalFrame</b></p>
+            <p>　　由于内部窗体是外部窗体的复制品，所以内部窗体也是窗体。由于它们包含在另一个Swing容器中，所以它们是内部的，而这个容器通常是一个桌面窗格。<br>
+              　　内部窗体边框中所包含的控件与界面样式有关。标准Swing界面样式都提供关闭按钮、最大化按钮和最小化按钮，这可以从图15-1的Metal界面样式中看到。另外，Metal界面样式还提供在标题条中的控制条和图标，如图15-1最下面的图片所示。<br>
+              　　<applet code="Test.class" archive="s15_tu01.jar" width=500 height=500>
+              </applet> <br>
+              　　　　　　　　　　　图15-1 运行中的JInternalFrame</p>
+            <p> 　　单击图15-1所示的小应用程序中的按钮将产生内部窗体。图15-1顶层的窗体被选取，此时，这个窗体的边框是增亮的。<br>
+              　　例15-1列出了图15-1所示的小应用程序的代码。</p>
+            <p align="center"> <b>例15-1 运行中的JInternalFrame</b></p>
+            <hr noshade size="1"><pre>import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class Test extends JApplet {
+	JButton b = new JButton("make frame");
+	JDesktopPane desktopPane = new JDesktopPane();
+	int windowCount = 1;
+
+	public void init() {
+		Container contentPane = getContentPane();
+
+		contentPane.add(b, BorderLayout.NORTH);
+		contentPane.add(desktopPane, BorderLayout.CENTER);
+
+		desktopPane.setLayout(new FlowLayout());
+
+		b.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent event) {
+				JInternalFrame jif = new JInternalFrame(
+				  	"Internal Frame " + windowCount++, // title
+				  	true,  // resizable
+				  	true,  // closable
+				  	true,  // maximizable
+				  	true); // iconifiable
+
+				jif.setPreferredSize(new Dimension(250, 100));
+				desktopPane.add(jif);
+				jif.show();//新添加一句,原文没有
+				desktopPane.revalidate();
+			}
+		});
+	}
+}
+</pre>
+            <hr size="1" noshade>
+            <p> 15.1.1 JInternalFrame属性</p>
+            <p>&nbsp;</p>
+            <p> 15.1.2 JInternalFrame事件</p>
+            <p align="center"><b>例15-2 处理内部窗体事件</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import java.beans.*;<br>
+            import javax.swing.*;<br>
+            import javax.swing.event.*;
+            <p>public class Test extends JApplet {<br>
+              JDesktopPane desktopPane = new JDesktopPane();</p>
+            <p> public void init() {<br>
+              Container contentPane = getContentPane();</p>
+            <p> contentPane.add(desktopPane, BorderLayout.CENTER);<br>
+              desktopPane.setLayout(new FlowLayout());</p>
+            <p> JInternalFrame jif = new JInternalFrame(<br>
+              &quot;An Internal Frame&quot;, // title<br>
+              false, // resizable<br>
+              true, // closable<br>
+              true, // maximizable<br>
+              true); // iconifiable</p>
+            <p> jif.setPreferredSize(new Dimension(300, 250));<br>
+              jif.addInternalFrameListener(new Listener(this));<br>
+              jif.show();//新添加一句,原文没有</p>
+            <p> desktopPane.add(jif);<br>
+              }<br>
+              }<br>
+              class Listener implements InternalFrameListener { <br>
+              private JApplet applet;</p>
+            <p> public Listener(JApplet applet) {<br>
+              this.applet = applet; <br>
+              }<br>
+              public void internalFrameActivated(InternalFrameEvent e) {<br>
+              applet.showStatus(&quot;frame activated&quot;);<br>
+              }<br>
+              public void internalFrameClosed(InternalFrameEvent e) {<br>
+              applet.showStatus(&quot;frame closed&quot;);<br>
+              }<br>
+              public void internalFrameClosing(InternalFrameEvent e) {<br>
+              applet.showStatus(&quot;frame closing&quot;);<br>
+              }<br>
+              public void internalFrameDeactivated(InternalFrameEvent e) {<br>
+              applet.showStatus(&quot;frame deactivated&quot;);<br>
+              }<br>
+              public void internalFrameDeiconified(InternalFrameEvent e) {<br>
+              applet.showStatus(&quot;frame deiconified&quot;);<br>
+              }<br>
+              public void internalFrameIconified(InternalFrameEvent e) {<br>
+              applet.showStatus(&quot;frame iconified&quot;);<br>
+              }<br>
+              public void internalFrameOpened(InternalFrameEvent e) {<br>
+              applet.showStatus(&quot;frame opened&quot;);<br>
+              }<br>
+              private void sleepForABit() {<br>
+              try {<br>
+              Thread.currentThread().sleep(5000);<br>
+              }<br>
+              catch(InterruptedException e) {<br>
+              e.printStackTrace();<br>
+              }<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p align="center"><b>例15-3 否决关闭内部窗体</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import java.beans.*;<br>
+            import javax.swing.*;<br>
+            import java.util.*;
+            <p>public class Test extends JFrame {<br>
+              JDesktopPane desktopPane = new JDesktopPane();</p>
+            <p> public Test() {<br>
+              Container contentPane = getContentPane();</p>
+            <p> contentPane.add(desktopPane, BorderLayout.CENTER);<br>
+              desktopPane.setLayout(new FlowLayout());</p>
+            <p> JInternalFrame jif = new JInternalFrame(<br>
+              &quot;Some Editor&quot;, // title<br>
+              false, // resizable<br>
+              true); // closable</p>
+            <p> jif.setPreferredSize(new Dimension(300, 250));<br>
+              jif.addVetoableChangeListener(new CloseListener());<br>
+              jif.show();//新添加的一句,原文没有<br>
+              desktopPane.add(jif);<br>
+              }<br>
+              public static void main(String args[]) {<br>
+              GJApp.launch(new Test(), <br>
+              &quot;Vetoing Internal Frame Closing&quot;,<br>
+              300,300,450,300);<br>
+              }<br>
+              }<br>
+              class CloseListener implements VetoableChangeListener { <br>
+              private Test applet;</p>
+            <p> public void vetoableChange(PropertyChangeEvent e) <br>
+              throws PropertyVetoException {<br>
+              String name = e.getPropertyName();</p>
+            <p> if(name.equals(JInternalFrame.IS_CLOSED_PROPERTY)) {<br>
+              Component internalFrame = (Component)e.getSource();<br>
+              Boolean oldValue = (Boolean)e.getOldValue(),<br>
+              newValue = (Boolean)e.getNewValue();</p>
+            <p> if(oldValue == Boolean.FALSE &amp;&amp; <br>
+              newValue == Boolean.TRUE) {<br>
+              int answer = JOptionPane.showConfirmDialog(<br>
+              internalFrame, // parentComponent<br>
+              &quot;Save Changes?&quot;, // message<br>
+              &quot;Unsaved Changes&quot;, // title<br>
+              JOptionPane.YES_NO_CANCEL_OPTION); </p>
+            <p> if(answer == JOptionPane.CANCEL_OPTION) {<br>
+              throw new PropertyVetoException(<br>
+              &quot;close cancelled&quot;, e);<br>
+              }<br>
+              }<br>
+              }<br>
+              }<br>
+              }<br>
+              class GJApp extends WindowAdapter {<br>
+              static private JPanel statusArea = new JPanel();<br>
+              static private JLabel status = new JLabel(&quot; &quot;);<br>
+              static private ResourceBundle resources;</p>
+            <p> public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h) {<br>
+              launch(f,title,x,y,w,h,null); <br>
+              }<br>
+              public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h,<br>
+              String propertiesFilename) {<br>
+              f.setTitle(title);<br>
+              f.setBounds(x,y,w,h);<br>
+              f.setVisible(true);</p>
+            <p> statusArea.setBorder(BorderFactory.createEtchedBorder());<br>
+              statusArea.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));<br>
+              statusArea.add(status);<br>
+              status.setHorizontalAlignment(JLabel.LEFT);</p>
+            <p> f.setDefaultCloseOperation(<br>
+              WindowConstants.DISPOSE_ON_CLOSE);</p>
+            <p> if(propertiesFilename != null) {<br>
+              resources = ResourceBundle.getBundle(<br>
+              propertiesFilename, Locale.getDefault());<br>
+              }</p>
+            <p> f.addWindowListener(new WindowAdapter() {<br>
+              public void windowClosed(WindowEvent e) {<br>
+              System.exit(0);<br>
+              }<br>
+              });<br>
+              }<br>
+              static public JPanel getStatusArea() {<br>
+              return statusArea;<br>
+              }<br>
+              static public void showStatus(String s) {<br>
+              status.setText(s);<br>
+              }<br>
+              static Object getResource(String key) {<br>
+              if(resources != null) {<br>
+              return resources.getString(key);<br>
+              }<br>
+              return null;<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p align="center"><b>例15-4 替换一个内部窗体的图标</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              JDesktopPane desktopPane = new JDesktopPane();<br>
+              JInternalFrame jif = new JInternalFrame(<br>
+              &quot;Internal Frame&quot;, // title<br>
+              true, // resizble<br>
+              true, // closable<br>
+              true, // maximizable<br>
+              true); // iconifiable</p>
+            <p> public void init() {<br>
+              Container contentPane = getContentPane();</p>
+            <p> contentPane.add(desktopPane, BorderLayout.CENTER);</p>
+            <p> jif.setBounds(50, 50, 300, 200);<br>
+              jif.setFrameIcon(new ImageIcon(this.getClass().getResource(&quot;print.gif&quot;)));<br>
+              desktopPane.add(jif);<br>
+              jif.show();//源添加的一句,原文没有<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p>&nbsp;</p>
+            <p>&nbsp;</p>
+            <p> 15.1.3 AWT兼容</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例15-5 一个定制的桌面窗格</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              CustomDesktopPane desktopPane = new CustomDesktopPane();<br>
+              int frameCount = 1, numFrames = 5, x, y;</p>
+            <p> public void init() {<br>
+              Container contentPane = getContentPane();</p>
+            <p> setJMenuBar(createMenuBar());<br>
+              contentPane.add(desktopPane, BorderLayout.CENTER);</p>
+            <p> for(int i=0; i &lt; numFrames; ++i) {<br>
+              JInternalFrame jif = new JInternalFrame(<br>
+              &quot;Internal Frame &quot; + frameCount++, // title<br>
+              true, // resizable<br>
+              true, // closable<br>
+              true, // maximizable<br>
+              true); // iconifiable</p>
+            <p> x = (int)(Math.random() * 100);<br>
+              y = (int)(Math.random() * 100);</p>
+            <p> jif.setBounds(x, y, 250, 100);<br>
+              desktopPane.putClientProperty(<br>
+              &quot;JDesktopPane.dragMode&quot;,<br>
+              &quot;outline&quot;);</p>
+            <p> desktopPane.add(jif);<br>
+              jif.show();//新添加一句,原文没有<br>
+              }<br>
+              }<br>
+              private JMenuBar createMenuBar() {<br>
+              JMenuBar menubar = new JMenuBar();<br>
+              JMenu windowMenu = new JMenu(&quot;Window&quot;);</p>
+            <p> windowMenu.add(new OpenAllAction());<br>
+              windowMenu.add(new CloseAllAction());<br>
+              windowMenu.add(new CascadeAction());</p>
+            <p> menubar.add(windowMenu);<br>
+              return menubar;<br>
+              }<br>
+              class OpenAllAction extends AbstractAction {<br>
+              public OpenAllAction() {<br>
+              super(&quot;open all&quot;);<br>
+              }<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              desktopPane.openAll();<br>
+              }<br>
+              }<br>
+              class CloseAllAction extends AbstractAction {<br>
+              public CloseAllAction() {<br>
+              super(&quot;close all&quot;);<br>
+              }<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              desktopPane.closeAll();<br>
+              }<br>
+              }<br>
+              class CascadeAction extends AbstractAction {<br>
+              public CascadeAction() {<br>
+              super(&quot;cascade&quot;);<br>
+              }<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              desktopPane.cascade();<br>
+              }<br>
+              }<br>
+              }<br>
+              class CustomDesktopPane extends JDesktopPane { <br>
+              private int xoffset = 20, yoffset = 20, w = 250, h = 350;</p>
+            <p> public void closeAll() {<br>
+              JInternalFrame[] frames = getAllFrames();</p>
+            <p> for(int i=0; i &lt; frames.length; ++i) {<br>
+              if(!frames[i].isIcon()) {<br>
+              try {<br>
+              frames[i].setIcon(true);<br>
+              }<br>
+              catch(java.beans.PropertyVetoException ex) {<br>
+              System.out.println(&quot;iconification vetoed!&quot;);<br>
+              }<br>
+              }<br>
+              }<br>
+              }<br>
+              public void openAll() {<br>
+              JInternalFrame[] frames = getAllFrames();</p>
+            <p> for(int i=0; i &lt; frames.length; ++i) {<br>
+              if(frames[i].isIcon()) {<br>
+              try {<br>
+              frames[i].setIcon(false);<br>
+              }<br>
+              catch(java.beans.PropertyVetoException ex) {<br>
+              System.out.println(&quot;restoration vetoed!&quot;);<br>
+              }<br>
+              }<br>
+              }<br>
+              }<br>
+              public void cascade() {<br>
+              JInternalFrame[] frames = getAllFrames();<br>
+              int x = 0, y = 0;</p>
+            <p> for(int i=0; i &lt; frames.length; ++i) {<br>
+              if( ! frames[i].isIcon()) {<br>
+              frames[i].setBounds(x,y,w,h);<br>
+              x += xoffset;<br>
+              y += yoffset;<br>
+              }<br>
+              }<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 15.2 JDesktopPane</p>
+            <p>&nbsp;</p>
+            <p><br>
+              15.2.1 JDesktopPane属性</p>
+            <p>&nbsp;</p>
+            <p>15.2.2 JDesktopPane事件</p>
+            <p>&nbsp;</p>
+            <p> 15.2.3 JDesktopPane类总结 </p>
+            <p>&nbsp;</p>
+            <p> 15.2.4 AWT兼容</p>
+            <p>&nbsp;</p>
+            <p> 15.3 DesktopManager</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例15-6 一个定制的DesktopManager</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              JDesktopPane desktopPane = new JDesktopPane();</p>
+            <p> public void init() {<br>
+              Container contentPane = getContentPane();</p>
+            <p> contentPane.add(desktopPane, BorderLayout.CENTER);<br>
+              desktopPane.setDesktopManager(new OutlineManager());</p>
+            <p> JInternalFrame jif = new JInternalFrame(<br>
+              &quot;Outline Drag and Resize&quot;, // title<br>
+              true, // resizable<br>
+              true, // closable<br>
+              true, // maximizable<br>
+              true); // iconifiable</p>
+            <p> jif.setBounds(10, 10, 250, 100);<br>
+              desktopPane.add(jif);<br>
+              jif.show();//新添加的,原文没有<br>
+              }<br>
+              }<br>
+              class OutlineManager extends DefaultDesktopManager { <br>
+              private Rectangle start, last;<br>
+              private boolean first = true;</p>
+            <p> // dragging ...</p>
+            <p> public void beginDraggingFrame(JComponent frame) {<br>
+              initializeOutline(frame);<br>
+              }<br>
+              public void dragFrame(JComponent frame, int x, int y) {<br>
+              updateOutline(frame, x, y, start.width, start.height);<br>
+              }<br>
+              public void endDraggingFrame(JComponent frame) {<br>
+              endOutline(frame);<br>
+              }</p>
+            <p> // resizing ...</p>
+            <p> public void beginResizingFrame(JComponent frame, int dir) {<br>
+              initializeOutline(frame);<br>
+              }<br>
+              public void resizeFrame(JComponent frame, <br>
+              int x, int y, int w, int h) {<br>
+              updateOutline(frame, x, y, w, h);<br>
+              }<br>
+              public void endResizingFrame(JComponent frame) {<br>
+              endOutline(frame);<br>
+              }</p>
+            <p> // outline ...</p>
+            <p> private void initializeOutline(final JComponent frame) {<br>
+              // the call to setVisible() calls repaint, which<br>
+              // places a paint event on the event queue.<br>
+              // therefore, the effect of the setVisible() call is<br>
+              // not apparent until after this method returns</p>
+            <p> frame.setVisible(false);<br>
+              start = frame.getBounds();<br>
+              last = new Rectangle(start);<br>
+              first = true;</p>
+            <p> // the Runnable below paints the initial outline <br>
+              // after the repaint event spawned by setVisible() is<br>
+              // handled</p>
+            <p> SwingUtilities.invokeLater(new Runnable() {<br>
+              public void run() {<br>
+              updateOutline(frame,start.x,start.y,<br>
+              start.width,start.height);<br>
+              }<br>
+              });<br>
+              }<br>
+              private void updateOutline(JComponent frame, <br>
+              int x, int y, int w, int h) {<br>
+              Container container = frame.getParent();<br>
+              Graphics g = container.getGraphics();</p>
+            <p> try {<br>
+              g.setXORMode(container.getBackground());</p>
+            <p> if( ! first) {<br>
+              g.drawRect(last.x, last.y, <br>
+              last.width-1, last.height-1);<br>
+              }<br>
+              g.drawRect(x, y, w-1, h-1);<br>
+              first = false;<br>
+              }<br>
+              finally {<br>
+              g.dispose();<br>
+              last.setBounds(x,y,w,h);<br>
+              }<br>
+              }<br>
+              private void endOutline(JComponent frame) {<br>
+              frame.setVisible(true);<br>
+              setBoundsForFrame(<br>
+              frame, last.x, last.y, last.width, last.height);<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 15.4 本章回顾</p>
+            <p>&nbsp;</p>
+            <p>[<a href="index.html" target="_self">目录</a>][<a href="s14.htm">上一页</a>][<a href="s16.htm">下一页</a>](飒龙收藏/2002.5.18) 
+            </p>
+            <p>&nbsp; </p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </td>
+  </tr>
+</tbody>
+</table>
+<script language="javascript">bottomprint()</script>
+</body>
+</html>

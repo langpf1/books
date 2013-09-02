@@ -1,0 +1,990 @@
+<SCRIPT LANGUAGE="JavaScript" SRC="/-fs0/sys/pop-up.js"></SCRIPT>
+
+<SCRIPT LANGUAGE="JavaScript" SRC="/-fs0/sys/pop-up-all.js"></SCRIPT>
+
+<html>
+<head>
+<title>易都网--Java 2 图形设计卷Ⅱ：SWING</title>
+<LINK rel="stylesheet" href="../../../_public/javaa.css">
+<meta http-equiv="Content-Type" content="text/html; charset=GBK">
+<script language="JavaScript" src="../../../_public/javaa.js"></script>
+<meta name="keywords" content="Java,JSP,ASP,PHP,J2EE,EJB,JavaScript,C/C++,ASM,CSS,HTML,XML,网络安全,MySQL,ACCESS">
+</head>
+<body bgcolor="#FFFFFF">
+<table border=0 cellpadding=0 cellspacing=0 width="100%">
+  <tbody> 
+  <script language="javascript">print2()</script>
+  <tr> 
+    <td width="100%"> 
+      <table bgcolor=#EEEEEE border=0 cellpadding=3 cellspacing=0 width="100%">
+        <tbody> 
+        <tr> 
+          <td class=f1 id=thetd width="100%"> 
+            <p>[<a href="index.html" target="_self">目录</a>][<a href="s21.htm">上一页</a>][<a href="s23.htm">下一页</a>]</p>
+            <p align="center"><b>第22章 文本组件</b></p>
+            <p>　　 Swing提供两种完全不同的文本组件类型：简单文本控件和风格文本组件。简单文本控件一次只能显示一种字体和一种颜色，而风格文本组件则可以显示多种字体和颜色。前者有单行文本域（JTextField）、口令域(JPassowrdField)、后者有编辑器窗格（JEditorPan)和文本窗格（JTextPane)。 
+            </p>
+            <p> <b>22.1 JTextField</b></p>
+            <p align="center"><b>例22-1 单行文本域的排列方式和列数</b></p>
+            <hr size="1" noshade>
+            import javax.swing.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import java.util.*;
+            <p>public class Test extends JApplet {<br>
+              private JPanel textFieldPanel = new JPanel();<br>
+              private JTextField textField = <br>
+              new JTextField(&quot;initial content&quot;);</p>
+            <p> public void init() {<br>
+              Container contentPane = getContentPane();</p>
+            <p> textFieldPanel.add(textField);</p>
+            <p> contentPane.setLayout(new BorderLayout(0,20));<br>
+              contentPane.add(new ControlPanel(), BorderLayout.NORTH);<br>
+              contentPane.add(textFieldPanel, BorderLayout.CENTER);<br>
+              }<br>
+              class ControlPanel extends JPanel {<br>
+              private JComboBox alignments = new JComboBox();<br>
+              private JComboBox columns = new JComboBox();</p>
+            <p> public ControlPanel() {<br>
+              columns.addItem(new Integer(0));<br>
+              columns.addItem(new Integer(5));<br>
+              columns.addItem(new Integer(10));<br>
+              columns.addItem(new Integer(15));</p>
+            <p> alignments.addItem(&quot;LEFT&quot;); <br>
+              alignments.addItem(&quot;CENTER&quot;); <br>
+              alignments.addItem(&quot;RIGHT&quot;); </p>
+            <p> add(new JLabel(&quot;Horizontal Alignment:&quot;));<br>
+              add(alignments);<br>
+              add(Box.createHorizontalStrut(10));<br>
+              add(new JLabel(&quot;Columns:&quot;));<br>
+              add(columns);</p>
+            <p> columns.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              Integer c = <br>
+              (Integer)columns.getSelectedItem();</p>
+            <p> textField.setColumns(c.intValue());</p>
+            <p> // the following call to revalidate()<br>
+              // should not be necessary<br>
+              revalidate();</p>
+            <p> textField.setScrollOffset(0);<br>
+              }<br>
+              });<br>
+              alignments.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              int index = alignments.getSelectedIndex();</p>
+            <p> if(index == 0)<br>
+              textField.setHorizontalAlignment(<br>
+              JTextField.LEFT);<br>
+              else if(index == 1)<br>
+              textField.setHorizontalAlignment(<br>
+              JTextField.CENTER);<br>
+              else if(index == 2)<br>
+              textField.setHorizontalAlignment(<br>
+              JTextField.RIGHT);<br>
+              }<br>
+              });<br>
+              }<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> <b>22.1.1 水平可视性和滚动偏移</b></p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例22-2 单行文本域的滚动偏移</b></p>
+            <hr size="1" noshade>
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;<br>
+            import javax.swing.event.*;
+            <p>public class Test extends JApplet {<br>
+              private JTextField textField = new JTextField(<br>
+              &quot;12345678901234567890123456789012345678901234567890&quot;, 
+              10);</p>
+            <p> public void init() {<br>
+              Container contentPane = getContentPane();<br>
+              JPanel textFieldPanel = new JPanel();</p>
+            <p> textFieldPanel.add(textField);</p>
+            <p> contentPane.add(new ControlPanel(), BorderLayout.NORTH);<br>
+              contentPane.add(textFieldPanel, BorderLayout.CENTER);<br>
+              }<br>
+              class ControlPanel extends JPanel {<br>
+              private JLabel display = new JLabel(&quot; &quot;);<br>
+              private JSlider slider = new JSlider(<br>
+              textField.getHorizontalVisibility());<br>
+              private JComboBox columns = new JComboBox();</p>
+            <p> public ControlPanel() {<br>
+              columns.addItem(new Integer(0));<br>
+              columns.addItem(new Integer(5));<br>
+              columns.addItem(new Integer(10));<br>
+              columns.addItem(new Integer(15));</p>
+            <p> columns.setSelectedIndex(2);</p>
+            <p> add(new JLabel(&quot;Scroll Offset:&quot;));<br>
+              add(slider);<br>
+              add(display);<br>
+              add(Box.createHorizontalStrut(10));<br>
+              add(new JLabel(&quot;Columns:&quot;));<br>
+              add(columns);</p>
+            <p> slider.addChangeListener(new ChangeListener() {<br>
+              public void stateChanged(ChangeEvent e) {<br>
+              textField.setScrollOffset(slider.getValue());</p>
+            <p> Integer i = <br>
+              new Integer(textField.getScrollOffset());<br>
+              BoundedRangeModel m =<br>
+              textField.getHorizontalVisibility();<br>
+              <br>
+              display.setText(i.toString());</p>
+            <p> showStatus(&quot;Visibility - min: &quot; + <br>
+              m.getMinimum() + <br>
+              &quot;, max: &quot; + m.getMaximum() +<br>
+              &quot;, extent: &quot; + m.getExtent() + <br>
+              &quot;, value: &quot; + m.getValue() +<br>
+              &quot;, isAdj: &quot; + <br>
+              m.getValueIsAdjusting());<br>
+              }<br>
+              });<br>
+              columns.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              Integer c = <br>
+              (Integer)columns.getSelectedItem();</p>
+            <p> textField.setColumns(c.intValue());</p>
+            <p> // the following call to revalidate()<br>
+              // should not be necessary<br>
+              revalidate();</p>
+            <p> textField.setScrollOffset(0);<br>
+              }<br>
+              });<br>
+              }<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 22.1.2 布局单行文本域</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例22-3 用GridBagLayout来布局单行文本域</b></p>
+            <hr size="1" noshade>
+            import java.applet.Applet;<br>
+            import java.awt.*;<br>
+            import javax.swing.*;
+            <p>public class PurchaseApplet extends JApplet {<br>
+              public void init() {<br>
+              getContentPane().add(new ButtonPurchaseForm(),<br>
+              BorderLayout.CENTER);<br>
+              }<br>
+              }<br>
+              class ButtonPurchaseForm extends JPanel {<br>
+              JSeparator sep = new JSeparator();<br>
+              JLabel title = new JLabel(&quot;Order Form&quot;);<br>
+              JLabel name = new JLabel(&quot;Name:&quot;);<br>
+              JLabel address = new JLabel(&quot;Address:&quot;);<br>
+              JLabel payment = new JLabel(&quot;Purchase Method:&quot;);<br>
+              JLabel phone = new JLabel(&quot;Phone:&quot;);<br>
+              JLabel city = new JLabel(&quot;City:&quot;);<br>
+              JLabel state = new JLabel(&quot;State:&quot;);</p>
+            <p> JTextField nameField = new JTextField(25);<br>
+              JTextField addressField = new JTextField(25);<br>
+              JTextField cityField = new JTextField(15);<br>
+              JTextField stateField = new JTextField(2);</p>
+            <p> JComboBox paymentChoice = new JComboBox();</p>
+            <p> JButton paymentButton = new JButton(&quot;Purchase&quot;);<br>
+              JButton cancelButton = new JButton(&quot;Cancel&quot;);</p>
+            <p> public ButtonPurchaseForm() {<br>
+              GridBagLayout gbl = new GridBagLayout();<br>
+              GridBagConstraints gbc = new GridBagConstraints();</p>
+            <p><br>
+              setLayout(gbl);</p>
+            <p> paymentChoice.addItem(&quot;Visa&quot;);<br>
+              paymentChoice.addItem(&quot;MasterCard&quot;);<br>
+              paymentChoice.addItem(&quot;COD&quot;);</p>
+            <p> title.setFont(new Font(&quot;Times-Roman&quot;, <br>
+              Font.BOLD + Font.ITALIC,<br>
+              16));</p>
+            <p> gbc.anchor = GridBagConstraints.NORTHWEST;<br>
+              gbc.gridwidth = GridBagConstraints.REMAINDER;<br>
+              add(title, gbc);</p>
+            <p> gbc.anchor = GridBagConstraints.NORTH;<br>
+              gbc.fill = GridBagConstraints.HORIZONTAL;<br>
+              gbc.insets = new Insets(0,0,10,0);<br>
+              add(sep, gbc);</p>
+            <p> gbc.anchor = GridBagConstraints.WEST;<br>
+              gbc.gridwidth = 1;<br>
+              gbc.insets = new Insets(0,0,0,0);<br>
+              add(name, gbc);</p>
+            <p> add(Box.createHorizontalStrut(10));<br>
+              gbc.gridwidth = GridBagConstraints.REMAINDER;<br>
+              add(nameField, gbc);</p>
+            <p> gbc.gridwidth = 1;<br>
+              add(address, gbc);</p>
+            <p> add(Box.createHorizontalStrut(10));<br>
+              gbc.gridwidth = GridBagConstraints.REMAINDER;<br>
+              add(addressField, gbc);</p>
+            <p> gbc.gridwidth = 1;<br>
+              add(city, gbc);</p>
+            <p> add(Box.createHorizontalStrut(10));<br>
+              add(cityField, gbc);<br>
+              add(Box.createHorizontalStrut(10));<br>
+              add(state, gbc);<br>
+              add(Box.createHorizontalStrut(5));</p>
+            <p> gbc.gridwidth = GridBagConstraints.REMAINDER;<br>
+              gbc.fill = GridBagConstraints.NONE;<br>
+              add(stateField, gbc);</p>
+            <p> gbc.gridwidth = 1;<br>
+              add(payment, gbc);</p>
+            <p> gbc.insets = new Insets(5,0,5,0);</p>
+            <p> add(Box.createHorizontalStrut(10));<br>
+              gbc.gridwidth = GridBagConstraints.REMAINDER;<br>
+              gbc.fill = GridBagConstraints.NONE;<br>
+              add(paymentChoice, gbc);</p>
+            <p> ButtonPanel buttonPanel = new ButtonPanel();</p>
+            <p> buttonPanel.add(paymentButton);<br>
+              buttonPanel.add(cancelButton);</p>
+            <p> gbc.anchor = GridBagConstraints.SOUTH;<br>
+              gbc.insets = new Insets(15,0,0,0);<br>
+              gbc.fill = GridBagConstraints.HORIZONTAL;<br>
+              gbc.gridwidth = 7;<br>
+              add(buttonPanel, gbc);<br>
+              }<br>
+              class ButtonPanel extends JPanel {<br>
+              JPanel buttonPanel = new JPanel();<br>
+              JSeparator separator = new JSeparator();</p>
+            <p> public ButtonPanel() {<br>
+              buttonPanel.setLayout(<br>
+              new FlowLayout(FlowLayout.CENTER));</p>
+            <p> setLayout(new BorderLayout(0,5));<br>
+              add(separator, &quot;North&quot;);<br>
+              add(buttonPanel, &quot;Center&quot;);<br>
+              }<br>
+              public void add(JButton button) {<br>
+              buttonPanel.add(button);<br>
+              }<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p>22.1.3 使单行文本域有效</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例22-4 实现一个定制文档</b></p>
+            <hr size="1" noshade>
+            import javax.swing.*;<br>
+            import javax.swing.text.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class Test extends JApplet {<br>
+              JTextField tf = new JTextField(DateDocument.initString);</p>
+            <p> public Test() {<br>
+              Container contentPane = getContentPane();<br>
+              JLabel label = new JLabel(&quot;Date:&quot;);<br>
+              Font font = new Font(&quot;Dialog&quot;, Font.PLAIN, 24);</p>
+            <p> tf.setFont(font);<br>
+              label.setFont(font);</p>
+            <p> tf.setDocument(new DateDocument(tf));</p>
+            <p> contentPane.setLayout(new FlowLayout(FlowLayout.CENTER,<br>
+              10,10)); <br>
+              contentPane.add(label);<br>
+              contentPane.add(tf);<br>
+              }<br>
+              }<br>
+              class DateDocument extends PlainDocument {<br>
+              public static String initString = &quot;XX/XX/XXXX&quot;; // Y10K!<br>
+              private static int sep1 = 2, sep2 = 5;<br>
+              private JTextComponent textComponent;<br>
+              private int newOffset;</p>
+            <p> public DateDocument(JTextComponent tc) {<br>
+              textComponent = tc;<br>
+              try {<br>
+              insertString(0, initString, null);<br>
+              }<br>
+              catch(Exception ex) { ex.printStackTrace(); }<br>
+              }<br>
+              public void insertString(int offset, String s, <br>
+              AttributeSet attributeSet) <br>
+              throws BadLocationException {<br>
+              if(s.equals(initString)) {<br>
+              super.insertString(offset, s, attributeSet);<br>
+              }<br>
+              else {<br>
+              try {<br>
+              Integer.parseInt(s);<br>
+              }<br>
+              catch(Exception ex) {<br>
+              return; // only allow integer values<br>
+              }</p>
+            <p> newOffset = offset;</p>
+            <p> if(atSeparator(offset)) {<br>
+              newOffset++; <br>
+              textComponent.setCaretPosition(newOffset);<br>
+              }<br>
+              super.remove(newOffset, 1);<br>
+              super.insertString(newOffset, s, attributeSet);<br>
+              }<br>
+              }<br>
+              public void remove(int offset, int length) <br>
+              throws BadLocationException {<br>
+              if(atSeparator(offset)) <br>
+              textComponent.setCaretPosition(offset-1);<br>
+              else<br>
+              textComponent.setCaretPosition(offset);<br>
+              }<br>
+              private boolean atSeparator(int offset) {<br>
+              return offset == sep1 || offset == sep2;<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 22.1.4 JTextField组件总结</p>
+            <p>&nbsp;</p>
+            <p> 22.1.5 JTextField属性</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例22-5 单行文本域和缺省按钮</b></p>
+            <hr size="1" noshade>
+            import javax.swing.*;<br>
+            import javax.swing.text.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import java.util.*;
+            <p>public class Test extends JFrame {<br>
+              private JTextField field = new JTextField(10);<br>
+              private JButton b = new JButton(&quot;Default Button&quot;);<br>
+              private JCheckBox cb = new JCheckBox(<br>
+              &quot;Text field fires action event&quot;);<br>
+              public Test() {<br>
+              Container contentPane = getContentPane();</p>
+            <p> SwingUtilities.getRootPane(this).setDefaultButton(b);<br>
+              cb.setSelected(true);</p>
+            <p> contentPane.setLayout(new FlowLayout(<br>
+              FlowLayout.CENTER,10,20));<br>
+              contentPane.add(field);<br>
+              contentPane.add(b);<br>
+              contentPane.add(cb);</p>
+            <p> b.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              JOptionPane.showMessageDialog(Test.this,<br>
+              &quot;Button fired action event&quot;);<br>
+              }<br>
+              });<br>
+              field.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              JOptionPane.showMessageDialog(Test.this,<br>
+              &quot;Textfield fired action event&quot;);<br>
+              }<br>
+              });<br>
+              cb.addActionListener(new ActionListener() {<br>
+              private Keymap km;<br>
+              private KeyStroke ks;<br>
+              private Action action;</p>
+            <p> public void actionPerformed(ActionEvent e) {<br>
+              if(cb.isSelected()) {<br>
+              km.addActionForKeyStroke(ks, action);<br>
+              }<br>
+              else {<br>
+              if(ks == null) {<br>
+              km = field.getKeymap();<br>
+              ks = KeyStroke.getKeyStroke(<br>
+              KeyEvent.VK_ENTER, 0);<br>
+              action = km.getAction(ks);<br>
+              }<br>
+              km.removeKeyStrokeBinding(ks);<br>
+              }<br>
+              }<br>
+              });<br>
+              }<br>
+              public static void main(String args[]) {<br>
+              GJApp.launch(new Test(), <br>
+              &quot;Default Buttons&quot;,300,300,350,200);<br>
+              }<br>
+              }<br>
+              class GJApp extends WindowAdapter {<br>
+              static private JPanel statusArea = new JPanel();<br>
+              static private JLabel status = new JLabel(&quot; &quot;);<br>
+              static private ResourceBundle resources;</p>
+            <p> public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h) {<br>
+              launch(f,title,x,y,w,h,null); <br>
+              }<br>
+              public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h,<br>
+              String propertiesFilename) {<br>
+              f.setTitle(title);<br>
+              f.setBounds(x,y,w,h);<br>
+              f.setVisible(true);</p>
+            <p> statusArea.setBorder(BorderFactory.createEtchedBorder());<br>
+              statusArea.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));<br>
+              statusArea.add(status);<br>
+              status.setHorizontalAlignment(JLabel.LEFT);</p>
+            <p> f.setDefaultCloseOperation(<br>
+              WindowConstants.DISPOSE_ON_CLOSE);</p>
+            <p> if(propertiesFilename != null) {<br>
+              resources = ResourceBundle.getBundle(<br>
+              propertiesFilename, Locale.getDefault());<br>
+              }</p>
+            <p> f.addWindowListener(new WindowAdapter() {<br>
+              public void windowClosed(WindowEvent e) {<br>
+              System.exit(0);<br>
+              }<br>
+              });<br>
+              }<br>
+              static public JPanel getStatusArea() {<br>
+              return statusArea;<br>
+              }<br>
+              static public void showStatus(String s) {<br>
+              status.setText(s);<br>
+              }<br>
+              static Object getResource(String key) {<br>
+              if(resources != null) {<br>
+              return resources.getString(key);<br>
+              }<br>
+              return null;<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 22.1.6 JTextField事件</p>
+            <p>&nbsp;</p>
+            <p> 22.1.7 JTextField类总结</p>
+            <p>&nbsp;</p>
+            <p> 22.1.8 AWT兼容</p>
+            <p>&nbsp;</p>
+            <p> 22.2 JPasswordField</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例22-6 使用JPasswordField</b></p>
+            <hr size="1" noshade>
+            import javax.swing.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import java.util.*;
+            <p>public class Test extends JApplet {<br>
+              private String pw = &quot;dol42ce&quot;;<br>
+              private JPasswordField passwordField = new JPasswordField(8);</p>
+            <p> public void init() {<br>
+              Container contentPane = getContentPane();<br>
+              JPanel panel = new JPanel();</p>
+            <p> panel.add(new JLabel(&quot;Password:&quot;));<br>
+              panel.add(passwordField);</p>
+            <p> passwordField.setEchoChar('?');</p>
+            <p> contentPane.add(panel, BorderLayout.CENTER);</p>
+            <p> passwordField.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              String password = new String(<br>
+              passwordField.getPassword());</p>
+            <p> if(pw.equals(password))<br>
+              showStatus(&quot;Access Granted&quot;);<br>
+              else<br>
+              showStatus(&quot;Wrong password - security &quot; +<br>
+              &quot;has been called&quot;);<br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 22.2.1 JPasswordField组件总结</p>
+            <p>&nbsp;</p>
+            <p> 22.2.2 JPasswordField属性</p>
+            <p>&nbsp;</p>
+            <p> 22.2.3 JPasswordField类总结</p>
+            <p>&nbsp;</p>
+            <p> 22.3 JTextArea</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例22-7 指定JTExtArea的换行行为</b></p>
+            <hr size="1" noshade>
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;<br>
+            import javax.swing.text.*;<br>
+            import java.io.FileReader;
+            <p>public class Test extends JApplet {<br>
+              private JTextArea textArea = new JTextArea();<br>
+              private Container contentPane = getContentPane();</p>
+            <p> public void init() {<br>
+              readFile(textArea, &quot;text&quot;);<br>
+              contentPane.add(new ControlPanel(), BorderLayout.NORTH);<br>
+              contentPane.add(new JScrollPane(textArea), <br>
+              BorderLayout.CENTER);<br>
+              }<br>
+              private void readFile(JTextComponent textComponent,String s) {<br>
+              try { (new DefaultEditorKit()).read(<br>
+              new FileReader(s), textComponent.getDocument(), 0);<br>
+              } catch(Exception ex) { ex.printStackTrace(); }<br>
+              }<br>
+              class ControlPanel extends JPanel { <br>
+              JRadioButton radioButtons[] = new JRadioButton[] {<br>
+              new JRadioButton(&quot;wrap off&quot;),<br>
+              new JRadioButton(&quot;wrap characters&quot;),<br>
+              new JRadioButton(&quot;wrap words&quot;),<br>
+              };</p>
+            <p> public ControlPanel() {<br>
+              ButtonGroup group = new ButtonGroup();<br>
+              Listener listener = new Listener();</p>
+            <p> for(int i=0; i &lt; radioButtons.length; ++i) {<br>
+              JRadioButton b = radioButtons[i];</p>
+            <p> b.addActionListener(listener);<br>
+              group.add(b);<br>
+              add(b);</p>
+            <p> if(i == 0) <br>
+              b.setSelected(true); // &quot;wrap off&quot;<br>
+              }<br>
+              }<br>
+              class Listener implements ActionListener {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              String action = e.getActionCommand();</p>
+            <p> textArea.setLineWrap(!action.equals(&quot;wrap off&quot;));<br>
+              textArea.setWrapStyleWord(<br>
+              action.equals(&quot;wrap words&quot;));<br>
+              //textArea.repaint();</p>
+            <p> showStatus(&quot;rows: &quot; + textArea.getRows() +<br>
+              &quot;, columns: &quot; + textArea.getColumns() +<br>
+              &quot;, lines: &quot; + textArea.getLineCount());</p>
+            <p> }<br>
+              };<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 22.3.1 JTextArea组件总结</p>
+            <p>&nbsp;</p>
+            <p> 22.3.2 JTextArea属性</p>
+            <p>&nbsp;</p>
+            <p> 22.3.3 JTextArea类总结</p>
+            <p>&nbsp;</p>
+            <p> 22.3.4 AWT兼容</p>
+            <p>&nbsp;</p>
+            <p> 22.4 JEditorPane</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例22-8 用一个编辑器窗格来显示HTML文件</b></p>
+            <hr size="1" noshade>
+            import javax.swing.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import java.util.*;
+            <p>public class Test extends JFrame {<br>
+              private JEditorPane editorPane = new JEditorPane();</p>
+            <p> public Test() {<br>
+              Container contentPane = getContentPane();</p>
+            <p> String url = &quot;file:&quot; + System.getProperty(&quot;user.dir&quot;) 
+              +<br>
+              System.getProperty(&quot;file.separator&quot;) +<br>
+              &quot;java.util.Hashtable.html&quot;;</p>
+            <p> editorPane.setEditable(false);</p>
+            <p> try { <br>
+              editorPane.setPage(url);<br>
+              }<br>
+              catch(Exception ex) { ex.printStackTrace(); }</p>
+            <p> contentPane.add(new ControlPanel(), BorderLayout.NORTH);<br>
+              contentPane.add(new JScrollPane(editorPane), <br>
+              BorderLayout.CENTER);<br>
+              }<br>
+              class ControlPanel extends JPanel {<br>
+              private JCheckBox edit = new JCheckBox(&quot;Editable&quot;);</p>
+            <p> public ControlPanel() {<br>
+              add(edit);<br>
+              edit.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              editorPane.setEditable(edit.isSelected());<br>
+              }<br>
+              });<br>
+              }<br>
+              }<br>
+              public static void main(String args[]) {<br>
+              GJApp.launch(new Test(), <br>
+              &quot;JEditorPane&quot;,300,300,650,450);<br>
+              }<br>
+              }<br>
+              class GJApp extends WindowAdapter {<br>
+              static private JPanel statusArea = new JPanel();<br>
+              static private JLabel status = new JLabel(&quot; &quot;);<br>
+              static private ResourceBundle resources;</p>
+            <p> public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h) {<br>
+              launch(f,title,x,y,w,h,null); <br>
+              }<br>
+              public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h,<br>
+              String propertiesFilename) {<br>
+              f.setTitle(title);<br>
+              f.setBounds(x,y,w,h);<br>
+              f.setVisible(true);</p>
+            <p> statusArea.setBorder(BorderFactory.createEtchedBorder());<br>
+              statusArea.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));<br>
+              statusArea.add(status);<br>
+              status.setHorizontalAlignment(JLabel.LEFT);</p>
+            <p> f.setDefaultCloseOperation(<br>
+              WindowConstants.DISPOSE_ON_CLOSE);</p>
+            <p> if(propertiesFilename != null) {<br>
+              resources = ResourceBundle.getBundle(<br>
+              propertiesFilename, Locale.getDefault());<br>
+              }</p>
+            <p> f.addWindowListener(new WindowAdapter() {<br>
+              public void windowClosed(WindowEvent e) {<br>
+              System.exit(0);<br>
+              }<br>
+              });<br>
+              }<br>
+              static public JPanel getStatusArea() {<br>
+              return statusArea;<br>
+              }<br>
+              static public void showStatus(String s) {<br>
+              status.setText(s);<br>
+              }<br>
+              static Object getResource(String key) {<br>
+              if(resources != null) {<br>
+              return resources.getString(key);<br>
+              }<br>
+              return null;<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 22.4.1 JEditorPane属性</p>
+            <p>&nbsp;</p>
+            <p> 22.4.2 JEditorPane事件</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例22-9 用超链接监听器来装载URL</b></p>
+            <hr size="1" noshade>
+            import javax.swing.*;<br>
+            import javax.swing.event.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import java.util.*;<br>
+            import java.io.IOException;
+            <p>public class Test extends JFrame {<br>
+              private JEditorPane editorPane = new JEditorPane();</p>
+            <p> public Test() {<br>
+              Container contentPane = getContentPane();<br>
+              String url = &quot;file:&quot; + System.getProperty(&quot;user.dir&quot;) 
+              +<br>
+              System.getProperty(&quot;file.separator&quot;) +<br>
+              &quot;java.util.Hashtable.html&quot;;</p>
+            <p> try { <br>
+              editorPane.setPage(url);<br>
+              }<br>
+              catch(IOException ex) { ex.printStackTrace(); }</p>
+            <p> contentPane.add(new JScrollPane(editorPane), <br>
+              BorderLayout.CENTER);</p>
+            <p> editorPane.setEditable(false);</p>
+            <p> editorPane.addHyperlinkListener(new HyperlinkListener() {<br>
+              public void hyperlinkUpdate(HyperlinkEvent e) {<br>
+              try { <br>
+              editorPane.setPage(e.getURL());<br>
+              }<br>
+              catch(IOException ex) { ex.printStackTrace(); }<br>
+              }<br>
+              });<br>
+              }<br>
+              public static void main(String args[]) {<br>
+              GJApp.launch(new Test(), <br>
+              &quot;JEditorPane&quot;,300,300,450,300);<br>
+              }<br>
+              }<br>
+              class GJApp extends WindowAdapter {<br>
+              static private JPanel statusArea = new JPanel();<br>
+              static private JLabel status = new JLabel(&quot; &quot;);<br>
+              static private ResourceBundle resources;</p>
+            <p> public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h) {<br>
+              launch(f,title,x,y,w,h,null); <br>
+              }<br>
+              public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h,<br>
+              String propertiesFilename) {<br>
+              f.setTitle(title);<br>
+              f.setBounds(x,y,w,h);<br>
+              f.setVisible(true);</p>
+            <p> statusArea.setBorder(BorderFactory.createEtchedBorder());<br>
+              statusArea.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));<br>
+              statusArea.add(status);<br>
+              status.setHorizontalAlignment(JLabel.LEFT);</p>
+            <p> f.setDefaultCloseOperation(<br>
+              WindowConstants.DISPOSE_ON_CLOSE);</p>
+            <p> if(propertiesFilename != null) {<br>
+              resources = ResourceBundle.getBundle(<br>
+              propertiesFilename, Locale.getDefault());<br>
+              }</p>
+            <p> f.addWindowListener(new WindowAdapter() {<br>
+              public void windowClosed(WindowEvent e) {<br>
+              System.exit(0);<br>
+              }<br>
+              });<br>
+              }<br>
+              static public JPanel getStatusArea() {<br>
+              return statusArea;<br>
+              }<br>
+              static public void showStatus(String s) {<br>
+              status.setText(s);<br>
+              }<br>
+              static Object getResource(String key) {<br>
+              if(resources != null) {<br>
+              return resources.getString(key);<br>
+              }<br>
+              return null;<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 22.4.3 JEditorPane类总结</p>
+            <p>&nbsp;</p>
+            <p> 22.5 JTextPane</p>
+            <p>&nbsp;</p>
+            <p> 22.5.1 嵌入图标和组件</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例22-10 文本窗格里的组件和图标</b></p>
+            <hr size="1" noshade>
+            import java.io.File;<br>
+            import javax.swing.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class Test extends JFrame {<br>
+              private JFileChooser chooser = new JFileChooser();<br>
+              private JTextPane textPane = new JTextPane();</p>
+            <p> public Test() {<br>
+              Container contentPane = getContentPane();<br>
+              JMenuBar menuBar = new JMenuBar();<br>
+              JMenu insertMenu = new JMenu(&quot;Insert&quot;);<br>
+              JMenuItem imageItem = new JMenuItem(&quot;image&quot;),<br>
+              chooserItem = new JMenuItem(&quot;color chooser&quot;);</p>
+            <p> insertMenu.add(imageItem);<br>
+              insertMenu.add(chooserItem);</p>
+            <p> menuBar.add(insertMenu);<br>
+              setJMenuBar(menuBar);</p>
+            <p> textPane.setFont(new Font(&quot;Serif&quot;, Font.ITALIC, 24));</p>
+            <p> contentPane.add(textPane, BorderLayout.CENTER);</p>
+            <p> chooserItem.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              JColorChooser chooser = new JColorChooser();<br>
+              chooser.setMaximumSize(<br>
+              chooser.getPreferredSize());<br>
+              textPane.insertComponent(chooser);<br>
+              }<br>
+              });<br>
+              imageItem.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              int option = <br>
+              chooser.showDialog(Test.this,&quot;Pick An Image&quot;);</p>
+            <p> if(option == JFileChooser.APPROVE_OPTION) {<br>
+              File file = chooser.getSelectedFile();</p>
+            <p> if(file != null) {<br>
+              textPane.insertIcon(new ImageIcon(<br>
+              file.getPath()));<br>
+              }</p>
+            <p> }<br>
+              }<br>
+              });<br>
+              }<br>
+              public static void main(String args[]) {<br>
+              GJApp.launch(new Test(), <br>
+              &quot;Using JTextPane&quot;,300,300,450,300);<br>
+              }<br>
+              }<br>
+              class GJApp extends WindowAdapter {<br>
+              static private JPanel statusArea = new JPanel();<br>
+              static private JLabel status = new JLabel(&quot; &quot;);</p>
+            <p> public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h) {<br>
+              f.setTitle(title);<br>
+              f.setBounds(x,y,w,h);<br>
+              f.setVisible(true);</p>
+            <p> statusArea.setBorder(BorderFactory.createEtchedBorder());<br>
+              statusArea.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));<br>
+              statusArea.add(status);<br>
+              status.setHorizontalAlignment(JLabel.LEFT);</p>
+            <p> f.setDefaultCloseOperation(<br>
+              WindowConstants.DISPOSE_ON_CLOSE);</p>
+            <p> f.addWindowListener(new WindowAdapter() {<br>
+              public void windowClosed(WindowEvent e) {<br>
+              System.exit(0);<br>
+              }<br>
+              });<br>
+              }<br>
+              static public JPanel getStatusArea() {<br>
+              return statusArea;<br>
+              }<br>
+              static public void updateStatus(String s) {<br>
+              status.setText(s);<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 22.5.2 用属性标记内容</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例22-11 在文本窗格中设置字符属性</b></p>
+            <hr size="1" noshade>
+            import java.io.File;<br>
+            import javax.swing.*;<br>
+            import javax.swing.text.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import java.util.*;<br>
+            import java.io.FileReader;
+            <p>public class Test extends JFrame {<br>
+              private JTextPane textPane = new JTextPane();</p>
+            <p> private JMenuBar menubar = new JMenuBar();<br>
+              private JToolBar toolbar = new JToolBar();</p>
+            <p> private Hashtable actionTable = new Hashtable();</p>
+            <p> private String[] cutCopyPasteActionNames = new String[] {<br>
+              DefaultEditorKit.cutAction, &quot;Cut&quot;, &quot;cut.gif&quot;,<br>
+              DefaultEditorKit.copyAction, &quot;Copy&quot;, &quot;copy.gif&quot;,<br>
+              DefaultEditorKit.pasteAction, &quot;Paste&quot;, &quot;paste.gif&quot;,<br>
+              };</p>
+            <p> private String[] familyActionNames = new String[] {<br>
+              &quot;font-family-SansSerif&quot;, &quot;SanSerif&quot;,<br>
+              &quot;font-family-Monospaced&quot;, &quot;Monospaced&quot;,<br>
+              &quot;font-family-Serif&quot;, &quot;Serif&quot;,<br>
+              };<br>
+              private String[] styleActionNames = new String[] {<br>
+              &quot;font-italic&quot;, &quot;Italic&quot;, &quot;italic.gif&quot;,<br>
+              &quot;font-bold&quot;, &quot;Bold&quot;, &quot;bold.gif&quot;,<br>
+              &quot;font-underline&quot;, &quot;Underline&quot;, &quot;underline.gif&quot;,<br>
+              };<br>
+              private String[] sizeActionNames = new String[] {<br>
+              &quot;font-size-8&quot;, &quot;8&quot;, &quot;font-size-10&quot;, 
+              &quot;10&quot;, <br>
+              &quot;font-size-12&quot;, &quot;12&quot;, &quot;font-size-14&quot;, 
+              &quot;14&quot;, <br>
+              &quot;font-size-16&quot;, &quot;16&quot;, &quot;font-size-18&quot;, 
+              &quot;18&quot;, <br>
+              &quot;font-size-24&quot;, &quot;24&quot;, &quot;font-size-36&quot;, 
+              &quot;36&quot;, <br>
+              &quot;font-size-48&quot;, &quot;48&quot;, <br>
+              };</p>
+            <p> public Test() {<br>
+              Container contentPane = getContentPane();<br>
+              JScrollPane scrollPane = new JScrollPane(textPane);</p>
+            <p> loadActionTable();<br>
+              populate();<br>
+              readFile();<br>
+              setJMenuBar(menubar);</p>
+            <p> contentPane.add(toolbar, BorderLayout.NORTH);<br>
+              contentPane.add(new JScrollPane(textPane), <br>
+              BorderLayout.CENTER);<br>
+              }<br>
+              private void readFile() {<br>
+              try {<br>
+              textPane.getEditorKit().read(<br>
+              new FileReader(&quot;text&quot;), textPane.getDocument(), 0);<br>
+              }<br>
+              catch(Exception ex) { ex.printStackTrace(); }<br>
+              }<br>
+              private void populate() {<br>
+              JMenu editMenu = new JMenu(&quot;Edit&quot;),<br>
+              fontMenu = new JMenu(&quot;Font&quot;),<br>
+              styleMenu = new JMenu(&quot;Style&quot;),<br>
+              sizeMenu = new JMenu(&quot;Size&quot;),<br>
+              familyMenu = new JMenu(&quot;Family&quot;);</p>
+            <p> for(int i=0; i &lt; familyActionNames.length; ++i) {<br>
+              Action action = getAction(familyActionNames[i]);<br>
+              if(action != null) {<br>
+              JMenuItem item = familyMenu.add(action);<br>
+              item.setText(familyActionNames[++i]);<br>
+              }<br>
+              }<br>
+              for(int i=0; i &lt; sizeActionNames.length; ++i) {<br>
+              Action action = getAction(sizeActionNames[i]);<br>
+              if(action != null) {<br>
+              JMenuItem item = sizeMenu.add(action);<br>
+              item.setText(sizeActionNames[++i]);<br>
+              }<br>
+              }<br>
+              for(int i=0; i &lt; cutCopyPasteActionNames.length; ++i) {<br>
+              Action action = getAction(cutCopyPasteActionNames[i]);</p>
+            <p> if(action != null) {<br>
+              JButton button = toolbar.add(action);<br>
+              JMenuItem item = editMenu.add(action);</p>
+            <p> item.setText(cutCopyPasteActionNames[++i]);</p>
+            <p> button.setText(null);<br>
+              button.setIcon(new ImageIcon(<br>
+              cutCopyPasteActionNames[++i]));<br>
+              }<br>
+              }</p>
+            <p> editMenu.addSeparator();<br>
+              toolbar.addSeparator();</p>
+            <p> for(int i=0; i &lt; styleActionNames.length; ++i) {<br>
+              Action action = getAction(styleActionNames[i]);</p>
+            <p> if(action != null) {<br>
+              JButton button = toolbar.add(action);<br>
+              JMenuItem item = styleMenu.add(action);<br>
+              <br>
+              item.setText(styleActionNames[++i]);</p>
+            <p> button.setText(null);<br>
+              button.setIcon(<br>
+              new ImageIcon(styleActionNames[++i]));<br>
+              }<br>
+              }<br>
+              fontMenu.add(familyMenu);<br>
+              fontMenu.add(styleMenu);<br>
+              fontMenu.add(sizeMenu);</p>
+            <p> editMenu.add(fontMenu);<br>
+              menubar.add(editMenu);<br>
+              }<br>
+              private void loadActionTable() {<br>
+              Action[] actions = textPane.getActions();</p>
+            <p> for(int i=0; i &lt; actions.length; ++i) {<br>
+              actionTable.put(actions[i].getValue(Action.NAME),<br>
+              actions[i]);<br>
+              }<br>
+              }<br>
+              private Action getAction(String name) {<br>
+              return (Action)actionTable.get(name);<br>
+              }<br>
+              public static void main(String args[]) {<br>
+              GJApp.launch(new Test(), <br>
+              &quot;Using JTextPane&quot;,300,300,450,300);<br>
+              }<br>
+              }<br>
+              class GJApp extends WindowAdapter {<br>
+              static private JPanel statusArea = new JPanel();<br>
+              static private JLabel status = new JLabel(&quot; &quot;);<br>
+              static private ResourceBundle resources;</p>
+            <p> static {<br>
+              resources = ResourceBundle.getBundle(<br>
+              &quot;GJApp&quot;, Locale.getDefault());<br>
+              };</p>
+            <p> private GJApp() {}<br>
+              <br>
+              public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h) {<br>
+              f.setTitle(title);<br>
+              f.setBounds(x,y,w,h);<br>
+              f.setVisible(true);</p>
+            <p> statusArea.setBorder(BorderFactory.createEtchedBorder());<br>
+              statusArea.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));<br>
+              statusArea.add(status);<br>
+              status.setHorizontalAlignment(JLabel.LEFT);</p>
+            <p> f.setDefaultCloseOperation(<br>
+              WindowConstants.DISPOSE_ON_CLOSE);</p>
+            <p> f.addWindowListener(new WindowAdapter() {<br>
+              public void windowClosed(WindowEvent e) {<br>
+              System.exit(0);<br>
+              }<br>
+              });<br>
+              }<br>
+              static public JPanel getStatusArea() {<br>
+              return statusArea;<br>
+              }<br>
+              static public void showStatus(String s) {<br>
+              status.setText(s);<br>
+              }<br>
+              static Object getResource(String key) {<br>
+              if(resources != null) {<br>
+              return resources.getString(key);<br>
+              }<br>
+              return null;<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 22.5.3 JTextPane属性</p>
+            <p>&nbsp;</p>
+            <p> 22.5.4 JTextPane类总结</p>
+            <p>&nbsp;</p>
+            <p> 22.6 AWT兼容</p>
+            <p>&nbsp;</p>
+            <p> 22.7 本章回顾</p>
+            <p>&nbsp; </p>
+            <p> <b></b>[<a href="index.html" target="_self">目录</a>][<a href="s21.htm">上一页</a>][<a href="s23.htm">下一页</a>](飒龙收藏/2002.5.18) 
+            </p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </td>
+  </tr>
+</tbody>
+</table>
+<script language="javascript">bottomprint()</script>
+</body>
+</html>

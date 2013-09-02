@@ -1,0 +1,962 @@
+<SCRIPT LANGUAGE="JavaScript" SRC="/-fs0/sys/pop-up.js"></SCRIPT>
+
+<SCRIPT LANGUAGE="JavaScript" SRC="/-fs0/sys/pop-up-all.js"></SCRIPT>
+
+<html>
+<head>
+<title>易都网--Java 2 图形设计卷Ⅱ：SWING</title>
+<LINK rel="stylesheet" href="../../../_public/javaa.css">
+<meta http-equiv="Content-Type" content="text/html; charset=GBK">
+<script language="JavaScript" src="../../../_public/javaa.js"></script>
+<meta name="keywords" content="Java,JSP,ASP,PHP,J2EE,EJB,JavaScript,C/C++,ASM,CSS,HTML,XML,网络安全,MySQL,ACCESS">
+</head>
+<body bgcolor="#FFFFFF">
+<table border=0 cellpadding=0 cellspacing=0 width="100%">
+  <tbody> 
+  <script language="javascript">print2()</script>
+  <tr> 
+    <td width="100%"> 
+      <table bgcolor=#EEEEEE border=0 cellpadding=3 cellspacing=0 width="100%">
+        <tbody> 
+        <tr> 
+          <td class=f1 id=thetd width="100%"> 
+            <p>[<a href="index.html" target="_self">目录</a>][<a href="s03.htm">上一页</a>][<a href="s05.htm">下一页</a>]</p>
+            <p align="center"><b>第4章 JComponent类</b></p>
+            <p> 　　JComponent类是所有Swing轻量组件的基类，因此，我们单独用一章对它进行讨论。JComponent对Swing的意义就如同java.awt.Component对AWT的意义一样，它们都是它们各自框架组件的基类。<br>
+              　　作为所有Swing轻量组件的基类，JComponent提供了大量的基本功能。要全面了解Swing，就必须知道JComponent类提供的功能，还必须知道如何使用JComponent类。</p>
+            <p> <b>4.1 JComponent类概览</b></p>
+            <p> 　　JComponent扩展java.awt.Container，而java.awt.Container又扩展java.awt.Component，因此，所有的Swing组件都是AWT容器。Component和Container类本身提供了大量的功能，因此，JComponent继承了大量的功能。本章（实际上本书）假设读者有AWT组件和容器的基本知识，这些基本知识在《Java2图形设计，卷Ⅰ：AWT》中用了大量的篇幅来介绍。<br>
+              　　因为JComponent为几乎所有的Swing组件提供下层构件，因此，它是一个很大的类，包括100多个public方法。JComponent为它的扩展提供了下面的功能：<br>
+              　　■边框。　　■自动滚动。<br>
+              　　■可访问性。　　■工具提示。<br>
+              　　■双缓存。　　■键击处理。<br>
+              　　■调试图形。　　■客户属性。</p>
+            <p> <b>4.1.1 边框</b></p>
+            <p> 　　任何JComponent的扩展都可以带边框。Swing提供了许多不同风格的边框，如雕刻边框、带标题边框和蚀刻边框。虽然一个组件只能有一个边框，但是边框是可以组合的。因此，从效果上来看，单个组件可有多个边框。图4-1示出了组合边框、带标题边框和定制边框。<br>
+              　　边框通常用来组织组件集，但在其他情况下也是很有用的。例如，图4-1示出的组合框可以作为一显示艺术品略图的图形程序的图片帧。通常，可操作的边框在绘图程序中用来移动和改变对象的大小，而且作为Swing的定制边框，这种边框实现起来也很容易。<br>
+              　　本章不详细介绍边框，有关边框的知识，请参见第5章“边框、图标和动作”。</p>
+            <p> <b>4.1.2 可访问性</b></p>
+            <p> 　　可访问性是使人人都能使用软件。例如，为视力不好的用户放大字体或为听力不好的用户显示带声音的标题。<br>
+              　　Swing的插入式界面模式体系结构通过允许把可选择的界面样式分配给一组组件来支持可访问性。图4-2所示的SwingSet样例应用程序使用一个定制的界面样式，它具有高反差、大字体的外观，为视力不好的用户提供了更好的可读性。<br>
+              　　除了Swing插入式界面模式外，使用一个可访问API和一组可访问工具也能支持可访问性。在第4.11节“支持可访问性”中介绍了可访问性。</p>
+            <p><b>4.1.3 双缓存</b></p>
+            <p>　　在更新组件(擦除然后重绘组件)时，会产生可察觉的闪烁。双缓存通过在屏外缓存区中更新组件，然后把屏外缓存区的相应部分拷贝到组件的屏上代表中来消除闪烁。<br>
+              　　所有的Swing轻量组件都继承了双缓存它们显示内容的能力。一个屏外缓存(由Swing的RepaintManager维护)常用于双缓存JComponent的扩展。<br>
+              　　图4-3示出了一个篮球图像的简单动画和含有可拖动的轻量组件的应用程序。<br>
+              　　除了为双缓存轻量组件使用屏外缓存外，开发人员还可以为拖动轻量组件或实现动画等其他目的而使用屏外缓存。 </p>
+            <p> 4.1.4 调试图形</p>
+            <p>&nbsp;</p>
+            <p> 4.1.5 自动滚动</p>
+            <p>&nbsp;</p>
+            <p> 4.1.6 工具提示</p>
+            <p>&nbsp;</p>
+            <p> 4.1.7 键击处理和客户属性</p>
+            <p>&nbsp;</p>
+            <p> 4.2 JComponent类结构</p>
+            <p>&nbsp;</p>
+            <p> 4.2.1 Swing组件是AWT容器</p>
+            <p align="center"><b>例4-1 作为容器使用的Swing按钮</b></p>
+            <hr size="1" noshade>
+            import javax.swing.*;<br>
+            import java.awt.*;
+            <p>public class ButtonAsContainer extends JApplet {<br>
+              public void init() {<br>
+              JButton b = new JButton(&quot;Swing Buttons Are Containers&quot;);</p>
+            <p> b.setLayout(new FlowLayout());<br>
+              b.add(new Button(&quot;AWT Button&quot;));<br>
+              b.add(new JButton(&quot;Swing Button&quot;));</p>
+            <p> getContentPane().add(b);<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 4.2.2 最小尺寸、最大尺寸和首选尺寸</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例4-2 为JComponent显式地设置首选大小</b></p>
+            <hr size="1" noshade>
+            import javax.swing.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class Test extends JApplet {<br>
+              JComboBox sizeCombo = new JComboBox(new Object[] {<br>
+              &quot;null&quot;,<br>
+              &quot;100 x 100&quot;<br>
+              });<br>
+              JList list = new JList(new Object[] {<br>
+              &quot;item 1&quot;,<br>
+              &quot;item 2&quot;,<br>
+              &quot;item 3&quot;,<br>
+              &quot;item 4&quot;,<br>
+              &quot;item 5&quot;,<br>
+              });<br>
+              public void init() {<br>
+              final Container contentPane = getContentPane();</p>
+            <p> list.setBorder(<br>
+              BorderFactory.createLineBorder(Color.black));</p>
+            <p> sizeCombo.setSelectedIndex(0);</p>
+            <p> contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(list);<br>
+              contentPane.add(new JLabel(&quot;preferred size for list:&quot;));<br>
+              contentPane.add(sizeCombo);</p>
+            <p> sizeCombo.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              int index = sizeCombo.getSelectedIndex();</p>
+            <p> if(index == 0)<br>
+              list.setPreferredSize(null);<br>
+              else<br>
+              list.setPreferredSize(<br>
+              new Dimension(100, 100));<br>
+              list.revalidate();<br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 4.3 绘制JComponent组件</p>
+            <p>&nbsp;</p>
+            <p> 4.3.1 Swing组件中的定制绘制</p>
+            <p>&nbsp;</p>
+            <p> 4.3.2 在AWT组件中重载绘制方法</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例4-3 为定制AWT组件而重载paint()</b></p>
+            <hr size="1" noshade>
+            import java.applet.Applet;<br>
+            import java.awt.*;
+            <p>public class TestApplet extends Applet {<br>
+              public void init() {<br>
+              ImageCanvas imageCanvas = new ImageCanvas(&quot;sphere.gif&quot;);<br>
+              //ImageCanvas imageCanvas = new ImageCanvas(<br>
+              add(imageCanvas);<br>
+              //setVisible(true);<br>
+              }<br>
+              }<br>
+              class ImageCanvas extends Canvas {<br>
+              Image image;</p>
+            <p> public ImageCanvas(String imageName) {<br>
+              image = Toolkit.getDefaultToolkit().getImage(imageName);</p>
+            <p> MediaTracker mt = new MediaTracker(this);<br>
+              try {<br>
+              mt.addImage(image, 0);<br>
+              mt.waitForID(0);<br>
+              }<br>
+              catch(InterruptedException ex) {<br>
+              ex.printStackTrace();<br>
+              }<br>
+              }<br>
+              public void paint(Graphics g) {<br>
+              g.drawImage(image, 0, 0, null);<br>
+              }<br>
+              public Dimension getPreferredSize() {<br>
+              return new Dimension(image.getWidth(null),<br>
+              image.getHeight(null));<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 4.3.3 在Swing组件中重载绘制方法</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例4-4 带有从JComponent派生的图像画布的小应用程序</b></p>
+            <hr size="1" noshade>
+            import javax.swing.*;<br>
+            import java.awt.*;
+            <p>public class TestApplet extends JApplet {<br>
+              public void init() {<br>
+              Container contentPane = getContentPane();<br>
+              ImageCanvas imagePanel = new ImageCanvas(<br>
+              &quot;sphere.gif&quot;,<br>
+              &quot;a blue sphere&quot;);<br>
+              imagePanel.setBorder(<br>
+              BorderFactory.createTitledBorder(&quot;ImageCanvas&quot;));</p>
+            <p> contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(imagePanel);<br>
+              }<br>
+              }<br>
+            </p>
+            <hr size="1" noshade>
+            <p align="center"><b>例4-5 为定制Swing组件而重载paintComponent()</b></p>
+            <hr size="1" noshade>
+            class ImageCanvas extends JPanel {<br>
+            ImageIcon icon;
+            <p> public ImageCanvas(String imageName, String description) {<br>
+              //icon = new ImageIcon(imageName, description);<br>
+              icon =new ImageIcon(this.getClass().getResource(imageName),description);<br>
+              }<br>
+              public void paintComponent(Graphics g) {<br>
+              Insets insets = getInsets();<br>
+              super.paintComponent(g);<br>
+              icon.paintIcon(this, g, insets.left, insets.top);<br>
+              }<br>
+              public Dimension getPreferredSize() {<br>
+              Insets insets = getInsets();<br>
+              return new Dimension(<br>
+              icon.getIconWidth() + insets.left + insets.right, <br>
+              icon.getIconHeight() + insets.top + insets.bottom);<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p>&nbsp; </p>
+            <p>4.3.4 paint、repaint和update方法</p>
+            <p>&nbsp;</p>
+            <p> 4.3.5 validate、invalidate和revalidate方法</p>
+            <p>&nbsp;</p>
+            <p> 4.3.6 不透明组件与透明组件的比较</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例4-6 不透明测试小应用程序</b></p>
+            <hr size="1" noshade>
+            public class OpaqueTest extends JApplet {<br>
+            public void init() {<br>
+            Container contentPane = getContentPane();<br>
+            RainPanel rainPanel = new RainPanel();
+            <p> ColoredPanel opaque = new ColoredPanel(),<br>
+              transparent = new ColoredPanel();</p>
+            <p> // JComponents are opaque by default, so the opaque<br>
+              // property only needs to be set for transparent<br>
+              transparent.setOpaque(false);</p>
+            <p> rainPanel.add(opaque);<br>
+              rainPanel.add(transparent);</p>
+            <p> contentPane.add(rainPanel, BorderLayout.CENTER);</p>
+            <p> }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p align="center"><b>例4-7 不容透明Swing组件</b></p>
+            <hr size="1" noshade>
+            import javax.swing.*;<br>
+            import java.awt.*;
+            <p>public class OpaqueTest extends JApplet {<br>
+              public void init() {<br>
+              Container contentPane = getContentPane();<br>
+              RainPanel rainPanel = new RainPanel();</p>
+            <p> ColoredPanel opaque = new ColoredPanel(),<br>
+              transparent = new ColoredPanel();</p>
+            <p> // JComponents are opaque by default, so the opaque<br>
+              // property only needs to be set for transparent<br>
+              transparent.setOpaque(false);</p>
+            <p> rainPanel.add(opaque);<br>
+              rainPanel.add(transparent);</p>
+            <p> contentPane.add(rainPanel, BorderLayout.CENTER);</p>
+            <p> System.out.println(opaque.isOpaque());<br>
+              System.out.println(transparent.isOpaque());<br>
+              }<br>
+              }<br>
+              class RainPanel extends JPanel {<br>
+              ImageIcon rain = new ImageIcon(this.getClass().getResource(&quot;rain.gif&quot;));<br>
+              private int rainw = rain.getIconWidth();<br>
+              private int rainh = rain.getIconHeight();</p>
+            <p> public void paintComponent(Graphics g) {<br>
+              Dimension size = getSize();</p>
+            <p> for(int row=0; row &lt; size.height; row += rainh)<br>
+              for(int col=0; col &lt; size.width; col += rainw)<br>
+              rain.paintIcon(this,g,col,row);<br>
+              }<br>
+              }<br>
+              class ColoredPanel extends JPanel {<br>
+              public void paintComponent(Graphics g) {<br>
+              super.paintComponent(g);</p>
+            <p> Dimension size = getSize();</p>
+            <p> g.setColor(Color.black);<br>
+              g.drawRect(0,0,size.width-1,size.height-1);</p>
+            <p> g.setColor(Color.red);<br>
+              g.fillRect(size.width/2-25,size.height/2-25,50,50);<br>
+              }<br>
+              public Dimension getPreferredSize() {<br>
+              return new Dimension(100,100);<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p>&nbsp;</p>
+            <p> 4.3.7 立即绘制Swing组件</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例4-8 在事件处理方法中使用paintImmediately()</b></p>
+            <hr size="1" noshade>
+            import javax.swing.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class TestApplet extends JApplet {<br>
+              public void init() {<br>
+              Container contentPane = getContentPane();<br>
+              final JPanel panel = new JPanel();<br>
+              JButton button = new JButton(&quot;repaint&quot;);</p>
+            <p> panel.setBackground(Color.blue);<br>
+              panel.setPreferredSize(new Dimension(100,100));</p>
+            <p> contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(button);<br>
+              contentPane.add(panel);</p>
+            <p> button.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              Color c = panel.getBackground();<br>
+              Dimension sz = panel.getSize();</p>
+            <p> panel.setBackground(<br>
+              c == Color.blue ? Color.red : Color.blue);</p>
+            <p> panel.paintImmediately(<br>
+              0,0,sz.width,sz.height);</p>
+            <p> // for illustrative purposes only<br>
+              try {<br>
+              Thread.currentThread().sleep(5000);<br>
+              }<br>
+              catch(InterruptedException ex) {<br>
+              ex.printStackTrace();<br>
+              }<br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 4.4 双缓存</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例4-9 双缓存测试小应用程序</b></p>
+            <hr size="1" noshade>
+            import javax.swing.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class DoubleBufferingTest extends JApplet {<br>
+              public void init() {<br>
+              final JSlider slider = <br>
+              new JSlider(JSlider.HORIZONTAL,0,100,50);</p>
+            <p> final Container contentPane = getContentPane();<br>
+              JCheckBox dbcheckBox = new JCheckBox(&quot;double buffered&quot;);<br>
+              JPanel controlPanel = new JPanel();</p>
+            <p> dbcheckBox.setSelected(true);<br>
+              controlPanel.add(dbcheckBox);</p>
+            <p> slider.setPaintTicks(true);<br>
+              slider.setMinorTickSpacing(5);<br>
+              slider.setMajorTickSpacing(15);</p>
+            <p> contentPane.add(controlPanel, &quot;North&quot;);<br>
+              contentPane.add(slider, &quot;Center&quot;);</p>
+            <p> dbcheckBox.addItemListener(new ItemListener() {<br>
+              public void itemStateChanged(ItemEvent event) {</p>
+            <p> if(event.getStateChange() == ItemEvent.SELECTED) {<br>
+              slider.setDoubleBuffered(true);<br>
+              }<br>
+              else {<br>
+              slider.setDoubleBuffered(false);<br>
+              }<br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p align="center"><b>例4-10 为组件的容器禁用双缓存</b></p>
+            <hr size="1" noshade>
+            import javax.swing.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class DoubleBufferingTest extends JApplet {<br>
+              public void init() {<br>
+              final Container contentPane = getContentPane();</p>
+            <p> JSlider slider = new JSlider(JSlider.HORIZONTAL,0,100,50);<br>
+              JCheckBox dbcheckBox = new JCheckBox(&quot;double buffered&quot;);<br>
+              JPanel controlPanel = new JPanel();</p>
+            <p> dbcheckBox.setSelected(true);<br>
+              controlPanel.add(dbcheckBox);</p>
+            <p> slider.setPaintTicks(true);<br>
+              slider.setMinorTickSpacing(5);<br>
+              slider.setMajorTickSpacing(15);</p>
+            <p> contentPane.add(controlPanel, &quot;North&quot;);<br>
+              contentPane.add(slider, &quot;Center&quot;);</p>
+            <p> dbcheckBox.addItemListener(new ItemListener() {<br>
+              public void itemStateChanged(ItemEvent event) {<br>
+              JComponent cp = (JComponent)getContentPane();<br>
+              JComponent rp = (JComponent)getRootPane();</p>
+            <p> if(event.getStateChange() == ItemEvent.SELECTED) {<br>
+              rp.setDoubleBuffered(true);<br>
+              cp.setDoubleBuffered(true);<br>
+              }<br>
+              else {<br>
+              rp.setDoubleBuffered(false);<br>
+              cp.setDoubleBuffered(false);<br>
+              }<br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p align="center"><b>例4-11 调用RepaintManager.getDoubleBufferingEnabled()</b></p>
+            <hr size="1" noshade>
+            import javax.swing.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class DoubleBufferingTest extends JApplet {<br>
+              public void init() {<br>
+              Container contentPane = getContentPane();<br>
+              JCheckBox dbcheckBox = new JCheckBox(&quot;double buffered&quot;);<br>
+              JPanel controlPanel = new JPanel();<br>
+              final JSlider slider = <br>
+              new JSlider(JSlider.HORIZONTAL,0,100,50);</p>
+            <p> dbcheckBox.setSelected(true);<br>
+              controlPanel.add(dbcheckBox);</p>
+            <p> slider.setPaintTicks(true);<br>
+              slider.setMinorTickSpacing(5);<br>
+              slider.setMajorTickSpacing(15);</p>
+            <p> contentPane.add(controlPanel, &quot;North&quot;);<br>
+              contentPane.add(slider, &quot;Center&quot;);</p>
+            <p> dbcheckBox.addItemListener(new ItemListener() {<br>
+              public void itemStateChanged(ItemEvent event) {<br>
+              RepaintManager rm =<br>
+              RepaintManager.currentManager(slider);</p>
+            <p> if(event.getStateChange() == ItemEvent.SELECTED) {<br>
+              rm.setDoubleBufferingEnabled(true);<br>
+              }<br>
+              else {<br>
+              rm.setDoubleBufferingEnabled(false);<br>
+              }<br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p align="center"><b>例4-12 动画测试小应用程序</b></p>
+            <hr size="1" noshade>
+            <hr size="1" noshade>
+            <p align="center"><b>例4-13 AnimationPane类清单</b></p>
+            <hr size="1" noshade>
+            <hr size="1" noshade>
+            <p>&nbsp;</p>
+            <p>&nbsp;</p>
+            <p>&nbsp;</p>
+            <p>&nbsp;</p>
+            <p> 4.5 调试图形</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例4-14 为调试图形使用Log(日志)和Flash(闪烁)选项</b></p>
+            <hr size="1" noshade>
+            import javax.swing.*;<br>
+            import javax.swing.event.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import java.io.*;
+            <p>public class DebugGraphicsTest extends JApplet {<br>
+              private JSlider slider = new JSlider();<br>
+              boolean logIsOn = false, flashIsOn = false;</p>
+            <p> public void init() {<br>
+              Container cp = getContentPane();<br>
+              RepaintManager rm = <br>
+              RepaintManager.currentManager(slider);</p>
+            <p> rm.setDoubleBufferingEnabled(false);</p>
+            <p> cp.setLayout(new BoxLayout(cp, BoxLayout.Y_AXIS));<br>
+              cp.add(slider);<br>
+              cp.add(makeControlPanel());</p>
+            <p> slider.setEnabled(false);<br>
+              }<br>
+              private JPanel makeControlPanel() {<br>
+              JPanel controls = new JPanel(),<br>
+              checkBoxes = new JPanel();<br>
+              JCheckBox logCheckBox = new JCheckBox(&quot;Log&quot;),<br>
+              flashCheckBox = new JCheckBox(&quot;Flash&quot;);<br>
+              JButton repaintButton = new JButton(&quot;repaint&quot;);</p>
+            <p> final JSlider flashTimeSlider = <br>
+              new JSlider(JSlider.HORIZONTAL,0,250,100);</p>
+            <p> flashTimeSlider.setPaintTicks(true);<br>
+              flashTimeSlider.setMajorTickSpacing(10);<br>
+              flashTimeSlider.setMinorTickSpacing(5);</p>
+            <p> controls.setLayout(new BoxLayout(controls, <br>
+              BoxLayout.X_AXIS));<br>
+              checkBoxes.setLayout(new BoxLayout(checkBoxes, <br>
+              BoxLayout.Y_AXIS));</p>
+            <p> flashTimeSlider.setBorder(<br>
+              BorderFactory.createTitledBorder(&quot;Flash Time&quot;));<br>
+              controls.setBorder(<br>
+              BorderFactory.createTitledBorder(&quot;Controls&quot;));</p>
+            <p> checkBoxes.add(logCheckBox);<br>
+              checkBoxes.add(flashCheckBox);</p>
+            <p> controls.add(repaintButton);<br>
+              controls.add(flashTimeSlider);<br>
+              controls.add(checkBoxes);</p>
+            <p> repaintButton.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              int opts = 0;</p>
+            <p> if(logIsOn) opts |= DebugGraphics.LOG_OPTION;<br>
+              if(flashIsOn) opts |= DebugGraphics.FLASH_OPTION;</p>
+            <p> slider.setDebugGraphicsOptions(opts);<br>
+              repaint();<br>
+              }<br>
+              });</p>
+            <p> flashTimeSlider.addChangeListener(new ChangeListener() {<br>
+              public void stateChanged(ChangeEvent e) {<br>
+              DebugGraphics.setFlashTime(<br>
+              flashTimeSlider.getValue());<br>
+              }<br>
+              });</p>
+            <p> flashCheckBox.addItemListener(new ItemListener() {<br>
+              public void itemStateChanged(ItemEvent e) {<br>
+              AbstractButton b = (AbstractButton)e.getSource();</p>
+            <p> if(b.isSelected()) flashIsOn = true;<br>
+              else flashIsOn = false;<br>
+              }<br>
+              });<br>
+              logCheckBox.addItemListener(new ItemListener() {<br>
+              public void itemStateChanged(ItemEvent e) {<br>
+              AbstractButton b = (AbstractButton)e.getSource();</p>
+            <p> if(b.isSelected()) logIsOn = true;<br>
+              else logIsOn = false;<br>
+              }<br>
+              });</p>
+            <p> return controls;<br>
+              }<br>
+              public static void main(String args[]) {<br>
+              final JFrame f = new JFrame();<br>
+              JApplet applet = new DebugGraphicsTest();</p>
+            <p> applet.init();<br>
+              f.setContentPane(applet.getContentPane());</p>
+            <p> f.setBounds(100,100,300,175);<br>
+              f.setTitle(&quot;DebugGraphicsTest&quot;);<br>
+              f.setVisible(true);</p>
+            <p> f.addWindowListener(new WindowAdapter() {<br>
+              public void windowClosing(WindowEvent event) {<br>
+              f.dispose();<br>
+              System.exit(0);<br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 4.6 自动滚动</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例4-15 包裹在滚动窗格中的一个列表</b></p>
+            <hr size="1" noshade>
+            import javax.swing.*;<br>
+            import java.awt.*;
+            <p>public class TestApplet extends JApplet {<br>
+              public void init() {<br>
+              String[] items = { &quot;one&quot;, &quot;two&quot;, &quot;three&quot;, 
+              <br>
+              &quot;four&quot;, &quot;five&quot;, &quot;six&quot; };</p>
+            <p> Container contentPane = getContentPane();<br>
+              JList list = new JList(items);</p>
+            <p> list.setVisibleRowCount(3);</p>
+            <p> contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(new JScrollPane(list));<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p align="center"><b>例4-16 自动滚动测试小应用程序</b></p>
+            <hr size="1" noshade>
+            <hr size="1" noshade>
+            <p>&nbsp;</p>
+            <p align="center"><b>例4-17 AutoscrollViewport列表</b></p>
+            <hr size="1" noshade>
+            import javax.swing.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>class AutoscrollViewport extends JViewport {<br>
+              Point scrollTo = new Point(), last = new Point();<br>
+              boolean manualDragUnderway = false;<br>
+              final int increment;</p>
+            <p> public AutoscrollViewport(Component component, int inc) {<br>
+              this.increment = inc;</p>
+            <p> setView(component);</p>
+            <p> setAutoscrolls(true);<br>
+              setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));</p>
+            <p> addMouseListener(new MouseAdapter() {<br>
+              public void mousePressed(MouseEvent e) {<br>
+              last.x = e.getPoint().x;<br>
+              last.y = e.getPoint().y;<br>
+              manualDragUnderway = true;<br>
+              }<br>
+              }); <br>
+              addMouseMotionListener(new MouseMotionAdapter() {<br>
+              public void mouseDragged(MouseEvent e) {<br>
+              Point drag = e.getPoint();<br>
+              Point viewPos = getViewPosition();<br>
+              Point offset = new Point(drag.x - last.x,<br>
+              drag.y - last.y);<br>
+              last.x = drag.x;<br>
+              last.y = drag.y;</p>
+            <p> if(contains(drag)) {<br>
+              if(manualDragUnderway) {<br>
+              scrollTo.x = viewPos.x - offset.x;<br>
+              scrollTo.y = viewPos.y - offset.y;<br>
+              setViewPosition(scrollTo);<br>
+              }<br>
+              }<br>
+              else { // autoscrolling ...<br>
+              Rectangle bounds = getBounds();</p>
+            <p> manualDragUnderway = false;</p>
+            <p> if(drag.x &gt; bounds.x + bounds.width) {<br>
+              // scroll right<br>
+              viewPos.x -= increment;<br>
+              setViewPosition(viewPos);<br>
+              }<br>
+              if(drag.x &lt; 0) {<br>
+              // scroll left<br>
+              viewPos.x += increment;<br>
+              setViewPosition(viewPos);<br>
+              }<br>
+              if(drag.y &gt; bounds.y + bounds.height) {<br>
+              // scroll down<br>
+              viewPos.y -= increment;<br>
+              setViewPosition(viewPos);<br>
+              }<br>
+              if(drag.y &lt; 0) {<br>
+              // scroll up<br>
+              viewPos.y += increment;<br>
+              setViewPosition(viewPos);<br>
+              }<br>
+              }<br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 4.7 工具提示</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例4-18 为一个按钮设置工具提示文本</b></p>
+            <hr size="1" noshade>
+            import javax.swing.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class ToolTipTest extends JApplet {<br>
+              public void init() {<br>
+              Container contentPane = getContentPane();<br>
+              JButton button = new JButton(&quot;I've got a tooltip&quot;);</p>
+            <p> button.setMnemonic(KeyEvent.VK_G);</p>
+            <p> button.setToolTipText(<br>
+              &quot;rather lengthy tooltip text for button&quot;);</p>
+            <p> contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(button);<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 4.7.1 基于鼠标位置的工具提示</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例4-19 根据鼠标位置来显示不同的工具提示</b></p>
+            <hr size="1" noshade>
+            import javax.swing.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class ToolTipsBasedOnMousePosition extends JApplet {<br>
+              public void init() {<br>
+              Container contentPane = getContentPane();<br>
+              <br>
+              //ImageMap map = new ImageMap(&quot;tiger.gif&quot;);<br>
+              Icon icon = new ImageIcon(this.getClass().getResource(&quot;tiger.gif&quot;));<br>
+              ImageMap map = new ImageMap(icon);<br>
+              <br>
+              contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(map);<br>
+              }<br>
+              }<br>
+              class ImageMap extends JLabel {<br>
+              private Rectangle teeth= new Rectangle(62,203,80,55),<br>
+              nose = new Rectangle(37,164,130,30),<br>
+              ear = new Rectangle(228,10,65,55),<br>
+              rEye = new Rectangle(137,103,20,17),<br>
+              lEye = new Rectangle(65,97,16,15);</p>
+            <p> //public ImageMap(String imageName) {<br>
+              public ImageMap(Icon imageName) {<br>
+              //super(new ImageIcon(imageName));<br>
+              super(imageName);<br>
+              setToolTipText(&quot;tiger!&quot;);<br>
+              }<br>
+              public String getToolTipText(MouseEvent e) {<br>
+              Point p = e.getPoint();<br>
+              String s = null;</p>
+            <p> if(teeth.contains(p)) s = &quot;ooooh, big teeth!&quot;;<br>
+              else if(nose.contains(p)) s = &quot;keen sense of smell&quot;;<br>
+              else if(ear.contains(p)) s = &quot;acute hearing&quot;;<br>
+              else if(rEye.contains(p) || lEye.contains(p)) <br>
+              s = &quot;excellent vision&quot;;</p>
+            <p> return s == null ? getToolTipText() : s;<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 4.7.2 工具提示的首选位置</p>
+            <p>&nbsp;</p>
+            <p> 4.7.3 定制工具提示的行为</p>
+            <p>&nbsp;</p>
+            <p> 4.7.4 定制工具提示的界面样式</p>
+            <p>&nbsp;</p>
+            <p> 4.8 键击处理</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例4-20 处理嵌套键击</b></p>
+            <hr size="1" noshade>
+            import javax.swing.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class KeystrokeTest extends JApplet {<br>
+              private JButton button = new JButton(&quot;button&quot;);</p>
+            <p> public void init() {<br>
+              Container contentPane = getContentPane();<br>
+              JPanel panel = new JPanel();<br>
+              JCheckBox checkbox = new JCheckBox(&quot;checkbox&quot;);<br>
+              JButton southButton = new JButton(&quot;south button&quot;);<br>
+              Listener listener = new Listener();</p>
+            <p> panel.setBorder(<br>
+              BorderFactory.createTitledBorder(<br>
+              (&quot;Ancestor of button and checkbox&quot;)));</p>
+            <p> checkbox.registerKeyboardAction(<br>
+              listener,<br>
+              KeyStroke.getKeyStroke(KeyEvent.VK_F,0,false),<br>
+              JComponent.WHEN_FOCUSED);</p>
+            <p> panel.registerKeyboardAction(<br>
+              listener,<br>
+              KeyStroke.getKeyStroke(KeyEvent.VK_A, <br>
+              InputEvent.ALT_MASK, false),<br>
+              JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);</p>
+            <p> southButton.registerKeyboardAction(<br>
+              listener,<br>
+              KeyStroke.getKeyStroke(KeyEvent.VK_W, 0, true),<br>
+              JComponent.WHEN_IN_FOCUSED_WINDOW);</p>
+            <p> panel.add(button);<br>
+              panel.add(checkbox);</p>
+            <p> contentPane.add(panel, &quot;Center&quot;);<br>
+              contentPane.add(southButton, &quot;South&quot;);<br>
+              }<br>
+              }<br>
+              class Listener implements ActionListener {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              Object src = e.getSource();<br>
+              String cname = src.getClass().getName();</p>
+            <p> if(src instanceof JCheckBox) {<br>
+              System.out.print(&quot;'f' key PRESSED when checkbox&quot;);<br>
+              System.out.println(&quot; had focus&quot;);<br>
+              }<br>
+              else if(src instanceof JPanel) {<br>
+              System.out.print(&quot;'ALT-a' key PRESSED when ancestor&quot;);<br>
+              System.out.println(&quot; of titled panel had focus&quot;);<br>
+              }<br>
+              else if(src instanceof JButton) {<br>
+              System.out.print(&quot;'w' key RELEASED when any&quot;);<br>
+              System.out.println(&quot; component in window had focus&quot;);<br>
+              }<br>
+              System.out.println(&quot;Source: &quot; + cname);<br>
+              System.out.println();<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 4.9 客户属性</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例4-21 用客户属性把一个动态目标分配给一个按钮</b></p>
+            <hr size="1" noshade>
+            import javax.swing.*;<br>
+            import java.util.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import java.beans.*;
+            <p>public class ClientPropertiesTest extends JApplet {<br>
+              JButton button = new JButton(&quot;toggle target color&quot;);<br>
+              JComboBox targetCombo = new JComboBox();<br>
+              JPanel[] targets = { new JPanel(),<br>
+              new JPanel(),<br>
+              new JPanel() };<br>
+              public void init() {<br>
+              Container contentPane = getContentPane();<br>
+              Dimension targetPreferredSize = new Dimension(100,100);<br>
+              JPanel targetPanel = new JPanel();</p>
+            <p> for(int i=0; i &lt; targets.length; ++i) {<br>
+              targets[i].setBackground(Color.blue);<br>
+              targets[i].setPreferredSize(targetPreferredSize);<br>
+              targetPanel.add(targets[i]);</p>
+            <p> }<br>
+              targetCombo.addItem(&quot;left&quot;);<br>
+              targetCombo.addItem(&quot;center&quot;);<br>
+              targetCombo.addItem(&quot;right&quot;);</p>
+            <p> contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(button);<br>
+              contentPane.add(targetCombo);<br>
+              contentPane.add(targetPanel);</p>
+            <p> button.putClientProperty(&quot;target&quot;, targets[0]);</p>
+            <p> button.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              Component c = <br>
+              (Component)button.getClientProperty(&quot;target&quot;);</p>
+            <p> if(c != null) {<br>
+              Color bg = c.getBackground();</p>
+            <p> c.setBackground(bg == Color.blue ?<br>
+              Color.red : Color.blue);</p>
+            <p> c.repaint();<br>
+              }<br>
+              }<br>
+              });<br>
+              targetCombo.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              button.putClientProperty(<br>
+              &quot;target&quot;, <br>
+              targets[targetCombo.getSelectedIndex()]);<br>
+              }<br>
+              });<br>
+              button.addPropertyChangeListener(<br>
+              new PropertyChangeListener() {<br>
+              public void propertyChange(PropertyChangeEvent e) {<br>
+              if(e.getPropertyName().equals(&quot;target&quot;)) {<br>
+              showStatus(<br>
+              (String)targetCombo.getSelectedItem() + <br>
+              &quot; panel set as target&quot;);<br>
+              }<br>
+              }<br>
+              });<br>
+              }<br>
+              public static void main(String args[]) {<br>
+              final JFrame f = new JFrame();<br>
+              JApplet applet = new ClientPropertiesTest();</p>
+            <p> applet.init();</p>
+            <p> f.setContentPane(applet.getContentPane());<br>
+              f.setBounds(100,100,300,250);<br>
+              f.setTitle(&quot;ClientPropertiesTest&quot;);<br>
+              f.setVisible(true);</p>
+            <p> f.addWindowListener(new WindowAdapter() {<br>
+              public void windowClosing(WindowEvent e) {<br>
+              f.dispose();<br>
+              System.exit(0);<br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 4.10 焦点管理</p>
+            <p>&nbsp;</p>
+            <p> 4.10.1 JComponent的焦点属性</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例4-22 为Swing组件指定焦点属性</b></p>
+            <hr size="1" noshade>
+            import javax.swing.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class Test extends JApplet {<br>
+              private JButton button_1 = new NotFocusTraversableButton(),<br>
+              button_2 = new ButtonThatManagesFocus(),<br>
+              button_3 = new JButton(&quot;regular button&quot;),<br>
+              button_4 = new JButton(&quot;regular button&quot;),<br>
+              button_5 = new JButton(&quot;request focus disabled&quot;),<br>
+              button_6 = new JButton(<br>
+              &quot;next focusable component set to Manages Focus button&quot;);</p>
+            <p> public void init() {<br>
+              Container contentPane = getContentPane();<br>
+              FocusCycleRootPanel panel = new FocusCycleRootPanel();</p>
+            <p> button_5.setRequestFocusEnabled(false);<br>
+              button_6.setNextFocusableComponent(button_2);</p>
+            <p> panel.add(button_3);<br>
+              panel.add(button_4);<br>
+              panel.add(button_5);</p>
+            <p> contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(button_1);<br>
+              contentPane.add(button_2);<br>
+              contentPane.add(panel);<br>
+              contentPane.add(button_6);<br>
+              }<br>
+              }<br>
+              class ButtonThatManagesFocus extends JButton {<br>
+              public ButtonThatManagesFocus() {<br>
+              super(&quot;Manages Focus&quot;); <br>
+              }<br>
+              public boolean isManagingFocus() {<br>
+              return true;<br>
+              }<br>
+              public void processComponentKeyEvent(KeyEvent e) {<br>
+              System.out.println(e);<br>
+              }<br>
+              }<br>
+              class NotFocusTraversableButton extends JButton {<br>
+              public NotFocusTraversableButton() {<br>
+              super(&quot;Not Focus Traversable&quot;); <br>
+              }<br>
+              public boolean isFocusTraversable() {<br>
+              return false;<br>
+              }<br>
+              }<br>
+              class FocusCycleRootPanel extends JPanel {<br>
+              public FocusCycleRootPanel() {<br>
+              setBorder(BorderFactory.createTitledBorder(<br>
+              &quot;FocusCycleRoot Panel&quot;));<br>
+              }<br>
+              public boolean isFocusCycleRoot() {<br>
+              return true;<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 4.10.2 焦点管理器</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例4-23 实现一个定制的焦点管理器</b></p>
+            <hr size="1" noshade>
+            import javax.swing.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class Test extends JApplet {<br>
+              private JButton button_1 = new JButton(&quot;button one&quot;),<br>
+              button_2 = new JButton(&quot;button two&quot;),<br>
+              button_3 = new JButton(&quot;button three&quot;),<br>
+              button_4 = new JButton(&quot;button four&quot;),<br>
+              button_5 = new JButton(&quot;button five&quot;),<br>
+              button_6 = new JButton(&quot;button six&quot;);</p>
+            <p> public void init() {<br>
+              Container contentPane = getContentPane();</p>
+            <p> javax.swing.FocusManager.setCurrentManager(<br>
+              new CustomFocusManager());</p>
+            <p> contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(button_1);<br>
+              contentPane.add(button_2);<br>
+              contentPane.add(button_3);<br>
+              contentPane.add(button_4);<br>
+              contentPane.add(button_5);<br>
+              contentPane.add(button_6);<br>
+              }<br>
+              }<br>
+              class CustomFocusManager extends DefaultFocusManager {<br>
+              public boolean compareTabOrder(Component a, Component b) {<br>
+              Point location_a = a.getLocation(),<br>
+              location_b = b.getLocation();</p>
+            <p> int ax = location_a.x, ay = location_a.y;<br>
+              int bx = location_b.x, by = location_b.y;</p>
+            <p> if(Math.abs(ay - by) &lt; 10) {<br>
+              return (bx &lt; ax);<br>
+              }<br>
+              return (ay &gt; by); <br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 4.11 支持可访问性</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例4-24 获得可访问性信息</b></p>
+            <hr size="1" noshade>
+            import javax.swing.*;<br>
+            import javax.accessibility.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class Test extends JApplet {<br>
+              public void init() {<br>
+              Container contentPane = getContentPane();<br>
+              JLabel label = new JLabel(&quot;First Name:&quot;);<br>
+              JButton showButton = new JButton(<br>
+              &quot;show accessible information&quot;);</p>
+            <p> final JTextField field = new JTextField(15);</p>
+            <p> AccessibleContext fieldContext = <br>
+              field.getAccessibleContext();</p>
+            <p> fieldContext.setAccessibleName(&quot;First Name&quot;);<br>
+              fieldContext.setAccessibleDescription(<br>
+              &quot;Enter your first name&quot;);</p>
+            <p> contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(showButton);<br>
+              contentPane.add(label);<br>
+              contentPane.add(field);</p>
+            <p> showButton.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              AccessibleContext context;<br>
+              AccessibleRole role;</p>
+            <p> context = field.getAccessibleContext();<br>
+              role = context.getAccessibleRole();</p>
+            <p> System.out.print(&quot;Accessible Role: &quot;);<br>
+              System.out.println(<br>
+              context.getAccessibleRole());</p>
+            <p> System.out.print(&quot;Accessible Description: &quot;);<br>
+              System.out.println(<br>
+              context.getAccessibleDescription());</p>
+            <p> System.out.print(&quot;Accessible Name: &quot;);<br>
+              System.out.println(<br>
+              context.getAccessibleName());<br>
+              <br>
+              }<br>
+              });</p>
+            <p> }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 4.12 本章回顾</p>
+            <p>&nbsp;</p>
+            <p>[<a href="index.html" target="_self">目录</a>][<a href="s03.htm">上一页</a>][<a href="s05.htm">下一页</a>](飒龙收藏/2002.5.18) 
+            </p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </td>
+  </tr>
+</tbody>
+</table>
+<script language="javascript">bottomprint()</script>
+</body>
+</html>

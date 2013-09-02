@@ -1,0 +1,678 @@
+<SCRIPT LANGUAGE="JavaScript" SRC="/-fs0/sys/pop-up.js"></SCRIPT>
+
+<SCRIPT LANGUAGE="JavaScript" SRC="/-fs0/sys/pop-up-all.js"></SCRIPT>
+
+<html>
+<head>
+<title>易都网--Java 2 图形设计卷Ⅱ：SWING</title>
+<LINK rel="stylesheet" href="../../../_public/javaa.css">
+<meta http-equiv="Content-Type" content="text/html; charset=GBK">
+<script language="JavaScript" src="../../../_public/javaa.js"></script>
+<meta name="keywords" content="Java,JSP,ASP,PHP,J2EE,EJB,JavaScript,C/C++,ASM,CSS,HTML,XML,网络安全,MySQL,ACCESS">
+</head>
+<body bgcolor="#FFFFFF">
+<table border=0 cellpadding=0 cellspacing=0 width="100%">
+  <tbody> 
+  <script language="javascript">print2()</script>
+  <tr> 
+    <td width="100%"> 
+      <table bgcolor=#EEEEEE border=0 cellpadding=3 cellspacing=0 width="100%">
+        <tbody> 
+        <tr> 
+          <td class=f1 id=thetd width="100%"> 
+            <p>[<a href="index.html" target="_self">目录</a>][<a href="s22.htm">上一页</a>][下一页]</p>
+            <p align="center"><b>第23章 定制文本组件</b></p>
+            <p align="left">　　Swing文本建立在由javax.swing.text包的类和接口提供的一个复杂的下层构件之上。一般使用Swing文本组件(在前两章中介绍)不要求对Swing文本包有很深的了解。但如果要定制文本组件，则要对javax.swing.text包有一个基本的掌握。本章提供了定制通用任务的例子。如彩色文本、设置字符和段落属性、实现定制视图等。</p>
+            <p> <b>23.1 概览</b></p>
+            <p>　　与其他Swing组件一样，文本组件由一个模型(Document接口的一个实现)和一个UI代表（javax.swing.plaf.basic.BasicTextUI类的一个扩展）组成。文本组件还使用一个编辑器工具包(EditorKit类的一个扩展）和一个视图(View类的一个扩展)。图23-1示出了一个类图，这个类图说明了Swing文本域、这个域模型、UI代表、编辑器工具包和视图之间的静态关系(注：23.4节“视图”讨论了视图，所有的文本组件都有一个或多个视图)。其他的Swing文本组件有类似的类图。</p>
+            <p> <b>23.2 属性集和风格常量</b></p>
+            <p align="center"><b>例23-1 使用属性集</b> </p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;<br>
+            import javax.swing.text.*;<br>
+            import java.util.*;<br>
+            import java.io.FileReader;
+            <p>public class Test extends JFrame {<br>
+              private JTextPane textPane = new JTextPane();<br>
+              private StyledDocument document = <br>
+              (StyledDocument)textPane.getDocument();</p>
+            <p> public Test() {<br>
+              Container contentPane = getContentPane();<br>
+              readFile(&quot;text.txt&quot;);<br>
+              setAttributes();</p>
+            <p> textPane.setFont(new Font(&quot;Dialog&quot;, Font.PLAIN, 18));<br>
+              contentPane.add(new JScrollPane(textPane), <br>
+              BorderLayout.CENTER);<br>
+              }<br>
+              private void setAttributes() {<br>
+              SimpleAttributeSet attributes = new SimpleAttributeSet();</p>
+            <p> StyleConstants.setForeground(attributes, Color.blue);<br>
+              StyleConstants.setUnderline(attributes, true);</p>
+            <p> document.setCharacterAttributes(5,9,attributes,false);</p>
+            <p> StyleConstants.setForeground(attributes, Color.red);<br>
+              StyleConstants.setStrikeThrough(attributes, false);</p>
+            <p> document.setCharacterAttributes(15,9,attributes,true);<br>
+              }<br>
+              private void readFile(String filename) {<br>
+              EditorKit kit = textPane.getEditorKit();<br>
+              try {<br>
+              kit.read(new FileReader(filename), document, 0);<br>
+              }<br>
+              catch(Exception ex) {<br>
+              ex.printStackTrace();<br>
+              }<br>
+              }<br>
+              public static void main(String args[]) {<br>
+              GJApp.launch(new Test(), <br>
+              &quot;Setting Attributes&quot;,300,300,450,300);<br>
+              }<br>
+              }<br>
+              class GJApp extends WindowAdapter {<br>
+              static private JPanel statusArea = new JPanel();<br>
+              static private JLabel status = new JLabel(&quot; &quot;);<br>
+              static private ResourceBundle resources;</p>
+            <p> static {<br>
+              resources = ResourceBundle.getBundle(<br>
+              &quot;GJApp&quot;, Locale.getDefault());<br>
+              };</p>
+            <p> private GJApp() {}<br>
+              <br>
+              public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h) {<br>
+              f.setTitle(title);<br>
+              f.setBounds(x,y,w,h);<br>
+              f.setVisible(true);</p>
+            <p> statusArea.setBorder(BorderFactory.createEtchedBorder());<br>
+              statusArea.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));<br>
+              statusArea.add(status);<br>
+              status.setHorizontalAlignment(JLabel.LEFT);</p>
+            <p> f.setDefaultCloseOperation(<br>
+              WindowConstants.DISPOSE_ON_CLOSE);</p>
+            <p> f.addWindowListener(new WindowAdapter() {<br>
+              public void windowClosed(WindowEvent e) {<br>
+              System.exit(0);<br>
+              }<br>
+              });<br>
+              }<br>
+              static public JPanel getStatusArea() {<br>
+              return statusArea;<br>
+              }<br>
+              static public void showStatus(String s) {<br>
+              status.setText(s);<br>
+              }<br>
+              static Object getResource(String key) {<br>
+              if(resources != null) {<br>
+              return resources.getString(key);<br>
+              }<br>
+              return null;<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p>&nbsp; </p>
+            <p> 23.3 定制动作</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例23-2 实现定制动作</b></p>
+            <hr noshade size="1">
+            import java.io.File;<br>
+            import javax.swing.*;<br>
+            import javax.swing.text.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import java.util.*;<br>
+            import java.io.FileReader;
+            <p>public class Test extends JFrame {<br>
+              private JTextPane textPane = new JTextPane();<br>
+              private StyledDocument document = <br>
+              (StyledDocument)textPane.getDocument();<br>
+              private StyledEditorKit kit = <br>
+              (StyledEditorKit)textPane.getEditorKit();<br>
+              private JColorChooser chooser = new JColorChooser();<br>
+              private int CharacterMode = 0, ParagraphMode = 1;</p>
+            <p> public Test() {<br>
+              Container contentPane = getContentPane();<br>
+              readFile(&quot;text.txt&quot;);</p>
+            <p> textPane.setFont(new Font(&quot;Dialog&quot;, Font.PLAIN, 18));</p>
+            <p> contentPane.add(new JScrollPane(textPane), <br>
+              BorderLayout.CENTER);</p>
+            <p> setJMenuBar(createMenuBar());<br>
+              }<br>
+              private JMenuBar createMenuBar() {<br>
+              JMenuBar menuBar = new JMenuBar();<br>
+              JMenu editMenu = new JMenu(&quot;Edit&quot;);</p>
+            <p> editMenu.add(new ForegroundFromChooserAction(<br>
+              &quot;Character Foreground Color ... &quot;,<br>
+              CharacterMode));</p>
+            <p> editMenu.add(new ForegroundFromChooserAction(<br>
+              &quot;Paragraph Foreground Color ... &quot;,<br>
+              ParagraphMode));</p>
+            <p> menuBar.add(editMenu);<br>
+              return menuBar;<br>
+              }<br>
+              private void readFile(String filename) {<br>
+              try {<br>
+              kit.read(new FileReader(filename), document, 0);<br>
+              }<br>
+              catch(Exception ex) {<br>
+              ex.printStackTrace();<br>
+              }<br>
+              }<br>
+              public static void main(String args[]) {<br>
+              GJApp.launch(new Test(), <br>
+              &quot;Custom Actions&quot;,300,300,650,275);<br>
+              }<br>
+              class ForegroundFromChooserAction <br>
+              extends StyledEditorKit.StyledTextAction {</p>
+            <p> protected Color fg;<br>
+              protected JColorChooser chooser = new JColorChooser();<br>
+              protected int mode;</p>
+            <p> public ForegroundFromChooserAction(String nm, int mode) {<br>
+              super(nm);<br>
+              this.mode = mode;<br>
+              }<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              JEditorPane editor = getEditor(e);<br>
+              if (editor != null) {<br>
+              AttributeSet attributes = <br>
+              textPane.getCharacterAttributes();<br>
+              Color c = <br>
+              StyleConstants.getForeground(attributes);</p>
+            <p> Color fg = chooser.showDialog(Test.this,<br>
+              &quot;Choose Color for Text&quot;,<br>
+              c == null ? Color.black : c);<br>
+              /*<br>
+              if ((e != null) &amp;&amp; (e.getSource() == editor)) {<br>
+              String s = e.getActionCommand();<br>
+              try {<br>
+              fg = Color.decode(s);<br>
+              } <br>
+              catch(NumberFormatException ex) {<br>
+              ex.printStackTrace();<br>
+              }<br>
+              }<br>
+              */<br>
+              if (fg != null) {<br>
+              MutableAttributeSet attr = <br>
+              new SimpleAttributeSet();<br>
+              StyleConstants.setForeground(attr, fg);</p>
+            <p> if(mode == CharacterMode)<br>
+              setCharacterAttributes(editor, attr, false);<br>
+              else<br>
+              setParagraphAttributes(editor, attr, false);</p>
+            <p> textPane.setCaretPosition(<br>
+              textPane.getSelectionStart());<br>
+              } else {<br>
+              Toolkit.getDefaultToolkit().beep();<br>
+              }<br>
+              }<br>
+              }<br>
+              }<br>
+              }<br>
+              class GJApp extends WindowAdapter {<br>
+              static private JPanel statusArea = new JPanel();<br>
+              static private JLabel status = new JLabel(&quot; &quot;);<br>
+              static private ResourceBundle resources;</p>
+            <p> static {<br>
+              resources = ResourceBundle.getBundle(<br>
+              &quot;GJApp&quot;, Locale.getDefault());<br>
+              };</p>
+            <p> private GJApp() {}<br>
+              <br>
+              public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h) {<br>
+              f.setTitle(title);<br>
+              f.setBounds(x,y,w,h);<br>
+              f.setVisible(true);</p>
+            <p> statusArea.setBorder(BorderFactory.createEtchedBorder());<br>
+              statusArea.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));<br>
+              statusArea.add(status);<br>
+              status.setHorizontalAlignment(JLabel.LEFT);</p>
+            <p> f.setDefaultCloseOperation(<br>
+              WindowConstants.DISPOSE_ON_CLOSE);</p>
+            <p> f.addWindowListener(new WindowAdapter() {<br>
+              public void windowClosed(WindowEvent e) {<br>
+              System.exit(0);<br>
+              }<br>
+              });<br>
+              }<br>
+              static public JPanel getStatusArea() {<br>
+              return statusArea;<br>
+              }<br>
+              static public void showStatus(String s) {<br>
+              status.setText(s);<br>
+              }<br>
+              static Object getResource(String key) {<br>
+              if(resources != null) {<br>
+              return resources.getString(key);<br>
+              }<br>
+              return null;<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 23.4 视图</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例23-3 实现一个定制视图</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import javax.swing.event.*;<br>
+            import javax.swing.text.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import java.util.*;
+            <p>public class Test extends JFrame {<br>
+              JEditorPane editorPane = new JEditorPane();<br>
+              Vector positions = new Vector();<br>
+              Position.Bias bias = Position.Bias.Forward;</p>
+            <p> class CustomView extends WrappedPlainView {<br>
+              public CustomView(Element elem) {<br>
+              super(elem);<br>
+              }<br>
+              public void paint(Graphics g, Shape a) {<br>
+              super.paint(g,a);</p>
+            <p> Enumeration e = positions.elements();<br>
+              Position p;</p>
+            <p> while(e.hasMoreElements()) {<br>
+              try {<br>
+              p = (Position)e.nextElement();<br>
+              int offset = p.getOffset();</p>
+            <p> Shape s = modelToView(p.getOffset(), a, bias);<br>
+              Rectangle r = s.getBounds();</p>
+            <p> // black border<br>
+              g.setColor(Color.black);<br>
+              g.drawRect(r.x, r.y, 6, 6);</p>
+            <p> // red fill<br>
+              g.setColor(Color.red);<br>
+              g.fillRect(r.x+1, r.y+1, 5, 5);<br>
+              }<br>
+              catch(BadLocationException ex) {<br>
+              ex.printStackTrace();<br>
+              }<br>
+              }<br>
+              }<br>
+              };<br>
+              class CustomEditorKit extends DefaultEditorKit <br>
+              implements ViewFactory {<br>
+              public ViewFactory getViewFactory() {<br>
+              return this;<br>
+              }<br>
+              public View create(Element elem) {<br>
+              return new CustomView(elem);<br>
+              }<br>
+              };<br>
+              public Test() {<br>
+              JPanel panel = new JPanel();<br>
+              JButton button = new JButton(&quot;Insert Position&quot;);<br>
+              Container contentPane = getContentPane(); <br>
+              panel.add(button);</p>
+            <p> editorPane.setEditorKit(new CustomEditorKit());<br>
+              editorPane.setFont(new Font(&quot;Serif&quot;, Font.ITALIC, 36));</p>
+            <p> contentPane.add(panel, BorderLayout.NORTH);<br>
+              contentPane.add(editorPane, BorderLayout.CENTER);</p>
+            <p> button.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              try {<br>
+              Document doc = editorPane.getDocument();<br>
+              int p = editorPane.getCaretPosition();</p>
+            <p> positions.addElement(doc.createPosition(p));<br>
+              editorPane.repaint();<br>
+              }<br>
+              catch(BadLocationException ex) {<br>
+              ex.printStackTrace();<br>
+              }<br>
+              }<br>
+              });<br>
+              }<br>
+              public static void main(String args[]) {<br>
+              GJApp.launch(new Test(), <br>
+              &quot;Custom Text Views&quot;,300,300,450,300);<br>
+              }<br>
+              }<br>
+              class GJApp extends WindowAdapter {<br>
+              static private JPanel statusArea = new JPanel();<br>
+              static private JLabel status = new JLabel(&quot; &quot;);</p>
+            <p> public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h) {<br>
+              f.setTitle(title);<br>
+              f.setBounds(x,y,w,h);<br>
+              f.setVisible(true);</p>
+            <p> statusArea.setBorder(BorderFactory.createEtchedBorder());<br>
+              statusArea.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));<br>
+              statusArea.add(status);<br>
+              status.setHorizontalAlignment(JLabel.LEFT);</p>
+            <p> f.setDefaultCloseOperation(<br>
+              WindowConstants.DISPOSE_ON_CLOSE);</p>
+            <p> f.addWindowListener(new WindowAdapter() {<br>
+              public void windowClosed(WindowEvent e) {<br>
+              System.exit(0);<br>
+              }<br>
+              });<br>
+              }<br>
+              static public JPanel getStatusArea() {<br>
+              return statusArea;<br>
+              }<br>
+              static public void showStatus(String s) {<br>
+              status.setText(s);<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 23.5 风格和风格的相关内容</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例23-4 使用风格的相关内容</b> </p>
+            <hr noshade size="1">
+            import java.io.File;<br>
+            import javax.swing.*;<br>
+            import javax.swing.text.*;<br>
+            import javax.swing.event.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import java.util.*;<br>
+            import java.io.FileReader;
+            <p>public class Test extends JFrame {<br>
+              private JTextPane textPane = new JTextPane();<br>
+              private Hashtable actionTable = new Hashtable();<br>
+              private JCheckBoxMenuItem titleItem, bodyItem; </p>
+            <p> public Test() {<br>
+              Container contentPane = getContentPane();</p>
+            <p> textPane.setEditorKit(new ChapterEditorKit());<br>
+              textPane.setFont(new Font(&quot;Dialog&quot;, Font.PLAIN, 18));</p>
+            <p> // must load action table after setting editor kit ...<br>
+              loadActionTable();</p>
+            <p> readFile(&quot;text.txt&quot;);</p>
+            <p> contentPane.add(new JScrollPane(textPane), <br>
+              BorderLayout.CENTER);<br>
+              contentPane.add(GJApp.getStatusArea(),BorderLayout.SOUTH);</p>
+            <p> setJMenuBar(createMenuBar());<br>
+              }<br>
+              private JMenuBar createMenuBar() {<br>
+              JMenuBar menuBar = new JMenuBar();<br>
+              JMenu editMenu = new JMenu(&quot;Edit&quot;),<br>
+              styleMenu = new JMenu(&quot;Paragraph Styles&quot;);</p>
+            <p> styleMenu.add(getAction(ChapterStyleContext.titleStyle));<br>
+              styleMenu.add(getAction(ChapterStyleContext.bodyStyle));</p>
+            <p> editMenu.add(styleMenu);<br>
+              menuBar.add(editMenu);<br>
+              return menuBar;<br>
+              }<br>
+              private void readFile(String filename) {<br>
+              EditorKit kit = textPane.getEditorKit();<br>
+              Document doc = textPane.getDocument();</p>
+            <p> try {<br>
+              kit.read(new FileReader(filename), doc, 0);<br>
+              }<br>
+              catch(Exception ex) {<br>
+              ex.printStackTrace();<br>
+              }<br>
+              }<br>
+              private void loadActionTable() {<br>
+              Action[] actions = textPane.getActions();</p>
+            <p> for(int i=0; i &lt; actions.length; ++i) {<br>
+              actionTable.put(actions[i].getValue(Action.NAME),<br>
+              actions[i]);<br>
+              }<br>
+              }<br>
+              private Action getAction(String name) {<br>
+              return (Action)actionTable.get(name);<br>
+              }<br>
+              public static void main(String args[]) {<br>
+              GJApp.launch(new Test(), <br>
+              &quot;Custom EditorKits &amp; Style Contexts&quot;,<br>
+              300,300,650,275);<br>
+              }<br>
+              }<br>
+              class ChapterEditorKit extends StyledEditorKit {<br>
+              private CaretListener caretListener = new Listener();<br>
+              private static ChapterStyleContext context = <br>
+              new ChapterStyleContext();</p>
+            <p> private static Action[] defaultActions = new Action[] {<br>
+              new ParagraphStyleAction(<br>
+              ChapterStyleContext.titleStyle,<br>
+              context.getStyle(ChapterStyleContext.titleStyle)),<br>
+              new ParagraphStyleAction(<br>
+              ChapterStyleContext.bodyStyle,<br>
+              context.getStyle(ChapterStyleContext.bodyStyle)),<br>
+              };<br>
+              public Action[] getActions() {<br>
+              return TextAction.augmentList(super.getActions(), <br>
+              defaultActions);<br>
+              }<br>
+              public void install(JEditorPane editorPane) {<br>
+              editorPane.addCaretListener(caretListener);<br>
+              }<br>
+              public void deinstall(JEditorPane editorPane) {<br>
+              editorPane.removeCaretListener(caretListener);<br>
+              }<br>
+              static class Listener implements CaretListener {<br>
+              public void caretUpdate(CaretEvent e) {<br>
+              int dot = e.getDot(), mark = e.getMark();</p>
+            <p> if (dot == mark) {<br>
+              JTextComponent c = (JTextComponent) e.getSource();<br>
+              StyledDocument document = <br>
+              (StyledDocument) c.getDocument(); <br>
+              Element elem = document.getParagraphElement(dot);<br>
+              AttributeSet set = elem.getAttributes();<br>
+              String name = (String)set.getAttribute(<br>
+              StyleConstants.NameAttribute);</p>
+            <p> GJApp.showStatus(name);<br>
+              }<br>
+              }<br>
+              }<br>
+              static class ParagraphStyleAction <br>
+              extends StyledEditorKit.StyledTextAction {<br>
+              private Style style;</p>
+            <p> public ParagraphStyleAction(String nm, Style style) {<br>
+              super(nm);<br>
+              this.style = style;<br>
+              }<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              setParagraphAttributes(getEditor(e), style, false);<br>
+              GJApp.showStatus(style.getName());<br>
+              }<br>
+              }<br>
+              }<br>
+              class ChapterStyleContext extends StyleContext {<br>
+              public static String titleStyle = &quot;title&quot;,<br>
+              bodyStyle = &quot;body&quot;;</p>
+            <p> public static String[] defaultStyleNames = new String[] {<br>
+              new String(titleStyle),<br>
+              new String(bodyStyle) };</p>
+            <p> public ChapterStyleContext() {<br>
+              Style root = getStyle(DEFAULT_STYLE);</p>
+            <p> for(int i=0; i &lt; defaultStyleNames.length; ++i) {<br>
+              String name = defaultStyleNames[i];<br>
+              Style s = addStyle(name, root);</p>
+            <p> if(name.equals(titleStyle)) {<br>
+              StyleConstants.setFontFamily(s, &quot;Dialog&quot;);<br>
+              StyleConstants.setFontSize(s, 24);<br>
+              StyleConstants.setBold(s, true);<br>
+              StyleConstants.setUnderline(s, true);<br>
+              }<br>
+              else if(name.equals(bodyStyle)) {<br>
+              StyleConstants.setFontFamily(s, &quot;Times-Roman&quot;);<br>
+              StyleConstants.setFontSize(s, 16);<br>
+              }<br>
+              }<br>
+              }<br>
+              }<br>
+              class GJApp extends WindowAdapter {<br>
+              static private JPanel statusArea = new JPanel();<br>
+              static private JLabel status = new JLabel(&quot; &quot;);<br>
+              static private ResourceBundle resources;</p>
+            <p> static {<br>
+              resources = ResourceBundle.getBundle(<br>
+              &quot;GJApp&quot;, Locale.getDefault());<br>
+              };</p>
+            <p> private GJApp() {}<br>
+              <br>
+              public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h) {<br>
+              f.setTitle(title);<br>
+              f.setBounds(x,y,w,h);<br>
+              f.setVisible(true);</p>
+            <p> statusArea.setBorder(BorderFactory.createEtchedBorder());<br>
+              statusArea.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));<br>
+              statusArea.add(status);<br>
+              status.setHorizontalAlignment(JLabel.LEFT);</p>
+            <p> f.setDefaultCloseOperation(<br>
+              WindowConstants.DISPOSE_ON_CLOSE);</p>
+            <p> f.addWindowListener(new WindowAdapter() {<br>
+              public void windowClosed(WindowEvent e) {<br>
+              System.exit(0);<br>
+              }<br>
+              });<br>
+              }<br>
+              static public JPanel getStatusArea() {<br>
+              return statusArea;<br>
+              }<br>
+              static public void showStatus(String s) {<br>
+              status.setText(s);<br>
+              }<br>
+              static Object getResource(String key) {<br>
+              if(resources != null) {<br>
+              return resources.getString(key);<br>
+              }<br>
+              return null;<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 23.6 元素</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例23-5 元素层次</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import javax.swing.event.*;<br>
+            import javax.swing.text.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import java.util.*;<br>
+            import java.io.FileReader;
+            <p>public class Test extends JFrame {<br>
+              private JTextComponent components[] = new JTextComponent[] {<br>
+              new JTextField(&quot;initial content&quot;), new JTextArea(10,20),<br>
+              new JTextPane(), new JEditorPane(),<br>
+              };<br>
+              private String borderNames[] = new String[] { <br>
+              &quot;JTextField&quot;, &quot;JTextArea&quot;, &quot;JTextPane&quot;, 
+              &quot;JEditorPane&quot;<br>
+              };<br>
+              private JPanel textComponentPanel = new JPanel();<br>
+              private ElementTreePanel treePanel = <br>
+              new ElementTreePanel(components[0]);<br>
+              private JSplitPane sp = new JSplitPane( <br>
+              JSplitPane.HORIZONTAL_SPLIT, <br>
+              new JScrollPane(textComponentPanel), <br>
+              new JScrollPane(treePanel));</p>
+            <p> public Test() {<br>
+              Container contentPane = getContentPane();<br>
+              CaretListener listener = new Listener();</p>
+            <p> textComponentPanel.setBorder(<br>
+              BorderFactory.createTitledBorder(&quot;Text Components&quot;));</p>
+            <p> for(int i=0; i &lt; components.length; ++i) {<br>
+              JTextComponent c = (JTextComponent)components[i];</p>
+            <p> c.addCaretListener(listener);<br>
+              c.setBorder(<br>
+              BorderFactory.createTitledBorder(borderNames[i]));</p>
+            <p> if(i != 0) // JTextField<br>
+              readFile(c, &quot;text.txt&quot;);</p>
+            <p> if(i == 3) { // JEditorPane<br>
+              JEditorPane <br>
+              editorPane = (JEditorPane)c;</p>
+            <p> String url = &quot;file:&quot; + <br>
+              System.getProperty(&quot;user.dir&quot;) +<br>
+              System.getProperty(&quot;file.separator&quot;) +<br>
+              &quot;java.util.Hashtable.html&quot;;</p>
+            <p> editorPane.setEditable(false);<br>
+              try { <br>
+              editorPane.setPage(url);<br>
+              }<br>
+              catch(Exception ex) { ex.printStackTrace(); }</p>
+            <p> JScrollPane sp = new JScrollPane(c);<br>
+              sp.setPreferredSize(new Dimension(450,450));<br>
+              panel.add(sp);<br>
+              }<br>
+              else<br>
+              panel.add(c);<br>
+              }<br>
+              sp.setDividerLocation(600);</p>
+            <p> contentPane.add(sp, BorderLayout.CENTER);<br>
+              }<br>
+              class Listener implements CaretListener {<br>
+              public void caretUpdate(CaretEvent e) {<br>
+              JTextComponent c = (JTextComponent)e.getSource();</p>
+            <p> if(c != treePanel.getEditor()) {<br>
+              sp.setRightComponent(treePanel = <br>
+              new ElementTreePanel(c));<br>
+              }<br>
+              }<br>
+              }<br>
+              private void readFile(JTextComponent c, String filename) {<br>
+              try {<br>
+              c.read(new FileReader(filename), null);<br>
+              }<br>
+              catch(Exception ex) {<br>
+              ex.printStackTrace();<br>
+              }<br>
+              }<br>
+              public static void main(String args[]) {<br>
+              GJApp.launch(new Test(), <br>
+              &quot;Element Hierarchies&quot;,300,300,800,300);<br>
+              }<br>
+              }<br>
+              class GJApp extends WindowAdapter {<br>
+              static private JPanel statusArea = new JPanel();<br>
+              static private JLabel status = new JLabel(&quot; &quot;);<br>
+              static private ResourceBundle resources;</p>
+            <p> private GJApp() {}<br>
+              <br>
+              public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h) {<br>
+              f.setTitle(title);<br>
+              f.setBounds(x,y,w,h);<br>
+              f.setVisible(true);</p>
+            <p> statusArea.setBorder(BorderFactory.createEtchedBorder());<br>
+              statusArea.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));<br>
+              statusArea.add(status);<br>
+              status.setHorizontalAlignment(JLabel.LEFT);</p>
+            <p> f.setDefaultCloseOperation(<br>
+              WindowConstants.DISPOSE_ON_CLOSE);</p>
+            <p> f.addWindowListener(new WindowAdapter() {<br>
+              public void windowClosed(WindowEvent e) {<br>
+              System.exit(0);<br>
+              }<br>
+              });<br>
+              }<br>
+              static public JPanel getStatusArea() {<br>
+              return statusArea;<br>
+              }<br>
+              static public void showStatus(String s) {<br>
+              status.setText(s);<br>
+              }<br>
+              static Object getResource(String key) {<br>
+              if(resources != null) {<br>
+              return resources.getString(key);<br>
+              }<br>
+              return null;<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 23.7 本章回顾</p>
+            <p>&nbsp;</p>
+            <p> [<a href="index.html" target="_self">目录</a>][<a href="s22.htm">上一页</a>][下一页](飒龙收藏/2002.5.18) 
+            </p>
+            <p>&nbsp; </p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </td>
+  </tr>
+</tbody>
+</table>
+<script language="javascript">bottomprint()</script>
+</body>
+</html>

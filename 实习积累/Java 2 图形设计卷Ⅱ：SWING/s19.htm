@@ -1,0 +1,2335 @@
+<SCRIPT LANGUAGE="JavaScript" SRC="/-fs0/sys/pop-up.js"></SCRIPT>
+
+<SCRIPT LANGUAGE="JavaScript" SRC="/-fs0/sys/pop-up-all.js"></SCRIPT>
+
+<html>
+<head>
+<title>易都网--Java 2 图形设计卷Ⅱ：SWING</title>
+<LINK rel="stylesheet" href="../../../_public/javaa.css">
+<meta http-equiv="Content-Type" content="text/html; charset=GBK">
+<script language="JavaScript" src="../../../_public/javaa.js"></script>
+<meta name="keywords" content="Java,JSP,ASP,PHP,J2EE,EJB,JavaScript,C/C++,ASM,CSS,HTML,XML,网络安全,MySQL,ACCESS">
+</head>
+<body bgcolor="#FFFFFF">
+<table border=0 cellpadding=0 cellspacing=0 width="100%">
+  <tbody> 
+  <script language="javascript">print2()</script>
+  <tr> 
+    <td width="100%"> 
+      <table bgcolor=#EEEEEE border=0 cellpadding=3 cellspacing=0 width="100%">
+        <tbody> 
+        <tr> 
+          <td class=f1 id=thetd width="100%"> 
+            <p>[<a href="index.html" target="_self">目录</a>][<a href="s18.htm">上一页</a>][<a href="s20.htm">下一页</a>]</p>
+            <p align="center"><b>第19章 表格</b></p>
+            <p> 19.1 表格和滚动</p>
+            <p align="center"><b>例19-1 表格和滚动窗格</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class Test extends JFrame {<br>
+              public Test() {<br>
+              Container contentPane = getContentPane();</p>
+            <p> contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(new JTable(10,10)); <br>
+              contentPane.add(new JScrollPane(new JTable(10,10)));<br>
+              }<br>
+              public static void main(String args[]) {<br>
+              GraphicJavaWindowHandler.launch(new Test(),<br>
+              &quot;Tables and Scrollpanes&quot;,100,100,850,700);<br>
+              }<br>
+              }<br>
+              class GraphicJavaWindowHandler extends WindowAdapter {<br>
+              public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h) {<br>
+              f.setTitle(title);<br>
+              f.setBounds(x,y,w,h);<br>
+              f.setVisible(true);</p>
+            <p> f.setDefaultCloseOperation(<br>
+              WindowConstants.DISPOSE_ON_CLOSE);</p>
+            <p> f.addWindowListener(new WindowAdapter() {<br>
+              public void windowClosed(WindowEvent e) {<br>
+              System.exit(0);<br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 19.2 表格模型</p>
+            <p>&nbsp;</p>
+            <p align="center">&nbsp; </p>
+            <p> 19.2.1 表格数据模型</p>
+            <p>&nbsp;</p>
+            <p align="center">&nbsp; </p>
+            <p> 19.2.2 TableModel接口</p>
+            <p>&nbsp;</p>
+            <p align="center">&nbsp; </p>
+            <p> 19.2.3 AbstractTableModel</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例19-2 AbstractTableModel的一个简单扩展</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;<br>
+            import javax.swing.table.*;<br>
+            import java.util.*;
+            <p>public class Test extends JFrame {<br>
+              JTable table = new JTable(<br>
+              new AbstractTableModel() {<br>
+              int rows = 100, cols = 10;</p>
+            <p> public int getRowCount() { return rows; }<br>
+              public int getColumnCount() { return cols; }</p>
+            <p> public Object getValueAt(int row, int col) {<br>
+              return &quot;(&quot; + row + &quot;,&quot; + col + &quot;)&quot;;<br>
+              }<br>
+              });</p>
+            <p> public Test() {<br>
+              getContentPane().add(new JScrollPane(table),<br>
+              BorderLayout.CENTER);<br>
+              }<br>
+              public static void main(String args[]) {<br>
+              GJApp.launch(<br>
+              new Test(), &quot;A Simple Model&quot;,300,300,450,300); <br>
+              }<br>
+              }<br>
+              class GJApp extends WindowAdapter {<br>
+              static private JPanel statusArea = new JPanel();<br>
+              static private JLabel status = new JLabel(&quot; &quot;);<br>
+              static private ResourceBundle resources;</p>
+            <p> public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h) {<br>
+              launch(f,title,x,y,w,h,null); <br>
+              }<br>
+              public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h,<br>
+              String propertiesFilename) {<br>
+              f.setTitle(title);<br>
+              f.setBounds(x,y,w,h);<br>
+              f.setVisible(true);</p>
+            <p> statusArea.setBorder(BorderFactory.createEtchedBorder());<br>
+              statusArea.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));<br>
+              statusArea.add(status);<br>
+              status.setHorizontalAlignment(JLabel.LEFT);</p>
+            <p> f.setDefaultCloseOperation(<br>
+              WindowConstants.DISPOSE_ON_CLOSE);</p>
+            <p> if(propertiesFilename != null) {<br>
+              resources = ResourceBundle.getBundle(<br>
+              propertiesFilename, Locale.getDefault());<br>
+              }</p>
+            <p> f.addWindowListener(new WindowAdapter() {<br>
+              public void windowClosed(WindowEvent e) {<br>
+              System.exit(0);<br>
+              }<br>
+              });<br>
+              }<br>
+              static public JPanel getStatusArea() {<br>
+              return statusArea;<br>
+              }<br>
+              static public void showStatus(String s) {<br>
+              status.setText(s);<br>
+              }<br>
+              static Object getResource(String key) {<br>
+              if(resources != null) {<br>
+              return resources.getString(key);<br>
+              }<br>
+              return null;<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p align="center">&nbsp; </p>
+            <p> 19.2.4 DefaultTableModel</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例19-3 使用DefaultTableModel</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;<br>
+            import javax.swing.table.*;<br>
+            import java.util.*;
+            <p>public class Test extends JFrame {<br>
+              private int rows=3, cols=5;<br>
+              private Object[] rowData = new Object[cols];</p>
+            <p> private DefaultTableModel model = new DefaultTableModel();<br>
+              private JTable table = new JTable(model);</p>
+            <p> public Test() {<br>
+              for(int c=0; c &lt; cols; ++c)<br>
+              model.addColumn(&quot;Column &quot; + Integer.toString(c));</p>
+            <p> for(int r=0; r &lt; rows; ++r) {<br>
+              for(int c=0; c &lt; cols; ++c) {<br>
+              rowData[c] = &quot;(&quot; + r + &quot;,&quot; + c + &quot;)&quot;;<br>
+              }<br>
+              model.addRow(rowData);<br>
+              }<br>
+              getContentPane().add(new JScrollPane(table),<br>
+              BorderLayout.CENTER);<br>
+              getContentPane().add(new ControlPanel(),<br>
+              BorderLayout.NORTH);<br>
+              }<br>
+              public static void main(String args[]) {<br>
+              GJApp.launch(new Test(),<br>
+              &quot;Using DefaultTableModel&quot;,150,150,600,350); <br>
+              }<br>
+              class ControlPanel extends JPanel {<br>
+              private JButton rowButton = new JButton(&quot;Add Row&quot;),<br>
+              colButton = new JButton(&quot;Add Column&quot;);</p>
+            <p> public ControlPanel() {<br>
+              add(rowButton);<br>
+              add(colButton);</p>
+            <p> rowButton.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              int rowCount = model.getRowCount();<br>
+              int colCount = model.getColumnCount();</p>
+            <p> if(colCount &gt; rowData.length)<br>
+              rowData = new Object[colCount];</p>
+            <p> for(int c=0; c &lt; colCount; ++c) {<br>
+              rowData[c] = &quot;(&quot; + rowCount + &quot;,&quot; + <br>
+              c + &quot;)&quot;;<br>
+              }<br>
+              model.addRow(rowData);<br>
+              }<br>
+              });<br>
+              colButton.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              int colCount = model.getColumnCount();<br>
+              model.addColumn(&quot;Column &quot; + colCount);</p>
+            <p> // Bug: the call to sizeColumnsToFit() <br>
+              // should not be necessary<br>
+              table.sizeColumnsToFit(-1);<br>
+              }<br>
+              });<br>
+              }<br>
+              }<br>
+              }<br>
+              class GJApp extends WindowAdapter {<br>
+              static private JPanel statusArea = new JPanel();<br>
+              static private JLabel status = new JLabel(&quot; &quot;);<br>
+              static private ResourceBundle resources;</p>
+            <p> public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h) {<br>
+              launch(f,title,x,y,w,h,null); <br>
+              }<br>
+              public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h,<br>
+              String propertiesFilename) {<br>
+              f.setTitle(title);<br>
+              f.setBounds(x,y,w,h);<br>
+              f.setVisible(true);</p>
+            <p> statusArea.setBorder(BorderFactory.createEtchedBorder());<br>
+              statusArea.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));<br>
+              statusArea.add(status);<br>
+              status.setHorizontalAlignment(JLabel.LEFT);</p>
+            <p> f.setDefaultCloseOperation(<br>
+              WindowConstants.DISPOSE_ON_CLOSE);</p>
+            <p> if(propertiesFilename != null) {<br>
+              resources = ResourceBundle.getBundle(<br>
+              propertiesFilename, Locale.getDefault());<br>
+              }</p>
+            <p> f.addWindowListener(new WindowAdapter() {<br>
+              public void windowClosed(WindowEvent e) {<br>
+              System.exit(0);<br>
+              }<br>
+              });<br>
+              }<br>
+              static public JPanel getStatusArea() {<br>
+              return statusArea;<br>
+              }<br>
+              static public void showStatus(String s) {<br>
+              status.setText(s);<br>
+              }<br>
+              static Object getResource(String key) {<br>
+              if(resources != null) {<br>
+              return resources.getString(key);<br>
+              }<br>
+              return null;<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 19.2.5 表格模型、缺省绘制器和缺省编辑器</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例19-4 使用缺省绘制器和编辑器</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import java.util.*;<br>
+            import javax.swing.*;<br>
+            import javax.swing.table.*;
+            <p>public class Test extends JFrame {<br>
+              String[] columnNames = {<br>
+              &quot;Name&quot;, &quot;Check-In Date&quot;, &quot;Check-Out Date&quot;, 
+              &quot;Smoking&quot;,<br>
+              &quot;Fax&quot;, &quot;Laptop&quot;, &quot;Room Rate&quot;, &quot;Photo&quot;,<br>
+              };</p>
+            <p> Date dayOne = (new GregorianCalendar(2000, 10, 5)).getTime();<br>
+              Date dayTwo = (new GregorianCalendar(2000, 10, 7)).getTime();</p>
+            <p> Object[][] data = {<br>
+              { &quot;Andrews&quot;, dayOne, dayTwo,<br>
+              new Boolean(true), new Boolean(true), <br>
+              new Boolean(true), new Double(79.99),<br>
+              new ImageIcon(&quot;tenchi.jpg&quot;)},</p>
+            <p> { &quot;Anthony&quot;, dayOne, dayTwo, <br>
+              new Boolean(false), new Boolean(false), <br>
+              new Boolean(false), new Double(69.99),<br>
+              new ImageIcon(&quot;washu.jpg&quot;)},</p>
+            <p> { &quot;Woodard&quot;, dayOne, dayTwo, <br>
+              new Boolean(true), new Boolean(false), <br>
+              new Boolean(false), new Double(99.99),<br>
+              new ImageIcon(&quot;sasami.jpg&quot;)},</p>
+            <p> { &quot;Thomas&quot;, dayOne, dayTwo, <br>
+              new Boolean(false), new Boolean(true), <br>
+              new Boolean(true), new Double(79.99),<br>
+              new ImageIcon(&quot;aeka.jpg&quot;)},<br>
+              <br>
+              { &quot;Reed&quot;, dayOne, dayTwo, <br>
+              new Boolean(true), new Boolean(true), <br>
+              new Boolean(true), new Double(79.99),<br>
+              new ImageIcon(&quot;tenchi.jpg&quot;)},</p>
+            <p> { &quot;Crenshaw&quot;, dayOne, dayTwo, <br>
+              new Boolean(false), new Boolean(false), <br>
+              new Boolean(false), new Double(69.99),<br>
+              new ImageIcon(&quot;washu.jpg&quot;)},</p>
+            <p> { &quot;Royal&quot;, dayOne, dayTwo, <br>
+              new Boolean(true), new Boolean(false), <br>
+              new Boolean(false), new Double(99.99),<br>
+              new ImageIcon(&quot;sasami.jpg&quot;)},</p>
+            <p> { &quot;Moore&quot;, dayOne, dayTwo, <br>
+              new Boolean(false), new Boolean(true), <br>
+              new Boolean(true), new Double(79.99),<br>
+              new ImageIcon(&quot;aeka.jpg&quot;)},<br>
+              };<br>
+              <br>
+              JTable table = new JTable(new CustomModel(data, columnNames));<br>
+              public Test() {<br>
+              getContentPane().add(new JScrollPane(table),<br>
+              BorderLayout.CENTER);<br>
+              }<br>
+              public static void main(String args[]) {<br>
+              GJApp.launch(<br>
+              new Test(), <br>
+              &quot;A Custom Table Model That Specifies Column Classes&quot;,<br>
+              300,300,650,182);<br>
+              }<br>
+              }<br>
+              class CustomModel extends DefaultTableModel {<br>
+              public CustomModel(Object[][] data, Object[] columnNames) {<br>
+              super(data, columnNames);<br>
+              }<br>
+              public Class getColumnClass(int col) {<br>
+              // dataVector is a protected member of DefaultTableModel<br>
+              <br>
+              Vector v = (Vector)dataVector.elementAt(0);<br>
+              return v.elementAt(col).getClass();<br>
+              }<br>
+              public boolean isCellEditable(int row, int col) {<br>
+              Class columnClass = getColumnClass(col);<br>
+              return columnClass != ImageIcon.class &amp;&amp; <br>
+              columnClass != Date.class;<br>
+              }<br>
+              }<br>
+              class GJApp extends WindowAdapter {<br>
+              static private JPanel statusArea = new JPanel();<br>
+              static private JLabel status = new JLabel(&quot; &quot;);<br>
+              static private ResourceBundle resources;</p>
+            <p> public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h) {<br>
+              launch(f,title,x,y,w,h,null); <br>
+              }<br>
+              public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h,<br>
+              String propertiesFilename) {<br>
+              f.setTitle(title);<br>
+              f.setBounds(x,y,w,h);<br>
+              f.setVisible(true);</p>
+            <p> statusArea.setBorder(BorderFactory.createEtchedBorder());<br>
+              statusArea.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));<br>
+              statusArea.add(status);<br>
+              status.setHorizontalAlignment(JLabel.LEFT);</p>
+            <p> f.setDefaultCloseOperation(<br>
+              WindowConstants.DISPOSE_ON_CLOSE);</p>
+            <p> if(propertiesFilename != null) {<br>
+              resources = ResourceBundle.getBundle(<br>
+              propertiesFilename, Locale.getDefault());<br>
+              }</p>
+            <p> f.addWindowListener(new WindowAdapter() {<br>
+              public void windowClosed(WindowEvent e) {<br>
+              System.exit(0);<br>
+              }<br>
+              });<br>
+              }<br>
+              static public JPanel getStatusArea() {<br>
+              return statusArea;<br>
+              }<br>
+              static public void showStatus(String s) {<br>
+              status.setText(s);<br>
+              }<br>
+              static Object getResource(String key) {<br>
+              if(resources != null) {<br>
+              return resources.getString(key);<br>
+              }<br>
+              return null;<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 19.3 表格列</p>
+            <p>&nbsp;</p>
+            <p align="center">&nbsp; </p>
+            <p> 19.3.1 列调整大小模式</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例19-5 JTable调整大小模式</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import javax.swing.event.*;<br>
+            import javax.swing.table.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import java.util.*;
+            <p>public class Test extends JFrame {<br>
+              Object[] resizeModes = new Object[] {<br>
+              &quot;JTable.AUTO_RESIZE_OFF&quot;,<br>
+              &quot;JTable.AUTO_RESIZE_NEXT_COLUMN&quot;,<br>
+              &quot;JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS&quot;,<br>
+              &quot;JTable.AUTO_RESIZE_LAST_COLUMN&quot;,<br>
+              &quot;JTable.AUTO_RESIZE_ALL_COLUMNS&quot;,<br>
+              };<br>
+              int[] resizeConstants = {<br>
+              JTable.AUTO_RESIZE_OFF,<br>
+              JTable.AUTO_RESIZE_NEXT_COLUMN,<br>
+              JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS,<br>
+              JTable.AUTO_RESIZE_LAST_COLUMN,<br>
+              JTable.AUTO_RESIZE_ALL_COLUMNS,<br>
+              };<br>
+              JTable table = new JTable(6,5);</p>
+            <p> public Test() {<br>
+              Container contentPane = getContentPane();</p>
+            <p> contentPane.add(new ControlPanel(), BorderLayout.NORTH);<br>
+              contentPane.add(new JScrollPane(table), <br>
+              BorderLayout.CENTER);</p>
+            <p> }<br>
+              class ControlPanel extends JPanel {<br>
+              JComboBox resizeModeCombo = new JComboBox(resizeModes);</p>
+            <p> public ControlPanel() {<br>
+              initializeCombo();</p>
+            <p> setBorder(BorderFactory.createTitledBorder(<br>
+              &quot;Resize Mode&quot;));</p>
+            <p> setLayout(new FlowLayout(FlowLayout.LEFT,2,2));<br>
+              add(resizeModeCombo);</p>
+            <p> resizeModeCombo.addActionListener(<br>
+              new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              int index = <br>
+              resizeModeCombo.getSelectedIndex();</p>
+            <p> table.setAutoResizeMode(<br>
+              resizeConstants[index]);<br>
+              }<br>
+              });<br>
+              }<br>
+              private void initializeCombo() {<br>
+              int resizeMode = table.getAutoResizeMode();</p>
+            <p> if(resizeMode == JTable.AUTO_RESIZE_OFF)<br>
+              resizeModeCombo.setSelectedIndex(0);<br>
+              else if(resizeMode == JTable.AUTO_RESIZE_NEXT_COLUMN)<br>
+              resizeModeCombo.setSelectedIndex(1);<br>
+              else if(resizeMode == JTable.AUTO_RESIZE_LAST_COLUMN)<br>
+              resizeModeCombo.setSelectedIndex(2);<br>
+              else if(resizeMode == JTable.AUTO_RESIZE_ALL_COLUMNS)<br>
+              resizeModeCombo.setSelectedIndex(3);<br>
+              else if(<br>
+              resizeMode == JTable.AUTO_RESIZE_SUBSEQUENT_COLUMNS)<br>
+              resizeModeCombo.setSelectedIndex(4);<br>
+              }<br>
+              }<br>
+              public static void main(String args[]) {<br>
+              GJApp.launch(<br>
+              new Test(), &quot;JTable Resize Modes&quot;, 300,300,425,210);<br>
+              }<br>
+              }<br>
+              class GJApp extends WindowAdapter {<br>
+              static private JPanel statusArea = new JPanel();<br>
+              static private JLabel status = new JLabel(&quot; &quot;);<br>
+              static private ResourceBundle resources;</p>
+            <p> public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h) {<br>
+              launch(f,title,x,y,w,h,null); <br>
+              }<br>
+              public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h,<br>
+              String propertiesFilename) {<br>
+              f.setTitle(title);<br>
+              f.setBounds(x,y,w,h);<br>
+              f.setVisible(true);</p>
+            <p> statusArea.setBorder(BorderFactory.createEtchedBorder());<br>
+              statusArea.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));<br>
+              statusArea.add(status);<br>
+              status.setHorizontalAlignment(JLabel.LEFT);</p>
+            <p> f.setDefaultCloseOperation(<br>
+              WindowConstants.DISPOSE_ON_CLOSE);</p>
+            <p> if(propertiesFilename != null) {<br>
+              resources = ResourceBundle.getBundle(<br>
+              propertiesFilename, Locale.getDefault());<br>
+              }</p>
+            <p> f.addWindowListener(new WindowAdapter() {<br>
+              public void windowClosed(WindowEvent e) {<br>
+              System.exit(0);<br>
+              }<br>
+              });<br>
+              }<br>
+              static public JPanel getStatusArea() {<br>
+              return statusArea;<br>
+              }<br>
+              static public void showStatus(String s) {<br>
+              status.setText(s);<br>
+              }<br>
+              static Object getResource(String key) {<br>
+              if(resources != null) {<br>
+              return resources.getString(key);<br>
+              }<br>
+              return null;<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p align="center">&nbsp; </p>
+            <p> 19.3.2 列宽度</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例19-6 指定列宽度</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;<br>
+            import javax.swing.table.*;<br>
+            import java.util.*;
+            <p>public class Test extends JFrame {<br>
+              Object[] columnNames = <br>
+              {&quot;First Name&quot;, &quot;MI&quot;, &quot;Last Name&quot;};</p>
+            <p> Object[][] names = {<br>
+              { &quot;Lynn&quot;, &quot;M.&quot;, &quot;Seckinger&quot; },<br>
+              { &quot;Carol&quot;, &quot;R.&quot;, &quot;Seckinger&quot; },<br>
+              { &quot;Roy&quot;, &quot;D.&quot;, &quot;Martin&quot; },<br>
+              { &quot;Bill&quot;, &quot;O.&quot;, &quot;Veryveryveryverylonglastname&quot; 
+              },<br>
+              { &quot;Richard&quot;, &quot;A.&quot;, &quot;Tattersall&quot; },<br>
+              { &quot;Philip&quot;, &quot;B.&quot;, &quot;Edwards&quot; },<br>
+              { &quot;Moore&quot;, &quot;T.&quot;, &quot;Moore&quot; },</p>
+            <p> // shorten scrollbar grip with these ...<br>
+              { &quot;Lynn&quot;, &quot;M.&quot;, &quot;Seckinger&quot; },<br>
+              { &quot;Carol&quot;, &quot;R.&quot;, &quot;Seckinger&quot; },<br>
+              { &quot;Roy&quot;, &quot;D.&quot;, &quot;Martin&quot; },<br>
+              { &quot;Bill&quot;, &quot;O.&quot;, &quot;Veryveryveryverylonglastname&quot; 
+              },<br>
+              { &quot;Richard&quot;, &quot;A.&quot;, &quot;Tattersall&quot; },<br>
+              { &quot;Philip&quot;, &quot;B.&quot;, &quot;Edwards&quot; },<br>
+              { &quot;Moore&quot;, &quot;T.&quot;, &quot;Moore&quot; },<br>
+              };<br>
+              JTable table = new JTable(names, columnNames);</p>
+            <p> public Test() {<br>
+              TableColumn mid = table.getColumn(columnNames[1]);<br>
+              TableColumn last = table.getColumn(columnNames[2]);</p>
+            <p> int midWidth = getPreferredWidthForColumn(mid),<br>
+              lastWidth = getPreferredWidthForColumn(last);</p>
+            <p> mid.setMinWidth(midWidth);<br>
+              mid.setMaxWidth(midWidth);</p>
+            <p> last.setMinWidth(lastWidth);</p>
+            <p> // sizeColumnsToFit() must be called due to a JTable<br>
+              // bug ...<br>
+              table.sizeColumnsToFit(0);</p>
+            <p> getContentPane().add(new JScrollPane(table), <br>
+              BorderLayout.CENTER);<br>
+              }<br>
+              public int getPreferredWidthForColumn(TableColumn col) {<br>
+              int hw = columnHeaderWidth(col), // hw = header width<br>
+              cw = widestCellInColumn(col); // cw = column width</p>
+            <p> return hw &gt; cw ? hw : cw;<br>
+              }<br>
+              private int columnHeaderWidth(TableColumn col) {<br>
+              TableCellRenderer renderer = col.getHeaderRenderer();</p>
+            <p> Component comp = renderer.getTableCellRendererComponent(<br>
+              table, col.getHeaderValue(), <br>
+              false, false, 0, 0);</p>
+            <p> return comp.getPreferredSize().width;<br>
+              }<br>
+              private int widestCellInColumn(TableColumn col) {<br>
+              int c = col.getModelIndex(), width=0, maxw=0;</p>
+            <p> for(int r=0; r &lt; table.getRowCount(); ++r) {<br>
+              TableCellRenderer renderer = <br>
+              table.getCellRenderer(r,c);</p>
+            <p> Component comp = <br>
+              renderer.getTableCellRendererComponent(<br>
+              table, table.getValueAt(r,c), <br>
+              false, false, r, c);</p>
+            <p> width = comp.getPreferredSize().width;<br>
+              maxw = width &gt; maxw ? width : maxw;<br>
+              }<br>
+              return maxw;<br>
+              }<br>
+              public static void main(String args[]) {<br>
+              GJApp.launch(<br>
+              new Test(),&quot;Setting Column Widths&quot;,300,300,320,140);<br>
+              }<br>
+              }<br>
+              class GJApp extends WindowAdapter {<br>
+              static private JPanel statusArea = new JPanel();<br>
+              static private JLabel status = new JLabel(&quot; &quot;);<br>
+              static private ResourceBundle resources;</p>
+            <p> public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h) {<br>
+              launch(f,title,x,y,w,h,null); <br>
+              }<br>
+              public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h,<br>
+              String propertiesFilename) {<br>
+              f.setTitle(title);<br>
+              f.setBounds(x,y,w,h);<br>
+              f.setVisible(true);</p>
+            <p> statusArea.setBorder(BorderFactory.createEtchedBorder());<br>
+              statusArea.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));<br>
+              statusArea.add(status);<br>
+              status.setHorizontalAlignment(JLabel.LEFT);</p>
+            <p> f.setDefaultCloseOperation(<br>
+              WindowConstants.DISPOSE_ON_CLOSE);</p>
+            <p> if(propertiesFilename != null) {<br>
+              resources = ResourceBundle.getBundle(<br>
+              propertiesFilename, Locale.getDefault());<br>
+              }</p>
+            <p> f.addWindowListener(new WindowAdapter() {<br>
+              public void windowClosed(WindowEvent e) {<br>
+              System.exit(0);<br>
+              }<br>
+              });<br>
+              }<br>
+              static public JPanel getStatusArea() {<br>
+              return statusArea;<br>
+              }<br>
+              static public void showStatus(String s) {<br>
+              status.setText(s);<br>
+              }<br>
+              static Object getResource(String key) {<br>
+              if(resources != null) {<br>
+              return resources.getString(key);<br>
+              }<br>
+              return null;<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p align="center">&nbsp; </p>
+            <p> 19.4 表格列模型</p>
+            <p>&nbsp; </p>
+            <p> 19.4.1 DefaultTableColumnModel类</p>
+            <p>&nbsp;</p>
+            <p align="center">&nbsp; </p>
+            <p align="center">&nbsp; </p>
+            <p> 19.4.2 列边距</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例19-7 设置列边距</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;<br>
+            import javax.swing.event.*;<br>
+            import javax.swing.table.*;<br>
+            import java.util.*;
+            <p>public class Test extends JFrame {<br>
+              JTable table = new JTable(<br>
+              new AbstractTableModel() {<br>
+              public int getRowCount() { return 10; }<br>
+              public int getColumnCount() { return 10; }</p>
+            <p> public Object getValueAt(int row, int col) {<br>
+              return &quot;(&quot; + Integer.toString(row) + &quot;,&quot; +<br>
+              Integer.toString(col) + &quot;)&quot;;<br>
+              }<br>
+              });</p>
+            <p> public Test() {<br>
+              Container cp = getContentPane();<br>
+              cp.add(new JScrollPane(table), BorderLayout.CENTER);<br>
+              cp.add(new ControlPanel(), BorderLayout.NORTH);<br>
+              }<br>
+              class ControlPanel extends JPanel {<br>
+              private JSlider slider = new JSlider(<br>
+              JSlider.HORIZONTAL,0,100,<br>
+              table.getColumnModel().getColumnMargin());</p>
+            <p> private JLabel label = new JLabel();</p>
+            <p> public ControlPanel() {<br>
+              add(new JLabel(&quot;Column Margin:&quot;));<br>
+              add(slider);<br>
+              add(label);</p>
+            <p> label.setText(<br>
+              Integer.toString(<br>
+              table.getColumnModel().getColumnMargin()));</p>
+            <p> slider.addChangeListener(new ChangeListener() {<br>
+              public void stateChanged(ChangeEvent e) {<br>
+              table.getColumnModel().setColumnMargin(<br>
+              slider.getValue());<br>
+              }<br>
+              });<br>
+              table.getColumnModel().addColumnModelListener(<br>
+              new TableColumnModelListener() {<br>
+              public void columnMarginChanged(ChangeEvent e) {<br>
+              TableColumnModel m = table.getColumnModel();<br>
+              label.setText(<br>
+              Integer.toString(m.getColumnMargin()));<br>
+              }</p>
+            <p> // unfortunately, Swing does not have many<br>
+              // event adapter classes ...<br>
+              public void columnAdded(TableColumnModelEvent e) {<br>
+              }<br>
+              public void columnMoved(TableColumnModelEvent e) {<br>
+              }<br>
+              public void columnRemoved(<br>
+              TableColumnModelEvent e) {<br>
+              }<br>
+              public void columnSelectionChanged(<br>
+              ListSelectionEvent e) {<br>
+              }<br>
+              });<br>
+              }<br>
+              }<br>
+              public static void main(String args[]) {<br>
+              GJApp.launch(new Test(),<br>
+              &quot;Column Margins&quot;,150,150,500,200); <br>
+              }<br>
+              }<br>
+              class GJApp extends WindowAdapter {<br>
+              static private JPanel statusArea = new JPanel();<br>
+              static private JLabel status = new JLabel(&quot; &quot;);<br>
+              static private ResourceBundle resources;</p>
+            <p> public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h) {<br>
+              launch(f,title,x,y,w,h,null); <br>
+              }<br>
+              public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h,<br>
+              String propertiesFilename) {<br>
+              f.setTitle(title);<br>
+              f.setBounds(x,y,w,h);<br>
+              f.setVisible(true);</p>
+            <p> statusArea.setBorder(BorderFactory.createEtchedBorder());<br>
+              statusArea.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));<br>
+              statusArea.add(status);<br>
+              status.setHorizontalAlignment(JLabel.LEFT);</p>
+            <p> f.setDefaultCloseOperation(<br>
+              WindowConstants.DISPOSE_ON_CLOSE);</p>
+            <p> if(propertiesFilename != null) {<br>
+              resources = ResourceBundle.getBundle(<br>
+              propertiesFilename, Locale.getDefault());<br>
+              }</p>
+            <p> f.addWindowListener(new WindowAdapter() {<br>
+              public void windowClosed(WindowEvent e) {<br>
+              System.exit(0);<br>
+              }<br>
+              });<br>
+              }<br>
+              static public JPanel getStatusArea() {<br>
+              return statusArea;<br>
+              }<br>
+              static public void showStatus(String s) {<br>
+              status.setText(s);<br>
+              }<br>
+              static Object getResource(String key) {<br>
+              if(resources != null) {<br>
+              return resources.getString(key);<br>
+              }<br>
+              return null;<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p align="center">&nbsp; </p>
+            <p> 19.4.3 隐藏列</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例19-8 添加和删除列</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import javax.swing.table.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import java.util.*;
+            <p>public class Test extends JFrame {<br>
+              JTable table = new JTable(<br>
+              new Object[][] {<br>
+              {&quot;Mouse&quot;, &quot;Mighty&quot;, &quot;M.&quot; },<br>
+              {&quot;Mouse&quot;, &quot;Polly&quot;, &quot;A.&quot; },<br>
+              {&quot;Doright&quot;, &quot;Dudley&quot;, &quot;L.&quot; }<br>
+              },<br>
+              new Object[] {<br>
+              &quot;Last Name&quot;, &quot;First Name&quot;, &quot;Middle Initial&quot; 
+              <br>
+              }<br>
+              );<br>
+              public Test() {<br>
+              Container cp = getContentPane();</p>
+            <p> cp.add(new JScrollPane(table), BorderLayout.CENTER);<br>
+              cp.add(new ControlPanel(), BorderLayout.NORTH);<br>
+              }<br>
+              class ControlPanel extends JPanel {<br>
+              private JCheckBox checkBox = new JCheckBox(<br>
+              &quot;First Name Column Showing&quot;);<br>
+              public ControlPanel() {<br>
+              final TableColumnModel tcm = table.getColumnModel();<br>
+              final TableColumn firstNameColumn = <br>
+              table.getColumn(&quot;First Name&quot;);</p>
+            <p> checkBox.setSelected(true);<br>
+              add(checkBox);</p>
+            <p> checkBox.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent event) {<br>
+              if(checkBox.isSelected()) {<br>
+              tcm.addColumn(firstNameColumn);<br>
+              tcm.moveColumn(2,1);<br>
+              }<br>
+              else {<br>
+              tcm.removeColumn(firstNameColumn);<br>
+              }<br>
+              table.sizeColumnsToFit(-1);<br>
+              }<br>
+              });<br>
+              }<br>
+              }<br>
+              public static void main(String args[]) {<br>
+              GJApp.launch(<br>
+              new Test(), &quot;Showing/Hiding Columns&quot;,300,300,450,175);<br>
+              }<br>
+              }<br>
+              class GJApp extends WindowAdapter {<br>
+              static private JPanel statusArea = new JPanel();<br>
+              static private JLabel status = new JLabel(&quot; &quot;);<br>
+              static private ResourceBundle resources;</p>
+            <p> public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h) {<br>
+              launch(f,title,x,y,w,h,null); <br>
+              }<br>
+              public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h,<br>
+              String propertiesFilename) {<br>
+              f.setTitle(title);<br>
+              f.setBounds(x,y,w,h);<br>
+              f.setVisible(true);</p>
+            <p> statusArea.setBorder(BorderFactory.createEtchedBorder());<br>
+              statusArea.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));<br>
+              statusArea.add(status);<br>
+              status.setHorizontalAlignment(JLabel.LEFT);</p>
+            <p> f.setDefaultCloseOperation(<br>
+              WindowConstants.DISPOSE_ON_CLOSE);</p>
+            <p> if(propertiesFilename != null) {<br>
+              resources = ResourceBundle.getBundle(<br>
+              propertiesFilename, Locale.getDefault());<br>
+              }</p>
+            <p> f.addWindowListener(new WindowAdapter() {<br>
+              public void windowClosed(WindowEvent e) {<br>
+              System.exit(0);<br>
+              }<br>
+              });<br>
+              }<br>
+              static public JPanel getStatusArea() {<br>
+              return statusArea;<br>
+              }<br>
+              static public void showStatus(String s) {<br>
+              status.setText(s);<br>
+              }<br>
+              static Object getResource(String key) {<br>
+              if(resources != null) {<br>
+              return resources.getString(key);<br>
+              }<br>
+              return null;<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p align="center">&nbsp; </p>
+            <p> 19.4.4 锁定左边列</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例19-9 锁定表格的左列</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;<br>
+            import javax.swing.event.*;<br>
+            import javax.swing.table.*;
+            <p>public class Test extends JFrame {<br>
+              Object[][] listings = new Object[][] {<br>
+              { &quot;28 Pickelodan&quot;, &quot;Mork and Mindy&quot;, &quot;Dukes 
+              of Hazard&quot;, <br>
+              &quot;I Love Lucy&quot;, &quot;Andy Griffith&quot;, &quot;Mission 
+              Impossible&quot; },</p>
+            <p> { &quot;29 Dizey&quot;, &quot;Rulan&quot;, &quot;&lt;-- Mulan&quot;, 
+              &quot;&lt;-- Mulan&quot;, <br>
+              &quot;&lt;-- Mulan&quot;, &quot;&lt;-- Mulan&quot; },</p>
+            <p> { &quot;31 NBT&quot;, &quot;Nightly News&quot;, &quot;40/20&quot;, 
+              <br>
+              &quot;&lt;-- 40/20&quot;, &quot;LimeTime&quot;, &quot;&lt;-- LimeTime&quot; 
+              },</p>
+            <p> { &quot;32 AnimalUniverse&quot;, &quot;Amazing Animals&quot;,&quot;Animal 
+              Rescues&quot;,<br>
+              &quot;Cute Animals&quot;, &quot;Killer Animals&quot;, <br>
+              &quot;Big and Small Animals&quot; },</p>
+            <p> { &quot;34 DSPN&quot;, &quot;Tuesday Night FootBall&quot;, <br>
+              &quot;&lt;--Tuesday Night FootBall&quot;, &quot;&lt;--Tuesday Night 
+              FootBall&quot;, <br>
+              &quot;&lt;--Tuesday Night FootBall&quot;, &quot;&lt;--Tuesday Night 
+              FootBall&quot;},</p>
+            <p> { &quot;37 TLC&quot;, &quot;Mind Mysteries&quot;, &quot;Our World&quot;, 
+              <br>
+              &quot;Ancient Wonders&quot;, &quot;UFOs&quot;, &quot;Ancient Inventions&quot; 
+              },</p>
+            <p> { &quot;38 THC&quot;, &quot;The Civil War&quot;, &quot;Stalin&quot;, 
+              <br>
+              &quot;Watergate&quot;, &quot;Kent State&quot;, &quot;WWII&quot; 
+              },<br>
+              };<br>
+              Object[] columnNames = new Object[] {<br>
+              &quot;Channel&quot;, &quot;7:30&quot;, &quot;8:00&quot;, &quot;8:30&quot;, 
+              &quot;9:00&quot;, &quot;9:30&quot;<br>
+              };<br>
+              TableModel sharedModel = new DefaultTableModel(<br>
+              listings, columnNames);<br>
+              JTable table = new JTable(sharedModel),<br>
+              headerTable = new JTable(sharedModel);</p>
+            <p> TableColumnModel tcm = table.getColumnModel();<br>
+              TableColumn firstColumn = tcm.getColumn(0);</p>
+            <p> public Test() {<br>
+              Container cp = getContentPane();</p>
+            <p> setActualPreferredColumnWidths(table);<br>
+              setActualPreferredColumnWidths(headerTable);</p>
+            <p> table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);<br>
+              headerTable.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);</p>
+            <p> headerTable.getTableHeader().setReorderingAllowed(false);</p>
+            <p> headerTable.setPreferredScrollableViewportSize(<br>
+              new Dimension(<br>
+              firstColumn.getPreferredWidth() +<br>
+              headerTable.getColumnModel().getColumnMargin(), <br>
+              0));</p>
+            <p> cp.add(new ControlPanel(), BorderLayout.NORTH);<br>
+              cp.add(new JScrollPane(table), BorderLayout.CENTER);<br>
+              }<br>
+              class ControlPanel extends JPanel {<br>
+              JCheckBox checkBox = new JCheckBox(&quot;First Column Locked&quot;);</p>
+            <p> public ControlPanel() {<br>
+              add(checkBox);</p>
+            <p> checkBox.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              JScrollPane scrollPane = (JScrollPane)<br>
+              SwingUtilities.getAncestorOfClass(<br>
+              JScrollPane.class, table);</p>
+            <p> if(checkBox.isSelected()) {<br>
+              tcm.removeColumn(firstColumn);<br>
+              scrollPane.setRowHeaderView(headerTable);<br>
+              scrollPane.setCorner(<br>
+              JScrollPane.UPPER_LEFT_CORNER,<br>
+              headerTable.getTableHeader());<br>
+              }<br>
+              else {<br>
+              tcm.addColumn(firstColumn);</p>
+            <p> int numCols = tcm.getColumnCount();<br>
+              tcm.moveColumn(numCols-1, 0);<br>
+              scrollPane.setRowHeaderView(null);<br>
+              }<br>
+              }<br>
+              });<br>
+              }<br>
+              }<br>
+              public void setActualPreferredColumnWidths(JTable table) {<br>
+              int columnCount = table.getColumnCount();</p>
+            <p> for(int i=0; i &lt; columnCount; ++i) {<br>
+              TableColumn c = table.getColumnModel().getColumn(i);<br>
+              int w = getActualPreferredColumnWidth(c);</p>
+            <p> c.setPreferredWidth(w);<br>
+              }<br>
+              }<br>
+              public int getActualPreferredColumnWidth(TableColumn col) {<br>
+              int hw = columnHeaderWidth(col), // hw = header width<br>
+              cw = widestCellInColumn(col); // cw = column width</p>
+            <p> return hw &gt; cw ? hw : cw;<br>
+              }<br>
+              private int columnHeaderWidth(TableColumn col) {<br>
+              TableCellRenderer renderer = col.getHeaderRenderer();</p>
+            <p> Component comp = renderer.getTableCellRendererComponent(<br>
+              table, col.getHeaderValue(), <br>
+              false, false, 0, 0);</p>
+            <p> return comp.getPreferredSize().width;<br>
+              }<br>
+              private int widestCellInColumn(TableColumn col) {<br>
+              int c = col.getModelIndex(), width=0, maxw=0;</p>
+            <p> for(int r=0; r &lt; table.getRowCount(); ++r) {<br>
+              TableCellRenderer renderer = <br>
+              table.getCellRenderer(r,c);</p>
+            <p> Component comp = <br>
+              renderer.getTableCellRendererComponent(<br>
+              table, table.getValueAt(r,c), <br>
+              false, false, r, c);</p>
+            <p> width = comp.getPreferredSize().width;<br>
+              maxw = width &gt; maxw ? width : maxw;<br>
+              }<br>
+              return maxw;<br>
+              }<br>
+              public static void main(String args[]) {<br>
+              GraphicJavaApplication.launch(<br>
+              new Test(),&quot;Locking the Left-Hand Column&quot;,<br>
+              300,300,600,210);<br>
+              }<br>
+              }<br>
+              class GraphicJavaApplication extends WindowAdapter {<br>
+              public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h) {<br>
+              f.setTitle(title);<br>
+              f.setBounds(x,y,w,h);<br>
+              f.setVisible(true);</p>
+            <p> f.setDefaultCloseOperation(<br>
+              WindowConstants.DISPOSE_ON_CLOSE);</p>
+            <p> f.addWindowListener(new WindowAdapter() {<br>
+              public void windowClosed(WindowEvent e) {<br>
+              System.exit(0);<br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 19.5 表格选取</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例19-10 表格选取</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import javax.swing.event.*;<br>
+            import javax.swing.table.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class Test extends JFrame {<br>
+              Object[] selectionModes = new Object[] {<br>
+              &quot;SINGLE_SELECTION&quot;,<br>
+              &quot;SINGLE_INTERVAL_SELECTION&quot;,<br>
+              &quot;MULTIPLE_INTERVAL_SELECTION&quot;,<br>
+              };<br>
+              int[] selectionConstants = {<br>
+              ListSelectionModel.SINGLE_SELECTION,<br>
+              ListSelectionModel.SINGLE_INTERVAL_SELECTION,<br>
+              ListSelectionModel.MULTIPLE_INTERVAL_SELECTION,<br>
+              };</p>
+            <p> JTable table = new JTable(10,10);</p>
+            <p> public Test() {<br>
+              Container contentPane = getContentPane();<br>
+              contentPane.add(new ControlPanel(), BorderLayout.NORTH);<br>
+              contentPane.add(new JScrollPane(table), <br>
+              BorderLayout.CENTER);</p>
+            <p> }<br>
+              class ControlPanel extends JPanel {<br>
+              JComboBox combo = new JComboBox(selectionModes);</p>
+            <p> public ControlPanel() {<br>
+              setBorder(BorderFactory.createTitledBorder(<br>
+              &quot;Selection Modes&quot;));<br>
+              add(combo);<br>
+              initializeCombo();</p>
+            <p> combo.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              int index = combo.getSelectedIndex();</p>
+            <p> table.setSelectionMode(<br>
+              selectionConstants[index]);<br>
+              }<br>
+              });<br>
+              } <br>
+              private void initializeCombo() {<br>
+              int mode = <br>
+              table.getSelectionModel().getSelectionMode();</p>
+            <p> if(mode == ListSelectionModel.SINGLE_SELECTION) { <br>
+              combo.setSelectedIndex(0);<br>
+              }<br>
+              else if(mode == <br>
+              ListSelectionModel.SINGLE_INTERVAL_SELECTION) {<br>
+              combo.setSelectedIndex(1);<br>
+              }<br>
+              else if(mode == <br>
+              ListSelectionModel.MULTIPLE_INTERVAL_SELECTION) {<br>
+              combo.setSelectedIndex(2);<br>
+              }<br>
+              }<br>
+              }<br>
+              public static void main(String args[]) {<br>
+              GraphicJavaApplication.launch(<br>
+              new Test(),&quot;JTable Selection Modes&quot;,300,300,450,300);<br>
+              }<br>
+              }<br>
+              class GraphicJavaApplication extends WindowAdapter {<br>
+              public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h) {<br>
+              f.setTitle(title);<br>
+              f.setBounds(x,y,w,h);<br>
+              f.setVisible(true);</p>
+            <p> f.setDefaultCloseOperation(<br>
+              WindowConstants.DISPOSE_ON_CLOSE);</p>
+            <p> f.addWindowListener(new WindowAdapter() {<br>
+              public void windowClosed(WindowEvent e) {<br>
+              System.exit(0);<br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p align="center">&nbsp; </p>
+            <p> 19.6 绘制和编辑</p>
+            <p>&nbsp;</p>
+            <p align="center">&nbsp; </p>
+            <p> 19.6.1 使用表格单绘制器和编辑器</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例19-11 StereoDeckModel类</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import javax.swing.table.*;
+            <p>class StereoDeckModel extends AbstractTableModel {<br>
+              String[] columnNames = {<br>
+              &quot;In Use&quot;, &quot;Manufacturer&quot;, &quot;Model&quot;, 
+              &quot;Price&quot;, &quot;Dolby&quot;,<br>
+              &quot;Bass&quot;, &quot;Volume&quot;<br>
+              };<br>
+              Object[][] data = {<br>
+              { Boolean.FALSE, &quot;Sony&quot;, &quot;1501A&quot;, <br>
+              new Double(129.99), Boolean.TRUE,<br>
+              Boolean.TRUE, new Integer(50) }, </p>
+            <p> { Boolean.FALSE, &quot;Phillips&quot;, &quot;86A4&quot;, <br>
+              new Double(159.99), Boolean.TRUE,<br>
+              Boolean.FALSE, new Integer(35) }, </p>
+            <p> { Boolean.TRUE, &quot;Kenwood&quot;, &quot;33-801-A&quot;, <br>
+              new Double(199.99), Boolean.FALSE,<br>
+              Boolean.TRUE, new Integer(77) }, </p>
+            <p> { Boolean.FALSE, &quot;Blaupunkt&quot;, &quot;7622A&quot;, <br>
+              new Double(229.99), Boolean.TRUE,<br>
+              Boolean.FALSE, new Integer(19) }, </p>
+            <p> { Boolean.FALSE, &quot;Akai&quot;, &quot;9733&quot;, <br>
+              new Double(259.99), Boolean.TRUE,<br>
+              Boolean.FALSE, new Integer(68) }, </p>
+            <p> { Boolean.FALSE, &quot;Sony&quot;, &quot;1520B&quot;, <br>
+              new Double(349.99), Boolean.FALSE,<br>
+              Boolean.FALSE, new Integer(94) }, </p>
+            <p> { Boolean.FALSE, &quot;Kenwood&quot;, &quot;2289B&quot;, <br>
+              new Double(499.99), Boolean.FALSE,<br>
+              Boolean.FALSE, new Integer(44) }, <br>
+              };<br>
+              public Object getValueAt(int row, int col) {<br>
+              return data[row][col];<br>
+              }<br>
+              public int getRowCount() { <br>
+              return data.length; <br>
+              }<br>
+              public int getColumnCount() { <br>
+              return columnNames.length;<br>
+              }<br>
+              public String getColumnName(int col) {<br>
+              return columnNames[col];<br>
+              }<br>
+              public Class getColumnClass(int col) {<br>
+              return data[0][col].getClass();<br>
+              }<br>
+              public void setValueAt(Object value, int row, int col) {<br>
+              data[row][col] = value;<br>
+              fireTableCellUpdated(row, col);<br>
+              }<br>
+              public boolean isCellEditable(int row, int col) {<br>
+              Class cls = getColumnClass(col);<br>
+              String name = getColumnName(col);</p>
+            <p> return (cls == Boolean.class &amp;&amp; !name.equals(&quot;Dolby&quot;)) 
+              ||<br>
+              cls == Integer.class || cls == Double.class;<br>
+              }<br>
+              public void updateBulbs(int selectedRow) {<br>
+              for(int r=0; r &lt; getRowCount(); ++r) {<br>
+              data[r][0] = new Boolean(r == selectedRow);<br>
+              }<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p align="center">&nbsp; </p>
+            <p align="center"><b>例19-12 使用绘制器和编辑器</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import java.text.*;<br>
+            import java.util.*;<br>
+            import javax.swing.*;<br>
+            import javax.swing.event.*;<br>
+            import javax.swing.table.*;
+            <p>public class Test extends JFrame {<br>
+              JTable table = new JTable(new StereoDeckModel());</p>
+            <p> public Test() {<br>
+              initializeInUseColumn();<br>
+              initializePriceColumn();<br>
+              initializeVolumeColumn();<br>
+              sizeColumns();</p>
+            <p> table.setSelectionMode(<br>
+              ListSelectionModel.SINGLE_SELECTION);</p>
+            <p> table.getSelectionModel().addListSelectionListener(<br>
+              new ListSelectionListener() {<br>
+              public void valueChanged(ListSelectionEvent e) {<br>
+              StereoDeckModel model = <br>
+              (StereoDeckModel)table.getModel(); </p>
+            <p> if(!e.getValueIsAdjusting()) {<br>
+              model.updateBulbs(table.getSelectedRow());<br>
+              }<br>
+              }<br>
+              });<br>
+              getContentPane().add(new JScrollPane(table),<br>
+              BorderLayout.CENTER);<br>
+              }<br>
+              private void initializeInUseColumn() {<br>
+              TableColumn inUseColumn = table.getColumn(&quot;In Use&quot;);<br>
+              <br>
+              inUseColumn.setCellRenderer(new BulbRenderer());<br>
+              inUseColumn.setCellEditor(new BulbEditor());<br>
+              }<br>
+              private void initializePriceColumn() {<br>
+              TableColumn priceColumn = table.getColumn(&quot;Price&quot;);<br>
+              JComboBox combo = new JComboBox();</p>
+            <p> // Combo box items are Numbers ...<br>
+              combo.addItem(new Double(159.99));<br>
+              combo.addItem(new Double(169.99));<br>
+              combo.addItem(new Double(229.99));<br>
+              combo.addItem(new Double(449.99));<br>
+              combo.addItem(new Double(699.99));</p>
+            <p> combo.setRenderer(new ListCellCurrencyRenderer());</p>
+            <p> priceColumn.setCellRenderer(<br>
+              new TableCellCurrencyRenderer());</p>
+            <p> priceColumn.setCellEditor(new PriceEditor(combo));<br>
+              }<br>
+              private void initializeVolumeColumn() {<br>
+              TableColumn volumeColumn = table.getColumn(&quot;Volume&quot;);<br>
+              TableCellRenderer renderer = new VolumeRenderer();<br>
+              TableCellEditor editor = new VolumeEditor();</p>
+            <p> volumeColumn.setCellRenderer(renderer);<br>
+              volumeColumn.setCellEditor(editor);</p>
+            <p> Dimension ps = ((JPanel)renderer).getPreferredSize();<br>
+              table.setRowHeight(ps.height);<br>
+              }<br>
+              public static void main(String args[]) {<br>
+              GraphicJavaApplication.launch(<br>
+              new Test(), &quot;Car Stereo Deck&quot;, 300,300,559,368);<br>
+              }<br>
+              private void sizeColumns() {<br>
+              TableColumnModel tcm = table.getColumnModel();</p>
+            <p> for(int i=0; i &lt; tcm.getColumnCount(); ++i) {<br>
+              TableColumn column = tcm.getColumn(i);<br>
+              int w = getPreferredWidthForColumn(column);</p>
+            <p> column.setMinWidth(w);<br>
+              column.setMaxWidth(w);<br>
+              }<br>
+              }<br>
+              public int getPreferredWidthForColumn(TableColumn col) {<br>
+              int hw = columnHeaderWidth(col), // hw = header width<br>
+              cw = widestCellInColumn(col); // cw = column width</p>
+            <p> return hw &gt; cw ? hw+10 : cw+10;<br>
+              }<br>
+              private int columnHeaderWidth(TableColumn col) {<br>
+              TableCellRenderer renderer = col.getHeaderRenderer();</p>
+            <p> Component comp = renderer.getTableCellRendererComponent(<br>
+              table, col.getHeaderValue(), <br>
+              false, false, 0, 0);</p>
+            <p> return comp.getPreferredSize().width;<br>
+              }<br>
+              private int widestCellInColumn(TableColumn col) {<br>
+              int c = col.getModelIndex(), width=0, maxw=0;</p>
+            <p> for(int r=0; r &lt; table.getRowCount(); ++r) {<br>
+              TableCellRenderer renderer = <br>
+              table.getCellRenderer(r,c);</p>
+            <p> Component comp = <br>
+              renderer.getTableCellRendererComponent(<br>
+              table, table.getValueAt(r,c), <br>
+              false, false, r, c);</p>
+            <p> width = comp.getPreferredSize().width;<br>
+              maxw = width &gt; maxw ? width : maxw;<br>
+              }<br>
+              return maxw;<br>
+              }<br>
+              }<br>
+              class ListCellCurrencyRenderer extends DefaultListCellRenderer {<br>
+              public Component getListCellRendererComponent(<br>
+              JList list,<br>
+              Object value,<br>
+              int index,<br>
+              boolean isSelected,<br>
+              boolean hasFocus) {<br>
+              JLabel c = (JLabel)<br>
+              super.getListCellRendererComponent(<br>
+              list, value, index,<br>
+              isSelected, hasFocus);</p>
+            <p> Format format = NumberFormat.getCurrencyInstance();<br>
+              c.setText(value == null ? &quot;&quot; : format.format(value));<br>
+              return c;<br>
+              }<br>
+              }<br>
+              class TableCellCurrencyRenderer extends DefaultTableCellRenderer 
+              {<br>
+              public void setValue(Object value) {<br>
+              Format format = NumberFormat.getCurrencyInstance();<br>
+              super.setValue(value == null ? &quot;&quot; : format.format(value));<br>
+              }<br>
+              }<br>
+              class GraphicJavaApplication extends WindowAdapter {<br>
+              public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h) {<br>
+              f.setTitle(title);<br>
+              f.setBounds(x,y,w,h);<br>
+              f.setVisible(true);</p>
+            <p> f.setDefaultCloseOperation(<br>
+              WindowConstants.DISPOSE_ON_CLOSE);</p>
+            <p> f.addWindowListener(new WindowAdapter() {<br>
+              public void windowClosed(WindowEvent e) {<br>
+              System.exit(0);<br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p align="center">&nbsp; </p>
+            <p> 19.6.2 表格单绘制器</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例19-13 VolumeRenderer</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import javax.swing.*;<br>
+            import javax.swing.event.*;<br>
+            import javax.swing.table.*;
+            <p>class VolumeRenderer extends JPanel<br>
+              implements TableCellRenderer {<br>
+              private JSlider slider = new JSlider();<br>
+              private JLabel label = new JLabel(&quot;value&quot;);</p>
+            <p> public VolumeRenderer() {<br>
+              slider.setOrientation(SwingConstants.HORIZONTAL);<br>
+              slider.setPreferredSize(new Dimension(200,30));<br>
+              slider.putClientProperty(&quot;JSlider.isFilled&quot;,Boolean.TRUE);</p>
+            <p> label.setHorizontalAlignment(JLabel.CENTER);<br>
+              label.setHorizontalTextPosition(JLabel.CENTER);</p>
+            <p> setLayout(new BorderLayout());<br>
+              add(label, BorderLayout.NORTH);<br>
+              add(slider, BorderLayout.CENTER);</p>
+            <p> slider.addChangeListener(new ChangeListener() {<br>
+              public void stateChanged(ChangeEvent e) {<br>
+              label.setText(<br>
+              Integer.toString(slider.getValue()));<br>
+              }<br>
+              });<br>
+              }<br>
+              public Component getTableCellRendererComponent(<br>
+              JTable table, Object value,<br>
+              boolean isSelected,<br>
+              boolean hasFocus,<br>
+              int row, int col) {<br>
+              Integer v = (Integer)value;</p>
+            <p> slider.setValue(v.intValue());<br>
+              label.setText(v.toString());</p>
+            <p> slider.setEnabled(isSelected);<br>
+              label.setEnabled(isSelected);</p>
+            <p> return this;<br>
+              }<br>
+              public JSlider getSlider() {<br>
+              return slider;<br>
+              }<br>
+              public JLabel getLabel() {<br>
+              return label;<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p align="center">&nbsp; </p>
+            <p> 19.6.3 Default Table Cell Renderer类</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例19-14 BulbRenderer</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import javax.swing.*;<br>
+            import javax.swing.table.*;
+            <p>class BulbRenderer extends DefaultTableCellRenderer {<br>
+              private ImageIcon darkBulb = new ImageIcon(&quot;button.jpg&quot;),<br>
+              brightBulb = new ImageIcon(&quot;button_lit.jpg&quot;);</p>
+            <p> public BulbRenderer() {<br>
+              setHorizontalAlignment(JLabel.CENTER);<br>
+              }<br>
+              public Component getTableCellRendererComponent(<br>
+              JTable table, Object value,<br>
+              boolean isSelected,<br>
+              boolean hasFocus,<br>
+              int row, int col) {<br>
+              Boolean b = (Boolean)value;<br>
+              setIcon(b.booleanValue() ? brightBulb : darkBulb);<br>
+              return this;<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p align="center">&nbsp; </p>
+            <p> 19.6.4 表格格式化绘制器</p>
+            <p>&nbsp;</p>
+            <p align="center">&nbsp; </p>
+            <p> 19.6.5 单元编辑器</p>
+            <p>&nbsp;</p>
+            <p align="center">&nbsp; </p>
+            <p> 19.6.6 表格单编辑器</p>
+            <p>&nbsp;</p>
+            <p align="center">&nbsp; </p>
+            <p> 19.6.7 实现TableCellEditor接口</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例19-15 AbstractCellEditor</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import javax.swing.*;<br>
+            import javax.swing.event.*;<br>
+            import javax.swing.table.*;<br>
+            import javax.swing.tree.*;<br>
+            import java.awt.event.MouseEvent;<br>
+            import java.util.EventObject;
+            <p>abstract public class AbstractCellEditor <br>
+              implements TableCellEditor {<br>
+              protected EventListenerList listenerList = <br>
+              new EventListenerList();<br>
+              protected Object value;<br>
+              protected ChangeEvent changeEvent = null;<br>
+              protected int clickCountToStart = 1;</p>
+            <p> public Object getCellEditorValue() {<br>
+              return value;<br>
+              }<br>
+              public void setCellEditorValue(Object value) {<br>
+              this.value = value;<br>
+              }<br>
+              public void setClickCountToStart(int count) {<br>
+              clickCountToStart = count;<br>
+              }<br>
+              public int getClickCountToStart() {<br>
+              return clickCountToStart;<br>
+              }<br>
+              public boolean isCellEditable(EventObject anEvent) {<br>
+              if (anEvent instanceof MouseEvent) {<br>
+              if (((MouseEvent)anEvent).getClickCount() &lt; <br>
+              clickCountToStart)<br>
+              return false;<br>
+              }<br>
+              return true;<br>
+              }<br>
+              public boolean shouldSelectCell(EventObject anEvent) {<br>
+              return true;<br>
+              }<br>
+              public boolean stopCellEditing() {<br>
+              fireEditingStopped();<br>
+              return true;<br>
+              }<br>
+              public void cancelCellEditing() {<br>
+              fireEditingCanceled();<br>
+              }<br>
+              public void addCellEditorListener(CellEditorListener l) {<br>
+              listenerList.add(CellEditorListener.class, l);<br>
+              }<br>
+              public void removeCellEditorListener(CellEditorListener l) {<br>
+              listenerList.remove(CellEditorListener.class, l);<br>
+              }<br>
+              protected void fireEditingStopped() {<br>
+              Object[] listeners = listenerList.getListenerList();<br>
+              for (int i = listeners.length-2; i&gt;=0; i-=2) {<br>
+              if (listeners[i] == CellEditorListener.class) {<br>
+              if (changeEvent == null)<br>
+              changeEvent = new ChangeEvent(this);<br>
+              ((CellEditorListener)<br>
+              listeners[i+1]).editingStopped(changeEvent);<br>
+              } <br>
+              }<br>
+              }<br>
+              protected void fireEditingCanceled() {<br>
+              Object[] listeners = listenerList.getListenerList();<br>
+              for (int i = listeners.length-2; i&gt;=0; i-=2) {<br>
+              if (listeners[i]==CellEditorListener.class) {<br>
+              if (changeEvent == null)<br>
+              changeEvent = new ChangeEvent(this);<br>
+              ((CellEditorListener)<br>
+              listeners[i+1]).editingCanceled(changeEvent);<br>
+              } <br>
+              }<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p align="center"><b>例19-16 VolumeEditor</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;<br>
+            import javax.swing.table.*;<br>
+            import java.util.EventObject;
+            <p>class VolumeEditor extends AbstractCellEditor {<br>
+              VolumeRenderer renderer = new VolumeRenderer();</p>
+            <p> public VolumeEditor() {<br>
+              renderer.getLabel().addMouseListener(new MouseAdapter() {<br>
+              public void mousePressed(MouseEvent e) {<br>
+              if(e.getClickCount() == 2)<br>
+              cancelCellEditing(); <br>
+              }<br>
+              });<br>
+              }<br>
+              public Component getTableCellEditorComponent(<br>
+              JTable table, Object value,<br>
+              boolean isSelected,<br>
+              int row, int column) {<br>
+              JSlider slider = renderer.getSlider();<br>
+              slider.setValue(((Integer)value).intValue());<br>
+              return renderer;<br>
+              }<br>
+              public boolean stopCellEditing() {<br>
+              JSlider slider = renderer.getSlider();</p>
+            <p> setCellEditorValue(new Integer(slider.getValue()));</p>
+            <p> return super.stopCellEditing();<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p align="center"><b>例19-17 列出了PriceEdior类</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import java.util.EventObject;
+            <p>class PriceEditor extends DefaultCellEditor {<br>
+              public PriceEditor(JComboBox combo) {<br>
+              super(combo);<br>
+              }<br>
+              public boolean isCellEditable(EventObject e) {<br>
+              JPanel messagePanel = new JPanel();<br>
+              JPasswordField pwf = new JPasswordField(10);</p>
+            <p>System.out.println(e);<br>
+              messagePanel.add(new JLabel(&quot;Password:&quot;));<br>
+              messagePanel.add(pwf);</p>
+            <p> JOptionPane.showMessageDialog(null, <br>
+              messagePanel, &quot;Password Required&quot;,<br>
+              JOptionPane.INFORMATION_MESSAGE);</p>
+            <p> if(pwf.getText().equals(&quot;dolby&quot;)) {<br>
+              return true;<br>
+              }<br>
+              else {<br>
+              JOptionPane.showMessageDialog(null, <br>
+              &quot;Wrong Password!&quot;, &quot;Access Failed&quot;, <br>
+              JOptionPane.INFORMATION_MESSAGE);<br>
+              return false;<br>
+              }<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 19.7 表格行</p>
+            <p>&nbsp;</p>
+            <p align="center">&nbsp; </p>
+            <p align="center">&nbsp; </p>
+            <p> 19.7.1 行高</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例19-18 计算和设置行高</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;<br>
+            import javax.swing.event.*;<br>
+            import javax.swing.table.*;<br>
+            import java.util.*;
+            <p>public class Test extends JFrame {<br>
+              Object[] columnNames = {&quot;Name&quot;, &quot;Cost/Lb.&quot;, 
+              &quot;Picture&quot;};</p>
+            <p> Object[][] rowData = {<br>
+              { &quot;cake&quot;, &quot;$1.29&quot;, new ImageIcon(&quot;cake.gif&quot;) 
+              },<br>
+              { &quot;pear&quot;, &quot;$1.29&quot;, new ImageIcon(&quot;pear.gif&quot;) 
+              },<br>
+              { &quot;pineapple&quot;, &quot;$1.29&quot;, new ImageIcon(&quot;pineapple.gif&quot;) 
+              },<br>
+              { &quot;apple&quot;, &quot;$1.29&quot;, new ImageIcon(&quot;apple.gif&quot;) 
+              },<br>
+              { &quot;bread&quot;, &quot;$1.29&quot;, new ImageIcon(&quot;bread.gif&quot;) 
+              },<br>
+              };<br>
+              class RowSizingModel extends DefaultTableModel {<br>
+              public RowSizingModel(Object[][] data, <br>
+              Object[] colNames) {<br>
+              super(data, colNames);<br>
+              }<br>
+              public Class getColumnClass(int c) {<br>
+              if(c == 2) return ImageIcon.class;<br>
+              else return super.getColumnClass(c);<br>
+              }<br>
+              }<br>
+              JTable table = new JTable(new RowSizingModel(rowData, <br>
+              columnNames));</p>
+            <p> public Test() {<br>
+              table.setRowHeight(getMaxRowHeight());<br>
+              getContentPane().add(new JScrollPane(table), <br>
+              BorderLayout.CENTER);<br>
+              }<br>
+              public int getMaxRowHeight() {<br>
+              int columnCount = table.getColumnCount(), h=0, maxh=0;</p>
+            <p> for(int i=0; i &lt; columnCount; ++i) {<br>
+              TableColumn column = <br>
+              table.getColumnModel().getColumn(i);</p>
+            <p> h = getMaxRowHeightForColumn(column);<br>
+              maxh = Math.max(h,maxh);<br>
+              }<br>
+              return maxh;<br>
+              }<br>
+              public int getMaxRowHeightForColumn(TableColumn column) {<br>
+              int height = 0, maxh = 0, c = column.getModelIndex();</p>
+            <p> for(int r=0; r &lt; table.getRowCount(); ++r) {<br>
+              TableCellRenderer renderer = <br>
+              table.getCellRenderer(r,c); <br>
+              Component <br>
+              comp = renderer.getTableCellRendererComponent(<br>
+              table, table.getValueAt(r,c), <br>
+              false, false, r, c);</p>
+            <p> height = comp.getMaximumSize().height;<br>
+              maxh = height &gt; maxh ? height : maxh;<br>
+              }<br>
+              return maxh;<br>
+              }<br>
+              public static void main(String args[]) {<br>
+              GJApp.launch(<br>
+              new Test(), &quot;Sizing Rows&quot;, 300,300,450,300);<br>
+              }<br>
+              }<br>
+              class GJApp extends WindowAdapter {<br>
+              static private JPanel statusArea = new JPanel();<br>
+              static private JLabel status = new JLabel(&quot; &quot;);<br>
+              static private ResourceBundle resources;</p>
+            <p> public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h) {<br>
+              launch(f,title,x,y,w,h,null); <br>
+              }<br>
+              public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h,<br>
+              String propertiesFilename) {<br>
+              f.setTitle(title);<br>
+              f.setBounds(x,y,w,h);<br>
+              f.setVisible(true);</p>
+            <p> statusArea.setBorder(BorderFactory.createEtchedBorder());<br>
+              statusArea.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));<br>
+              statusArea.add(status);<br>
+              status.setHorizontalAlignment(JLabel.LEFT);</p>
+            <p> f.setDefaultCloseOperation(<br>
+              WindowConstants.DISPOSE_ON_CLOSE);</p>
+            <p> if(propertiesFilename != null) {<br>
+              resources = ResourceBundle.getBundle(<br>
+              propertiesFilename, Locale.getDefault());<br>
+              }</p>
+            <p> f.addWindowListener(new WindowAdapter() {<br>
+              public void windowClosed(WindowEvent e) {<br>
+              System.exit(0);<br>
+              }<br>
+              });<br>
+              }<br>
+              static public JPanel getStatusArea() {<br>
+              return statusArea;<br>
+              }<br>
+              static public void showStatus(String s) {<br>
+              status.setText(s);<br>
+              }<br>
+              static Object getResource(String key) {<br>
+              if(resources != null) {<br>
+              return resources.getString(key);<br>
+              }<br>
+              return null;<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p align="center">&nbsp; </p>
+            <p> 19.7.2 绘制行</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例19-19 利用行和列进行绘制</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;<br>
+            import javax.swing.table.*;
+            <p>public class Test extends JFrame {<br>
+              JTable table = new JTable(<br>
+              new AbstractTableModel() {<br>
+              int rows = 100, cols = 10;</p>
+            <p> public int getRowCount() { return rows; }<br>
+              public int getColumnCount() { return cols; }</p>
+            <p> public Object getValueAt(int row, int col) {<br>
+              return &quot;(&quot; + Integer.toString(row) + &quot;,&quot; +<br>
+              Integer.toString(col) + &quot;)&quot;;<br>
+              }<br>
+              });</p>
+            <p> public Test() {<br>
+              TableColumn column;<br>
+              int columnCount = table.getColumnCount();</p>
+            <p> for(int i=0; i &lt; columnCount; ++i) {<br>
+              column = table.getColumn(table.getColumnName(i));</p>
+            <p> if(i % 2 == 0)<br>
+              column.setCellRenderer(new RowRenderer());<br>
+              }<br>
+              getContentPane().add(new JScrollPane(table),<br>
+              BorderLayout.CENTER);<br>
+              }<br>
+              public static void main(String args[]) {<br>
+              GraphicJavaApplication.launch(<br>
+              new Test(), &quot;Rendering By Columns and Rows&quot;,<br>
+              300,300,450,300); <br>
+              }<br>
+              }<br>
+              class RowRenderer extends DefaultTableCellRenderer {<br>
+              public Component getTableCellRendererComponent(JTable table,<br>
+              Object value, boolean isSelected,<br>
+              boolean hasFocus,<br>
+              int row, int column) {<br>
+              if(row % 2 == 0) setForeground(Color.blue);<br>
+              else setForeground(Color.orange);</p>
+            <p> return super.getTableCellRendererComponent(table,<br>
+              value, isSelected, hasFocus,<br>
+              row, column);<br>
+              }<br>
+              }<br>
+              class GraphicJavaApplication extends WindowAdapter {<br>
+              public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h) {<br>
+              f.setTitle(title);<br>
+              f.setBounds(x,y,w,h);<br>
+              f.setVisible(true);</p>
+            <p> f.setDefaultCloseOperation(<br>
+              WindowConstants.DISPOSE_ON_CLOSE);</p>
+            <p> f.addWindowListener(new WindowAdapter() {<br>
+              public void windowClosed(WindowEvent e) {<br>
+              System.exit(0);<br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p align="center">&nbsp; </p>
+            <p> 19.8 表格装饰器</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例19-20 一个绘制装饰器</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;<br>
+            import javax.swing.event.*;<br>
+            import javax.swing.table.*;<br>
+            import java.util.*;
+            <p>public class Test extends JFrame {<br>
+              JTable table = new JTable(new Object[][] {<br>
+              {&quot;apple&quot;, &quot;$.39&quot;}, {&quot;mango&quot;, &quot;$.49&quot;},<br>
+              {&quot;papaya&quot;, &quot;$1.19&quot;}, {&quot;lemon&quot;, &quot;$.19&quot;},<br>
+              {&quot;orange&quot;, &quot;$.59&quot;}, {&quot;watermelon&quot;, 
+              &quot;$.39&quot;},<br>
+              {&quot;tangerine&quot;, &quot;$1.09&quot;}, {&quot;cherry&quot;, 
+              &quot;$.79&quot;},<br>
+              {&quot;banana&quot;, &quot;$.29&quot;}, {&quot;lime&quot;, &quot;$.33&quot;},<br>
+              {&quot;grapefruit&quot;, &quot;$.69&quot;}, {&quot;grapes&quot;, 
+              &quot;$.49&quot;},<br>
+              },<br>
+              new Object[] { &quot;Item&quot;, &quot;Price/Lb.&quot; }); <br>
+              <br>
+              public Test() {<br>
+              TableColumn column = table.getColumn(&quot;Price/Lb.&quot;);<br>
+              TableCellRenderer renderer = column.getHeaderRenderer();</p>
+            <p> column.setHeaderRenderer(new RendererDecorator(renderer));</p>
+            <p> getContentPane().add(new JScrollPane(table),<br>
+              BorderLayout.CENTER);<br>
+              }<br>
+              public static void main(String args[]) {<br>
+              GJApp.launch(<br>
+              new Test(), &quot;A Renderer Decorator&quot;, 300,300,450,182);<br>
+              }<br>
+              }<br>
+              class RendererDecorator implements TableCellRenderer {<br>
+              TableCellRenderer realRenderer; <br>
+              JPanel panel;<br>
+              JLabel iconLabel = new JLabel(new ImageIcon(&quot;money.gif&quot;));</p>
+            <p> public RendererDecorator(TableCellRenderer r) {<br>
+              realRenderer = r;<br>
+              iconLabel.setBorder(BorderFactory.createEtchedBorder());<br>
+              }<br>
+              public Component getTableCellRendererComponent(<br>
+              JTable table, Object value,<br>
+              boolean isSelected, boolean hasFocus,<br>
+              int row, int col) {<br>
+              Component c = realRenderer.getTableCellRendererComponent(<br>
+              table, value, isSelected, <br>
+              hasFocus, row, col);<br>
+              embellishComponent(c);<br>
+              return panel;<br>
+              }<br>
+              private void embellishComponent(Component c) {<br>
+              if(panel == null) {<br>
+              panel = new JPanel();</p>
+            <p> panel.setLayout(new BorderLayout());<br>
+              panel.add(c, BorderLayout.CENTER);<br>
+              panel.add(iconLabel, BorderLayout.WEST);<br>
+              }<br>
+              }<br>
+              }<br>
+              class GJApp extends WindowAdapter {<br>
+              static private JPanel statusArea = new JPanel();<br>
+              static private JLabel status = new JLabel(&quot; &quot;);<br>
+              static private ResourceBundle resources;</p>
+            <p> public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h) {<br>
+              launch(f,title,x,y,w,h,null); <br>
+              }<br>
+              public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h,<br>
+              String propertiesFilename) {<br>
+              f.setTitle(title);<br>
+              f.setBounds(x,y,w,h);<br>
+              f.setVisible(true);</p>
+            <p> statusArea.setBorder(BorderFactory.createEtchedBorder());<br>
+              statusArea.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));<br>
+              statusArea.add(status);<br>
+              status.setHorizontalAlignment(JLabel.LEFT);</p>
+            <p> f.setDefaultCloseOperation(<br>
+              WindowConstants.DISPOSE_ON_CLOSE);</p>
+            <p> if(propertiesFilename != null) {<br>
+              resources = ResourceBundle.getBundle(<br>
+              propertiesFilename, Locale.getDefault());<br>
+              }</p>
+            <p> f.addWindowListener(new WindowAdapter() {<br>
+              public void windowClosed(WindowEvent e) {<br>
+              System.exit(0);<br>
+              }<br>
+              });<br>
+              }<br>
+              static public JPanel getStatusArea() {<br>
+              return statusArea;<br>
+              }<br>
+              static public void showStatus(String s) {<br>
+              status.setText(s);<br>
+              }<br>
+              static Object getResource(String key) {<br>
+              if(resources != null) {<br>
+              return resources.getString(key);<br>
+              }<br>
+              return null;<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p align="center"><b>例19-21 利用装饰器排序</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import java.util.*;<br>
+            import javax.swing.*;<br>
+            import javax.swing.event.*;<br>
+            import javax.swing.table.*;
+            <p>public class Test extends JFrame {<br>
+              JTable table = new JTable(new Object[][] {<br>
+              {&quot;apple&quot;, &quot;$.39&quot;}, {&quot;mango&quot;, &quot;$.49&quot;},<br>
+              {&quot;papaya&quot;, &quot;$1.19&quot;}, {&quot;lemon&quot;, &quot;$.19&quot;},<br>
+              {&quot;orange&quot;, &quot;$.59&quot;}, {&quot;watermelon&quot;, 
+              &quot;$.39&quot;},<br>
+              {&quot;tangerine&quot;, &quot;$1.09&quot;}, {&quot;cherry&quot;, 
+              &quot;$.79&quot;},<br>
+              {&quot;banana&quot;, &quot;$.29&quot;}, {&quot;lime&quot;, &quot;$.33&quot;},<br>
+              {&quot;grapefruit&quot;, &quot;$.69&quot;}, {&quot;grapes&quot;, 
+              &quot;$.49&quot;},<br>
+              },<br>
+              new Object[] { &quot;Item&quot;, &quot;Price/Lb.&quot; }); <br>
+              <br>
+              public Test() {<br>
+              final SortDecorator decorator = <br>
+              new SortDecorator(table.getModel());</p>
+            <p> table.setModel(decorator);</p>
+            <p> JTableHeader hdr = (JTableHeader)table.getTableHeader();</p>
+            <p> hdr.addMouseListener(new MouseAdapter() {<br>
+              public void mouseClicked(MouseEvent e) {<br>
+              TableColumnModel tcm = table.getColumnModel();<br>
+              int vc = tcm.getColumnIndexAtX(e.getX());<br>
+              int mc = table.convertColumnIndexToModel(vc);</p>
+            <p> decorator.sort(mc);<br>
+              //table.repaint();<br>
+              }<br>
+              });<br>
+              getContentPane().add(new JScrollPane(table),<br>
+              BorderLayout.CENTER);<br>
+              }<br>
+              public static void main(String args[]) {<br>
+              GJApp.launch(<br>
+              new Test(),&quot;A Sort Decorator&quot;,300,300,450,250);<br>
+              }<br>
+              }<br>
+              class SortDecorator implements TableModel, TableModelListener {<br>
+              private TableModel realModel;<br>
+              private int indexes[];</p>
+            <p> public SortDecorator(TableModel model) {<br>
+              if(model == null)<br>
+              throw new IllegalArgumentException(<br>
+              &quot;null models are not allowed&quot;);<br>
+              this.realModel = model; </p>
+            <p> realModel.addTableModelListener(this);<br>
+              allocate();<br>
+              }<br>
+              public Object getValueAt(int row, int column) {<br>
+              return realModel.getValueAt(indexes[row], column);<br>
+              }<br>
+              public void setValueAt(Object aValue, int row, int column) {<br>
+              realModel.setValueAt(aValue, indexes[row], column);<br>
+              }<br>
+              public void tableChanged(TableModelEvent e) {<br>
+              allocate();<br>
+              }<br>
+              public void sort(int column) {<br>
+              int rowCount = getRowCount();</p>
+            <p> for(int i=0; i &lt; rowCount; i++) {<br>
+              for(int j = i+1; j &lt; rowCount; j++) {<br>
+              if(compare(indexes[i], indexes[j], column) &lt; 0) {<br>
+              swap(i,j);<br>
+              }<br>
+              }<br>
+              }<br>
+              }<br>
+              public void swap(int i, int j) {<br>
+              int tmp = indexes[i];<br>
+              indexes[i] = indexes[j];<br>
+              indexes[j] = tmp;<br>
+              }<br>
+              public int compare(int i, int j, int column) {<br>
+              Object io = realModel.getValueAt(i,column);<br>
+              Object jo = realModel.getValueAt(j,column);</p>
+            <p> int c = jo.toString().compareTo(io.toString());<br>
+              return (c &lt; 0) ? -1 : ((c &gt; 0) ? 1 : 0);<br>
+              }<br>
+              private void allocate() {<br>
+              indexes = new int[getRowCount()];</p>
+            <p> for(int i=0; i &lt; indexes.length; ++i) {<br>
+              indexes[i] = i; <br>
+              }<br>
+              }</p>
+            <p> // TableModel pass-through methods follow ...</p>
+            <p> public int getRowCount() {<br>
+              return realModel.getRowCount(); <br>
+              }<br>
+              public int getColumnCount() {<br>
+              return realModel.getColumnCount(); <br>
+              }<br>
+              public String getColumnName(int columnIndex) {<br>
+              return realModel.getColumnName(columnIndex);<br>
+              }<br>
+              public Class getColumnClass(int columnIndex) {<br>
+              return realModel.getColumnClass(columnIndex);<br>
+              }<br>
+              public boolean isCellEditable(int rowIndex, int columnIndex) {<br>
+              return realModel.isCellEditable(rowIndex, columnIndex);<br>
+              }<br>
+              public void addTableModelListener(TableModelListener l) {<br>
+              realModel.addTableModelListener(l);<br>
+              }<br>
+              public void removeTableModelListener(TableModelListener l) {<br>
+              realModel.removeTableModelListener(l);<br>
+              }<br>
+              }<br>
+              class GJApp extends WindowAdapter {<br>
+              static private JPanel statusArea = new JPanel();<br>
+              static private JLabel status = new JLabel(&quot; &quot;);<br>
+              static private ResourceBundle resources;</p>
+            <p> public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h) {<br>
+              launch(f,title,x,y,w,h,null); <br>
+              }<br>
+              public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h,<br>
+              String propertiesFilename) {<br>
+              f.setTitle(title);<br>
+              f.setBounds(x,y,w,h);<br>
+              f.setVisible(true);</p>
+            <p> statusArea.setBorder(BorderFactory.createEtchedBorder());<br>
+              statusArea.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));<br>
+              statusArea.add(status);<br>
+              status.setHorizontalAlignment(JLabel.LEFT);</p>
+            <p> f.setDefaultCloseOperation(<br>
+              WindowConstants.DISPOSE_ON_CLOSE);</p>
+            <p> if(propertiesFilename != null) {<br>
+              resources = ResourceBundle.getBundle(<br>
+              propertiesFilename, Locale.getDefault());<br>
+              }</p>
+            <p> f.addWindowListener(new WindowAdapter() {<br>
+              public void windowClosed(WindowEvent e) {<br>
+              System.exit(0);<br>
+              }<br>
+              });<br>
+              }<br>
+              static public JPanel getStatusArea() {<br>
+              return statusArea;<br>
+              }<br>
+              static public void showStatus(String s) {<br>
+              status.setText(s);<br>
+              }<br>
+              static Object getResource(String key) {<br>
+              if(resources != null) {<br>
+              return resources.getString(key);<br>
+              }<br>
+              return null;<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 19.9 表格头部</p>
+            <p>&nbsp;</p>
+            <p align="center">&nbsp; </p>
+            <p> 19.9.1 JTableHeader</p>
+            <p>&nbsp;</p>
+            <p align="center">&nbsp; </p>
+            <p> 19.9.2 列头部绘制器和头部工具提示</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例19-22 一个多行表格列头部和头部工具提示</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import javax.swing.border.*;<br>
+            import javax.swing.table.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import java.util.*;
+            <p>public class Test extends JFrame {<br>
+              String longTitle = &quot;Last Name / Maiden Name (if divorced)&quot;;<br>
+              MultilineHeaderRenderer multilineRenderer = <br>
+              new MultilineHeaderRenderer(longTitle);</p>
+            <p> JTable table = new JTable(<br>
+              new Object[][] {<br>
+              { &quot;Lynn&quot;, &quot;M.&quot;, &quot;Seckinger&quot; },<br>
+              { &quot;Carol&quot;, &quot;R.&quot;, &quot;Seckinger&quot; },<br>
+              { &quot;Roy&quot;, &quot;D.&quot;, &quot;Martin&quot; },<br>
+              { &quot;Richard&quot;, &quot;A.&quot;, &quot;Tattersall&quot; },<br>
+              { &quot;Philip&quot;, &quot;B.&quot;, &quot;Edwards&quot; },<br>
+              { &quot;Moore&quot;, &quot;T.&quot;, &quot;Moore&quot; },</p>
+            <p> // shorten scrollbar grip with these ...</p>
+            <p> { &quot;Lynn&quot;, &quot;M.&quot;, &quot;Seckinger&quot; },<br>
+              { &quot;Carol&quot;, &quot;R.&quot;, &quot;Seckinger&quot; },<br>
+              { &quot;Roy&quot;, &quot;D.&quot;, &quot;Martin&quot; },<br>
+              { &quot;Richard&quot;, &quot;A.&quot;, &quot;Tattersall&quot; },<br>
+              { &quot;Philip&quot;, &quot;B.&quot;, &quot;Edwards&quot; },<br>
+              { &quot;Moore&quot;, &quot;T.&quot;, &quot;Moore&quot; },<br>
+              },<br>
+              new Object[] {&quot;First Name&quot;, &quot;MI&quot;, longTitle});</p>
+            <p> public Test() {<br>
+              TableColumn middleColumn = table.getColumn(&quot;MI&quot;),<br>
+              lastColumn = table.getColumn(longTitle);</p>
+            <p> lastColumn.setHeaderRenderer(multilineRenderer);</p>
+            <p> TableCellRenderer hdrRenderer = <br>
+              middleColumn.getHeaderRenderer();</p>
+            <p> Component hdrComponent = <br>
+              hdrRenderer.getTableCellRendererComponent(table, <br>
+              &quot;MI&quot;, false, false, 0, 0);</p>
+            <p> if(hdrComponent instanceof JComponent) {<br>
+              JComponent c = (JComponent)hdrComponent;<br>
+              c.setToolTipText(&quot;Middle Initial&quot;);<br>
+              }</p>
+            <p> table.getTableHeader().setToolTipText(&quot;Table Header!&quot;);</p>
+            <p> getContentPane().add(<br>
+              new JScrollPane(table), BorderLayout.CENTER);<br>
+              }<br>
+              public static void main(String args[]) {<br>
+              GJApp.launch(new Test(), <br>
+              &quot;Multi-Line Column Headers&quot;,300,300,300,250);<br>
+              }<br>
+              }<br>
+              class MultilineHeaderRenderer implements TableCellRenderer {<br>
+              MultilineHeader mll;<br>
+              JScrollPane scrollPane;</p>
+            <p> public MultilineHeaderRenderer(String title) {<br>
+              mll = new MultilineHeader(title);<br>
+              scrollPane = new JScrollPane(mll);</p>
+            <p> scrollPane.setHorizontalScrollBarPolicy(<br>
+              JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);</p>
+            <p> scrollPane.setVerticalScrollBarPolicy(<br>
+              JScrollPane.VERTICAL_SCROLLBAR_NEVER);</p>
+            <p> scrollPane.setBorder(null);<br>
+              }<br>
+              public Component getTableCellRendererComponent(JTable table, <br>
+              Object value,<br>
+              boolean isSelected,<br>
+              boolean hasFocus,<br>
+              int row, int col) {<br>
+              mll.setText((String)value);<br>
+              return scrollPane;<br>
+              }<br>
+              }<br>
+              class MultilineHeader extends JTextArea {<br>
+              public MultilineHeader(String s) {<br>
+              super(s);<br>
+              }<br>
+              public void updateUI() {<br>
+              super.updateUI();</p>
+            <p> // turn on wrapping and disable editing and highlighting</p>
+            <p> setLineWrap(true);<br>
+              setWrapStyleWord(true);<br>
+              setHighlighter(null);<br>
+              setEditable(false);</p>
+            <p> // make the text area look like a table header</p>
+            <p> LookAndFeel.installColorsAndFont(this,<br>
+              &quot;TableHeader.background&quot;,<br>
+              &quot;TableHeader.foreground&quot;,<br>
+              &quot;TableHeader.font&quot;);</p>
+            <p> LookAndFeel.installBorder(this, &quot;TableHeader.cellBorder&quot;);<br>
+              }<br>
+              }<br>
+              class GJApp extends WindowAdapter {<br>
+              static private JPanel statusArea = new JPanel();<br>
+              static private JLabel status = new JLabel(&quot; &quot;);<br>
+              static private ResourceBundle resources;</p>
+            <p> public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h) {<br>
+              launch(f,title,x,y,w,h,null); <br>
+              }<br>
+              public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h,<br>
+              String propertiesFilename) {<br>
+              f.setTitle(title);<br>
+              f.setBounds(x,y,w,h);<br>
+              f.setVisible(true);</p>
+            <p> statusArea.setBorder(BorderFactory.createEtchedBorder());<br>
+              statusArea.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));<br>
+              statusArea.add(status);<br>
+              status.setHorizontalAlignment(JLabel.LEFT);</p>
+            <p> f.setDefaultCloseOperation(<br>
+              WindowConstants.DISPOSE_ON_CLOSE);</p>
+            <p> if(propertiesFilename != null) {<br>
+              resources = ResourceBundle.getBundle(<br>
+              propertiesFilename, Locale.getDefault());<br>
+              }</p>
+            <p> f.addWindowListener(new WindowAdapter() {<br>
+              public void windowClosed(WindowEvent e) {<br>
+              System.exit(0);<br>
+              }<br>
+              });<br>
+              }<br>
+              static public JPanel getStatusArea() {<br>
+              return statusArea;<br>
+              }<br>
+              static public void showStatus(String s) {<br>
+              status.setText(s);<br>
+              }<br>
+              static Object getResource(String key) {<br>
+              if(resources != null) {<br>
+              return resources.getString(key);<br>
+              }<br>
+              return null;<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p align="center">&nbsp; </p>
+            <p> 19.9.3 JTable属性</p>
+            <p>&nbsp;</p>
+            <p align="center">&nbsp; </p>
+            <p> 19.9.4 表格事件</p>
+            <p>&nbsp;</p>
+            <p align="center">&nbsp; </p>
+            <p> 19.9.5 表格模型事件</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例19-23 表格模型事件处理</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import javax.swing.event.*;<br>
+            import javax.swing.table.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class Test extends JFrame {<br>
+              JTable table = new JTable(10,10);</p>
+            <p> public Test() {<br>
+              Container contentPane = getContentPane();</p>
+            <p> contentPane.add(new JScrollPane(table),<br>
+              BorderLayout.CENTER);</p>
+            <p> table.getModel().addTableModelListener(<br>
+              new TableModelListener() {<br>
+              public void tableChanged(TableModelEvent e) {<br>
+              int firstRow = e.getFirstRow(),<br>
+              column = e.getColumn();</p>
+            <p> String properties = &quot; source=&quot; + e.getSource() + <br>
+              &quot; firstRow= &quot; + <br>
+              (firstRow == TableModelEvent.HEADER_ROW ?<br>
+              &quot;HEADER_ROW&quot; : <br>
+              Integer.toString(firstRow)) +</p>
+            <p> &quot; lastRow= &quot; + e.getLastRow() + </p>
+            <p> &quot; column= &quot; + <br>
+              (firstRow == TableModelEvent.ALL_COLUMNS ?<br>
+              &quot;ALL_COLUMNS&quot; : <br>
+              Integer.toString(column));</p>
+            <p> String typeString = new String();<br>
+              int type = e.getType();</p>
+            <p> switch(type) {<br>
+              case TableModelEvent.DELETE:<br>
+              typeString = &quot;DELETE&quot;; break;<br>
+              case TableModelEvent.INSERT:<br>
+              typeString = &quot;INSERT&quot;; break;<br>
+              case TableModelEvent.UPDATE:<br>
+              typeString = &quot;UPDATE&quot;; break;<br>
+              }<br>
+              properties += &quot; type=&quot; + typeString;</p>
+            <p> JOptionPane.showMessageDialog(Test.this, <br>
+              e.getClass().getName() + <br>
+              &quot;[&quot; + properties + &quot;]&quot;);<br>
+              }<br>
+              });<br>
+              }<br>
+              public static void main(String args[]) {<br>
+              GraphicJavaApplication.launch(new Test(),<br>
+              &quot;Handling Table Model Events&quot;,300,300,450,220);<br>
+              }<br>
+              }<br>
+              class GraphicJavaApplication extends WindowAdapter {<br>
+              public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h) {<br>
+              f.setTitle(title);<br>
+              f.setBounds(x,y,w,h);<br>
+              f.setVisible(true);</p>
+            <p> f.setDefaultCloseOperation(<br>
+              WindowConstants.DISPOSE_ON_CLOSE);</p>
+            <p> f.addWindowListener(new WindowAdapter() {<br>
+              public void windowClosed(WindowEvent e) {<br>
+              System.exit(0);<br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p align="center">&nbsp; </p>
+            <p> 19.9.6 TableColumnModel事件</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例19-24 列模型事件的处理</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import javax.swing.event.*;<br>
+            import javax.swing.table.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class Test extends JApplet {<br>
+              JTable table = new JTable(<br>
+              new AbstractTableModel() {<br>
+              int rows = 10, cols = 10;</p>
+            <p> public int getRowCount() { return rows; }<br>
+              public int getColumnCount() { return cols; }</p>
+            <p> public Object getValueAt(int row, int col) {<br>
+              return &quot;(&quot; + Integer.toString(row) + &quot;,&quot; +<br>
+              Integer.toString(col) + &quot;)&quot;;<br>
+              }<br>
+              }<br>
+              ); </p>
+            <p> public void init() {<br>
+              Container contentPane = getContentPane();</p>
+            <p> contentPane.add(new JScrollPane(table),<br>
+              BorderLayout.CENTER);</p>
+            <p> table.getColumnModel().addColumnModelListener(<br>
+              new TableColumnModelListener() {<br>
+              public void columnAdded(TableColumnModelEvent e) { }<br>
+              public void columnMarginChanged(ChangeEvent e) { }<br>
+              public void columnRemoved(TableColumnModelEvent e) { }<br>
+              public void columnSelectionChanged(<br>
+              ListSelectionEvent e) { }</p>
+            <p> public void columnMoved(TableColumnModelEvent e) { <br>
+              String s = &quot;Column Moved From &quot; + <br>
+              e.getFromIndex() + &quot; To &quot; +<br>
+              e.getToIndex();</p>
+            <p> showStatus(s);<br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p align="center">&nbsp; </p>
+            <p> 19.9.7 列表选取事件</p>
+            <p align="center"><b>例19-25 行选取事件的处理</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import javax.swing.event.*;<br>
+            import javax.swing.table.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import java.util.*;
+            <p>public class Test extends JFrame {<br>
+              JTable table = new JTable(10,10);</p>
+            <p> public Test() {<br>
+              Container contentPane = getContentPane();</p>
+            <p> contentPane.add(new JScrollPane(table),<br>
+              BorderLayout.CENTER);</p>
+            <p> table.getSelectionModel().addListSelectionListener(<br>
+              new ListSelectionListener() {<br>
+              public void valueChanged(ListSelectionEvent e) {<br>
+              if(e.getValueIsAdjusting()) {<br>
+              System.out.println(&quot;Selection Model &quot; +<br>
+              &quot;adjusting ...&quot;);<br>
+              }<br>
+              else {<br>
+              System.out.println(&quot;Selection Model:&quot; +<br>
+              e.toString());<br>
+              }<br>
+              }<br>
+              });<br>
+              }<br>
+              public static void main(String args[]) {<br>
+              GJApp.launch(new Test(), <br>
+              &quot;Handling Row Selection&quot;,300,300,450,220);<br>
+              }<br>
+              }<br>
+              class GJApp extends WindowAdapter {<br>
+              static private JPanel statusArea = new JPanel();<br>
+              static private JLabel status = new JLabel(&quot; &quot;);<br>
+              static private ResourceBundle resources;</p>
+            <p> public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h) {<br>
+              launch(f,title,x,y,w,h,null); <br>
+              }<br>
+              public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h,<br>
+              String propertiesFilename) {<br>
+              f.setTitle(title);<br>
+              f.setBounds(x,y,w,h);<br>
+              f.setVisible(true);</p>
+            <p> statusArea.setBorder(BorderFactory.createEtchedBorder());<br>
+              statusArea.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));<br>
+              statusArea.add(status);<br>
+              status.setHorizontalAlignment(JLabel.LEFT);</p>
+            <p> f.setDefaultCloseOperation(<br>
+              WindowConstants.DISPOSE_ON_CLOSE);</p>
+            <p> if(propertiesFilename != null) {<br>
+              resources = ResourceBundle.getBundle(<br>
+              propertiesFilename, Locale.getDefault());<br>
+              }</p>
+            <p> f.addWindowListener(new WindowAdapter() {<br>
+              public void windowClosed(WindowEvent e) {<br>
+              System.exit(0);<br>
+              }<br>
+              });<br>
+              }<br>
+              static public JPanel getStatusArea() {<br>
+              return statusArea;<br>
+              }<br>
+              static public void showStatus(String s) {<br>
+              status.setText(s);<br>
+              }<br>
+              static Object getResource(String key) {<br>
+              if(resources != null) {<br>
+              return resources.getString(key);<br>
+              }<br>
+              return null;<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p>&nbsp; </p>
+            <p> 19.9.8 JTable类总结</p>
+            <p>&nbsp;</p>
+            <p align="center">&nbsp; </p>
+            <p> 19.9.9 AWT兼容</p>
+            <p>&nbsp; </p>
+            <p> 19.10 本章回顾</p>
+            <p>&nbsp; </p>
+            <p>[<a href="index.html" target="_self">目录</a>][<a href="s18.htm">上一页</a>][<a href="s20.htm">下一页</a>](飒龙收藏/2002.5.18) 
+            </p>
+            <p>&nbsp; </p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </td>
+  </tr>
+</tbody>
+</table>
+<script language="javascript">bottomprint()</script>
+</body>
+</html>

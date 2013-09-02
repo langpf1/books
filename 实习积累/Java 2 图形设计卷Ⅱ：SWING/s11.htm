@@ -1,0 +1,623 @@
+<SCRIPT LANGUAGE="JavaScript" SRC="/-fs0/sys/pop-up.js"></SCRIPT>
+
+<SCRIPT LANGUAGE="JavaScript" SRC="/-fs0/sys/pop-up-all.js"></SCRIPT>
+
+<html>
+<head>
+<title>易都网--Java 2 图形设计卷Ⅱ：SWING</title>
+<LINK rel="stylesheet" href="../../../_public/javaa.css">
+<meta http-equiv="Content-Type" content="text/html; charset=GBK">
+<script language="JavaScript" src="../../../_public/javaa.js"></script>
+<meta name="keywords" content="Java,JSP,ASP,PHP,J2EE,EJB,JavaScript,C/C++,ASM,CSS,HTML,XML,网络安全,MySQL,ACCESS">
+</head>
+<body bgcolor="#FFFFFF">
+<table border=0 cellpadding=0 cellspacing=0 width="100%">
+  <tbody> 
+  <script language="javascript">print2()</script>
+  <tr> 
+    <td width="100%"> 
+      <table bgcolor=#EEEEEE border=0 cellpadding=3 cellspacing=0 width="100%">
+        <tbody> 
+        <tr> 
+          <td class=f1 id=thetd width="100%"> 
+            <p>[<a href="index.html" target="_self">目录</a>][<a href="s10.htm">上一页</a>][<a href="s12.htm">下一页</a>]</p>
+            <p align="center"><b>第11章 进度条、滑杆和分隔条</b></p>
+            <p>　　本章介绍三个Swing组件：JProgressBar、JSlider和JSeparator。<br>
+              　　人们经常用进度条反映耗时任务已完成的百分比，本章将提供这样一个例子。但是，用ProgressMonitor和ProgressMonitorInputStream实用工具来反映一个任务的进度信息通常会更容易。“进度监控”小节中讨论了ProgressMonitor和ProgressMonitorInputStream实用工具。<br>
+              　　JProgressBar和JSlider与JSeparator一样，用来描述一个介于最小值和最大值之间的值。因此，与JProgressBar和JSlider相关的模型是BoundedRangeModel接口的一个实现。<br>
+              　　JSeparator是绘制一条蚀刻线的组件，它把逻辑上相关的组件分隔在一组，JSeparator组件可水平地垂直地放置。 </p>
+            <p> <b>11.1 JProgressBar</b></p>
+            <p>　　JProgressBar是一个简单的组件，它一般是一种颜色部分或完全填充的矩形。缺省情况下，进度条配备了一个凹陷的边框，并水平放置。<br>
+              　　进度条还可以选择显示一个字符串，这个字符串在进度条矩形的中央位置上显示。这个字符串缺省时为耗时任务已完成的百分比。这个字符串可用JProgressBar.setString方法定制。<br>
+              　　图11-1中示出的小应用程序创建了不同配置的进度条。 <br>
+              　　例11-1列出了图11-1中示出的小应用程序的代码。</p>
+            <p align="center"><b>例11-1 各种配置的进度条</b></p>
+            <hr size="1" noshade>
+            import javax.swing.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class Test extends JApplet {<br>
+              private JProgressBar[] progressBars = {<br>
+              new JProgressBar(),<br>
+              new JProgressBar(),<br>
+              new JProgressBar(),<br>
+              new JProgressBar()<br>
+              };</p>
+            <p> public void init() {<br>
+              Container contentPane = getContentPane();</p>
+            <p> contentPane.setLayout(new FlowLayout());</p>
+            <p> for(int i=0; i &lt; progressBars.length; ++i) {<br>
+              JProgressBar pb = progressBars[i];</p>
+            <p> if(i == 0) {<br>
+              pb.setStringPainted(true);<br>
+              pb.setString(&quot;Custom String&quot;);<br>
+              }<br>
+              if(i == 1) {<br>
+              pb.setOrientation(JProgressBar.VERTICAL);<br>
+              pb.setForeground(Color.yellow);<br>
+              pb.setMaximum(1000);<br>
+              pb.setValue(50);<br>
+              pb.setBorder(<br>
+              BorderFactory.createRaisedBevelBorder());<br>
+              }<br>
+              if(i == 2) {<br>
+              pb.setForeground(Color.blue);<br>
+              pb.setBorderPainted(false);<br>
+              pb.setValue(50);<br>
+              pb.setStringPainted(true);<br>
+              }<br>
+              if(i == 3) {<br>
+              pb.setOrientation(JProgressBar.VERTICAL);<br>
+              pb.setForeground(Color.red);<br>
+              pb.setValue(90);<br>
+              pb.setStringPainted(true);<br>
+              pb.setBorder(<br>
+              BorderFactory.createEtchedBorder());<br>
+              }<br>
+              contentPane.add(pb);<br>
+              }<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            　　这个小应用程序创建了一组进度条，并为每个进度条设置了各种不同的属性，从而产生了图11-1中示出的各种不同配置。<br>
+            <p> <b>11.1.1 进度条与线程</b></p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例11-2 使用JProgressBar</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class Test extends JApplet {<br>
+              private JProgressBar progressBar = new JProgressBar();<br>
+              private JButton startButton = new JButton(&quot;start&quot;);</p>
+            <p> public void init() {<br>
+              Container contentPane = getContentPane();</p>
+            <p> contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(startButton);<br>
+              contentPane.add(progressBar);</p>
+            <p> progressBar.setStringPainted(true);</p>
+            <p> startButton.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              (new UpdateThread()).start();<br>
+              }<br>
+              });<br>
+              }<br>
+              class UpdateThread extends Thread {<br>
+              Runnable update, finish;<br>
+              int value, min, max, increment;</p>
+            <p> public UpdateThread() {<br>
+              max = progressBar.getMaximum(); <br>
+              min = progressBar.getMinimum();</p>
+            <p> update = new Runnable() {<br>
+              public void run() {<br>
+              value = progressBar.getValue() + increment;<br>
+              updateProgressBar(value);<br>
+              }<br>
+              };<br>
+              finish = new Runnable() {<br>
+              public void run() {<br>
+              updateProgressBar(min);<br>
+              }<br>
+              };<br>
+              }<br>
+              public void run() {<br>
+              startButton.setEnabled(false);</p>
+            <p> while(value + increment &lt;= max) {<br>
+              simulateTimeConsumingActivity();<br>
+              SwingUtilities.invokeLater(update);<br>
+              }<br>
+              SwingUtilities.invokeLater(finish);<br>
+              startButton.setEnabled(true);<br>
+              }<br>
+              private void updateProgressBar(int value) {<br>
+              progressBar.setValue(value);<br>
+              }<br>
+              private void simulateTimeConsumingActivity() {<br>
+              try {<br>
+              Thread.currentThread().sleep(1000);<br>
+              increment = (max - min) / 10;<br>
+              }<br>
+              catch(InterruptedException e) {<br>
+              e.printStackTrace();<br>
+              }<br>
+              }<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 11.1.2 JProgressBar属性</p>
+            <p>&nbsp;</p>
+            <p> 11.1.3 JProgressBar事件</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例11-3 监视一个进度条的值</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import javax.swing.event.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class Test extends JApplet {<br>
+              private JProgressBar pb = new JProgressBar();</p>
+            <p> public void init() {<br>
+              Container contentPane = getContentPane();<br>
+              final JButton startButton = new JButton(&quot;start&quot;);</p>
+            <p> contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(startButton);<br>
+              contentPane.add(pb);</p>
+            <p> startButton.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              (new GetInfoThread(pb)).start();<br>
+              }<br>
+              });<br>
+              pb.addChangeListener(new ChangeListener() {<br>
+              public void stateChanged(ChangeEvent e) {<br>
+              int min = pb.getMinimum(), max = pb.getMaximum();<br>
+              int value = pb.getValue();</p>
+            <p> showStatus(&quot;Min: &quot; + min + &quot;, Max: &quot; + max 
+              +<br>
+              &quot;, Value: &quot; + value);<br>
+              }<br>
+              });<br>
+              }<br>
+              }<br>
+              class GetInfoThread extends Thread {<br>
+              Runnable update, finish;<br>
+              JProgressBar pb;<br>
+              int value, min, max, increment;</p>
+            <p> public GetInfoThread(JProgressBar progressBar) {<br>
+              pb = progressBar;</p>
+            <p> max = pb.getMaximum(); <br>
+              min = pb.getMinimum();</p>
+            <p> update = new Runnable() {<br>
+              public void run() {<br>
+              value = pb.getValue() + increment;<br>
+              pb.setValue(value);<br>
+              }<br>
+              };<br>
+              finish = new Runnable() {<br>
+              public void run() {<br>
+              value = min;<br>
+              pb.setValue(value);<br>
+              }<br>
+              };<br>
+              }<br>
+              public void run() {<br>
+              while(value + increment &lt;= max) {<br>
+              simulateTimeConsumingActivity();<br>
+              SwingUtilities.invokeLater(update);<br>
+              }<br>
+              SwingUtilities.invokeLater(finish);<br>
+              }<br>
+              private void simulateTimeConsumingActivity() {<br>
+              try {<br>
+              Thread.currentThread().sleep(1000);<br>
+              increment = (max - min) / 10;<br>
+              }<br>
+              catch(InterruptedException e) {<br>
+              e.printStackTrace();<br>
+              }<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 11.1.4 JProgressBar类总结</p>
+            <p>&nbsp;</p>
+            <p> 11.1.5 AWT兼容</p>
+            <p>&nbsp;</p>
+            <p> 11.2 JSlider</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例11-4 一个简单的JSlider例子</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;<br>
+            import java.util.*;
+            <p>public class Test extends JApplet {<br>
+              public void init() {<br>
+              Container contentPane = getContentPane();<br>
+              JSlider slider = new JSlider();</p>
+            <p> contentPane.add(slider, BorderLayout.NORTH);<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 11.2.1 填充的滑杆</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例11-5 一个填充的滑杆</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              public Test() {<br>
+              Container contentPane = getContentPane();<br>
+              JSlider slider = new JSlider();</p>
+            <p> slider.putClientProperty(&quot;JSlider.isFilled&quot;,Boolean.TRUE);</p>
+            <p> contentPane.add(slider, BorderLayout.NORTH);<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 11.2.2 滑杆间隔标记</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例11-6 显示滑杆的间隔标记</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;<br>
+            import java.util.*;
+            <p>public class Test extends JApplet {<br>
+              public void init() {<br>
+              Container contentPane = getContentPane();<br>
+              JSlider slider = new JSlider();<br>
+              JPanel controlPanel = new ControlPanel(slider);</p>
+            <p> contentPane.setLayout(new BorderLayout(0,40));<br>
+              contentPane.add(controlPanel, BorderLayout.NORTH);<br>
+              contentPane.add(slider, BorderLayout.CENTER);<br>
+              }<br>
+              class ControlPanel extends JPanel {<br>
+              public ControlPanel(final JSlider slider) {<br>
+              JCheckBox paintTicks = new JCheckBox(&quot;Paint Ticks&quot;);<br>
+              JComboBox minorSpacing = new JComboBox(),<br>
+              majorSpacing = new JComboBox();</p>
+            <p> minorSpacing.addItem(&quot;0&quot;);<br>
+              minorSpacing.addItem(&quot;3&quot;);<br>
+              minorSpacing.addItem(&quot;5&quot;);<br>
+              minorSpacing.addItem(&quot;10&quot;);<br>
+              minorSpacing.addItem(&quot;20&quot;);</p>
+            <p> majorSpacing.addItem(&quot;0&quot;);<br>
+              majorSpacing.addItem(&quot;3&quot;);<br>
+              majorSpacing.addItem(&quot;5&quot;);<br>
+              majorSpacing.addItem(&quot;10&quot;);<br>
+              majorSpacing.addItem(&quot;20&quot;);</p>
+            <p> add(paintTicks);<br>
+              add(new JLabel(&quot;Minor Tick Spacing:&quot;));<br>
+              add(minorSpacing);<br>
+              add(new JLabel(&quot;Major Tick Spacing:&quot;));<br>
+              add(majorSpacing);</p>
+            <p> paintTicks.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              JCheckBox cb = (JCheckBox)e.getSource();<br>
+              slider.setPaintTicks(cb.isSelected());<br>
+              slider.repaint();<br>
+              }<br>
+              });<br>
+              minorSpacing.addItemListener(new ItemListener() {<br>
+              public void itemStateChanged(ItemEvent e) {<br>
+              JComboBox cb = (JComboBox)e.getSource();<br>
+              int spacing = Integer.parseInt(<br>
+              (String)cb.getSelectedItem());</p>
+            <p> slider.setMinorTickSpacing(spacing);<br>
+              slider.revalidate();<br>
+              }<br>
+              });<br>
+              majorSpacing.addItemListener(new ItemListener() {<br>
+              public void itemStateChanged(ItemEvent e) {<br>
+              JComboBox cb = (JComboBox)e.getSource();<br>
+              int spacing = Integer.parseInt(<br>
+              (String)cb.getSelectedItem());</p>
+            <p> slider.setMajorTickSpacing(spacing);<br>
+              slider.revalidate();<br>
+              }<br>
+              });<br>
+              }<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 11.2.3 滑杆标签</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例11-7 显示缺省的JSlider标签</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              public Test() {<br>
+              Container contentPane = getContentPane();<br>
+              JSlider slider = new JSlider();</p>
+            <p> slider.setPaintLabels(true);<br>
+              slider.setMajorTickSpacing(20);<br>
+              contentPane.add(slider, BorderLayout.NORTH);<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p align="center"><b>例11-8 定制滑杆标签</b></p>
+            <hr noshade size="1">
+            import java.util.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              public Test() {<br>
+              Container contentPane = getContentPane();<br>
+              JSlider slider = new JSlider();<br>
+              Icon[] icons = {<br>
+              new ImageIcon(&quot;basketball.gif&quot;), <br>
+              new ImageIcon(&quot;baseball.gif&quot;), <br>
+              new ImageIcon(&quot;soccer.gif&quot;), <br>
+              new ImageIcon(&quot;clipboard.gif&quot;), <br>
+              new ImageIcon(&quot;filmstrip.gif&quot;), <br>
+              new ImageIcon(&quot;crab.gif&quot;), <br>
+              };<br>
+              Hashtable table = new Hashtable();</p>
+            <p> for(int i=0, loc=0; i &lt; icons.length; i++, loc += 20) {<br>
+              table.put(new Integer(loc), <br>
+              new JLabel(Integer.toString(loc), <br>
+              icons[i],<br>
+              JLabel.LEFT)); <br>
+              }</p>
+            <p> slider.setLabelTable(table);<br>
+              slider.setPaintLabels(true);<br>
+              slider.setMajorTickSpacing(20);</p>
+            <p> contentPane.add(slider, BorderLayout.NORTH);<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p>&nbsp;</p>
+            <p> 11.2.4 反转滑杆值</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例11-9 中列出图11-10中示出的小应用程序的代码</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              private JCheckBox checkBox = new JCheckBox(&quot;Invert&quot;);<br>
+              private JSlider[] sliders = { new JSlider(), <br>
+              new JSlider(JSlider.VERTICAL) };</p>
+            <p> public Test() {<br>
+              Container contentPane = getContentPane();</p>
+            <p> contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(checkBox);</p>
+            <p> for(int i=0; i &lt; sliders.length; ++i) {<br>
+              sliders[i].setPaintLabels(true);<br>
+              sliders[i].setMajorTickSpacing(20);<br>
+              contentPane.add(sliders[i]);<br>
+              }</p>
+            <p> checkBox.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              for(int i=0; i &lt; sliders.length; ++i)<br>
+              sliders[i].setInverted(checkBox.isSelected());<br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 11.2.5 滑杆的外延值</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例11-10 设置一个滑杆的外延值</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;<br>
+            import javax.swing.event.*;
+            <p>public class Test extends JApplet {<br>
+              public Test() {<br>
+              Container contentPane = getContentPane();<br>
+              JSlider slider = new JSlider();<br>
+              JPanel controlPanel = new ControlPanel(slider);</p>
+            <p> contentPane.add(controlPanel, BorderLayout.NORTH);<br>
+              contentPane.add(slider, BorderLayout.SOUTH);</p>
+            <p> slider.addChangeListener(new ChangeListener() {<br>
+              public void stateChanged(ChangeEvent e) {<br>
+              JSlider s = (JSlider)e.getSource();<br>
+              showStatus(&quot;Min: &quot; + s.getMinimum() + <br>
+              &quot;, Max: &quot; + s.getMaximum() +<br>
+              &quot;, Extent: &quot; + s.getExtent() +<br>
+              &quot;, Value: &quot; + s.getValue());<br>
+              }<br>
+              });<br>
+              }<br>
+              }<br>
+              class ControlPanel extends JPanel {<br>
+              public ControlPanel(final JSlider slider) {<br>
+              JComboBox extent = new JComboBox();</p>
+            <p> extent.addItem(&quot;0&quot;);<br>
+              extent.addItem(&quot;10&quot;);<br>
+              extent.addItem(&quot;20&quot;);<br>
+              extent.addItem(&quot;30&quot;);<br>
+              extent.addItem(&quot;40&quot;);</p>
+            <p> add(new JLabel(&quot;Extent:&quot;));<br>
+              add(extent);</p>
+            <p> extent.addItemListener(new ItemListener() {<br>
+              public void itemStateChanged(ItemEvent e) {<br>
+              JComboBox cb = (JComboBox)e.getSource();<br>
+              int ext = Integer.parseInt(<br>
+              (String)cb.getSelectedItem());</p>
+            <p> slider.setExtent(ext);<br>
+              slider.revalidate();<br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 11.2.6 JSlider属性</p>
+            <p>&nbsp;</p>
+            <p> 11.2.7 JSlider事件</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例11-11 监视一个滑杆的值</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;<br>
+            import javax.swing.event.*;
+            <p>public class Test extends JApplet {<br>
+              public Test() {<br>
+              Container contentPane = getContentPane();<br>
+              JSlider slider = new JSlider();</p>
+            <p> contentPane.add(slider, BorderLayout.NORTH);</p>
+            <p> slider.addChangeListener(new ChangeListener() {<br>
+              public void stateChanged(ChangeEvent e) {<br>
+              JSlider s = (JSlider)e.getSource();<br>
+              showStatus(&quot;Min: &quot; + s.getMinimum() + <br>
+              &quot;, Max: &quot; + s.getMaximum() +<br>
+              &quot;, Extent: &quot; + s.getExtent() +<br>
+              &quot;, Value: &quot; + s.getValue() +<br>
+              &quot;, Value Is Adjusting: &quot; +<br>
+              s.getValueIsAdjusting());<br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 11.2.8 JSlider类总结</p>
+            <p>&nbsp;</p>
+            <p> 11.2.9 AWT兼容</p>
+            <p>&nbsp;</p>
+            <p> 11.3 JSeparator</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例11-12 一个不可见的分隔条</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              public void init() {<br>
+              Container contentPane = getContentPane();<br>
+              JSeparator s = new JSeparator(JSeparator.VERTICAL);</p>
+            <p> contentPane.setLayout(new FlowLayout());</p>
+            <p> contentPane.add(new JButton(&quot;left&quot;));<br>
+              contentPane.add(s);<br>
+              contentPane.add(new JButton(&quot;right&quot;));<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p align="center"><b>例11-13 控制分隔条的大小</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              public void init() {<br>
+              Container contentPane = getContentPane();<br>
+              JSeparator s = new JSeparator(JSeparator.VERTICAL);<br>
+              Dimension ps = s.getPreferredSize();</p>
+            <p> contentPane.setLayout(new FlowLayout());</p>
+            <p> contentPane.add(new JButton(&quot;left&quot;));<br>
+              contentPane.add(s);<br>
+              contentPane.add(new JButton(&quot;right&quot;));</p>
+            <p> s.setPreferredSize(new Dimension(ps.width, 50));<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p align="center"><b>例11-14 监控分隔条的大小</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {</p>
+            <p> public void init() {<br>
+              Container contentPane = getContentPane();<br>
+              final JSeparator s = <br>
+              new JSeparator(JSeparator.VERTICAL);<br>
+              final Dimension ps = s.getPreferredSize();</p>
+            <p> contentPane.setLayout(new FlowLayout());</p>
+            <p> contentPane.add(new JButton(&quot;left&quot;));<br>
+              contentPane.add(s);<br>
+              contentPane.add(new JButton(&quot;right&quot;));</p>
+            <p> addComponentListener(new ComponentAdapter() {<br>
+              public void componentShown(ComponentEvent e) {<br>
+              System.out.println(&quot;shown&quot;);<br>
+              adjustSeparatorPreferredSize();<br>
+              }<br>
+              public void componentResized(ComponentEvent e) {<br>
+              System.out.println(&quot;resized&quot;);<br>
+              adjustSeparatorPreferredSize();<br>
+              }<br>
+              private void adjustSeparatorPreferredSize() {<br>
+              s.setPreferredSize(new Dimension(ps.width, <br>
+              getSize().height));<br>
+              s.revalidate();<br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p>&nbsp;</p>
+            <p>&nbsp;</p>
+            <p> 11.3.1 分隔条与框</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例11-15 分隔条与框</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              private JPanel left, rightTop, rightBottom;</p>
+            <p> private Box box = new Box(BoxLayout.X_AXIS),<br>
+              rightBox = new Box(BoxLayout.Y_AXIS);</p>
+            <p> private JSeparator vs, hs; // vs = vertical separator<br>
+              // hs = horizontal separator<br>
+              public void init() {<br>
+              createBoxes();<br>
+              setPanelBorders();<br>
+              //setSeparatorPreferredSizes();</p>
+            <p> left.setPreferredSize(new Dimension(150,0));</p>
+            <p> getContentPane().add(box, BorderLayout.CENTER);<br>
+              }<br>
+              private void createBoxes() {</p>
+            <p> Component vStrut = box.createVerticalStrut(10),<br>
+              hStrut = box.createHorizontalStrut(10);</p>
+            <p> rightBox.add(rightTop = new JPanel());<br>
+              rightBox.add(box.createVerticalStrut(10));<br>
+              rightBox.add(hs = new JSeparator());<br>
+              rightBox.add(box.createVerticalStrut(10));<br>
+              rightBox.add(rightBottom = new JPanel());</p>
+            <p> box.add(left = new JPanel());<br>
+              box.add(box.createHorizontalStrut(10));<br>
+              box.add(vs = new JSeparator(JSeparator.VERTICAL));<br>
+              box.add(box.createHorizontalStrut(10));<br>
+              box.add(rightBox);<br>
+              }<br>
+              private void setSeparatorPreferredSizes() {<br>
+              vs.setMaximumSize( <br>
+              new Dimension(vs.getPreferredSize().width, <br>
+              Integer.MAX_VALUE));</p>
+            <p> hs.setMaximumSize(<br>
+              new Dimension(Integer.MAX_VALUE,<br>
+              hs.getPreferredSize().height));<br>
+              }<br>
+              private void setPanelBorders() {<br>
+              left.setBorder(<br>
+              BorderFactory.createTitledBorder(&quot;Left&quot;));<br>
+              rightTop.setBorder(<br>
+              BorderFactory.createTitledBorder(&quot;Right Top&quot;));<br>
+              rightBottom.setBorder(<br>
+              BorderFactory.createTitledBorder(&quot;Right Bottom&quot;));<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 11.3.2 JSeparator属性</p>
+            <p>&nbsp;</p>
+            <p> 11.3.3 JSeparator事件</p>
+            <p>&nbsp;</p>
+            <p> 11.3.4 AWT兼容</p>
+            <p>&nbsp;</p>
+            <p> 11.4 本章回顾 </p>
+            <p>&nbsp;</p>
+            <p>[<a href="index.html" target="_self">目录</a>][<a href="s10.htm">上一页</a>][<a href="s12.htm">下一页</a>](飒龙收藏/2002.5.18) 
+            </p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </td>
+  </tr>
+</tbody>
+</table>
+<script language="javascript">bottomprint()</script>
+</body>
+</html>

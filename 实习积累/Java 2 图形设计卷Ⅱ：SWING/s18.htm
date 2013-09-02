@@ -1,0 +1,814 @@
+<SCRIPT LANGUAGE="JavaScript" SRC="/-fs0/sys/pop-up.js"></SCRIPT>
+
+<SCRIPT LANGUAGE="JavaScript" SRC="/-fs0/sys/pop-up-all.js"></SCRIPT>
+
+<html>
+<head>
+<title>易都网--Java 2 图形设计卷Ⅱ：SWING</title>
+<LINK rel="stylesheet" href="../../../_public/javaa.css">
+<meta http-equiv="Content-Type" content="text/html; charset=GBK">
+<script language="JavaScript" src="../../../_public/javaa.js"></script>
+<meta name="keywords" content="Java,JSP,ASP,PHP,J2EE,EJB,JavaScript,C/C++,ASM,CSS,HTML,XML,网络安全,MySQL,ACCESS">
+</head>
+<body bgcolor="#FFFFFF">
+<table border=0 cellpadding=0 cellspacing=0 width="100%">
+  <tbody> 
+  <script language="javascript">print2()</script>
+  <tr> 
+    <td width="100%"> 
+      <table bgcolor=#EEEEEE border=0 cellpadding=3 cellspacing=0 width="100%">
+        <tbody> 
+        <tr> 
+          <td class=f1 id=thetd width="100%"> 
+            <p>[<a href="index.html" target="_self">目录</a>][<a href="s17.htm">上一页</a>][<a href="s19.htm">下一页</a>]</p>
+            <p align="center"><b>第18章 组合框</b></p>
+            <p>　　由JComboBox类实现的组合框是由一个可编辑区（缺省时是一个文本区）和一个可选取项的下拉列表组成的。因此，我们采取把它与JList比较的方式来介绍JComboBox.</p>
+            <p> <b>18.1 JComboBox与JList的比较</b></p>
+            <p>　　JList和ComboBox很相似，因为这两个组件都显示一个项列表。因此，它们都有扩展ListModel接口的模型。而且，这两个组件都有绘制器，这些绘制器通过实现ListCellBenderer接口来绘制列表单元。<br>
+              　　但是，列表和组合框在施工方面还是有差别的。列表单是不可编辑的，但是组合框可以配备一个编辑器。JComboBox组件把编辑工作交给实现ComboBoxEdit接口的一个对象来处理。<br>
+              　　列表支持三个选取模式，并把选取工作实现ListSelectionModel接口的一个对象来处理。组合框在一个时刻只有一个可选取的项，而且选取工作由组合框模型来处理。另一方面，组合框支持键选取，即在某项上按下一下键就可以选取这个项，但列表不能这样做。 
+            </p>
+            <p> 18.2 JComboBox组件</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例18-1 可编辑组合框和不可编辑组合框</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              private JCheckBox checkBox = new JCheckBox(&quot;Editable&quot;);<br>
+              private JComboBox comboBox = new JComboBox();</p>
+            <p> public void init() {<br>
+              Container contentPane = getContentPane();</p>
+            <p> comboBox.addItem(&quot;Top&quot;);<br>
+              comboBox.addItem(&quot;Center&quot;);<br>
+              comboBox.addItem(&quot;Bottom&quot;);</p>
+            <p> checkBox.setSelected(comboBox.isEditable());</p>
+            <p> contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(checkBox);<br>
+              contentPane.add(comboBox);</p>
+            <p> checkBox.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              comboBox.setEditable(checkBox.isSelected());<br>
+              }<br>
+              });<br>
+              comboBox.getEditor().addActionListener(<br>
+              new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              System.out.println(&quot;here&quot; + <br>
+              comboBox.getSelectedItem());<br>
+              }<br>
+              });<br>
+              }<br>
+              public static void main(String args[]) {<br>
+              final JFrame f = new JFrame();<br>
+              JApplet applet = new Test();</p>
+            <p> applet.init();</p>
+            <p> f.setContentPane(applet.getContentPane());<br>
+              f.setBounds(100,100,308,199);<br>
+              f.setTitle(&quot;An Application&quot;);<br>
+              f.setVisible(true);</p>
+            <p> f.setDefaultCloseOperation(<br>
+              WindowConstants.DISPOSE_ON_CLOSE);</p>
+            <p> f.addWindowListener(new WindowAdapter() {<br>
+              public void windowClosed(WindowEvent e) {<br>
+              System.exit(0);<br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 18.3 组合框模型</p>
+            <p>&nbsp;</p>
+            <p> 18.3.1 JComboBoxModel</p>
+            <p>&nbsp;</p>
+            <p> 18.3.2 MutableComboBoxModel</p>
+            <p>&nbsp;</p>
+            <p> 18.3.3 DefaultComboBoxModel</p>
+            <p>&nbsp;</p>
+            <p> 18.4 组合框单绘制器</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例18-2 一个定制的列表单元绘制器</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;<br>
+            import javax.swing.border.*;
+            <p>public class Test extends JApplet {<br>
+              public void init() {<br>
+              Container contentPane = getContentPane();<br>
+              JComboBox combo = new JComboBox(new Object[] {<br>
+              new Object[] { Color.gray, &quot;gray&quot; },<br>
+              new Object[] { Color.orange, &quot;orange&quot; },<br>
+              new Object[] { Color.red, &quot;red&quot; },<br>
+              new Object[] { Color.blue, &quot;blue&quot; },<br>
+              new Object[] { Color.yellow, &quot;yellow&quot; },<br>
+              new Object[] { Color.magenta, &quot;magenta&quot; },<br>
+              new Object[] { Color.black, &quot;black&quot; },<br>
+              new Object[] { Color.green, &quot;green&quot; },<br>
+              new Object[] { Color.lightGray, &quot;lightGray&quot;} });</p>
+            <p> combo.setRenderer(new ColorRenderer());</p>
+            <p> contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(combo);<br>
+              }<br>
+              }<br>
+              class ColorRenderer extends JLabel implements ListCellRenderer {<br>
+              private static ColorIcon icon = new ColorIcon();</p>
+            <p> private Border <br>
+              redBorder = BorderFactory.createLineBorder(Color.red,2),<br>
+              emptyBorder = BorderFactory.createEmptyBorder(2,2,2,2);</p>
+            <p> public Component getListCellRendererComponent(<br>
+              JList list,<br>
+              Object value,<br>
+              int index,<br>
+              boolean isSelected,<br>
+              boolean cellHasFocus) {<br>
+              Object[] array = (Object[])value;</p>
+            <p> icon.setColor((Color)array[0]);<br>
+              setIcon(icon);<br>
+              setText((String)array[1]);</p>
+            <p> if(isSelected) setBorder(redBorder);<br>
+              else setBorder(emptyBorder);</p>
+            <p> return this;<br>
+              }<br>
+              }<br>
+              class ColorIcon implements Icon {<br>
+              private Color color;<br>
+              private int w, h;</p>
+            <p> public ColorIcon() {<br>
+              this(Color.gray, 50, 15);<br>
+              }<br>
+              public ColorIcon(Color color, int w, int h) {<br>
+              this.color = color;<br>
+              this.w = w;<br>
+              this.h = h;<br>
+              }<br>
+              public void paintIcon(Component c, Graphics g, int x, int y) {<br>
+              g.setColor(Color.black);<br>
+              g.drawRect(x, y, w-1, h-1);<br>
+              g.setColor(color);<br>
+              g.fillRect(x+1, y+1, w-2, h-2);<br>
+              }<br>
+              public Color getColor() {<br>
+              return color;<br>
+              }<br>
+              public void setColor(Color color) {<br>
+              this.color = color;<br>
+              }<br>
+              public int getIconWidth() {<br>
+              return w;<br>
+              }<br>
+              public int getIconHeight() {<br>
+              return h;<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 18.5 组合框键选取管理器</p>
+            <p>&nbsp;</p>
+            <p> 18.5.1 使用缺省键选取管理</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例18-3 使用缺省的键选取管理器</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;<br>
+            import javax.swing.border.*;
+            <p>public class Test extends JApplet {<br>
+              private JComboBox colorCombo = new JComboBox(new Object[] {<br>
+              new Item(new Object[] { Color.gray, &quot;gray&quot; }),<br>
+              new Item(new Object[] { Color.orange, &quot;orange&quot; }),<br>
+              new Item(new Object[] { Color.red, &quot;red&quot; }),<br>
+              new Item(new Object[] { Color.blue, &quot;blue&quot; }),<br>
+              new Item(new Object[] { Color.yellow, &quot;yellow&quot; }),<br>
+              new Item(new Object[] { Color.magenta, &quot;magenta&quot; }),<br>
+              new Item(new Object[] { Color.black, &quot;black&quot; }),<br>
+              new Item(new Object[] { Color.green, &quot;green&quot; }),<br>
+              new Item(new Object[] { Color.lightGray, &quot;lightGray&quot;})<br>
+              });</p>
+            <p> public void init() {<br>
+              final Container contentPane = getContentPane();</p>
+            <p> colorCombo.setRenderer(new ColorRenderer());</p>
+            <p> contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(colorCombo);</p>
+            <p> colorCombo.addActionListener(new ActionListener(){<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              Item item = (Item)colorCombo.getSelectedItem();<br>
+              String first = item.toString().substring(0,1);</p>
+            <p> showStatus(&quot;'&quot; + first + &quot;'&quot; + &quot; is for 
+              &quot; + item);<br>
+              }<br>
+              });<br>
+              }<br>
+              }<br>
+              class Item {<br>
+              private Color color;<br>
+              private String string;</p>
+            <p> public Item(Object[] array) {<br>
+              color = (Color)array[0];<br>
+              string = (String)array[1];<br>
+              }<br>
+              public Color getColor() { return color; }<br>
+              public String toString() { return string; }<br>
+              }<br>
+              class ColorRenderer extends JLabel implements ListCellRenderer {<br>
+              private static ColorIcon icon = new ColorIcon();</p>
+            <p> private Border <br>
+              redBorder = BorderFactory.createLineBorder(Color.red,2),<br>
+              emptyBorder = BorderFactory.createEmptyBorder(2,2,2,2);</p>
+            <p> public Component getListCellRendererComponent(<br>
+              JList list,<br>
+              Object value,<br>
+              int index,<br>
+              boolean isSelected,<br>
+              boolean cellHasFocus) {<br>
+              Item item = (Item)value;</p>
+            <p> icon.setColor(item.getColor());</p>
+            <p> setIcon(icon);<br>
+              setText(item.toString());</p>
+            <p> if(isSelected) setBorder(redBorder);<br>
+              else setBorder(emptyBorder);</p>
+            <p> return this;<br>
+              }<br>
+              }<br>
+              class ColorIcon implements Icon {<br>
+              private Color color;<br>
+              private int w, h;</p>
+            <p> public ColorIcon() {<br>
+              this(Color.gray, 50, 15);<br>
+              }<br>
+              public ColorIcon(Color color, int w, int h) {<br>
+              this.color = color;<br>
+              this.w = w;<br>
+              this.h = h;<br>
+              }<br>
+              public void paintIcon(Component c, Graphics g, int x, int y) {<br>
+              g.setColor(Color.black);<br>
+              g.drawRect(x, y, w-1, h-1);<br>
+              g.setColor(color);<br>
+              g.fillRect(x+1, y+1, w-2, h-2);<br>
+              }<br>
+              public Color getColor() {<br>
+              return color;<br>
+              }<br>
+              public void setColor(Color color) {<br>
+              this.color = color;<br>
+              }<br>
+              public int getIconWidth() {<br>
+              return w;<br>
+              }<br>
+              public int getIconHeight() {<br>
+              return h;<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 18.5.2 定制键选取管理器</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例18-4 实现一个定制的键选取管理器</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;<br>
+            import javax.swing.border.*;
+            <p>public class Test extends JApplet {<br>
+              private ColorKeySelectionManager ksm = <br>
+              new ColorKeySelectionManager();</p>
+            <p> private JComboBox colorCombo = new JComboBox(new Object[] {<br>
+              new Item(new Object[] { Color.gray, &quot;gray&quot; }),<br>
+              new Item(new Object[] { Color.orange, &quot;orange&quot; }),<br>
+              new Item(new Object[] { Color.red, &quot;red&quot; }),<br>
+              new Item(new Object[] { Color.blue, &quot;blue&quot; }),<br>
+              new Item(new Object[] { Color.yellow, &quot;yellow&quot; }),<br>
+              new Item(new Object[] { Color.magenta, &quot;magenta&quot; }),<br>
+              new Item(new Object[] { Color.black, &quot;black&quot; }),<br>
+              new Item(new Object[] { Color.green, &quot;green&quot; }),<br>
+              new Item(new Object[] { Color.lightGray, &quot;lightGray&quot;})<br>
+              });<br>
+              public void init() {<br>
+              final Container contentPane = getContentPane();</p>
+            <p> colorCombo.setRenderer(new ColorRenderer());<br>
+              colorCombo.setKeySelectionManager(ksm);</p>
+            <p> contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(colorCombo);</p>
+            <p> colorCombo.addActionListener(new ActionListener(){<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              Item item = (Item)colorCombo.getSelectedItem();<br>
+              String itemString = item.toString();</p>
+            <p> showStatus(&quot;'&quot; + ksm.getSearchString() +<br>
+              &quot;'&quot; + &quot; is for &quot; + itemString);<br>
+              }<br>
+              });<br>
+              }<br>
+              }<br>
+              class Item {<br>
+              private Color color;<br>
+              private String string;</p>
+            <p> public Item(Object[] array) {<br>
+              color = (Color)array[0];<br>
+              string = (String)array[1];<br>
+              }<br>
+              public Color getColor() { return color; }<br>
+              public String toString() { return string; }<br>
+              }<br>
+              class ColorRenderer extends JLabel implements ListCellRenderer {<br>
+              private static ColorIcon icon = new ColorIcon();</p>
+            <p> private Border <br>
+              redBorder = BorderFactory.createLineBorder(Color.red,2),<br>
+              emptyBorder = BorderFactory.createEmptyBorder(2,2,2,2);</p>
+            <p> public Component getListCellRendererComponent(<br>
+              JList list,<br>
+              Object value,<br>
+              int index,<br>
+              boolean isSelected,<br>
+              boolean cellHasFocus) {<br>
+              Item item = (Item)value;</p>
+            <p> icon.setColor(item.getColor());<br>
+              setIcon(icon);<br>
+              setText(item.toString());</p>
+            <p> if(isSelected) setBorder(redBorder);<br>
+              else setBorder(emptyBorder);</p>
+            <p> return this;<br>
+              }<br>
+              }<br>
+              class ColorIcon implements Icon {<br>
+              private Color color;<br>
+              private int w, h;</p>
+            <p> public ColorIcon() {<br>
+              this(Color.gray, 50, 15);<br>
+              }<br>
+              public ColorIcon(Color color, int w, int h) {<br>
+              this.color = color;<br>
+              this.w = w;<br>
+              this.h = h;<br>
+              }<br>
+              public void paintIcon(Component c, Graphics g, int x, int y) {<br>
+              g.setColor(Color.black);<br>
+              g.drawRect(x, y, w-1, h-1);<br>
+              g.setColor(color);<br>
+              g.fillRect(x+1, y+1, w-2, h-2);<br>
+              }<br>
+              public Color getColor() {<br>
+              return color;<br>
+              }<br>
+              public void setColor(Color color) {<br>
+              this.color = color;<br>
+              }<br>
+              public int getIconWidth() {<br>
+              return w;<br>
+              }<br>
+              public int getIconHeight() {<br>
+              return h;<br>
+              }<br>
+              }<br>
+              class ColorKeySelectionManager <br>
+              implements JComboBox.KeySelectionManager {<br>
+              private String searchString = new String();<br>
+              private long lastTime;</p>
+            <p> public int selectionForKey(char key,ComboBoxModel model) {<br>
+              updateSearchString(model, key);</p>
+            <p> int start = getIndexAfter(model,getSelectedString(model));<br>
+              int selection = search(model, start);</p>
+            <p> if(selection == -1 &amp;&amp; start != 0)<br>
+              selection = search(model, 0);</p>
+            <p> return selection;<br>
+              }<br>
+              public String getSearchString() {<br>
+              return searchString;<br>
+              }<br>
+              private int search(ComboBoxModel model, int start) {<br>
+              for(int i=start; i &lt; model.getSize(); ++i) {<br>
+              String s = getString(model, i);<br>
+              int searchLength = searchString.length();</p>
+            <p> if(s.regionMatches(0,searchString,0,searchLength))<br>
+              return i;<br>
+              }<br>
+              return -1;<br>
+              }<br>
+              private int getIndexAfter(ComboBoxModel model, String find) {<br>
+              int size = model.getSize();</p>
+            <p> if(find != null) {<br>
+              for(int i=0; i &lt; size; ++i) {<br>
+              String s = getString(model, i);</p>
+            <p> if(s.compareToIgnoreCase(find) == 0) {<br>
+              return (i == size-1) ? 0 : i + 1;<br>
+              }<br>
+              }<br>
+              }<br>
+              return 0;<br>
+              }<br>
+              private String getString(ComboBoxModel model, int index) {<br>
+              Item item = (Item)model.getElementAt(index);<br>
+              return item.toString();<br>
+              }<br>
+              private String getSelectedString(ComboBoxModel model) {<br>
+              Item item = (Item)model.getSelectedItem();<br>
+              return item.toString();<br>
+              }<br>
+              private void updateSearchString(<br>
+              ComboBoxModel model, char key) {<br>
+              long time = System.currentTimeMillis();</p>
+            <p> if(time - lastTime &lt; 500) searchString += key;<br>
+              else searchString = &quot;&quot; + key;</p>
+            <p> lastTime = time;<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 18.5.3 程序式的键选取</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例18-5 使用SwingUtilities.invokeLater()</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;<br>
+            import javax.swing.border.*;
+            <p>public class Test extends JApplet {<br>
+              private JComboBox charsCombo = new JComboBox(new Object[] {<br>
+              new Character('g'), new Character('o'), <br>
+              new Character('r'), new Character('b'), <br>
+              new Character('y'), new Character('m'), <br>
+              new Character('g'), new Character('l'),<br>
+              });<br>
+              private JComboBox colorCombo = new JComboBox(new Object[] {<br>
+              new Item(new Object[] { Color.gray, &quot;gray&quot; }),<br>
+              new Item(new Object[] { Color.orange, &quot;orange&quot; }),<br>
+              new Item(new Object[] { Color.red, &quot;red&quot; }),<br>
+              new Item(new Object[] { Color.blue, &quot;blue&quot; }),<br>
+              new Item(new Object[] { Color.yellow, &quot;yellow&quot; }),<br>
+              new Item(new Object[] { Color.magenta, &quot;magenta&quot; }),<br>
+              new Item(new Object[] { Color.black, &quot;black&quot; }),<br>
+              new Item(new Object[] { Color.green, &quot;green&quot; }),<br>
+              new Item(new Object[] { Color.lightGray, &quot;lightGray&quot;})<br>
+              });</p>
+            <p> public void init() {<br>
+              final Container contentPane = getContentPane();</p>
+            <p> colorCombo.setRenderer(new ColorRenderer());</p>
+            <p> colorCombo.addActionListener(new ActionListener(){<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              Item item = (Item)colorCombo.getSelectedItem();<br>
+              Character first = new Character(<br>
+              item.toString().charAt(0));</p>
+            <p> showStatus(&quot;'&quot; + first.toString() + &quot;'&quot; +<br>
+              &quot; is for &quot; + item);<br>
+              }<br>
+              });<br>
+              charsCombo.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              final Character c = (Character)<br>
+              charsCombo.getSelectedItem();</p>
+            <p> colorCombo.selectWithKeyChar(c.charValue());</p>
+            <p> SwingUtilities.invokeLater(new Runnable() {<br>
+              public void run() {<br>
+              Item item = (Item)<br>
+              colorCombo.getSelectedItem();</p>
+            <p> JOptionPane.showMessageDialog(contentPane,<br>
+              &quot;'&quot; + c.toString() + &quot;'&quot; +<br>
+              &quot; is for &quot; + item.toString());<br>
+              }<br>
+              });<br>
+              }<br>
+              });<br>
+              contentPane.setLayout(<br>
+              new FlowLayout(FlowLayout.CENTER, 10, 35));</p>
+            <p> contentPane.add(new JLabel(&quot;Select a Character:&quot;));<br>
+              contentPane.add(charsCombo);<br>
+              contentPane.add(colorCombo);<br>
+              }<br>
+              }<br>
+              class Item {<br>
+              private Color color;<br>
+              private String string;</p>
+            <p> public Item(Object[] array) {<br>
+              color = (Color)array[0];<br>
+              string = (String)array[1];<br>
+              }<br>
+              public Color getColor() { return color; }<br>
+              public String toString() { return string; }<br>
+              }</p>
+            <p>class ColorRenderer extends JLabel implements ListCellRenderer 
+              {<br>
+              private static ColorIcon icon = new ColorIcon();</p>
+            <p> private Border <br>
+              redBorder = BorderFactory.createLineBorder(Color.red,2),<br>
+              emptyBorder = BorderFactory.createEmptyBorder(2,2,2,2);</p>
+            <p> public Component getListCellRendererComponent(<br>
+              JList list,<br>
+              Object value,<br>
+              int index,<br>
+              boolean isSelected,<br>
+              boolean cellHasFocus) {<br>
+              Item item = (Item)value;</p>
+            <p> icon.setColor(item.getColor());</p>
+            <p> setIcon(icon);<br>
+              setText(item.toString());</p>
+            <p> if(isSelected) setBorder(redBorder);<br>
+              else setBorder(emptyBorder);</p>
+            <p> return this;<br>
+              }<br>
+              }<br>
+              class ColorIcon implements Icon {<br>
+              private Color color;<br>
+              private int w, h;</p>
+            <p> public ColorIcon() {<br>
+              this(Color.gray, 50, 15);<br>
+              }<br>
+              public ColorIcon(Color color, int w, int h) {<br>
+              this.color = color;<br>
+              this.w = w;<br>
+              this.h = h;<br>
+              }<br>
+              public void paintIcon(Component c, Graphics g, int x, int y) {<br>
+              g.setColor(Color.black);<br>
+              g.drawRect(x, y, w-1, h-1);<br>
+              g.setColor(color);<br>
+              g.fillRect(x+1, y+1, w-2, h-2);<br>
+              }<br>
+              public Color getColor() {<br>
+              return color;<br>
+              }<br>
+              public void setColor(Color color) {<br>
+              this.color = color;<br>
+              }<br>
+              public int getIconWidth() {<br>
+              return w;<br>
+              }<br>
+              public int getIconHeight() {<br>
+              return h;<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 18.6 组合框编辑器</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例18-6 实现一个定制的组合框编辑器</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;<br>
+            import javax.swing.event.*;<br>
+            import javax.swing.border.*;
+            <p>public class Test extends JApplet {<br>
+              private JComboBox comboBox = <br>
+              new JComboBox(new Object[] {<br>
+              new Item(new Object[] {Color.gray, &quot;gray&quot;}),<br>
+              new Item(new Object[] {Color.orange, &quot;orange&quot;}),<br>
+              new Item(new Object[] {Color.red, &quot;red&quot;}),<br>
+              new Item(new Object[] {Color.blue, &quot;blue&quot;}),<br>
+              new Item(new Object[] {Color.yellow, &quot;yellow&quot;}),<br>
+              new Item(new Object[] {Color.magenta, &quot;magenta&quot;}),<br>
+              new Item(new Object[] {Color.black, &quot;black&quot;}),<br>
+              new Item(new Object[] {Color.green, &quot;green&quot;}),<br>
+              new Item(new Object[] {Color.lightGray, &quot;lightGray&quot;}),<br>
+              new Item(new Object[] {Color.white, &quot;white&quot;}),<br>
+              });</p>
+            <p> public void init() {<br>
+              Container contentPane = getContentPane();</p>
+            <p> comboBox.setRenderer(new ColorRendererer());<br>
+              comboBox.setEditor(new ColorComboBoxEditor());<br>
+              comboBox.setEditable(true);</p>
+            <p> contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(comboBox);<br>
+              }<br>
+              }<br>
+              class Item {<br>
+              private Color color;<br>
+              private String string;</p>
+            <p> public Item(Object[] array) {<br>
+              color = (Color)array[0];<br>
+              string = (String)array[1];<br>
+              }<br>
+              public Color getColor() { return color; }<br>
+              public String toString() { return string; }<br>
+              }<br>
+              class ColorComboBoxEditor extends AbstractComboBoxEditor {<br>
+              ColorIcon editorIcon = new ColorIcon();<br>
+              JLabel editorLabel = new JLabel(editorIcon);</p>
+            <p> Item item;</p>
+            <p> JColorChooser colorChooser = new JColorChooser();<br>
+              ActionListener okListener = new OKListener();<br>
+              Dialog dialog = JColorChooser.createDialog(<br>
+              null, // parentComponent<br>
+              &quot;Choose A Color&quot;,// title<br>
+              true, // modal<br>
+              colorChooser,<br>
+              okListener, <br>
+              null); // cancel listener</p>
+            <p> public ColorComboBoxEditor() {<br>
+              editorLabel.setBorder(BorderFactory.createEtchedBorder());</p>
+            <p> editorLabel.addMouseListener(new MouseAdapter() {<br>
+              public void mousePressed(MouseEvent e) {<br>
+              dialog.setVisible(true);<br>
+              }<br>
+              });<br>
+              }<br>
+              class OKListener implements ActionListener {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              item = <br>
+              new Item(new Object[] {<br>
+              colorChooser.getColor(), null});</p>
+            <p> fireActionPerformed(e);<br>
+              }<br>
+              }<br>
+              public Component getEditorComponent() {<br>
+              return editorLabel;<br>
+              }<br>
+              public Object getItem() {<br>
+              return item;<br>
+              }<br>
+              public void setItem(Object itemToSet) {<br>
+              item = (Item)itemToSet;</p>
+            <p> // cannot set the selected item in an editor's<br>
+              // setItem method, or an infinite loop results</p>
+            <p> editorIcon.setColor(item.getColor());<br>
+              editorLabel.setText(item.toString());<br>
+              }<br>
+              public void selectAll() {<br>
+              // from ComboBoxModel interface: nothing to select <br>
+              }<br>
+              }<br>
+              abstract class AbstractComboBoxEditor implements ComboBoxEditor 
+              {<br>
+              EventListenerList listenerList = new EventListenerList();</p>
+            <p> public void addActionListener(ActionListener listener) {<br>
+              listenerList.add(ActionListener.class, listener);<br>
+              }<br>
+              public void removeActionListener(ActionListener listener) {<br>
+              listenerList.remove(ActionListener.class, listener);<br>
+              }<br>
+              protected void fireActionPerformed(ActionEvent e) {<br>
+              // Guaranteed to return a non-null array<br>
+              Object[] listeners = listenerList.getListenerList();<br>
+              <br>
+              // Process the listeners last to first, notifying<br>
+              // those that are interested in this event<br>
+              for (int i = listeners.length-2; i&gt;=0; i-=2) {<br>
+              if (listeners[i]==ActionListener.class) {<br>
+              ((ActionListener)<br>
+              listeners[i+1]).actionPerformed(e);<br>
+              } <br>
+              }<br>
+              } <br>
+              }<br>
+              class ColorRendererer extends JLabel implements ListCellRenderer 
+              {<br>
+              private ColorIcon icon = new ColorIcon();</p>
+            <p> public ColorRendererer() {<br>
+              setOpaque(true);<br>
+              setIcon(icon);<br>
+              }<br>
+              public Component getListCellRendererComponent(<br>
+              JList list,<br>
+              Object value,<br>
+              int index,<br>
+              boolean isSelected,<br>
+              boolean cellHasFocus) {<br>
+              Item item = (Item)value;</p>
+            <p> icon.setColor(item.getColor());<br>
+              setText(item.toString());</p>
+            <p> if(isSelected) {<br>
+              setForeground(list.getSelectionForeground());<br>
+              setBackground(list.getSelectionBackground());<br>
+              }<br>
+              else {<br>
+              setForeground(list.getForeground());<br>
+              setBackground(list.getBackground());<br>
+              }<br>
+              return this;<br>
+              }<br>
+              }<br>
+              class ColorIcon implements Icon {<br>
+              private Color color;<br>
+              private int w, h;</p>
+            <p> public ColorIcon() {<br>
+              this(Color.gray, 50, 15);<br>
+              }<br>
+              public ColorIcon(Color color, int w, int h) {<br>
+              this.color = color;<br>
+              this.w = w;<br>
+              this.h = h;<br>
+              }<br>
+              public void paintIcon(Component c, Graphics g, int x, int y) {<br>
+              g.setColor(Color.black);<br>
+              g.drawRect(x, y, w-1, h-1);<br>
+              g.setColor(color);<br>
+              g.fillRect(x+1, y+1, w-2, h-2);<br>
+              }<br>
+              public Color getColor() {<br>
+              return color;<br>
+              }<br>
+              public void setColor(Color color) {<br>
+              this.color = color;<br>
+              }<br>
+              public int getIconWidth() {<br>
+              return w;<br>
+              }<br>
+              public int getIconHeight() {<br>
+              return h;<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 18.6.1 JComboBox属性</p>
+            <p>&nbsp;</p>
+            <p align="center">&nbsp;</p>
+            <p> 18.6.2 JComboBox事件</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例18-7 处理选取事件</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              private JComboBox comboBox = new JComboBox();</p>
+            <p> public void init() {<br>
+              Container contentPane = getContentPane();</p>
+            <p> comboBox.addItem(&quot;Top&quot;);<br>
+              comboBox.addItem(&quot;Center&quot;);<br>
+              comboBox.addItem(&quot;Bottom&quot;);</p>
+            <p> contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(comboBox);</p>
+            <p> comboBox.addItemListener(new ItemListener() { <br>
+              public void itemStateChanged(ItemEvent event) {<br>
+              int state = event.getStateChange();<br>
+              String item = (String)event.getItem(), s;</p>
+            <p> if(event.getStateChange() == ItemEvent.SELECTED)<br>
+              s = &quot; selected&quot;;<br>
+              else<br>
+              s = &quot; deselected&quot;;</p>
+            <p> JOptionPane.showMessageDialog(<br>
+              comboBox, // parent component<br>
+              item + s, // message<br>
+              &quot;JComboBox Selection&quot;, // title<br>
+              JOptionPane.INFORMATION_MESSAGE); // type<br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p align="center"><b>例18-8 处理编辑事件</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              private JComboBox comboBox = new JComboBox();<br>
+              private ComboBoxEditor editor = comboBox.getEditor();</p>
+            <p> public void init() {<br>
+              Container contentPane = getContentPane();</p>
+            <p> comboBox.setEditable(true);</p>
+            <p> comboBox.addItem(&quot;Top&quot;);<br>
+              comboBox.addItem(&quot;Center&quot;);<br>
+              comboBox.addItem(&quot;Bottom&quot;);</p>
+            <p> contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(comboBox);</p>
+            <p> editor.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              String s = (String)editor.getItem();<br>
+              showStatus(&quot;Item Edited: &quot; + s);<br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p>&nbsp;</p>
+            <p> 18.6.3 JComboBox类总结</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例18-9 手工显示一个组件框的弹出式菜单</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class Test extends JApplet {<br>
+              public void init() {<br>
+              Container contentPane = getContentPane();<br>
+              JButton button = new JButton(&quot;show popup&quot;);<br>
+              final JComboBox combo = new JComboBox();</p>
+            <p> combo.addItem(&quot;first item&quot;);<br>
+              combo.addItem(&quot;second item&quot;);<br>
+              combo.addItem(&quot;third item&quot;);<br>
+              combo.addItem(&quot;fourth item&quot;);<br>
+              combo.addItem(&quot;fifth item&quot;);</p>
+            <p> button.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              combo.showPopup();<br>
+              }<br>
+              });<br>
+              contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(button);<br>
+              contentPane.add(combo);<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p>18.6.4 AWT兼容</p>
+            <p>&nbsp;</p>
+            <p> 18.7 本章回顾</p>
+            <p>&nbsp;</p>
+            <p>[<a href="index.html" target="_self">目录</a>][<a href="s17.htm">上一页</a>][<a href="s19.htm">下一页</a>](飒龙收藏/2002.5.18) 
+            </p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </td>
+  </tr>
+</tbody>
+</table>
+<script language="javascript">bottomprint()</script>
+</body>
+</html>

@@ -1,0 +1,1539 @@
+<SCRIPT LANGUAGE="JavaScript" SRC="/-fs0/sys/pop-up.js"></SCRIPT>
+
+<SCRIPT LANGUAGE="JavaScript" SRC="/-fs0/sys/pop-up-all.js"></SCRIPT>
+
+<html>
+<head>
+<title>易都网--Java 2 图形设计卷Ⅱ：SWING</title>
+<LINK rel="stylesheet" href="../../../_public/javaa.css">
+<meta http-equiv="Content-Type" content="text/html; charset=GBK">
+<script language="JavaScript" src="../../../_public/javaa.js"></script>
+<meta name="keywords" content="Java,JSP,ASP,PHP,J2EE,EJB,JavaScript,C/C++,ASM,CSS,HTML,XML,网络安全,MySQL,ACCESS">
+</head>
+<body bgcolor="#FFFFFF">
+<table border=0 cellpadding=0 cellspacing=0 width="100%">
+  <tbody> 
+  <script language="javascript">print2()</script>
+  <tr> 
+    <td width="100%"> 
+      <table bgcolor=#EEEEEE border=0 cellpadding=3 cellspacing=0 width="100%">
+        <tbody> 
+        <tr> 
+          <td class=f1 id=thetd width="100%"> 
+            <p>[<a href="index.html" target="_self">目录</a>][<a href="s19.htm">上一页</a>][<a href="s21.htm">下一页</a>]</p>
+            <p align="center"><b>第20章 树</b></p>
+            <p>　　Swing树使用人们所熟悉的文件夹和树叶图来显示分层的数据。应用最广泛的树组件(树组件又称为轮廓控件)。无疑是Windows 
+              Explorer，它包含一个用于导航目录的树组件。<br>
+              　　与表格类似，树由许多类和接口组成，这些类和接口在它们自己的包——swing.tree包中定义，swing包中的JTree类代表树组件。<br>
+              　　树由节点组成，节点可以是文件夹，也可以是树叶。文件夹可以有子节点，除根节点之外的所有节点都只有一个父节点。空的文件夹与树叶的不同之处就在于它允许有子节点。<br>
+              　　图20-1显示的是JTree类的一个扩展，该扩展可用于导航目录和文件。文件夹和树叶由不同的图标表示，这些图标都是彼此独立的。在文件夹上双击，或单击文件夹的句柄，就可以展开或折叠文件夹，根节点句柄的可见性可以被设置。例如，图20-1所示的树的根节点就没有显示句柄。<br>
+              　　除父节点和子节点外，树的节点还有一个用户对象(当使用DefaultTreeModel时就会呈现一个用户对象)。用户对象是Object类型，因此它提供了一个将任意对象与节点相关联的办法。<br>
+              　　树有一个简单的模型，每一个JTree实例都要维护对绘制器和编辑器的引用，这个绘制器和编辑器被树中所有的节点所使用。在表20-1中列出了swing.tree包中的主要类。</p>
+            <p> 　　　　　　　　　　　<b>表20-1 Swing.tree包中的主要类</b><br>
+              　　━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br>
+              　　　　<b>名　称</b>　　　　　　　　　　　　<b>实　现</b><br>
+              　　─────────────────────────────────<br>
+              　　DefaultMutableTreeNode　一个具有一个父节点、（可能）许多子节点和<br>
+              　　　　　　　　　　　　　　一个用户对象的可变节点，为相关联的节点提<br>
+              　　　　　　　　　　　　　　供了访问方法。如果没有任何子节点，这个节<br>
+              　　　　　　　　　　　　　　点就是树叶<br>
+              　　DefaultTreeModel　一个激发TreeModel Events事件的简单可变的模型。<br>
+              　　　　　　　　　　　　提供对子节点的访问方法，但不是提供对父节点的访<br>
+              　　　　　　　　　　　　问方法 <br>
+              　　DefaultTreeCellEditor　绘制器和编辑器的包装器，它把一个“真正”的<br>
+              　　　　　　　　　　　　　　编辑器组件放在节点图标的旁边 <br>
+              　　DefaultTreeCellRenderer　具有字体、颜色和图标访问方法的JLabel扩<br>
+              　　　　　　　　　　　　　　　展，它提供图标的缺省值<br>
+              　　TreePath　由一个节点到另一个节点的路径。路径中的节点存储在一个数<br>
+              　　　　　　　组中。路径用于在选取内容之间进行通信<br>
+              　　━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ </p>
+            <p> <b>20.1 创建树</b></p>
+            <p>　　<a href="s20_t02.htm" target="_blank">图20-2</a>示出的小应用程序包含一个表格，这个表格是用JTree无参数构件方法创建的。<br>
+              　　图20-2中所示的小应用程序向应用程序的内容空格中添加了一个树，这个树包裹在一个滚动空格中。在例20-1中列出了这个小应用程序的代码。在缺省情况下显示一个树中所示的树在程序开始运行时，它的文件夹都是展开的。</p>
+            <p> 　　　　　　　　<b>例20-1 一个简单的树的例子</b><br>
+              　　─────────────────────────────────<br>
+              　　import javax.swing.*;<br>
+              　　public class Test extends JApplet {<br>
+              　　　public void init(){<br>
+              　　　　　getContentPane().add(new JScrollPane(new JTree()));<br>
+              　　　}<br>
+              　　} <br>
+              　　─────────────────────────────────</p>
+            <p> 　　如果在构造时没有显式地指定模型或节点，则JTree的实例就以图20-2所示的节点来构造。<br>
+              　　几乎所有的树都是以下面的方式来构造的：选创建一个根节点，然后建立分层结构或创建一个树模型。例如，在创建图20-2所示的节点的缺省分层结构时，JTree缺省的构造方法就调用了JTree.getDefaultTreeModel()。<br>
+              　　//From JTree.java:<br>
+              　　protected static TreeModel getDefaultTreeModel(){<br>
+              　　　DefaultMutableTreeNode root=<br>
+              　　　　new Default Mutable Tree Node (&quot;JTree&quot;);<br>
+              　　　DefaultMutableTreeNode parent;</p>
+            <p>　　　parent = new DefaultMutableTreeNode(&quot;colors&quot;);<br>
+              　　　root.add(parent);<br>
+              　　　parent.add(new DefaultMutableTreeNode(&quot;blue&quot;));<br>
+              　　　parent.add(new DefaultMutableTreeNode(&quot;violet&quot;));<br>
+              　　　parent.add(new DefaultMutableTreeNode(&quot;red&quot;));<br>
+              　　　parent.add(new DefaultMutableTreeNode(&quot;yellow&quot;));</p>
+            <p>　　　parent = new DefaultMutableTreeNode(&quot;sports&quot;);<br>
+              　　　root.add(parent);<br>
+              　　　parent.add(new DefaultMutableTreeNode(&quot;basketball&quot;));<br>
+              　　　parent.add(new DefaultMutableTreeNode(&quot;soccer&quot;));<br>
+              　　　parent.add(new DefaultMutableTreeNode(&quot;football&quot;));<br>
+              　　　parent.add(new DefaultMutableTreeNode(&quot;hockey&quot;));<br>
+              　　　...<br>
+              　　　return new DefalutTreeModel(root);<br>
+              　　}</p>
+            <p></p>
+            <p> 　　用户对象的带有字符串JTree的节点被实例化，而且最终指定为树模型的根节点，节点colors有四个子节点，且指定为根节点的唯一节点。节点sports也有四个节点，而且也被添加到根节点中。<br>
+              　　JTree类还提供了用Object数组、哈希表和矢量创建树的构造方法，如<a href="s20_t03.htm" target="_blank">图20-3</a>所示。<br>
+              　　与构造分层节点相比，用数据来构造树，需要注意两点：<br>
+              　　第一点，数据很少（几乎没有）用来构造树，通常，树都是用节点一配置的，图20-2中所示的小应用程序即是一例。<br>
+              　　第二点，由于对象添加到哈希表中的顺序和对象在哈希表中存放的顺序没有任何联系，因此，用哈希表创建的树的节点顺序是难以预料的。<br>
+              　　例20-2列出了图20-3中所示小应用程序的完整代码。<br>
+              　　　　　　　　　<b>例20-2用对象、矢量和哈希表来创建树</b><br>
+              　　─────────────────────────────────<br>
+              　　import javax.swing.*;<br>
+              　　import javax.swing.tree.TreePath;<br>
+              　　import java.awt.*;<br>
+              　　import java.awt.event.*;<br>
+              　　import java.util.*;</p>
+            <p>　　public class Test extends JApplet {<br>
+              　　　Hashtable ht = new Hashtable(), ht2 = new Hashtable();<br>
+              　　　Vector vector = new Vector();<br>
+              　　　Object[] objs = new Object[] {<br>
+              　　　&quot;array item 1&quot;, &quot;array item 2&quot;, &quot;array 
+              item 3&quot; <br>
+              　　　};<br>
+              　　　public void init() {<br>
+              　　　　Container contentPane = getContentPane();</p>
+            <p> 　　　　vector.addElement(&quot;vector element 1&quot;);<br>
+              　　　　vector.addElement(&quot;vector element 2&quot;);<br>
+              　　　　vector.addElement(&quot;vector element 3&quot;);<br>
+              　　　　vector.addElement(&quot;vector element 4&quot;);<br>
+              　　　　vector.addElement(&quot;vector element 5&quot;);</p>
+            <p> 　　　　ht.put(&quot;another hashtable&quot;, ht2);<br>
+              　　　　ht.put(&quot;vector&quot;, vector);<br>
+              　　　　ht.put(&quot;Object[]&quot;, objs);</p>
+            <p> 　　　　ht2.put(&quot;Object[]&quot;, objs);<br>
+              　　　　ht2.put(&quot;vector&quot;, vector);<br>
+              　　　　ht2.put(&quot;one&quot;, new Integer(1));<br>
+              　　　　ht2.put(&quot;two&quot;, new Integer(2));<br>
+              　　　　ht2.put(&quot;three&quot;, new Integer(3));</p>
+            <p> 　　　　// trees must be created after data is populated</p>
+            <p> 　　　　JTree hashTree = new JTree(ht);<br>
+              　　　　JTree vectorTree = new JTree(vector);<br>
+              　　　　JTree objectTree = new JTree(objs);</p>
+            <p> 　　　　JScrollPane objPane = new JScrollPane(objectTree);<br>
+              　　　　JScrollPane hashPane = new JScrollPane(hashTree);<br>
+              　　　　JScrollPane vectorPane = new JScrollPane(vectorTree);</p>
+            <p> 　　　　objPane.setPreferredSize(new Dimension(150,200));//w,h<br>
+              　　　　hashPane.setPreferredSize(new Dimension(250,200));<br>
+              　　　　vectorPane.setPreferredSize(new Dimension(150,200));</p>
+            <p> 　　　　objPane.setBorder(<br>
+              　　　　　BorderFactory.createTitledBorder(&quot;Object[]&quot;));</p>
+            <p> 　　　　hashPane.setBorder(<br>
+              　　　　　BorderFactory.createTitledBorder(&quot;Hashtable&quot;));</p>
+            <p> 　　　　vectorPane.setBorder(<br>
+              　　　　　BorderFactory.createTitledBorder(&quot;Vector&quot;));</p>
+            <p> 　　　　hashTree.expandPath(new TreePath(<br>
+              　　　　　hashTree.getModel().getRoot())); </p>
+            <p> 　　　　contentPane.setLayout(new FlowLayout());<br>
+              　　　　contentPane.add(objPane);<br>
+              　　　　contentPane.add(hashPane);<br>
+              　　　　contentPane.add(vectorPane);<br>
+              　　　}<br>
+              　　}<br>
+              　　─────────────────────────────────<br>
+            </p>
+            <p> <b>20.2 树节点</b></p>
+            <p>　　在Swing树中，树节点是关键的组成部分，如同列是表格的主干一样。树节点由TreeNode接口定义，TreeNode接口被MutableTreeNode接口扩展，而MutableTreeNode接口又由DefaultMutableTreeNode类来实现。</p>
+            <p> <b>20.2.1 TreeNode接口</b></p>
+            <p>　　TreeNode接口定义了（固定）树节点的实质，接口总结20-1总结了树节点。<br>
+            </p>
+            <table width="100%" border="1" cellspacing="0" cellpadding="0" bgcolor="#CCCCCC" bordercolorlight="#000000" bordercolordark="#FFFFFF">
+              <tr>
+                <td><b>接口总结20-1 TreeNode</b></td>
+              </tr>
+            </table>
+            <p>　　public abstract Enumeration children()<br>
+              　　public abstract TreeNode getParent()<br>
+              　　public abstract TreeNode getChildAt(int)<br>
+              　　public abstract int getChildCount()<br>
+              　　public abstract int getIndex(TreeNode)<br>
+              　　public abstract abstract boolean getAllowsChildren()<br>
+              　　public abstract boolean isLeaf()<br>
+              　　上面列出的前两组方法是对一个节点的父节点和子节点的访问方法。访问一个节点的子节点，可以通过枚举子节点的父节点来实现，也可以通过索引来访问子节点。另外，还定义了获取节点索引的方法和获取一个节点包含的子节点数目的方法。<br>
+              　　上面列出的最后两个方法用来确定一个节点是文件夹，还是树叶。 </p>
+            <hr size="1" noshade>
+            <p>　　开发人员很少直接实现TreeNode接口，这是因为Swing在DefaultMutableTreeNode类中提供了TreeNode接口的一个常用的缺省实现。数目众多的树节点扩展了DefaultMutableTreeNode。 
+            </p>
+            <p> <b>20.2.2 MutableTreeNode接口</b></p>
+            <p>　　MutableTreeNode接口扩展TreeNode，它除了定义指定用户对象的方法外，还定义了修改一个节点的父节点和子节点的方法。接口总结20-2总结了MutableNode接口。<br>
+            </p>
+            <table width="100%" border="1" cellspacing="0" cellpadding="0" bgcolor="#CCCCCC" bordercolorlight="#000000" bordercolordark="#FFFFFF">
+              <tr> 
+                <td><b>接口总结20-2 MutableTreeNode</b></td>
+              </tr>
+            </table>
+            <p>　　扩展：TreeNode<br>
+              　　public abstract void insert(MutableTreeNode child,int index)<br>
+              　　public abstract void remove(int index)<br>
+              　　public abstract void remove(MutableTreeNode child)<br>
+              　　public abstract void removeFromParent()<br>
+              　　public abstract void setParent(MutableTreeNode)<br>
+              　　public abstract void setUserObject(Object)<br>
+              　　上面列出的第一组方法用来插入和删除子节点，子节点可以通过索引或引用来删除。removeFromParent方法用来将节点从父节点中删除，并更新父节点的子节点数目。<br>
+              　　上面列出的最后两个方法用来设置一个节点的父节点和用户对象。需要注意的是，MutableTreeNode继承了getParent方法，而没有继承getUserObject方法，这是一个疏漏，在以后发布的Swing中将予以更正。在实际应用中，因为没有getUserObject方法而造成的影响几乎为零，这是因为该方法已在defaultMutableTreeNode类中得到了实现。 
+            </p>
+            <hr size="1" noshade>
+            <p><b>20.2.3 DefaultMutableTreeNode类</b></p>
+            <p>　　在实际应用各，很少直接实现MutableTreeNode接口，这是因为Swing以DefaultMutableTreeNode类的形式提供了一个合理又强壮的MutableTreeNode接口的实现。<br>
+              　　图20-4示出了DefaultMutableTreeNode接口，并维护对其父节点、用户对象和子节点的引用。通过维护对其父节点和子节点的一个引用，DefaultMutableTreeNode类实现了组合设计样式(注：内容略)，该样式允许对文件夹和树叶进行嵌套。AWT的Component类Container类也是组合设计样式的一个样例(注：内容略)。<br>
+              　　1.使用DefaultMutableTreeNode<br>
+              　　树节点几乎总是DefaultMutableTreeNode类的实例或它的扩展。例如，由一个树创建的缺省节点就是DefaultMutableTreeNode的实例。<br>
+              　　除了那些在TreeNode和MutableTreeNode接口中定义的方法外，DefaultMutableTreeNode类还提供了许多其他的方法来访问相关的节点。例如，它提供了getFirstLeaf和getNextLeaf方法，前一种方法返回第一个树叶，第二种方法返回某一个给定树叶的下一个兄弟节点。<br>
+              　　DefaultMutableTreeNode类还提供了一些方法，这些方法以尝试优先或宽度优先遍历方式来返回由一个节点派生的子节点的一个枚举，深度优先和宽度优先这两种遍历方式的区别同图20-5。例20-3的小应用程序显示树的节点，这些节点是通过对一个树的根节点调用DefaultMutableTreeNode.depthFirstEmumeration和DefaultMutableTreeNode.breadthFirstEnumeration来获取的。</p>
+            <p align="center"> <b>例20-3 深度优先遍历与宽度优先遍历之间的比较</b></p>
+            <hr size="1" noshade>
+            　　import java.awt.*;<br>
+            　　import java.awt.event.*;<br>
+            　　import javax.swing.*;<br>
+            　　import javax.swing.tree.*;<br>
+            　　import java.util.*;
+<p>　　public class Test extends JApplet {<br>
+              　　　private JTree tree = new JTree();<br>
+              　　　private JButton button = new JButton(&quot;show traversals&quot;);</p>
+            <p> 　　　private DefaultMutableTreeNode root = <br>
+              　　　　(DefaultMutableTreeNode)tree.getModel().getRoot();</p>
+            <p> 　　　public void init() {<br>
+              　　　　getContentPane().add(new JScrollPane(tree), <br>
+              　　　　BorderLayout.CENTER);<br>
+              　　　　getContentPane().add(button, BorderLayout.NORTH);</p>
+            <p> 　　　　button.addActionListener(new ActionListener() {<br>
+              　　　　　public void actionPerformed(ActionEvent e) {<br>
+              　　　　　　Enumeration df = root.depthFirstEnumeration();<br>
+              　　　　　　Enumeration bf = root.breadthFirstEnumeration();</p>
+            <p> 　　　　　　while(df.hasMoreElements()) {<br>
+              　　　　　　　System.out.println(<br>
+              　　　　　　　df.nextElement().toString());<br>
+              　　　　　　}</p>
+            <p> 　　　　　　System.out.println(&quot;&quot;);<br>
+              　　　　　　System.out.println(&quot;&quot;);</p>
+            <p> 　　　　　　while(bf.hasMoreElements()) {<br>
+              　　　　　　　System.out.println(<br>
+              　　　　　　　bf.nextElement().toString());<br>
+              　　　　　　}</p>
+            <p> 　　　　　}<br>
+              　　　　});<br>
+              　　　}<br>
+              　　}</p>
+            <hr size="1" noshade>
+            <p>　　2.扩展DefaultMutableTreeNode<br>
+              　　可能对目录和文件提供导航的文件查看器可能是树组件最自然的应用，图20-6所示的应用程序就包含一个可用作文件查看器的JTree的一个实例。<br>
+              　　Swing树的设计基本是简便易行的，图20-6所示的应用程序就是一个证明，它有一个简单的实现方法。树包含有定制节点，这些节点是FileNode类的一些实例，而FileNode类维护作为自己的用户对象的一个File实例。 
+            </p>
+            <p>&nbsp;</p>
+            <p>&nbsp;</p>
+            <p>&nbsp;</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例 20-4 JTree文件查看器</b></p>
+            <hr size="1" noshade>
+            　　import javax.swing.*;<br>
+            　　import javax.swing.event.*;<br>
+            　　import javax.swing.tree.*;<br>
+            　　import java.awt.*;<br>
+            　　import java.awt.event.*;<br>
+            　　import java.io.File;<br>
+            　　import java.util.EventObject;
+<p>　　public class Test extends JFrame {<br>
+              　　　public Test() {<br>
+              　　　　final JTree tree = new JTree(createTreeModel());<br>
+              　　　　JScrollPane scrollPane = new JScrollPane(tree);</p>
+            <p> 　　　　getContentPane().add(scrollPane, BorderLayout.CENTER);<br>
+              　　　　getContentPane().add(GJApp.getStatusArea(), <br>
+              　　　　BorderLayout.SOUTH);</p>
+            <p> 　　　　tree.addTreeExpansionListener(new TreeExpansionListener(){<br>
+              　　　　　public void treeCollapsed(TreeExpansionEvent e) {<br>
+              　　　　　}<br>
+              　　　　　public void treeExpanded(TreeExpansionEvent e) {<br>
+              　　　　　　UpdateStatus updateThread;<br>
+              　　　　　　TreePath path = e.getPath();<br>
+              　　　　　　FileNode node = (FileNode)<br>
+              　　　　　　path.getLastPathComponent();</p>
+            <p> 　　　　　　if( ! node.isExplored()) {<br>
+              　　　　　　　DefaultTreeModel model = (DefaultTreeModel)tree.getModel();<br>
+              　　　　　　　GJApp.updateStatus(&quot;exploring ...&quot;);</p>
+            <p> 　　　　　　　UpdateStatus us = new UpdateStatus();<br>
+              　　　　　　　us.start();</p>
+            <p> 　　　　　　　node.explore();<br>
+              　　　　　　　model.nodeStructureChanged(node);<br>
+              　　　　　　}<br>
+              　　　　　}<br>
+              　　　　　class UpdateStatus extends Thread {<br>
+              　　　　　　public void run() {<br>
+              　　　　　　　try { Thread.currentThread().sleep(450); }<br>
+              　　　　　　　catch(InterruptedException e) { }</p>
+            <p> 　　　　　　　SwingUtilities.invokeLater(new Runnable() {<br>
+              　　　　　　　　public void run() {<br>
+              　　　　　　　　　GJApp.updateStatus(&quot; &quot;);<br>
+              　　　　　　　　}<br>
+              　　　　　　　});<br>
+              　　　　　　}<br>
+              　　　　　}<br>
+              　　　　});<br>
+              　　　}<br>
+              　　　private DefaultTreeModel createTreeModel() {<br>
+              　　　　File root = new File(&quot;E:/&quot;);<br>
+              　　　　FileNode rootNode = new FileNode(root);</p>
+            <p> 　　　　rootNode.explore();<br>
+              　　　　return new DefaultTreeModel(rootNode);<br>
+              　　　}<br>
+              　　　public static void main(String args[]) {<br>
+              　　　　GJApp.launch(new Test(),&quot;JTree File Explorer&quot;,<br>
+              　　　　300,300,450,400);<br>
+              　　　}<br>
+              　　}<br>
+              　　class FileNode extends DefaultMutableTreeNode {<br>
+              　　　private boolean explored = false;</p>
+            <p> 　　　public FileNode(File file) { <br>
+              　　　　setUserObject(file); <br>
+              　　　}<br>
+              　　　public boolean getAllowsChildren() { return isDirectory(); }<br>
+              　　　public boolean isLeaf() { return !isDirectory(); }<br>
+              　　　public File getFile() { return (File)getUserObject(); }</p>
+            <p> 　　　public boolean isExplored() { return explored; }</p>
+            <p> 　　　public boolean isDirectory() {<br>
+              　　　　File file = getFile();<br>
+              　　　　return file.isDirectory();<br>
+              　　　}<br>
+              　　　public String toString() {<br>
+              　　　　File file = (File)getUserObject();<br>
+              　　　　String filename = file.toString();<br>
+              　　　　int index = filename.lastIndexOf(File.separator);</p>
+            <p> 　　　　return (index != -1 &amp;&amp; index != filename.length()-1) 
+              ? <br>
+              　　　　filename.substring(index+1) : <br>
+              　　　　filename;<br>
+              　　　}<br>
+              　　　public void explore() {<br>
+              　　　　if(!isDirectory())<br>
+              　　　　return;</p>
+            <p> 　　　　if(!isExplored()) {<br>
+              　　　　　File file = getFile();<br>
+              　　　　　File[] children = file.listFiles();</p>
+            <p> 　　　　　for(int i=0; i &lt; children.length; ++i) <br>
+              　　　　　add(new FileNode(children[i]));</p>
+            <p> 　　　　　explored = true;<br>
+              　　　　}<br>
+              　　　}<br>
+              　　}<br>
+              　　class GJApp extends WindowAdapter {<br>
+              　　　static private JPanel statusArea = new JPanel();<br>
+              　　　static private JLabel status = new JLabel(&quot; &quot;);</p>
+            <p> 　　　public static void launch(final JFrame f, String title,<br>
+              　　　final int x, final int y, <br>
+              　　　final int w, int h) {<br>
+              　　　　f.setTitle(title);<br>
+              　　　　f.setBounds(x,y,w,h);<br>
+              　　　　f.setVisible(true);</p>
+            <p> 　　　　statusArea.setBorder(BorderFactory.createEtchedBorder());<br>
+              　　　　statusArea.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));<br>
+              　　　　statusArea.add(status);<br>
+              　　　　status.setHorizontalAlignment(JLabel.LEFT);</p>
+            <p> 　　　　f.setDefaultCloseOperation(<br>
+              　　　　WindowConstants.DISPOSE_ON_CLOSE);</p>
+            <p> 　　　　f.addWindowListener(new WindowAdapter() {<br>
+              　　　　　public void windowClosed(WindowEvent e) {<br>
+              　　　　　　System.exit(0);<br>
+              　　　　　}<br>
+              　　　　});<br>
+              　　　}<br>
+              　　　static public JPanel getStatusArea() {<br>
+              　　　　return statusArea;<br>
+              　　　}<br>
+              　　　static public void updateStatus(String s) {<br>
+              　　　　status.setText(s);<br>
+              　　　}<br>
+              　　}</p>
+            <hr size="1" noshade>
+            <p>20.3 树路径</p>
+            <p align="center"><b>例20-5 使用树路径</b></p>
+            <hr size="1" noshade>
+            import javax.swing.*;<br>
+            import javax.swing.event.*;<br>
+            import javax.swing.tree.*;<br>
+            import java.awt.*;<br>
+            //import java.awt.event.*;
+            <p>public class Test extends JApplet {<br>
+              JTree tree = new JTree();<br>
+              DefaultTreeModel model = (DefaultTreeModel)tree.getModel();<br>
+              TreeSelectionModel selectionModel = tree.getSelectionModel();</p>
+            <p> public void init() {<br>
+              getContentPane().add(tree, BorderLayout.CENTER);</p>
+            <p> tree.addTreeSelectionListener(<br>
+              new TreeSelectionListener() {<br>
+              public void valueChanged(TreeSelectionEvent e) {<br>
+              TreePath path = e.getNewLeadSelectionPath();</p>
+            <p> if(path == null)<br>
+              System.out.println(&quot;Selection Cleared&quot;);<br>
+              else {<br>
+              TreePath parentPath = path.getParentPath();<br>
+              Object <br>
+              lastNode = path.getLastPathComponent(),<br>
+              firstNode= path.getPathComponent(0);</p>
+            <p> System.out.println(&quot;Path: &quot; + path + <br>
+              &quot; has &quot; + <br>
+              path.getPathCount() + <br>
+              &quot; nodes&quot;);<br>
+              System.out.println(&quot;Last Path Component: &quot; +<br>
+              lastNode.toString());<br>
+              System.out.println(&quot;First Path Component: &quot; +<br>
+              firstNode.toString());<br>
+              System.out.println(&quot;Parent Path: &quot; + <br>
+              parentPath);</p>
+            <p> // the following if statement is always true </p>
+            <p> if(parentPath.isDescendant(path)) {<br>
+              System.out.println(parentPath + <br>
+              &quot; is a descendant of &quot; + path);</p>
+            <p> }<br>
+              DefaultMutableTreeNode last =<br>
+              (DefaultMutableTreeNode)lastNode;<br>
+              DefaultMutableTreeNode first =<br>
+              (DefaultMutableTreeNode)lastNode;</p>
+            <p> if(first.isNodeDescendant(last)) {<br>
+              System.out.println(<br>
+              &quot;last is descendant of first&quot;);<br>
+              <br>
+              }<br>
+              System.out.println(&quot;&quot;);<br>
+              }</p>
+            <p> }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 20.4 树模型</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例20-6 添加和删除节点</b></p>
+            <hr size="1" noshade>
+            import javax.swing.*;<br>
+            import javax.swing.event.*;<br>
+            import javax.swing.tree.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class Test extends JFrame {<br>
+              JTree tree = new JTree();<br>
+              DefaultTreeModel model = (DefaultTreeModel)tree.getModel();<br>
+              TreeSelectionModel selectionModel = tree.getSelectionModel();</p>
+            <p> JButton removeButton = new JButton(&quot;Remove selected node&quot;);<br>
+              JButton addButton = new JButton(&quot;Add node&quot;);</p>
+            <p> public Test() {<br>
+              Container contentPane = getContentPane();</p>
+            <p> selectionModel.setSelectionMode(<br>
+              TreeSelectionModel.SINGLE_TREE_SELECTION);</p>
+            <p> contentPane.add(new ControlPanel(), BorderLayout.NORTH);<br>
+              contentPane.add(tree, BorderLayout.CENTER);</p>
+            <p> tree.addTreeSelectionListener(<br>
+              new TreeSelectionListener() {<br>
+              public void valueChanged(TreeSelectionEvent e) {<br>
+              TreePath path = e.getNewLeadSelectionPath();<br>
+              boolean nodesAreSelected = (path != null);</p>
+            <p> addButton.setEnabled(nodesAreSelected);<br>
+              removeButton.setEnabled(nodesAreSelected);<br>
+              }<br>
+              });<br>
+              model.addTreeModelListener(new TreeModelListener() {<br>
+              public void treeNodesInserted(TreeModelEvent e) {<br>
+              showInsertionOrRemoval(e, &quot; added to &quot;);<br>
+              }<br>
+              public void treeNodesRemoved(TreeModelEvent e) {<br>
+              showInsertionOrRemoval(e, &quot; removed from &quot;);<br>
+              }<br>
+              private void showInsertionOrRemoval(TreeModelEvent e,<br>
+              String s) {<br>
+              Object[] parentPath = e.getPath();<br>
+              int[] indexes = e.getChildIndices();<br>
+              Object[] children = e.getChildren();<br>
+              Object parent = parentPath[parentPath.length-1];</p>
+            <p> JOptionPane.showMessageDialog(Test.this,<br>
+              &quot;Node \&quot;&quot; + children[0].toString() + <br>
+              &quot;\&quot;&quot; + s + parent.toString() + <br>
+              &quot; at index &quot; + indexes[0],<br>
+              &quot;Node Added or Removed&quot;,<br>
+              JOptionPane.INFORMATION_MESSAGE);<br>
+              }<br>
+              public void treeNodesChanged(TreeModelEvent e) {}<br>
+              public void treeStructureChanged(TreeModelEvent e) {}<br>
+              });<br>
+              }<br>
+              class ControlPanel extends JPanel {<br>
+              public ControlPanel() {<br>
+              addButton.setEnabled(false);<br>
+              removeButton.setEnabled(false);</p>
+            <p> add(addButton);<br>
+              add(removeButton);</p>
+            <p> addButton.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              TreePath path = <br>
+              selectionModel.getSelectionPath();</p>
+            <p> MutableTreeNode parent, node = <br>
+              (MutableTreeNode)path.getLastPathComponent();</p>
+            <p> if(path.getPathCount() &gt; 1)<br>
+              parent = (MutableTreeNode)node.getParent();<br>
+              else<br>
+              parent = (MutableTreeNode)node;</p>
+            <p> int index = parent.getIndex(node) + 1;</p>
+            <p> String s = JOptionPane.showInputDialog(<br>
+              Test.this,<br>
+              &quot;Enter a name for the new node:&quot;,<br>
+              &quot;New Tree Node&quot;,<br>
+              JOptionPane.QUESTION_MESSAGE);</p>
+            <p> MutableTreeNode newNode = <br>
+              new DefaultMutableTreeNode(s);</p>
+            <p> model.insertNodeInto(newNode, parent, index);<br>
+              }<br>
+              });<br>
+              removeButton.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              TreePath path = <br>
+              selectionModel.getSelectionPath();</p>
+            <p> if(path.getPathCount() == 1) {<br>
+              JOptionPane.showMessageDialog(ControlPanel.this,<br>
+              &quot;Can't remove root node!&quot;);<br>
+              return;<br>
+              }</p>
+            <p> MutableTreeNode node = <br>
+              (MutableTreeNode)path.getLastPathComponent();</p>
+            <p> model.removeNodeFromParent(node);<br>
+              }<br>
+              });<br>
+              }<br>
+              }<br>
+              public static void main(String args[]) {<br>
+              GraphicJavaApplication.launch(new Test(), <br>
+              &quot;Tree Model Example&quot;,300,300,450,300);<br>
+              }<br>
+              }<br>
+              class GraphicJavaApplication extends WindowAdapter {<br>
+              public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h) {<br>
+              f.setTitle(title);<br>
+              f.setBounds(x,y,w,h);<br>
+              f.setVisible(true);</p>
+            <p> f.setDefaultCloseOperation(<br>
+              WindowConstants.DISPOSE_ON_CLOSE);</p>
+            <p> f.addWindowListener(new WindowAdapter() {<br>
+              public void windowClosed(WindowEvent e) {<br>
+              System.exit(0);<br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 20.5 树选取</p>
+            <p align="center"><b>例20-7 树选取模式</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import javax.swing.tree.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class Test extends JApplet {<br>
+              JTree tree = new JTree();</p>
+            <p> TreeSelectionModel selectionModel = tree.getSelectionModel();</p>
+            <p> String modes[] = {<br>
+              &quot;CONTIGUOUS_TREE_SELECTION&quot;,<br>
+              &quot;DISCONTIGUOUS_TREE_SELECTION&quot;,<br>
+              &quot;SINGLE_TREE_SELECTION&quot;<br>
+              };<br>
+              int modeIds[] = {<br>
+              TreeSelectionModel.CONTIGUOUS_TREE_SELECTION,<br>
+              TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION,<br>
+              TreeSelectionModel.SINGLE_TREE_SELECTION,<br>
+              };</p>
+            <p> public void init() {<br>
+              Container contentPane = getContentPane();</p>
+            <p> contentPane.add(new ControlPanel(), BorderLayout.NORTH);<br>
+              contentPane.add(new JScrollPane(tree), <br>
+              BorderLayout.CENTER);<br>
+              }<br>
+              class ControlPanel extends JPanel {<br>
+              JComboBox combo = new JComboBox();<br>
+              JButton button = new JButton(&quot;clear selection&quot;);</p>
+            <p> public ControlPanel() {<br>
+              for(int i=0; i &lt; modes.length; ++i) {<br>
+              combo.addItem(modes[i]);<br>
+              }<br>
+              add(new JLabel(&quot;Selection Mode:&quot;));<br>
+              add(combo);<br>
+              add(button);</p>
+            <p> int initialMode = selectionModel.getSelectionMode();</p>
+            <p> if(initialMode == modeIds[0])<br>
+              combo.setSelectedIndex(0);<br>
+              else if(initialMode == modeIds[1])<br>
+              combo.setSelectedIndex(1);<br>
+              else if(initialMode == modeIds[2])<br>
+              combo.setSelectedIndex(2);</p>
+            <p> combo.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              int index = combo.getSelectedIndex();<br>
+              selectionModel.setSelectionMode(<br>
+              modeIds[index]);<br>
+              }<br>
+              });<br>
+              button.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              selectionModel.clearSelection();<br>
+              }<br>
+              });<br>
+              }<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 20.6 树单元绘制</p>
+            <p>&nbsp;</p>
+            <p> 20.6.1 DefaultTreeCellRenderer</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例20-8 使用DefaultTreeCellRenderer</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import javax.swing.tree.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class Test extends JApplet {<br>
+              static private Icon <br>
+              openFolder = new ImageIcon(&quot;button_lit.jpg&quot;),<br>
+              closedFolder = new ImageIcon(&quot;button.jpg&quot;),<br>
+              leafIcon = new ImageIcon(&quot;leaf.gif&quot;);</p>
+            <p> public void init() {<br>
+              JTree tree = new JTree();<br>
+              JScrollPane scrollPane = new JScrollPane(tree);<br>
+              DefaultTreeCellRenderer renderer = <br>
+              new DefaultTreeCellRenderer();</p>
+            <p> renderer.setClosedIcon(closedFolder);<br>
+              renderer.setOpenIcon(openFolder);<br>
+              renderer.setLeafIcon(leafIcon);<br>
+              renderer.setFont(new Font(&quot;Serif&quot;, Font.ITALIC, 12));</p>
+            <p> tree.setCellRenderer(renderer);<br>
+              tree.setEditable(true);<br>
+              getContentPane().add(scrollPane);<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p align="center"><b>例20-9 用UIManager类设置树图标的缺省值</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import javax.swing.tree.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class Test extends JApplet {<br>
+              static private Icon <br>
+              openFolder = new ImageIcon(&quot;button_lit.jpg&quot;),<br>
+              closedFolder = new ImageIcon(&quot;button.jpg&quot;),<br>
+              leafIcon = new ImageIcon(&quot;leaf.gif&quot;);</p>
+            <p> public void init() {<br>
+              UIManager.put(&quot;Tree.closedIcon&quot;, closedFolder);<br>
+              UIManager.put(&quot;Tree.openIcon&quot;, openFolder);<br>
+              UIManager.put(&quot;Tree.leafIcon&quot;, leafIcon);</p>
+            <p> JTree tree = new JTree();<br>
+              JScrollPane scrollPane = new JScrollPane(tree);</p>
+            <p> getContentPane().add(scrollPane);<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p align="center"><b>例20-10 扩展DefalutTreeCellRenderer</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;<br>
+            import javax.swing.event.*;<br>
+            import javax.swing.tree.*;<br>
+            import java.io.File;
+            <p>public class Test extends JFrame {<br>
+              public Test() {<br>
+              final JTree tree = new JTree(createTreeModel());<br>
+              JScrollPane scrollPane = new JScrollPane(tree);<br>
+              FileNodeRenderer renderer = new FileNodeRenderer();</p>
+            <p> tree.setEditable(true);<br>
+              tree.setCellRenderer(renderer);</p>
+            <p> getContentPane().add(scrollPane, BorderLayout.CENTER);</p>
+            <p> tree.addTreeExpansionListener(new TreeExpansionListener(){<br>
+              public void treeCollapsed(TreeExpansionEvent e) {<br>
+              }<br>
+              public void treeExpanded(TreeExpansionEvent e) {<br>
+              TreePath path = e.getPath();<br>
+              FileNode node = (FileNode)<br>
+              path.getLastPathComponent();</p>
+            <p> if( ! node.isExplored()) {<br>
+              DefaultTreeModel model = <br>
+              (DefaultTreeModel)tree.getModel();</p>
+            <p> node.explore();<br>
+              model.nodeStructureChanged(node);<br>
+              }<br>
+              }<br>
+              });<br>
+              }<br>
+              private DefaultTreeModel createTreeModel() {<br>
+              File root = new File(&quot;E:/&quot;);<br>
+              FileNode rootNode = new FileNode(root), node;</p>
+            <p> rootNode.explore();<br>
+              return new DefaultTreeModel(rootNode);<br>
+              }<br>
+              public static void main(String args[]) {<br>
+              GJApp.launch(new Test(),&quot;JTree File Explorer&quot;,<br>
+              300,300,450,400);<br>
+              }<br>
+              }<br>
+              class FileNode extends DefaultMutableTreeNode {<br>
+              private boolean explored = false, selected = false;</p>
+            <p> public FileNode(File file) { <br>
+              setUserObject(file); <br>
+              }<br>
+              public boolean getAllowsChildren() { return isDirectory(); }<br>
+              public boolean isLeaf() { return !isDirectory(); }<br>
+              public File getFile() { return (File)getUserObject(); }</p>
+            <p> public void explore() { explore(false); }<br>
+              public boolean isExplored() { return explored; }</p>
+            <p> public void setSelected(boolean s) { selected = s; }<br>
+              public boolean isSelected() { return selected; }</p>
+            <p> public boolean isDirectory() {<br>
+              File file = (File)getUserObject();<br>
+              return file.isDirectory();<br>
+              }<br>
+              public String toString() {<br>
+              File file = (File)getUserObject();<br>
+              String filename = file.toString();<br>
+              int index = filename.lastIndexOf(&quot;\\&quot;);</p>
+            <p> return (index != -1 &amp;&amp; index != filename.length()-1) ? 
+              <br>
+              filename.substring(index+1) : <br>
+              filename;<br>
+              }<br>
+              public void explore(boolean force) {<br>
+              if(!isExplored() || force) {<br>
+              File file = getFile();<br>
+              File[] children = file.listFiles();</p>
+            <p> for(int i=0; i &lt; children.length; ++i) <br>
+              add(new FileNode(children[i]));</p>
+            <p> explored = true;<br>
+              }<br>
+              }<br>
+              }<br>
+              class FileNodeRenderer extends DefaultTreeCellRenderer {<br>
+              protected JCheckBox checkBox = new JCheckBox(&quot;backup&quot;);<br>
+              private Component strut = Box.createHorizontalStrut(5);<br>
+              private JPanel panel = new JPanel();</p>
+            <p> public FileNodeRenderer() {<br>
+              panel.setBackground(<br>
+              UIManager.getColor(&quot;Tree.textBackground&quot;));<br>
+              <br>
+              setOpaque(false);<br>
+              checkBox.setOpaque(false);<br>
+              panel.setOpaque(false);</p>
+            <p> panel.setLayout(new FlowLayout(FlowLayout.CENTER,0,0));<br>
+              panel.add(this);<br>
+              panel.add(strut);<br>
+              panel.add(checkBox);</p>
+            <p> } <br>
+              public Component getTreeCellRendererComponent(<br>
+              JTree tree, Object value, <br>
+              boolean selected, boolean expanded,<br>
+              boolean leaf, int row, <br>
+              boolean hasFocus) {<br>
+              FileNode node = (FileNode)value;<br>
+              String s = tree.convertValueToText(value, selected,<br>
+              expanded, leaf, row, hasFocus);</p>
+            <p> super.getTreeCellRendererComponent(<br>
+              tree, value, selected, expanded,<br>
+              leaf, row, hasFocus);</p>
+            <p> checkBox.setVisible(node.isDirectory());<br>
+              checkBox.setSelected(node.isSelected());</p>
+            <p> return panel;<br>
+              }<br>
+              }<br>
+              class GJApp extends WindowAdapter {<br>
+              static private JPanel statusArea = new JPanel();<br>
+              static private JLabel status = new JLabel(&quot; &quot;);</p>
+            <p> public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h) {<br>
+              f.setTitle(title);<br>
+              f.setBounds(x,y,w,h);<br>
+              f.setVisible(true);</p>
+            <p> statusArea.setBorder(BorderFactory.createEtchedBorder());<br>
+              statusArea.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));<br>
+              statusArea.add(status);<br>
+              status.setHorizontalAlignment(JLabel.LEFT);</p>
+            <p> f.setDefaultCloseOperation(<br>
+              WindowConstants.DISPOSE_ON_CLOSE);</p>
+            <p> f.addWindowListener(new WindowAdapter() {<br>
+              public void windowClosed(WindowEvent e) {<br>
+              System.exit(0);<br>
+              }<br>
+              });<br>
+              }<br>
+              static public JPanel getStatusArea() {<br>
+              return statusArea;<br>
+              }<br>
+              static public void updateStatus(String s) {<br>
+              status.setText(s);<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p align="center"><b>例20-11 把用户对象设置为货币模式</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import javax.swing.tree.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import java.text.*;
+            <p>public class Test extends JApplet {<br>
+              public void init() {<br>
+              JTree tree = new JTree();<br>
+              JScrollPane scrollPane = new JScrollPane(tree);</p>
+            <p> DefaultMutableTreeNode root = <br>
+              new DefaultMutableTreeNode(&quot;prices&quot;);</p>
+            <p> root.add(new DefaultMutableTreeNode(new Double(10.99)));<br>
+              root.add(new DefaultMutableTreeNode(new Double(8.99))); <br>
+              root.add(new DefaultMutableTreeNode(new Double(6.95))); <br>
+              root.add(new DefaultMutableTreeNode(new Double(8.00))); <br>
+              root.add(new DefaultMutableTreeNode(new Double(7.59))); <br>
+              root.add(new DefaultMutableTreeNode(new Double(2.49))); </p>
+            <p> DefaultTreeModel model = <br>
+              (DefaultTreeModel)tree.getModel();</p>
+            <p> model.setRoot(root);</p>
+            <p> tree.setCellRenderer(new FormattingRenderer());<br>
+              tree.setEditable(true);<br>
+              getContentPane().add(scrollPane);<br>
+              }<br>
+              }<br>
+              class FormattingRenderer extends DefaultTreeCellRenderer {<br>
+              public Component getTreeCellRendererComponent(<br>
+              JTree tree, Object value, <br>
+              boolean selected, boolean expanded,<br>
+              boolean leaf, int row, <br>
+              boolean hasFocus) {<br>
+              // initialize renderer component (this) ...</p>
+            <p> super.getTreeCellRendererComponent(<br>
+              tree, value, selected, expanded, <br>
+              leaf, row, hasFocus);</p>
+            <p> // now format label text ...</p>
+            <p> DefaultMutableTreeNode n = (DefaultMutableTreeNode)value;<br>
+              Object userObject = n.getUserObject();</p>
+            <p> if(userObject instanceof Double) { <br>
+              Double d = (Double)userObject;<br>
+              Format format = NumberFormat.getCurrencyInstance();</p>
+            <p> setText(value == null ? &quot;&quot; : format.format(d));<br>
+              }<br>
+              return this;<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 20.6.2 Metal界面样式</p>
+            <p>&nbsp;</p>
+            <p> 20.6.3 根结点和根句柄</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例20-12 显示根节点和根节点句柄</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import java.util.*;
+            <p>public class Test extends JApplet {<br>
+              JTree tree = new JTree();<br>
+              public void init() {<br>
+              Container contentPane = getContentPane();<br>
+              JScrollPane scrollPane = new JScrollPane(tree);<br>
+              contentPane.add(new ControlPanel(), BorderLayout.NORTH);<br>
+              contentPane.add(scrollPane, BorderLayout.CENTER);<br>
+              }<br>
+              class ControlPanel extends JPanel{<br>
+              JCheckBox showRoot = new JCheckBox(&quot;show root node&quot;);<br>
+              JCheckBox showRootHandles = new JCheckBox(<br>
+              &quot;show root handle&quot;);<br>
+              public ControlPanel(){<br>
+              initializeCheckBoxes();<br>
+              setLayout(new FlowLayout());<br>
+              add(showRoot);<br>
+              add(showRootHandles);<br>
+              showRoot.addActionListener(new ActionListener(){<br>
+              public void actionPerformed(ActionEvent e){<br>
+              tree.setRootVisible(showRoot.isSelected());<br>
+              }<br>
+              });<br>
+              showRootHandles.addActionListener(<br>
+              new ActionListener(){<br>
+              public void actionPerformed(ActionEvent e){<br>
+              tree.setShowsRootHandles(<br>
+              showRootHandles.isSelected());<br>
+              }<br>
+              });<br>
+              }<br>
+              private void initializeCheckBoxes(){<br>
+              showRoot.setSelected(tree.isRootVisible());<br>
+              showRootHandles.setSelected(<br>
+              tree.getShowsRootHandles());<br>
+              }<br>
+              }<br>
+              }</p>
+            <p></p>
+            <hr size="1" noshade>
+            <p> 20.7 树单元编辑</p>
+            <p>&nbsp;</p>
+            <p align="center">&nbsp; </p>
+            <p> 20.7.1 扩展DefaultCellEditor</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例20-13 一个扩展DefaultCellEditor的编辑器</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import javax.swing.tree.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import java.util.*;
+            <p>public class Test extends JApplet {<br>
+              public void init() {<br>
+              JTree tree = new JTree();<br>
+              JScrollPane scrollPane = new JScrollPane(tree);<br>
+              JComboBox combo = new JComboBox();</p>
+            <p> combo.addItem(&quot;red&quot;);<br>
+              combo.addItem(&quot;blue&quot;);<br>
+              combo.addItem(&quot;green&quot;);<br>
+              combo.addItem(&quot;orange&quot;);<br>
+              combo.addItem(&quot;yellow&quot;);<br>
+              combo.addItem(&quot;magenta&quot;);</p>
+            <p> tree.setCellEditor(new ColorEditor(tree, combo));<br>
+              tree.setEditable(true);</p>
+            <p> getContentPane().add(scrollPane);<br>
+              }<br>
+              }<br>
+              class ColorEditor extends DefaultCellEditor {<br>
+              private JTree tree;</p>
+            <p> public ColorEditor(JTree tree, JComboBox comboBox) {<br>
+              super(comboBox);<br>
+              this.tree = tree;<br>
+              }<br>
+              public boolean isCellEditable(EventObject e) {<br>
+              boolean rv = false; // return value</p>
+            <p> if(e instanceof MouseEvent) {<br>
+              MouseEvent me = (MouseEvent)e;</p>
+            <p> if(me.getClickCount() == 3) {<br>
+              TreePath path =<br>
+              tree.getPathForLocation(me.getX(), me.getY()); </p>
+            <p> if(path.getPathCount() == 1) // root node<br>
+              return false;</p>
+            <p> DefaultMutableTreeNode node = <br>
+              (DefaultMutableTreeNode)<br>
+              path.getLastPathComponent(); <br>
+              <br>
+              rv = node.getParent().toString().equals(&quot;colors&quot;);<br>
+              }<br>
+              }<br>
+              return rv;<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 20.7.2 DefaultTreeCellEditor</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例20-14 使用DefaultTreeCellEditor</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import javax.swing.tree.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import java.util.*;
+            <p>public class Test extends JApplet {<br>
+              public void init() {<br>
+              JTree tree = new JTree();<br>
+              JScrollPane scrollPane = new JScrollPane(tree);<br>
+              JComboBox combo = new JComboBox();</p>
+            <p> combo.addItem(&quot;red&quot;);<br>
+              combo.addItem(&quot;blue&quot;);<br>
+              combo.addItem(&quot;green&quot;);<br>
+              combo.addItem(&quot;orange&quot;);<br>
+              combo.addItem(&quot;yellow&quot;);<br>
+              combo.addItem(&quot;magenta&quot;);</p>
+            <p> tree.setCellEditor(new DefaultTreeCellEditor(<br>
+              tree, new DefaultTreeCellRenderer(),<br>
+              new ColorEditor(tree, combo)));</p>
+            <p> tree.setEditable(true);</p>
+            <p> getContentPane().add(scrollPane);<br>
+              }<br>
+              }<br>
+              class ColorEditor extends DefaultCellEditor {<br>
+              private JTree tree;</p>
+            <p> public ColorEditor(JTree tree, JComboBox comboBox) {<br>
+              super(comboBox);<br>
+              this.tree = tree;<br>
+              }<br>
+              public boolean isCellEditable(EventObject e) {<br>
+              boolean rv = false; // return value</p>
+            <p> if(e instanceof MouseEvent) {<br>
+              MouseEvent me = (MouseEvent)e;</p>
+            <p> if(me.getClickCount() == 3) {<br>
+              TreePath path =<br>
+              tree.getPathForLocation(me.getX(), me.getY()); </p>
+            <p> if(path.getPathCount() == 1) // root node<br>
+              return false;</p>
+            <p> DefaultMutableTreeNode node = <br>
+              (DefaultMutableTreeNode)<br>
+              path.getLastPathComponent(); <br>
+              <br>
+              rv = node.getParent().toString().equals(&quot;colors&quot;);<br>
+              }<br>
+              }<br>
+              return rv;<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 20.8 绘制和编辑：学习一个样例</p>
+            <p>&nbsp;</p>
+            <p> 20.8.1 Test类</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例20-15 绘制和编辑：一个学习样例</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import javax.swing.event.*;<br>
+            import javax.swing.tree.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import java.io.File;<br>
+            import java.util.EventObject;
+            <p>public class Test extends JFrame {<br>
+              public Test() {<br>
+              JTree tree = new JTree(createTreeModel());<br>
+              JScrollPane scrollPane = new JScrollPane(tree);</p>
+            <p> FileNodeRenderer renderer = new FileNodeRenderer();<br>
+              FileNodeEditor editor = new FileNodeEditor();<br>
+              <br>
+              tree.setEditable(true);<br>
+              tree.setCellRenderer(renderer);<br>
+              tree.setCellEditor(new ImmediateEditor(tree, <br>
+              renderer, editor));</p>
+            <p> getContentPane().add(scrollPane, BorderLayout.CENTER);</p>
+            <p> tree.addTreeExpansionListener(new TreeExpansionListener(){<br>
+              public void treeCollapsed(TreeExpansionEvent e) {<br>
+              }<br>
+              public void treeExpanded(TreeExpansionEvent e) {<br>
+              TreePath path = e.getPath();<br>
+              FileNode node = (FileNode)<br>
+              path.getLastPathComponent();</p>
+            <p> if( ! node.isExplored())<br>
+              node.explore();<br>
+              }<br>
+              });<br>
+              tree.getCellEditor().addCellEditorListener(<br>
+              new CellEditorListener() {<br>
+              public void editingCanceled(ChangeEvent e) {<br>
+              CellEditor cellEditor = (CellEditor)e.getSource();<br>
+              SelectableFile sf = <br>
+              (SelectableFile)<br>
+              cellEditor.getCellEditorValue();</p>
+            <p> System.out.println(&quot;editing canceled: &quot; + <br>
+              sf.toString());<br>
+              }<br>
+              public void editingStopped(ChangeEvent e) {<br>
+              CellEditor cellEditor = (CellEditor)e.getSource();<br>
+              SelectableFile sf = <br>
+              (SelectableFile)<br>
+              cellEditor.getCellEditorValue();</p>
+            <p> System.out.println(&quot;editing stopped: &quot; + <br>
+              sf.toString());<br>
+              }<br>
+              });<br>
+              }<br>
+              private DefaultTreeModel createTreeModel() {<br>
+              File root = new File(&quot;E:/&quot;);<br>
+              FileNode rootNode = new FileNode(root), node;</p>
+            <p> rootNode.explore();<br>
+              return new DefaultTreeModel(rootNode);<br>
+              }<br>
+              public static void main(String args[]) {<br>
+              GJApp.launch(new Test(),&quot;JTree File Explorer&quot;,<br>
+              300,300,450,400);<br>
+              }<br>
+              }<br>
+              class SelectableFile {<br>
+              private File file;<br>
+              private boolean selected = false;</p>
+            <p> public SelectableFile(File file) {<br>
+              this.file = file;<br>
+              }<br>
+              public String toString() {<br>
+              return file.toString() + &quot; selected: &quot; + selected;<br>
+              }<br>
+              public void setSelected(boolean s) { selected = s; }<br>
+              public boolean isSelected() { return selected; }<br>
+              public File getFile() { return file; }<br>
+              }<br>
+              class FileNode extends DefaultMutableTreeNode {<br>
+              private boolean explored = false;</p>
+            <p> public FileNode(File file) { <br>
+              setUserObject(new SelectableFile(file)); <br>
+              }<br>
+              public boolean getAllowsChildren() { return isDirectory(); }<br>
+              public boolean isLeaf() { return !isDirectory(); }</p>
+            <p> public File getFile() { <br>
+              SelectableFile sf = (SelectableFile)getUserObject(); <br>
+              return sf.getFile();<br>
+              }<br>
+              public boolean isSelected() {<br>
+              SelectableFile sf = (SelectableFile)getUserObject(); <br>
+              return sf.isSelected();<br>
+              }<br>
+              public void setSelected(boolean b) {<br>
+              SelectableFile sf = (SelectableFile)getUserObject(); <br>
+              sf.setSelected(b);<br>
+              }<br>
+              public boolean isDirectory() {<br>
+              File file = getFile();<br>
+              return file.isDirectory();<br>
+              }<br>
+              public String toString() {<br>
+              File file = getFile();<br>
+              String filename = file.toString();<br>
+              int index = filename.lastIndexOf(&quot;\\&quot;);</p>
+            <p> return (index != -1 &amp;&amp; index != filename.length()-1) ? 
+              <br>
+              filename.substring(index+1) : <br>
+              filename;<br>
+              }<br>
+              public void explore() { explore(false); }<br>
+              public boolean isExplored() { return explored; }</p>
+            <p> public void explore(boolean force) {<br>
+              if(!isExplored() || force) {<br>
+              File file = getFile();<br>
+              File[] children = file.listFiles();</p>
+            <p> for(int i=0; i &lt; children.length; ++i) <br>
+              add(new FileNode(children[i]));</p>
+            <p> explored = true;<br>
+              }<br>
+              }<br>
+              }<br>
+              class FileNodeRenderer extends DefaultTreeCellRenderer {<br>
+              protected JCheckBox checkBox = new JCheckBox(&quot;backup&quot;);<br>
+              private Component strut = Box.createHorizontalStrut(5);<br>
+              private JPanel panel = new JPanel();</p>
+            <p> public FileNodeRenderer() {<br>
+              panel.setBackground(<br>
+              UIManager.getColor(&quot;Tree.textBackground&quot;));<br>
+              <br>
+              setOpaque(false);<br>
+              checkBox.setOpaque(false);<br>
+              panel.setOpaque(false);</p>
+            <p> panel.setLayout(new FlowLayout(FlowLayout.CENTER,0,0));<br>
+              panel.add(this);<br>
+              panel.add(strut);<br>
+              panel.add(checkBox);</p>
+            <p> } <br>
+              public Component getTreeCellRendererComponent(<br>
+              JTree tree, Object value, <br>
+              boolean selected, boolean expanded,<br>
+              boolean leaf, int row, <br>
+              boolean hasFocus) {<br>
+              FileNode node = (FileNode)value;</p>
+            <p> super.getTreeCellRendererComponent(<br>
+              tree, value, selected, expanded,<br>
+              leaf, row, hasFocus);</p>
+            <p> checkBox.setVisible(node.isDirectory());<br>
+              checkBox.setSelected(node.isSelected());</p>
+            <p> return panel;<br>
+              }<br>
+              public Dimension getCheckBoxOffset() {<br>
+              Graphics g = panel.getGraphics();<br>
+              int xoffset = 0;</p>
+            <p> if(g != null) {<br>
+              try {<br>
+              FontMetrics fm = g.getFontMetrics();<br>
+              xoffset = fm.stringWidth(getText()) + <br>
+              strut.getPreferredSize().width;<br>
+              }<br>
+              finally {<br>
+              g.dispose();<br>
+              }<br>
+              }<br>
+              return new Dimension(xoffset, 0);<br>
+              }<br>
+              }<br>
+              class FileNodeEditorRenderer extends FileNodeRenderer {<br>
+              public Component getTreeCellRendererComponent(<br>
+              JTree tree, Object value, <br>
+              boolean selected, boolean expanded,<br>
+              boolean leaf, int row, <br>
+              boolean hasFocus) {<br>
+              Component c = super.getTreeCellRendererComponent(tree, <br>
+              value, selected, expanded, <br>
+              leaf, row, hasFocus);<br>
+              setIcon(null);<br>
+              return c;<br>
+              }<br>
+              public JCheckBox getCheckBox() {<br>
+              return checkBox;<br>
+              }<br>
+              }<br>
+              class FileNodeEditor extends AbstractCellEditor {<br>
+              FileNodeEditorRenderer renderer;<br>
+              FileNode lastEditedNode;<br>
+              JCheckBox checkBox;</p>
+            <p> public FileNodeEditor() {<br>
+              renderer = new FileNodeEditorRenderer();<br>
+              checkBox = renderer.getCheckBox();</p>
+            <p> checkBox.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              lastEditedNode.setSelected(checkBox.isSelected());<br>
+              stopCellEditing();<br>
+              }<br>
+              });<br>
+              }<br>
+              public Component getTreeCellEditorComponent(<br>
+              JTree tree, Object value, <br>
+              boolean selected, boolean expanded,<br>
+              boolean leaf, int row) {<br>
+              lastEditedNode = (FileNode)value;</p>
+            <p> return renderer.getTreeCellRendererComponent(tree,<br>
+              value, selected, expanded,<br>
+              leaf, row, true); // hasFocus ignored<br>
+              }<br>
+              public Object getCellEditorValue() {<br>
+              return lastEditedNode.getUserObject();<br>
+              }<br>
+              }<br>
+              class ImmediateEditor extends DefaultTreeCellEditor {<br>
+              private FileNodeRenderer renderer;</p>
+            <p> public ImmediateEditor(JTree tree, <br>
+              FileNodeRenderer renderer, <br>
+              FileNodeEditor editor) {<br>
+              super(tree, renderer, editor);<br>
+              this.renderer = renderer;<br>
+              }<br>
+              protected boolean canEditImmediately(EventObject e) {<br>
+              boolean rv = false; // rv = return value</p>
+            <p> if(e instanceof MouseEvent) {<br>
+              MouseEvent me = (MouseEvent)e;<br>
+              rv = inCheckBoxHitRegion(me);<br>
+              }<br>
+              return rv;<br>
+              }<br>
+              public boolean shouldSelectCell(EventObject e) {<br>
+              boolean rv = false; // only mouse events</p>
+            <p> if(e instanceof MouseEvent) {<br>
+              MouseEvent me = (MouseEvent)e;<br>
+              TreePath path = tree.getPathForLocation(me.getX(), <br>
+              me.getY());<br>
+              FileNode node = (FileNode)<br>
+              path.getLastPathComponent();<br>
+              <br>
+              rv = node.isLeaf() || !inCheckBoxHitRegion(me);<br>
+              }<br>
+              return rv;<br>
+              }<br>
+              public boolean inCheckBoxHitRegion(MouseEvent e) {<br>
+              TreePath path = tree.getPathForLocation(e.getX(), <br>
+              e.getY());<br>
+              FileNode node = (FileNode)path.getLastPathComponent();<br>
+              boolean rv = false;</p>
+            <p> if(node.isDirectory()) {<br>
+              // offset and lastRow DefaultTreeCellEditor <br>
+              // protected members</p>
+            <p> Rectangle bounds = tree.getRowBounds(lastRow);<br>
+              Dimension checkBoxOffset = <br>
+              renderer.getCheckBoxOffset();</p>
+            <p> bounds.translate(offset + checkBoxOffset.width, <br>
+              checkBoxOffset.height);</p>
+            <p> rv = bounds.contains(e.getPoint());<br>
+              }<br>
+              return rv;<br>
+              }<br>
+              }<br>
+              class GJApp extends WindowAdapter {<br>
+              static private JPanel statusArea = new JPanel();<br>
+              static private JLabel status = new JLabel(&quot; &quot;);</p>
+            <p> public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h) {<br>
+              f.setTitle(title);<br>
+              f.setBounds(x,y,w,h);<br>
+              f.setVisible(true);</p>
+            <p> statusArea.setBorder(BorderFactory.createEtchedBorder());<br>
+              statusArea.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));<br>
+              statusArea.add(status);<br>
+              status.setHorizontalAlignment(JLabel.LEFT);</p>
+            <p> f.setDefaultCloseOperation(<br>
+              WindowConstants.DISPOSE_ON_CLOSE);</p>
+            <p> f.addWindowListener(new WindowAdapter() {<br>
+              public void windowClosed(WindowEvent e) {<br>
+              System.exit(0);<br>
+              }<br>
+              });<br>
+              }<br>
+              static public JPanel getStatusArea() {<br>
+              return statusArea;<br>
+              }<br>
+              static public void updateStatus(String s) {<br>
+              status.setText(s);<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 20.8.2 SelectableFile类和FileNode类</p>
+            <p>&nbsp;</p>
+            <p> 20.8.3 绘制器</p>
+            <p>&nbsp;</p>
+            <p> 20.8.4 编辑器</p>
+            <p>&nbsp;</p>
+            <p> 20.8.5 JTree属性</p>
+            <p>&nbsp;</p>
+            <p> 20.8.6 树事件</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例20-16 处理树鼠标事件</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import javax.swing.tree.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class Test extends JApplet {<br>
+              public Test() {<br>
+              JTree tree = new JTree();</p>
+            <p> getContentPane().add(new JScrollPane(tree));</p>
+            <p> tree.addMouseListener(new MouseAdapter() {<br>
+              public void mousePressed(MouseEvent e) {<br>
+              String s = null;<br>
+              JTree t = (JTree)e.getSource();<br>
+              int row = t.getRowForLocation(e.getX(), e.getY());</p>
+            <p> if(e.getClickCount() == 2)<br>
+              s = &quot;double click in row &quot; + row;<br>
+              else<br>
+              s = &quot;single click in row &quot; + row;</p>
+            <p> if(row != -1) {<br>
+              TreePath path = t.getPathForRow(row);<br>
+              TreeNode node = (TreeNode)<br>
+              path.getLastPathComponent(); </p>
+            <p> s += &quot;, node = &quot; + node.toString();<br>
+              }<br>
+              showStatus(s);<br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p align="center"><b>例20-17 处理树编辑事件</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import javax.swing.event.*;<br>
+            import javax.swing.tree.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import java.util.*;
+            <p>public class Test extends JApplet {<br>
+              public void init() {<br>
+              JTree tree = new JTree();</p>
+            <p> getContentPane().add(tree, BorderLayout.CENTER);</p>
+            <p> // must invoke setEditable, or the call below to<br>
+              // getCellEditor() will return null.</p>
+            <p> tree.setEditable(true);</p>
+            <p> tree.getCellEditor().addCellEditorListener(<br>
+              new CellEditorListener() {<br>
+              public void editingCanceled(ChangeEvent e) {<br>
+              CellEditor editor = (CellEditor)e.getSource();<br>
+              String s = (String)editor.getCellEditorValue();</p>
+            <p> showStatus(&quot;editing cancelled: &quot; + s);<br>
+              }<br>
+              public void editingStopped(ChangeEvent e) {<br>
+              CellEditor editor = (CellEditor)e.getSource();<br>
+              String s = (String)editor.getCellEditorValue();</p>
+            <p> showStatus(&quot;editing stopped: &quot; + s);<br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p align="center"><b>例20-18 处理树选取事件</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import javax.swing.tree.*;<br>
+            import javax.swing.event.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class Test extends JApplet {<br>
+              JTree tree = new JTree();<br>
+              JTextArea textArea = new JTextArea();<br>
+              JSplitPane splitPane = new JSplitPane(<br>
+              JSplitPane.HORIZONTAL_SPLIT, <br>
+              new JScrollPane(tree), <br>
+              new JScrollPane(textArea));<br>
+              public void init() {<br>
+              splitPane.setDividerLocation(150);<br>
+              textArea.setFont(new Font(&quot;Serif&quot;, Font.PLAIN, 17));</p>
+            <p> getContentPane().add(splitPane, BorderLayout.CENTER);</p>
+            <p> tree.addTreeSelectionListener(<br>
+              new TreeSelectionListener() {<br>
+              public void valueChanged(TreeSelectionEvent e) {<br>
+              TreePath path = e.getNewLeadSelectionPath();<br>
+              String s = new String();</p>
+            <p> if(path != null) {<br>
+              s += &quot;New lead selection path: &quot; + <br>
+              path.toString() + &quot;\n&quot;;<br>
+              }<br>
+              else <br>
+              s += &quot;selection cleared\n&quot;;</p>
+            <p> path = e.getOldLeadSelectionPath();</p>
+            <p> if(path != null) { <br>
+              s += &quot;Old lead selection path: &quot; + <br>
+              path.toString() + &quot;\n&quot;;<br>
+              }<br>
+              else<br>
+              s += &quot;No previous lead selection\n&quot;;</p>
+            <p> textArea.append(s + &quot;\n&quot;);<br>
+              printSelectionInformation(e);<br>
+              }<br>
+              void printSelectionInformation(TreeSelectionEvent e) {<br>
+              showPaths(e);<br>
+              showRows();</p>
+            <p> textArea.append(&quot;\n----------------------------&quot;);<br>
+              textArea.append(&quot;----------------------------\n&quot;);<br>
+              }<br>
+              private void showPaths(TreeSelectionEvent e) {<br>
+              TreePath[] paths = e.getPaths();<br>
+              <br>
+              textArea.append(&quot;Number of Paths: &quot; + <br>
+              paths.length + &quot;\n&quot;);</p>
+            <p> for(int i=0; i &lt; paths.length; ++i) {<br>
+              TreePath path = paths[i];<br>
+              boolean wasAdded = e.isAddedPath(path);</p>
+            <p> textArea.append(&quot; path &quot; + i + &quot;: &quot;);<br>
+              textArea.append(path + <br>
+              (wasAdded ? &quot; added to selection&quot; :<br>
+              &quot; removed from selection&quot;) + &quot;\n&quot;);<br>
+              }<br>
+              <br>
+              }<br>
+              private void showRows() {<br>
+              int[] rows = tree.getSelectionRows();</p>
+            <p> if(rows != null &amp;&amp; rows.length &gt; 0) {<br>
+              textArea.append(&quot;\nSelected Rows: &quot;);<br>
+              <br>
+              for(int i=0; i &lt; rows.length; ++i) {<br>
+              textArea.append(<br>
+              Integer.toString(rows[i]));</p>
+            <p> if(i != rows.length-1)<br>
+              textArea.append(&quot;,&quot;);<br>
+              }<br>
+              }<br>
+              <br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p align="center"><b>例20-19 处理树展开事件</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import javax.swing.event.*;<br>
+            import javax.swing.tree.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class Test extends JApplet {<br>
+              public void init() {<br>
+              Container contentPane = getContentPane();<br>
+              JTree tree = new JTree();</p>
+            <p> contentPane.add(tree);</p>
+            <p> tree.addTreeExpansionListener(<br>
+              new TreeExpansionListener() {<br>
+              public void treeCollapsed(TreeExpansionEvent e) {<br>
+              TreePath path = e.getPath();<br>
+              TreeNode node = (TreeNode)<br>
+              path.getLastPathComponent();</p>
+            <p> showStatus(&quot;node &quot; + &quot;\&quot;&quot; + node.toString() 
+              + <br>
+              &quot;\&quot;&quot; + &quot; collapsed&quot;);<br>
+              }<br>
+              public void treeExpanded(TreeExpansionEvent e) {<br>
+              TreePath path = e.getPath();<br>
+              TreeNode node = (TreeNode)<br>
+              path.getLastPathComponent();</p>
+            <p> showStatus(&quot;node &quot; + &quot;\&quot;&quot; + node.toString() 
+              + <br>
+              &quot;\&quot;&quot; + &quot; expanded&quot;);<br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p align="center"><b>例20-20 否决节点的展开和折叠</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import javax.swing.event.*;<br>
+            import javax.swing.tree.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class Test extends JFrame { <br>
+              public Test() { <br>
+              JTree tree = new JTree();<br>
+              getContentPane().add(tree);</p>
+            <p> tree.addTreeWillExpandListener(<br>
+              new TreeWillExpandListener() {<br>
+              public void treeWillExpand(TreeExpansionEvent e) <br>
+              throws ExpandVetoException {<br>
+              TreePath path = e.getPath();<br>
+              TreeNode node = (TreeNode)<br>
+              path.getLastPathComponent();</p>
+            <p> if(node.toString().equals(&quot;colors&quot;)) {<br>
+              JOptionPane.showMessageDialog(Test.this,<br>
+              &quot;Can't Expand Colors&quot;,<br>
+              &quot;Expansion Vetoed&quot;,<br>
+              JOptionPane.INFORMATION_MESSAGE);</p>
+            <p> throw new ExpandVetoException(e); <br>
+              }<br>
+              }<br>
+              public void treeWillCollapse(TreeExpansionEvent e) <br>
+              throws ExpandVetoException {<br>
+              TreePath path = e.getPath();<br>
+              TreeNode node = (TreeNode)<br>
+              path.getLastPathComponent();</p>
+            <p> if(node.toString().equals(&quot;food&quot;)) {<br>
+              JOptionPane.showMessageDialog(Test.this,<br>
+              &quot;Can't Collapse Food&quot;,<br>
+              &quot;Collapse Vetoed&quot;,<br>
+              JOptionPane.INFORMATION_MESSAGE);</p>
+            <p> throw new ExpandVetoException(e); <br>
+              }<br>
+              }<br>
+              });<br>
+              }<br>
+              public static void main(String args[]) {<br>
+              GraphicJavaApplication.launch(new Test(), <br>
+              &quot;Vetoing Node Expansion/Collapse&quot;,300,300,300,200);<br>
+              }<br>
+              }<br>
+              class GraphicJavaApplication extends WindowAdapter {<br>
+              public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h) {<br>
+              f.setTitle(title);<br>
+              f.setBounds(x,y,w,h);<br>
+              f.setVisible(true);</p>
+            <p> f.setDefaultCloseOperation(<br>
+              WindowConstants.DISPOSE_ON_CLOSE);</p>
+            <p> f.addWindowListener(new WindowAdapter() {<br>
+              public void windowClosed(WindowEvent e) {<br>
+              System.exit(0);<br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 20.8.7 JTree类总结</p>
+            <p>&nbsp;</p>
+            <p> 20.8.8 AWT兼容</p>
+            <p>&nbsp;</p>
+            <p> 20.9 本章回顾 </p>
+            <p>&nbsp;</p>
+            <p>[<a href="index.html" target="_self">目录</a>][<a href="s19.htm">上一页</a>][<a href="s21.htm">下一页</a>](飒龙收藏/2002.5.18) 
+            </p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </td>
+  </tr>
+</tbody>
+</table>
+<script language="javascript">bottomprint()</script>
+</body>
+</html>

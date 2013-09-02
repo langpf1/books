@@ -1,0 +1,775 @@
+<SCRIPT LANGUAGE="JavaScript" SRC="/-fs0/sys/pop-up.js"></SCRIPT>
+
+<SCRIPT LANGUAGE="JavaScript" SRC="/-fs0/sys/pop-up-all.js"></SCRIPT>
+
+<html>
+<head>
+<title>易都网--Java 2 图形设计卷Ⅱ：SWING</title>
+<LINK rel="stylesheet" href="../../../_public/javaa.css">
+<meta http-equiv="Content-Type" content="text/html; charset=GBK">
+<script language="JavaScript" src="../../../_public/javaa.js"></script>
+<meta name="keywords" content="Java,JSP,ASP,PHP,J2EE,EJB,JavaScript,C/C++,ASM,CSS,HTML,XML,网络安全,MySQL,ACCESS">
+</head>
+<body bgcolor="#FFFFFF">
+<table border=0 cellpadding=0 cellspacing=0 width="100%">
+  <tbody> 
+  <script language="javascript">print2()</script>
+  <tr> 
+    <td width="100%"> 
+      <table bgcolor=#EEEEEE border=0 cellpadding=3 cellspacing=0 width="100%">
+        <tbody> 
+        <tr> 
+          <td class=f1 id=thetd width="100%"> 
+            <p>[<a href="index.html" target="_self">目录</a>][<a href="s04.htm">上一页</a>][<a href="s06.htm">下一页</a>]</p>
+            <p align="center"><b>第5章 边框、图标和动作</b></p>
+            <p>　　本章介绍Swing的三种实用工具：边框、图标和动作。<br>
+              　　边框绘制在组件的边界周围，它有许多不同的各类：线边框、雕刻边框、不光滑的边框等等。边框本身不是组件，所以，它们绘制在指定组件的边衬中。<br>
+              　　图标是图形对象，通常是一个小图像。与边框一样，图标在指定组件的指定位置上绘制。<br>
+              　　动作封装图形用户界面的一个逻辑操作，并且还简化用户界面元素的构造工作。动作通常由一个或多个图标或文本字符串组成。可以把动作添加到某些容器中，这些容器创建一个组件与这个动作相关联。例如，利用JMenu.add(Action)方法，可把动作添加到一个菜单中。当一个动作添加到一个菜单中时，这个菜单用与这个动作相关联的文本和图标来创建一个菜单项并把这个菜单项添加到菜单中。<br>
+              　　边框、图标和动作都是很有意义的，因为它们都可以与多个组件相关联。由于边框和图标都不是组件，但却都能绘制到组件中，所以，可以在支持使用边框和图标的多个组件中共享边框和图标。动作也必须被多个组件所共享，并且用来作为控制的中心点以维护与这个动作相关联的组件的启用状态。</p>
+            <p> <b>5.1 边框</b></p>
+            <p>　　通过构造所需类型的边框，然后把这个边框传送给JComponent.setBorder(Border)，所有JComponent扩展(JViewport除外)都可以有边框。虽然每个组件可以只有一个边框，但Swing支持组合边框。因此，在实际应用中，单个组件可以使数个边框嵌套在一起，使边框有一定的深度。<br>
+              　　边框的使用很简单。例如，图5-1示出了一个带标题边框的JPanel实例。</p>
+            <p> 　　<applet code="Test.class" archive="s05_tu01.jar" width=350 height=200>
+              </applet><br>
+              　　　图5-1　一个带标题边框的JPanel实例</p>
+            <p> 　　例5-1例出了图5-1所示的小应用程序的代码。</p>
+            <p align="center"><b> 例5-1　一个带边框的JPanel的小应用程序 </b></p>
+            <hr size="1" noshade>
+            <p>　　import java.awt.BorderLayout;<br>
+              　　import javax.swing.*;<br>
+              　　import javax.swing.border.*;</p>
+            <p>　　public class Test extends JApplet {<br>
+              　　　public void init() {<br>
+              　　　　JPanel panel = new JPanel();</p>
+            <p> 　　　　panel.setBorder(new TitledBorder(&quot;JPanel Border&quot;));<br>
+              　　　　getContentPane().add(panel, BorderLayout.CENTER);<br>
+              　　　}<br>
+              　　}
+            <hr size="1" noshade>
+            　　这个小应用程序创建一个带标题的边框，这个边框传递给面板的setBorder方法。 
+            <p><b>5.1.1 边框和边衬</b></p>
+            <p>　　AWT容器有一个insets属性，它定义容器的边衬。布局管理器仔细地布局一个容器中的各个组件，以便这些组件不会侵占这个容器的边衬区。容器的insets属性是一个只读属性，修改AWT容器insets属性唯一的方法是子类化一个容器并重载它的getInsets方法。</p>
+            <p> 5.1.2 Swing的边框类型</p>
+            <p align="center"><b>例5-2 显示所有Swing边框类型的小应用程序</b></p>
+            <hr noshade size="1"><pre>import java.awt.*;
+import javax.swing.*;
+import javax.swing.border.*;
+
+public class Test extends JApplet {
+	public void init() {
+		JPanel jpanel = new AllBordersPanel();
+		getContentPane().add(jpanel, BorderLayout.CENTER);
+	}
+}
+class AllBordersPanel extends JPanel {
+	public AllBordersPanel() {
+		JPanel 	bl = new PanelWithTitle("Bevel Lowered"),
+				br = new PanelWithTitle("Bevel Raised"),
+				c = new PanelWithTitle("Compound"),
+				l = new PanelWithTitle("Line"),
+				m = new PanelWithTitle("Matte"),
+				e = new PanelWithEmptyBorder("Empty"),
+				t = new PanelWithTitle("Titled"),
+				sbr = new PanelWithTitle("Soft Bevel Raised"),
+				sbl = new PanelWithTitle("Soft Bevel Lowered"),
+				el = new PanelWithTitle("Etched Lowered"),
+				er = new PanelWithTitle("Etched Raised");
+
+		setLayout(new GridLayout(4,3,2,2));
+
+		ImageIcon icon = new ImageIcon(this.getClass().getResource("smiley.gif"));
+
+		Dimension iconsz = new Dimension(icon.getIconWidth(),
+										icon.getIconHeight());
+
+		bl.setBorder(BorderFactory.createLoweredBevelBorder());
+		br.setBorder(BorderFactory.createRaisedBevelBorder());
+		sbr.setBorder(new SoftBevelBorder(BevelBorder.RAISED));
+		sbl.setBorder(new SoftBevelBorder(BevelBorder.LOWERED));
+		t.setBorder(BorderFactory.createTitledBorder("Titled"));
+		l.setBorder(
+			BorderFactory.createLineBorder(Color.black,2));
+
+		c.setBorder(
+			BorderFactory.createCompoundBorder(
+				BorderFactory.createCompoundBorder(
+					BorderFactory.createLineBorder(Color.gray,10),
+					BorderFactory.createRaisedBevelBorder()),
+				BorderFactory.createCompoundBorder(
+					BorderFactory.createLineBorder(Color.blue,5),
+					BorderFactory.createLoweredBevelBorder())));
+
+		el.setBorder(BorderFactory.createEtchedBorder(
+						getBackground().brighter(),
+						getBackground().darker()));
+			
+		er.setBorder(BorderFactory.createEtchedBorder(
+						getBackground().darker(),
+						getBackground().brighter()));
+
+		m.setBorder(BorderFactory.createMatteBorder(
+							iconsz.height, iconsz.width,
+							iconsz.height, iconsz.width,
+							icon));
+
+		add(br); add(bl); add(sbr);
+		add(sbl); add(c); add(el);
+		add(er); add(e); add(l);
+		add(m); add(t);
+	}
+}
+class PanelWithTitle extends JPanel {
+	private String title;
+
+	public PanelWithTitle(String title) {
+		this.title = title;
+	}
+	public void paintComponent(Graphics g) {
+		FontMetrics fm = g.getFontMetrics();
+		Dimension size = getSize();
+		int titleW = fm.stringWidth(title);
+
+		g.setColor(Color.black);
+		g.drawString(title, size.width/2 - titleW/2, 
+							size.height/2);
+	}
+}
+class PanelWithEmptyBorder extends PanelWithTitle {
+	public PanelWithEmptyBorder(String title) {
+		super(title);
+		setBorder(BorderFactory.createEmptyBorder(10,10,10,10));
+	}
+	public void paintComponent(Graphics g) {
+		Dimension size = getSize();
+		Insets insets = getInsets();
+		g.setColor(Color.red);
+		g.fillRect(insets.left,insets.top,
+					size.width-2*insets.left,
+					size.height-2*insets.top);
+
+		super.paintComponent(g);
+	}
+}
+</pre>
+            <hr size="1" noshade>
+            <p> 5.1.3 不透明与透明之间的比较</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例5-3 部分透明的边框的样例</b></p>
+            <hr noshade size="1"><pre>import javax.swing.*;
+import javax.swing.border.*;
+import java.awt.*;
+
+public class Test extends JApplet {
+	JPanel panel = new RainPanel();
+	TitledBorder border = new TitledBorder("JPanel Border");
+
+	public void init() {
+		panel.setBorder(border);
+		getContentPane().add(panel, BorderLayout.CENTER);
+
+		System.out.println("opaque = " + border.isBorderOpaque());
+		System.out.println(
+				"insets = " + border.getBorderInsets(panel));
+	}
+}
+class RainPanel extends JPanel {
+	public void paintComponent(Graphics g) {
+		Icon icon = new ImageIcon(getClass().getResource("rain.gif"));
+		Dimension size = getSize();
+
+        int patchW = icon.getIconWidth(),
+        	patchH = icon.getIconHeight();
+
+        for(int r=0; r < size.width; r += patchW) {
+            for(int c=0; c < size.height; c += patchH)
+				icon.paintIcon(this, g, r, c);
+        }
+    }
+}
+</pre>
+            <hr size="1" noshade>
+            <p> 5.1.4 边框包</p>
+            <p>&nbsp;</p>
+            <p> 5.1.5 边框接口</p>
+            <p>&nbsp;</p>
+            <p> 5.1.6 AbstractBoorder类</p>
+            <p>&nbsp;</p>
+            <p> 5.1.7 边框库——共享边框</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例5-4 从边框库中获得边框</b></p>
+            <hr noshade size="1"><pre>import java.awt.*;
+import javax.swing.*;
+import javax.swing.border.*;
+
+public class Test extends JApplet {
+	public void init() {
+		Container contentPane = getContentPane();
+		JPanel panel 	= new JPanel();
+		JPanel panel2 	= new JPanel();
+
+		Border border 	= BorderFactory.createRaisedBevelBorder();
+		Border border2 	= BorderFactory.createRaisedBevelBorder();
+
+		panel.setBorder(border);
+		panel2.setBorder(border2);
+
+		contentPane.add(panel, BorderLayout.NORTH);
+		contentPane.add(panel2, BorderLayout.SOUTH);
+
+		if(border == border2)
+			System.out.println("bevel borders are shared");
+		else
+			System.out.println("bevel borders are NOT shared");
+	}
+}
+</pre>
+            <hr size="1" noshade>
+            <p> 5.1.8 替换内置边框</p>
+            <p>&nbsp;</p>
+            <p> 5.1.9 实现定制的边框</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例5-5 HandleBorder类清单</b></p>
+            <hr noshade size="1"><pre>import java.awt.*;
+import javax.swing.*;
+import javax.swing.border.*;
+
+public class HandleBorder extends AbstractBorder {
+	protected Color lineColor;
+	protected int thick;
+
+	public HandleBorder() {
+		this(Color.black, 6);
+	}
+	public HandleBorder(Color lineColor, int thick) {
+		this.lineColor = lineColor;
+		this.thick = thick;
+	}
+	public void paintBorder(Component c, Graphics g, int x,
+							int y, int w, int h) {
+		Graphics copy = g.create();
+		if(copy != null) {
+			try {
+				copy.translate(x,y);
+				paintRectangle(c,copy,w,h);
+				paintHandles(c,copy,w,h);
+			}
+			finally {
+				copy.dispose();
+			}
+		}
+	}
+	public Insets getBorderInsets() {
+		return new Insets(thick,thick,thick,thick);
+	}
+	protected void paintRectangle(Component c, Graphics g,
+									int w, int h) {
+		g.setColor(lineColor);
+		g.drawRect(thick/2,thick/2,w-thick-1,h-thick-1);
+	}
+	protected void paintHandles(Component c, Graphics g,
+									int w, int h) {
+		g.setColor(lineColor);
+
+		g.fillRect(0,0,thick,thick); // upper left
+		g.fillRect(w-thick,0,thick,thick); // upper right
+		g.fillRect(0,h-thick,thick,thick); // lower left
+		g.fillRect(w-thick,h-thick,thick,thick); // lower right
+		g.fillRect(w/2-thick/2,0,thick,thick); // mid top
+		g.fillRect(0,h/2-thick/2,thick,thick); // mid left
+		g.fillRect(w/2-thick/2,h-thick,thick,thick); // mid bottom
+		g.fillRect(w-thick,h/2-thick/2,thick,thick); // mid right
+	}	
+}
+</pre>
+            <hr size="1" noshade>
+            <p align="center"><b>例5-6 使用定制边框</b></p>
+            <hr noshade size="1"><pre>import javax.swing.*;
+import javax.swing.border.*;
+import java.awt.*;
+import java.awt.event.*;
+
+public class Test extends JApplet {
+	public void init() {
+		Container contentPane = getContentPane();
+
+		JPanel[] panels = { new JPanel(), 
+							new JPanel(), new JPanel() };
+
+		Border[] borders = { new HandleBorder(),
+							new HandleBorder(Color.red, 8),
+							new HandleBorder(Color.blue, 10) };
+
+		contentPane.setLayout(
+					new FlowLayout(FlowLayout.CENTER,20,20));
+
+		for(int i=0; i < panels.length; ++i) {
+			panels[i].setPreferredSize(new Dimension(100,100));
+			panels[i].setBorder(borders[i]);
+			contentPane.add(panels[i]);
+		}
+	}
+}
+</pre>
+            <hr size="1" noshade>
+            <p>&nbsp;</p>
+            <p> 5.2 图标</p>
+            <p align="center"><b>例5-7 一个绘制图标的小应用程序</b></p>
+            <hr noshade size="1"><pre>import com.sun.java.swing.JApplet;
+import java.awt.Color;
+import java.awt.Graphics;
+
+public class IconTest extends JApplet {
+
+    ColorIcon redIcon;
+    ColorIcon blueIcon;
+    ColorIcon yellowIcon;
+
+    public void paint(Graphics g) {
+        redIcon.paintIcon(this, g, 0, 0);
+        blueIcon.paintIcon(this, g, redIcon.getIconWidth() + 10, 0);
+        yellowIcon.paintIcon(this, g, redIcon.getIconWidth() + 10 + blueIcon.getIconWidth() + 10, 0);
+    }
+
+    public IconTest() {
+        redIcon = new ColorIcon(Color.red, 50, 50);
+        blueIcon = new ColorIcon(Color.blue, 60, 60);
+        yellowIcon = new ColorIcon(Color.yellow, 70, 70);
+    }
+}
+</pre>
+            <hr size="1" noshade>
+            <p align="center"><b>例5-8 ColorIcon类清单</b></p>
+            <hr noshade size="1"><pre>import java.awt.*;
+import javax.swing.*;
+
+class ColorIcon implements Icon {
+	private Color fillColor;
+	private int w, h;
+
+	public ColorIcon(Color fillColor, int w, int h) {
+		this.fillColor = fillColor;
+		this.w = w;
+		this.h = h;
+	}
+	public void paintIcon(Component c, Graphics g, int x, int y) {
+		g.setColor(Color.black);
+		g.drawRect(x, y, w-1, h-1);
+		g.setColor(fillColor);
+		g.fillRect(x+1, y+1, w-2, h-2);
+	}
+	public int getIconWidth() {
+		return w;
+	}
+	public int getIconHeight() {
+		return h;
+	}
+}
+</pre>
+            <hr size="1" noshade>
+            <p>&nbsp;</p>
+            <p>&nbsp;</p>
+            <p> 5.2.1 把图标与组件相关联</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例5-9 菜单项中的图标</b></p>
+            <hr noshade size="1"><pre>import java.awt.*;
+import javax.swing.*;
+
+public class Test extends JApplet {
+	ColorIcon 	redIcon = new ColorIcon(Color.red, 40, 15),
+				blueIcon = new ColorIcon(Color.blue, 40, 15),
+				yellowIcon = new ColorIcon(Color.yellow, 40, 15);
+
+	public void init() {
+		JMenuBar mb = new JMenuBar();
+		JMenu colors = new JMenu("Colors");
+
+		colors.add(new JMenuItem(redIcon));
+		colors.add(new JMenuItem(blueIcon));
+		colors.add(new JMenuItem(yellowIcon));
+
+		mb.add(colors);
+		setJMenuBar(mb);
+	}
+}
+</pre>
+            <hr size="1" noshade>
+            <p> 5.2.2 在组件中共享图标</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例5-10 修改后的ColorIcon类清单</b></p>
+            <hr noshade size="1"><pre>import java.awt.*;
+import javax.swing.*;
+
+class ColorIcon implements Icon {
+	private Color fillColor;
+	private int w, h;
+
+	public ColorIcon(Color fillColor, int w, int h) {
+		this.fillColor = fillColor;
+		this.w = w;
+		this.h = h;
+	}
+	public void paintIcon(Component c, Graphics g, int x, int y) {
+		g.setColor(Color.black);
+		g.drawRect(x, y, w-1, h-1);
+		g.setColor(fillColor);
+		g.fillRect(x+1, y+1, w-2, h-2);
+	}
+	public int getIconWidth() {
+		return w;
+	}
+	public int getIconHeight() {
+		return h;
+	}
+}
+</pre>
+            <hr size="1" noshade>
+            <p align="center"><b>例5-11 在许多组件中共享单图标的小应用程序</b></p>
+            <hr noshade size="1"><pre>import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class Test extends JApplet {
+	private ColorIcon colorIcon = new ColorIcon(40, 15);
+	private JPopupMenu popup = new JPopupMenu();
+	private JButton button = new JButton("select a color ...", 
+											colorIcon);
+	public void init() {
+		addPopupMenuItems();
+
+		button.putClientProperty("fill color", Color.red);
+
+		Container contentPane = getContentPane();
+		contentPane.setLayout(new FlowLayout());
+		contentPane.add(button);
+
+		button.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Dimension buttonsz = button.getSize();
+				popup.show(button,buttonsz.width,
+									buttonsz.height);
+			}
+		});
+	}
+	private void addPopupMenuItems() {
+		JMenuItem 	redItem = new JMenuItem(colorIcon),
+					blueItem = new JMenuItem(colorIcon),
+					grayItem = new JMenuItem(colorIcon),
+					yellowItem = new JMenuItem(colorIcon),
+					blackItem = new JMenuItem(colorIcon),
+					whiteItem = new JMenuItem(colorIcon),
+					orangeItem = new JMenuItem(colorIcon);
+
+		MenuItemListener listener = new MenuItemListener();
+
+		redItem.putClientProperty("fill color", Color.red);
+		redItem.addActionListener(listener);
+		popup.add(redItem);
+
+		blueItem.putClientProperty("fill color", Color.blue);
+		blueItem.addActionListener(listener);
+		popup.add(blueItem);
+
+		grayItem.putClientProperty("fill color", Color.gray);
+		grayItem.addActionListener(listener);
+		popup.add(grayItem);
+
+		yellowItem.putClientProperty("fill color", Color.yellow);
+		yellowItem.addActionListener(listener);
+		popup.add(yellowItem);
+
+		blackItem.putClientProperty("fill color", Color.black);
+		blackItem.addActionListener(listener);
+		popup.add(blackItem);
+
+		whiteItem.putClientProperty("fill color", Color.white);
+		whiteItem.addActionListener(listener);
+		popup.add(whiteItem);
+
+		orangeItem.putClientProperty("fill color", Color.orange);
+		orangeItem.addActionListener(listener);
+		popup.add(orangeItem);
+	}
+	class MenuItemListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			JComponent jc = (JComponent)e.getSource();
+
+			button.putClientProperty("fill color",
+							jc.getClientProperty("fill color"));
+
+			button.repaint();
+		}
+	}
+}
+</pre>
+            <hr size="1" noshade>
+            <p>&nbsp;</p>
+            <p> 5.2.3 图像图标</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例5-12 有一个ImageIcon的小应用程序</b></p>
+            <hr noshade size="1"><pre>import java.awt.*;
+import javax.swing.*;
+
+public class Test extends JApplet {
+	ImageIcon icon = new ImageIcon(this.getClass().getResource("coffeeCup.jpg"));
+
+	public void paint(Graphics g) {
+		icon.paintIcon(this, g, 20, 15);
+	}
+}
+</pre>
+            <hr size="1" noshade>
+            <p> 5.2.4 动画的图像图标</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例5-13 带一个动画的图标的小应用程序</b></p>
+            <hr noshade size="1"><pre>import java.awt.*;
+import javax.swing.*;
+
+public class Test extends JApplet {
+	public void init() {
+		JPanel panel = new MyJPanel();
+		getContentPane().add(panel, "Center");
+	}
+}
+class MyJPanel extends JPanel {
+	ImageIcon animatedIcon = new ImageIcon(getClass().getResource("globe.gif"));
+
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		animatedIcon.paintIcon(this, g, 20, 20);
+	}
+}
+</pre>
+            <hr size="1" noshade>
+            <p> 5.3 动作</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例5-14 带一个菜单条的小应用程序</b></p>
+            <hr noshade size="1"><pre>import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class Test extends JApplet {
+	public void init() {
+		JMenuBar mb = new JMenuBar();
+		JMenu fileMenu = new JMenu("File");
+		JMenuItem exitItem = new JMenuItem("exit");
+
+		exitItem.addActionListener(new ExitListener());
+
+		fileMenu.add(exitItem);
+		mb.add(fileMenu);
+		setJMenuBar(mb);
+	}
+}
+class ExitListener implements ActionListener {
+	public void actionPerformed(ActionEvent e) {
+		System.exit(0);
+	}
+}
+</pre>
+            <hr size="1" noshade>
+            <p align="center"><b>例5-15 用一个动作创建一个菜单项</b></p>
+            <hr noshade size="1"><pre>import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class Test extends JApplet {
+	public void init() {
+		JMenuBar mb = new JMenuBar();
+		JMenu fileMenu = new JMenu("File");
+
+		fileMenu.add(new ExitAction());
+		mb.add(fileMenu);
+		setJMenuBar(mb);
+	}
+}
+class ExitAction extends AbstractAction {
+	public ExitAction() {
+		super("exit");
+	}
+	public void actionPerformed(ActionEvent e) {
+		System.exit(0);
+	}
+}
+</pre>
+            <hr size="1" noshade>
+            <p>&nbsp;</p>
+            <p> 5.3.1 作为控制中心点的动作</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例5-16 与一个工具条按钮和一个菜单项相关联的动作</b></p>
+            <hr noshade size="1"><pre>import java.awt.*;
+import java.awt.event.*;
+import java.beans.*;
+import javax.swing.*;
+
+public class Test extends JApplet
+					implements PropertyChangeListener {
+	JPanel jp = new JPanel();
+	JPanel cp = new JPanel();  // cp = checkbox panel
+
+	JCheckBox jc = new JCheckBox("action enabled");
+	JMenuBar mb = new JMenuBar(); 
+	JToolBar tb = new JToolBar();
+
+	Action saveAction = new SaveAction();
+	Action exitAction = new ExitAction();
+	
+	
+
+	public void init() {
+		JMenu fileMenu = new JMenu("File");
+		
+
+		fileMenu.add(saveAction);
+		fileMenu.add(exitAction);
+		tb.add(saveAction);
+
+		JCheckBoxMenuItem checkBoxItem = 
+						  new JCheckBoxMenuItem("saved");
+
+		associateActionAndCheckBoxItem(saveAction, checkBoxItem);
+		fileMenu.add(checkBoxItem);
+
+		mb.add(fileMenu);
+
+		saveAction.addPropertyChangeListener(this);
+
+		jp.setLayout(new BorderLayout(2,2));
+		jp.add(tb, "North");  // toolbar
+		jp.add(cp, "Center"); // checkbox panel
+
+		cp.setLayout(new FlowLayout());
+		cp.add(jc);
+
+		Container contentPane = getContentPane();
+
+		contentPane.setLayout(new BorderLayout());
+		getRootPane().setJMenuBar(mb);
+		contentPane.add(jp, "Center");
+
+		jc.setSelected(saveAction.isEnabled());
+
+		jc.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent event) {
+				saveAction.setEnabled(!saveAction.isEnabled());
+			}
+		});
+	}
+	public void propertyChange(PropertyChangeEvent e) {
+		boolean b = ((Boolean)e.getNewValue()).booleanValue();
+		showStatus("save action " + (b ? "enabled" : "disabled"));
+	}
+	private void associateActionAndCheckBoxItem(
+								final Action action,
+								final JCheckBoxMenuItem item) {
+		item.setHorizontalTextPosition(JButton.LEFT);
+		item.setVerticalTextPosition(JButton.CENTER);
+		item.setEnabled(action.isEnabled());
+		item.addActionListener(action);
+		action.addPropertyChangeListener(
+									new PropertyChangeListener() {
+			public void propertyChange(PropertyChangeEvent e) {
+				String name = e.getPropertyName();
+
+				if(name.equals(Action.NAME)) {
+					item.setText((String)e.getNewValue());
+					item.revalidate();
+				}
+				else if(name.equals("enabled")) {
+					item.setEnabled(
+						((Boolean)e.getNewValue()).booleanValue());
+					item.repaint();
+				}
+				else if(name.equals(Action.SMALL_ICON)) {
+					item.setIcon((Icon)e.getNewValue());
+					item.revalidate();
+				}
+			}
+		});
+	}
+}
+class SaveAction extends AbstractAction {
+	public SaveAction() {
+		//super("save", new ImageIcon( this.getClass().getResource("save.gif")));
+									//("save.gif")));
+		super("save",new ImageIcon("save.gif"));
+		setEnabled(false);
+	}
+	
+	
+	
+	public void actionPerformed(ActionEvent event) {
+		String s = new String();
+		Object o = event.getSource();
+
+		if(o instanceof JButton) 		s += "ToolBar:  ";
+		else if(o instanceof JMenuItem) s += "MenuBar:  ";
+
+		System.out.println(s + " save");
+	}
+}
+class ExitAction extends AbstractAction {
+	public ExitAction() {
+		super("exit");
+	}
+	public void actionPerformed(ActionEvent event) {
+		System.exit(0);
+	}
+}
+</pre>
+            <hr size="1" noshade>
+            <p> 5.3.2 动作常量</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例5-17 在一个定制组件中使用Action.SHORT_DESCRIPTION</b></p>
+            <hr noshade size="1"><pre>import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class Test extends JApplet {
+	public void init() {
+		Container contentPane = getContentPane();
+		CustomAction action = new CustomAction();
+		CustomButton button = new CustomButton(action);
+
+		contentPane.setLayout(new FlowLayout());
+		contentPane.add(button);
+	}
+}
+class CustomButton extends JButton {
+	public CustomButton(Action action) {
+		super((String)action.getValue(Action.NAME),
+			  (Icon)action.getValue(Action.SMALL_ICON));
+
+		String shortDescription = (String)action.getValue(
+									Action.SHORT_DESCRIPTION);
+
+		setToolTipText(shortDescription);
+		addActionListener(action);
+	}
+}
+class CustomAction extends AbstractAction {
+	public CustomAction() {
+		super("doit", new ImageIcon("skelly.gif"));
+		putValue(Action.SHORT_DESCRIPTION, "a short description");
+	}
+	public void actionPerformed(ActionEvent e) {
+		System.out.println("Custom action performed");
+	}
+}
+</pre>
+            <hr size="1" noshade>
+            <p> 5.4 本章回顾</p>
+            <p>&nbsp;</p>
+            <p>[<a href="index.html" target="_self">目录</a>][<a href="s04.htm">上一页</a>][<a href="s06.htm">下一页</a>](飒龙收藏/2002.5.18) 
+            </p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </td>
+  </tr>
+</tbody>
+</table>
+<script language="javascript">bottomprint()</script>
+</body>
+</html>

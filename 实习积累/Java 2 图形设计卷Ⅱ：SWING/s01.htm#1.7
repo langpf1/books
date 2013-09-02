@@ -1,0 +1,260 @@
+<SCRIPT LANGUAGE="JavaScript" SRC="/-fs0/sys/pop-up.js"></SCRIPT>
+
+<SCRIPT LANGUAGE="JavaScript" SRC="/-fs0/sys/pop-up-all.js"></SCRIPT>
+
+<html>
+<head>
+<title>易都网--Java 2 图形设计卷Ⅱ：SWING</title>
+<LINK rel="stylesheet" href="../../../_public/javaa.css">
+<meta http-equiv="Content-Type" content="text/html; charset=GBK">
+<script language="JavaScript" src="../../../_public/javaa.js"></script>
+<meta name="keywords" content="Java,JSP,ASP,PHP,J2EE,EJB,JavaScript,C/C++,ASM,CSS,HTML,XML,网络安全,MySQL,ACCESS">
+</head>
+<body bgcolor="#FFFFFF">
+<table border=0 cellpadding=0 cellspacing=0 width="100%">
+  <tbody> 
+  <script language="javascript">print2()</script>
+  <tr> 
+    <td width="100%"> 
+      <table bgcolor=#EEEEEE border=0 cellpadding=3 cellspacing=0 width="100%">
+        <tbody> 
+        <tr> 
+          <td class=f1 id=thetd width="100%"> 
+            <p>[<a href="index.html" target="_self">目录</a>][上一页][<a href="s02.htm" target="_self">下一页</a>]</p>
+            <p align="center"><b>第1章 简　介</b></p>
+            <p>　　Java的基础类(JFC)是开发图形用户界面的API集。Java的基础类包括以下API：<br>
+              　　·抽象窗口工具包(版本1.1及以后的版本)。<br>
+              　　·2D API。<br>
+              　　·Swing组件。<br>
+              　　·可访问性API。<br>
+              　　抽象窗口工具包(Abstract Window Toolkit，AWT)是Java开发用户界面最初的工具包。AWT是建立JFC的主要基础，《Java 
+              2图形设计，卷Ⅰ：AWT》对AWT有详细的介绍。<br>
+              　　2D API提供了AWT所缺乏的附加图形功能。例如，AWT对图形操作只提供了一种规格的笔——即一个像素大小的正方形。而2D 
+              API除提供了不同大小的笔外，还提供了丰富的二维着色能力。《Graphic Java2，Volume IV：2D API》一书中对2D 
+              API有详细的介绍。<br>
+              　　Swing是建立在AWT之上的(参见1.2节“轻量组件与重量组件的比较”中对轻量组件与重量组件比较的讨论)、包括大多数轻量组件的组件集。除提供了AWT所缺少的、大量的附加组件外，Swing还提供了替代AWT重量组件的轻量组件。Swing还包括了一个使人印象深刻的、用于实现包含插入式界面样式等特性的图形用户界面的下层构件。因此，在不同的平台上，Swing组件都能保持组件的界面样式特性，如双缓冲、调试图形和文本编辑包等。<br>
+              　　可访问性(Accessibility)API是一个类集，其中的类使Swing组件能够与用于残疾用户的援助技术交互。JFC还包括许多可访问性工具，这些工具与可访问性API联合使用。 
+            </p>
+            <p><b><a name="1.1"></a>1.1 Swing的历史</b></p>
+            <p>　　要了解Swing，首先必须了解AWT，AWT是Swing的基础。<br>
+              　　Java的发展速度超出了人们的想象，Java API中最可视的部分——API突然成为了人们关注的焦点。遗憾的是，原来的AWT不能满足发展的需要。<br>
+              　　原来的AWT不是为许多开发人员使用的、功能强大的用户界面(UI)工具包而设计的，其设计目的是支持开发小应用程序中的简单用户界面。例如，原来的AWT缺少许多面向对象UI工具包中所能见到的特性，例如，剪贴板、打印支持和键盘导航等特性在AWT中都不存在。原来的AWT甚至不包括弹出式菜单或滚动窗格等基本特性，而弹出式菜单和滚动窗格是开发现代用户界面的两个基本元素。<br>
+              　　此外，AWT的下层构件还有严重的缺陷。人们使AWT适应基于继承的、具有很大伸缩性的事件模型。甚至更糟，基于对等组件(peer)的体系结构也被用于AWT，该体系结构注定要成为AWT的致命弱点。<br>
+              　　为了尽快推向市场和保持本地的界面样式，于是产生了基于对等组件的体系结构，而该体系结构注定是要失败的。对等组件是完成薄弱的AWT对象所委托任务的本地用户界面组件。对等组件负责完成所有的具体工作，包括绘制自己、对事件做出反应等，这使得AWT组件除了在适当的时间与其对等组件交互外无事可做。由于AWT类中是较复杂的本地对等组件的外壳，所以，AWT的早期开发人员能在最快的时间(原来的AWT是在不足六个星期的时间内开发出来的。)内创建组件。例如，java.awt.Panel类只包含十二行代码。 
+              <br>
+              　　另外，对等组件的设计也有严重的缺点。首先，在大多数平台上，对等组件都是在本地窗口中绘制的。每个组件一个本地窗口实在不能得到高性能，为此，含有大量AWT组件的小应用程序付出了很高的性能代价。<br>
+              　　把不同平台上的本地对等组件硬塞进Java框架中也是一个问题，使这些AWT组件跨平台的表现一致是完全不可能的。结果，不但没有实现急需的新组件，而且开发时间都浪费在修补对等组件的错误上和不兼容问题上了。<br>
+              　　更糟的是，AWT有很高的错误发生率。于是，第三方开始提供他们自己的工具包，这些工具包提供了更可靠的下层构件并提供了比AWT更多的功能。这些工具包之一是Netscape的Interner基础类(IFC)，IFC是一组建立在NEXTSTEP中的用户界面工具包概念基础上的一组轻量类。IFC组件不是对等的，在许多方面胜过了AWT组件。IFC还吸引了更多的开发人员加盟。<br>
+              　　由于认识到Java领域很可能在标准用户界面工具包问题上出现分裂局面，Javasoft和Netscape达成了一个交易，共同实现Java基础类(Apple公司和IBM公司也参加了JFC的开发)。Netscape开发人员与Swing工程师一起合作，以便把大部分的IFC的功能嵌入到Swing组件中。<br>
+              　　起初打算让Swing类似于Netscape的IFC。然而，随着时间的推移。在增加了插入式界面样式等特性并修改了设计之后，Swing大大地偏离了它原来的目标。随着Swing1.1版本的推出，虽然大量的IFC技术仍然嵌在Swing中，但是，Swing与IFC相似的部分已大部分消失了。今天，在一个功能全面的用户界面工具包中，Swing提供了AWT和IFC中最优秀的成份。 
+            </p>
+            <p><b> <a name="1.2"></a>1.2 轻量组件与重量组件的比较</b></p>
+            <p>　　轻量组件首次出现在AWT1.1版本中。AWT最初只包括与本地对等组件相关联的重量组件，这些组件在它们自己的本地不透明窗口中绘制。<br>
+              　　相反，轻量组件没有本地对等组件，而且在它们的重量容器的窗口中绘制。<br>
+              　　由于轻量组件不在本地不透明的窗口中绘制，因此，它们可以有透明的背景。透明的背景使显示的轻量组件可以是非矩形的，虽然所有组件(重量的或轻量的)都有一个矩形的边框。<br>
+              　　Swing组件几乎都是轻量组件，那些顶层容器：窗体，小应用程序、窗口和对话框除外。因为轻量组件是在其容器的窗口中绘制的，而不是在自己的窗口中绘制的，所以轻量组件最终必须包含在一个重量容器中。因此，Swing的窗体、小应用程序、窗口和对话框都必须是重量组件，以便提供一个可以在其绘制Swing轻量组件的窗口。 
+            </p>
+            <p><b> <a name="1.3"></a>1.3 Swing组件</b></p>
+            <p>　　Swing包含250多个类，是组件和支持类的集合。Swing提供了40多个组件，是AWT组件的四倍。除提供替代AWT重量组件的轻量组件外，Swing还提供了大量有助于开发图形用户界面的附加组件。</p>
+            <p><b> <a name="1.3.1"></a>1.3.1 AWT的替代组件</b></p>
+            <p>　　图1-1展示了用于替代AWT重量组件的Swing轻量组件。其中许多组件与它们所替代的AWT组件几乎是源代码兼容的。这使得替换AWT组件的工作相当简单。<br>
+              　　除模仿AWT组件所提供的功能外，几乎所有的Swing替代组件都有其他一些特性。例如，Swing按钮和标签可显示图标和文本，而AWT按钮和标签只能显示文本。<br>
+              　　图1-1中所示的所有组件均使用Windows的界面样式(图略)。</p>
+            <p><b> <a name="1.3.2"></a>1.3.2 Swing增加的组件</b></p>
+            <p>　　除提供AWT重量组件的替代组件外，Swing还提供了许多其他组件，如表格、树、定制对话框等。图1-2示出了一些新的Swing组件(图略)。</p>
+            <p><b> <a name="1.4"></a>1.4 J组件</b></p>
+            <p>　　如前所述，Swing包括250多个类，其中有些是UI组件，有些是支持类。为了把UI组件和支持类区分开，Swing组件的名字以J开头。表1-1列出了Swing提供的J组件。用斜体字表示的组件是AWT组件的替代组件。<br>
+              表1-1 Swing UI组件<br>
+              　　━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br>
+              　　<b>组件类　　　　　　　　　描述</b><br>
+              　　─────────────────────────────────<br>
+              　　JApplet Java.applet.Applet类的扩展，它含有JRootPane的一个实例<br>
+              　　<i>JButton</i> 能显示文本和图形的按钮，它是AWT按钮组件的替代组件<br>
+              　　<i>JCheckBox</i> 能显示文本和图形的复选框，它是AWT选择组件的替代组件<br>
+              　　<i>JCheckBoxMenuItem</i> 一个复选框菜单项，它是AWT的复选框菜单项组件的替代组件<br>
+              　　<i>JComboBox</i> 带下拉列表的文本框，它是AWT选择组件的替代组件<br>
+              　　JComponent 所有轻量J组件的基类<br>
+              　　JDesktopPane 内部窗体的容器<br>
+              　　<i>JDialog</i>　Swing对话框的基类，它扩展了AWT Dialot类<br>
+              　　JEditorPane 用于编辑文本的文本窗格<br>
+              　　<i>JFrame</i> 扩展java.awt.Frame的外部窗体<br>
+              　　JInternalFrame 在JDesktopPane中出现的内部窗体<br>
+              　　<i>JLabel</i> 可显示文本和图标的标签，它是AWT标签组件的替代组件<br>
+              　　JLayeredPane 能够在不同层上显示组件的容器<br>
+              　　<i>JList</i> 显示选项列表的组件，它是AWT列表组件的替代组件<br>
+              　　<i>JMenu</i> 菜单条中显示的一个菜单，它是AWT菜单组件的替代组件<br>
+              　　<i>JMenuBar</i> 用于显示菜单的菜单条，它是AWT菜单条组件的替代组件<br>
+              　　<i>JMenuItem</i> 菜单项，它是AWT菜单项组件的替代组件<br>
+              　　<i>JOptionPane</i> 显示标准的对话框，如：消息和问题对话框<br>
+              　　<i>JPanel</i> 通用容器，它是AWT面板和画布组件的替代组件<br>
+              　　JPasswordfield JTextField的扩展，使输入的字符不可见<br>
+              　　<i>JPopupMenu</i> 弹出式菜单，它是AWT弹出式菜单组件的替代组件<br>
+              　　JProgressBar 进度指示器<br>
+              　　<i>JRadioButton</i> 单选按钮，它是AWT复选框组件的替代组件<br>
+              　　JRootPane 顶层容器，它包含一个玻璃窗格，一个层窗格，一个内容窗格和一个可选的菜单条<br>
+              　　<i>JScrollBar</i> 滚动条，它是AWT滚动条组件的替代组件<br>
+              　　<i>JScrollPane</i> 滚动窗格，它是AWT滚动窗格组件的替代组件<br>
+              　　JSeparator 水平或垂直分隔条<br>
+              　　JSlider 滑杆<br>
+              　　JSplitPane 有两个分隔区的容器，这两个分隔区可以水平排列或者垂直排列且分隔区的大小能自动调整<br>
+              　　JTabbedPane 带选项卡的窗格<br>
+              　　JTable 表格<br>
+              　　JTableHeader 表格头<br>
+              　　<i>JTextArea</i> 用于输入多行文本的文本域，它是AWT文本域组件的替代组件<br>
+              　　<i>JTestComponent</i> 文本组件的基类，它替代AWT的TextComponent类<br>
+              　　<i>JTextField</i> 单行文本域，它替代AWT的单行文本域组件<br>
+              　　<i>JTextPane</i> 简单的文本编辑器<br>
+              　　JToggleButton 两种状态的按钮，它是JCheckBox和JRadioButton组件的基类<br>
+              　　JToolBar 工具条<br>
+              　　JToolTip 当光标停留在一个组件上时，该组件上显示的一行文字<br>
+              　　JTree 用于按钮层次组织数据的结构控件<br>
+              　　JViesport 用于浏览可滚动组件的视口<br>
+              　　<i>JWindow</i> 外部窗口，它是java.awt.Window的扩展<br>
+              　　━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br>
+              　　注：斜体字表示的是AWT的替代组件</p>
+            <p>　　<b>插入式界面模式</b></p>
+            <p> 　　Swing支持插入式界面样式，界面模式的基础是“模型-视图-控制器”体系结构的变体。图1-3图解说明了在不同的界面样式下运行的小应用程序。<br>
+              　　修改小应用程序或应用程序的界面样式不需要修改程序代码，通过把＄ JDK_HOME/lib目录下的swing.properties文件中的swing.defaultlaf属性设置为所需要的界面样式类型，就可以在运行时刻设置缺省的界面样式。下面是swing.properties文件的一个例子，它通过指定defaultlaf属性来设置缺省的界面样式：<br>
+              　　# swing.properties example file. Lines that begin with '#' are<br>
+              　　# comments.<br>
+              　　# The Mac look and feel is specifed as the default look and<br>
+              　　# feel below. If no look and feel is specifed.then the default<br>
+              　　# look and feel (metal) is used.<br>
+              　　# the next line specifies which look and feels are installed.<br>
+              　　swing.installedlafts=metal,motif,windows,mac<br>
+              　　# default set to Mac look and feel<br>
+              　　swing.defaultlaf=javax.swing.plaf.mac.MacLookAndFeel<br>
+              　　# swing.defaultlaf=javax.swing.plaf.windows.WindowsLookAndFeel<br>
+              　　# swing.defaultlaf=javax.swing.plaf.motif.MotifLookAndFeel<br>
+              　　在第7章“插入式界面样式”中介绍了插入式界面样式的Swing实现。</p>
+            <p><b> <a name="1.5"></a>1.5 Swing包概览</b></p>
+            <p>　　Swing由许多包组成，表1-2中列出了这些包</p>
+            <p>　　　　　　　　　　　　　　<b>表1-2 Swing包</b><br>
+              　　━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br>
+              　　<b>包　　　　　　　　　　　　　　描述 </b><br>
+              　　─────────────────────────────────<br>
+              　　com.sun.java.swing.plaf.motif 用户界面代表类，它们实现Motif界面样式<br>
+              　　com.sun.java.swing.plaf.windows 用户界面代表类，它们实现Windows界面样式<br>
+              　　javax.swing Swing组件和实用工具<br>
+              　　javax.swing.border Swing轻量组件的边框<br>
+              　　javax.swing.colorchooser JColorChooser的支持类/接口<br>
+              　　javax.swing.event 事件和侦听器类<br>
+              　　javax.swing.filechooser JFileChooser的支持类/接口<br>
+              　　javax.swing.pending 未完全实现的Swing组件<br>
+              　　javax.swing.plaf 抽象类，它定义UI代表的行为<br>
+              　　javax.swing.plaf.basic 实现所有标准界面样式公共功能的基类<br>
+              　　javax.swing.plaf.metal 用户界面代表类，它们实现Metal界面样式<br>
+              　　javax.swing.table JTable组件的支持类<br>
+              　　javax.swing.text 支持文档的显示和编辑<br>
+              　　javax.swing.text.html 支持显示和编辑HTML文件<br>
+              　　javax.swing.text.html.parser html文件的分析器类<br>
+              　　javax.swing.text.rtf 支持显示和编辑RTF文件<br>
+              　　javax.swing.tree JTree组件的支持类<br>
+              　　javax.swing.undo 支持取消操作<br>
+              　　━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br>
+              　　swing包是Swing提供的最大包，它包含将近100个类和25个接口。几乎所有的Swing组件都在swing包中，只有JTableHeader和JTextComponent是例外，它们分别在swing.table包和swing.text包中。<br>
+              　　swing.border包中含有数个在轻量Swing组件的边衬中画边框的类。border包由一个Border接口、一个AbstractBorder类和AbstractBorder的许多具体扩展组成。<br>
+              　　swing.event包中定义了事件和事件监听器类，swing.event包与AWT的event包类似。awt.event和swing.event都包含事件类和监听器接口，它们分别响应由AWT组件和Swing组件激发的事件。例如，当在树组件中需要节点扩展(或折叠)的通知时，则要实现Swing的TreeExpansionListener接口，并把一个TreeExpansionEvent实例传送给TreeExpansionListener接口中定义的方法。TreeExpansionListener和TreeExpansionEvent都是在swing.event包中定义的。 
+              <br>
+              　　Swing.pending包包括仍没有完全实现的Swing组件。在Swing1.1 FCS中，pending包包含选择器(日期、货币选择器)计算器、弹出式按钮等等。pending包中的组件最终会放到swing包中。<br>
+              　　虽然Swing的表格组件(JTable)在swing包中，但它的支持类却在swing.table包中。表格模型、单元绘制器和编辑器等都在swing.table包中。<br>
+              　　与JTable类一样，Swing的树类JTree(用于按层次组织数据的结构组件)也在swing包中，而它的支持类却在swing.tree包中。swing.tree包提供树模型、树节点、树单元编辑器和绘制器等支持类。<br>
+              　　Swing有四个用于显示和编辑文档的包：swing.text、swing.text.html、swing.text.html.parser和swing.text.rtf。swing.text包为Swing的文档模型提供了所有必须的下层构件。包括用于文档、元素、加字符、增亮、编辑工具包等的类和接口。swing.text.html和swing.text.rtf包是Swing最小的两个包：它们分别提供用于实现HTML(超文本标记语言)和rtf(多文本格式)文档编辑器的编辑器工具包。swing.text.html.parser包中含有分析html文件的支持类。 
+              <br>
+              　　Swing.undo包为实现取消操作提供支持。<br>
+              　　swing.plaf包中的类形成了Swing插入式界面样式的UI代表部分的基础。UI代表为它们的相关组件实现界面模式。<br>
+              　　swing.plaf包中的大多数类定义UI资源或扩展swing.ComponentUI类。swing.ComponentUI类定义所有UI代表的公共行为。在swing.plaf包中的UI代表类(即名字以UI结尾的类)通常为特定的组件定义附加的抽象方法。例如，swing.plaf.ButtonUI类扩展swing.ComponentUI类并添加了抽象方法getDefaultMargin()，该方法返回按钮边框与按钮内容之间的间距。<br>
+              　　 swing.plaf.basic包扩展在swing.plaf包中定义的类，并且实现所有标准Swing界面样式共有的特性。例如：swing.plaf.basic.BasicButtonUI类提供了swing.ComponentUI类和swing.plaf.ButtonUI类定义的一些方法的缺省实现。BasicButtonUI类还为paint等方法提供了多个不同的实现(paint方法绘制按钮的文本和图标)。BasicButtonUI还以无操作形式实现其他与界面样式有关的方法，如paintButtonPressed()方法。这些方法将被特定的界面样式扩展所重载。<br>
+              　　metal和motif包实现相应界面样式的UI代表类。通常，UI代表类扩展swing.plaf.basic包中的类。例如，metal.ButtonUI类重载swing.plaf.basic.ButtonUI类中的paintButtonPressed方法的无操作实现。<br>
+              　　Swing.plaf.multi包支持界面样式复用。界面样式复用允许多个UI代表与一个组件相关联。例如。一个按钮UI代表可能同时与一个视觉UI代表和一个音频UI代表相关联，这样，当这个按钮被激活时，不难能产生可视的反馈信息，还能播放一个声音。UI复用的主要用途是使组件更具可访问性。<br>
+              　　Swing还提供了其他两种界面样式实现，即mactintosh和Organic的界面样式。 </p>
+            <p><b> <a name="1.6"></a>1.6 Swing与AWT</b></p>
+            <p>　　对Swing最普遍的错误概念是认为其设计目的是用来替代AWT的。事实上，Swing建立在AWT之上，如图1-4所示。<br>
+              　　　　　　┌─────────┬──────────┐<br>
+              　　　　　　│Ｓｗｉｎｇ重量组件│　Ｓｗｉｎｇ轻量组件│ <br>
+              　　┌───┼─────────┼─────────┬┤<br>
+              　　│ＡＷＴ│窗体、窗口、对话框│　　　　　　　　　││<br>
+              　　│　　　├─────────┘　　　　　　　　　││<br>
+              　　│　　　│组件、容器、图形、颜色、字体、工具包、││<br>
+              　　│　　　│布局管理器等　　　　　　　　　　　　　││<br>
+              　　│　　　└───────────────────┘│<br>
+              　　└────────────────────────┘ <br>
+              　　Swing利用AWT的下层构件，包括图形、颜色、字体、工具包和布局管理器；然而，Swing没有使用AWT的组件。唯一与Swing有关的AWT组件是Frame、Window和Dialog类，它们分别被Swing的重量组件：JFrame、JWindow和JDialog所扩展。Swing使用AWT最好的部分来建立一个新的轻量组件集，并且丢弃了AWT中有问题的部分——重量组件。<br>
+              　　Swing是用来替代AWT的重量组件，而不是用来替代AWT本身。要了解Swing，就必须具有AWT的基本知识。<br>
+              　　Swing除利用图形、字体、布局管理器等AWT功能外，所有的Swing轻量组件基本上都是从AWT的Container类继承来的，而AWT的Container类又扩展了AWT的Component类。换句话说，Swing不仅利用了AWT提供的下层构件，而且所有的Swing组件实际上都是AWT容器。注意：AWT 
+              Container类本身是轻量的(即它没有对等组件(注：实际上，java.awt.Container有一个什么都不做的，待替换的对等组件))且在其容器的窗口中绘制。 
+            </p>
+            <p><b>对等组件与插入式界面样式的比较</b></p>
+            <p>　　Swing组件和AWT组件都把与显示组件有关的许多工作和处理组件事件的工作交给其他对象来执行。对AWT组件而言，代表是一个本地对等组件，而对Swing组件而言，代表是ComponentUI类的一个扩展。虽然Swing组件和AWT组件都使用代表机制，但把工作交给其他对象处理所产生的结果在两个工具包中有明显的不同。<br>
+              　　由于AWT组件把工作交给对等组件来完成，所以它们的行动很难扩展。例如，不可能把一幅图像添加到AWT的按钮上，这是因为按钮的绘制是由本地对等组件来完成的，而该对等组件可能是用C++编写的，它的行为不能扩展。同样，因为文本域的对等组件负责增亮文本，所以，文本域增亮文本的方式也不能修改。要点是，任何由本地对等组件实现的行为是不能修改或扩展的。 
+              <br>
+              　　另一方面，Swing组件的代表(它的ComponentUI)是Swing工具包中的一个Java类，它以扩展以修改组件的行为。Swing的插入式界面样式设计使用了改进的“模型-视图-控制器”体系结构，在这个体系结构中，组件的UI代表负责显示组件和处理输入事件的视图-控制器。当Swing组件配备了一个修改过的组件UI时，组件的可视外观或事件处理都是可以修改的。 
+            </p>
+            <p><b> <a name="1.7"></a>1.7 开始学习</b></p>
+            <p>　　Swing可与JDK1.1或1.2版一起使用。JDK1.2版包含了Swing，而1.1版本却没有。要在1.1版中使用Swing，必须从JFC 
+              web站点下载Swing，其地址是：<a href="http://java.sun.com/products/jfc/index.hmtl" target="_blank">http://java.sun.com/products/jfc/index.hmtl</a> 
+              。</p>
+            <p><b>在Internet浏览器中使用Swing</b></p>
+            <p>　　在Netscape Navigator和Internet Explorer中都能用Swing小应用程序，但是，必须使用合适的浏览器版本，并确保包含了对JDK 
+              1.1的支持。<br>
+              　　1.Netscape Navigator<br>
+              　　必须有Netscape Navigator 4.04或更新的版本，并且已安装了JDK1.1的补丁程序，要下载Netscape 
+              Navigator和JDK 1.1补丁程序请访问地址：<a href="http://developer.netscape.com/software/jdk/download.html" target="_blank">http://developer.netscape.com/software/jdk/download.html</a><br>
+              　　图1-5示出了一个在Netscape Navigator中运行的Swing小应用程序。<br>
+              　　在下载了一个合适的Netscape Navigator版本和JDK1.1补丁程序之后，还必须确保Netscape可找到Swing的jar文件。使Netscape能找到Swing有两种方法：第一种方法是把Swing的jar文件拷贝到一个确定的Netscape目录中；第二种方法是修改系统的CLASSPATH变量。本节介绍第一种方法，由于 
+              第二种方法对Internet Explorer和Netscape Navigator是相同的，所以我们将在“Internet Explorer”一节中介绍第二种方法。<br>
+              　　可把Swing的jar文件拷贝到Netscape的java\Classes目录中。例如，如果氢Netscape安装在C盘中，Swing安装在c:\swing目录下，则就把所有的Swing 
+              jar文件从c:\swing拷贝到c:\program files\Netscape\Communicator\Program\Java\Class下。只要有Netscape 
+              Navigator的最新版本，安装了JDK 1.1补丁程序，并且Netscape可找到Swing的jar文件，就具备了在Netscape 
+              Navigator中运行Swing小应用程序的条件。<br>
+              　　2、Internet Explorer<br>
+              　　Internet Explorer的4.0版或得高版本支持JDK1.1。只要有合适的Internet Explorer版本并设置了系统的CLASSPATH变量，以便Internet 
+              Explorer能找到Swing的jar文件，就能在Internet Explorer中运行Swing小应用程序。下面介绍如何设置系统的CLASSPAHT变量。<br>
+              　　对Windows NT系统，进入Windows的“控制面板”，双击“系统”图标，在“系统属性”窗口中单“Environment(环境)”选项卡，把CLASSPATH变量添加到“User 
+              Variables for Administrator”列表框中，如图1-6所示。<br>
+              　　CLASSPATH变量应该包括JDK的class.zip文件和swingall.jar文件。例如，图1-6显示了JDK和Swing均安装在D:\下时设置CLASSPATH变量的情况。添加(或修改)完CLASSPATH变量后，单击OK按钮关闭“System 
+              Properties”窗口，此时，需要重新启动系统，重启后，就可以在Internet Explorer中运行Swing小应用程序了。<br>
+              　　对Windows 95系统，必须手工编辑c:\下的autoexec.bat文件，只需在autoexec.bat文件中添加一项，如下所示：<br>
+              　　SET CLASSPATH=C:\jdk\lib\classes.zip;c:\swing\swingall.jar<br>
+              　　同样，在autoexec.bat文件中添加(或修改)了CLASSPATH变量后，必须重新启动系统。<br>
+              　　图1-7示出了在Internet Explorer中运行的Swing小应用程序。<br>
+              　　 3、Java插件<br>
+              　　当在Netscape Navigator或Internet Explorer中运行Swing小应用程序时，毫无疑问地还会发现许多错误。这些问题可能与Swing本身无关，可能是开发Internet上使用的Java小应用程序的主要缺点。<br>
+              　　小应用程序开发人员面临的最困难的任务之一是使小应用程序在不同的浏览器中的表现是一致的。此外，由于历史的原因，浏览器制造商已减慢了更新浏览器(与最新版本JDK同步的)的速度。幸运的是，针对这个Sun公司已推出了一个漂亮的解决方案，即它的Java插件(以前称作Activator)。<br>
+              　　通过把一个插件插入Netscape的Netscape Navigator中或在Internet Explorer中运行一个ActiveX控件来使用Java插件。插件或ActiveX控件有效地把Sun的JDK最新版本安装到浏览器中。使用Java插件保证了小应用程序在不同的浏览器中的一致性。<br>
+              　　Java插件唯一的缺点是要求对HTML文件做一些修改。当然Sun也提供了一个实用工具来进行这种修改。要更多地了解免费获得Java插件的情况，请访问下面的Web站点：<br>
+              　　<a href="http://java.sun.com/features/1998/04/plugin.html" target="_blank">http://java.sun.com/features/1998/04/plugin.html</a> 
+            </p>
+            <p><b> <a name="1.8"></a>1.8 Swing资源</b></p>
+            <p>　　除本书外，还能找到许多学习Swing的资源。当需要解答对本书中没有介绍到的问题时，就需要去寻找其他资源。<br>
+              　　开始学习Swing的最好方法是学习Swing本身随带的例子代码。这些例子提供了许多小而完善的小应用程序和应用程序，它们对Swing很多方面的特性做了练习。Swing的这些例子可在Swing主目录的examples目录下找到。例如，如果Swing安装在c:\swing目录下，则可以在c:\swing\examples目录下找Swing的例子。<br>
+              　　Internet上也有许多Swing资源，其中包括邮件列表和新闻组。下面列出的新闻组是解决Swing问题的好地方：<br>
+              　　comp.lang.java.programmer<br>
+              　　comp.lang.java.gui<br>
+              　　此外，还有许多由件列表供喜爱Swing的初高级用户使用，要了解邮件列表的有关信息，请访问下面的Web站点：<br>
+              　　<a href="http://www.eos.dk/" target="_blank">http://www.eos.dk/</a><br>
+              　　Swing Connection是由Sun维护的Swing的正式站点。可在下面的Web站点中找到：<br>
+              　　<a href="http://java.sun.com/products/jfc/tsc/" target="_blank">http://java.sun.com/products/jfc/tsc/</a> 
+            </p>
+            <p><b> <a name="1.9"></a>1.9 本章回顾</b></p>
+            <p>　　Java于1995年出现，并迅速发展成为程序开发人员所喜爱的语言。Java的重新定位于Internet和重命名为Java以前五年多时间里，它是以Oak语言的身份出现的(Oak是一种研究语言，Sun公司打算使它成为C++的一种更易于使用的和功能更强大的变体)。<br>
+              　　虽然Java语言开发许多年并且在Sun公司内部使用，但是该语言没有用户界面工具包。当Java的优势开始显现时，很明显，它必须有用户界面工具包并应在最短的时间内开发出来。开发用户界面最快的方法是在本地组件(又叫做对等组件)上做大部分工作，并在本地组件的顶层放一层Java类。这样，在六个星期不到的时间内开发小组实现了AWT。<br>
+              　　对等组件体系结构没有扩展性，并导致了不同平台上不一致的问题产生。此外，AWT没有可靠的面向对象基础；例如，最初的事件模型需要一个switch语句，以便根据事件类型来决定激活哪段代码。这种switch语句是对面向对象的破坏；这种根据对象类型进行切换的swich语句应该通过多态性机制来处理(注：swigch语句有时在面向对象设计中是有效的，但AWT的事件模型不是这种情况。) 
+              <br>
+              　　Java开发人员、Sun公司或Sun公司的竞争者逐渐注意到原来的AWT的缺点。不久，出现了许多用来替代AWT的工具包。同时，Sun发布了AWT的1.1版，它做了许多改进，包括一个新事件模型和对轻量组件(非对等组件)的支持。然而，AWT1.1版还不够好用。<br>
+              　　JavaSoft认识到Java领域在用户界面工具包的使用上将会出现分裂，于是他们与Netscape合作开发Swing组件集。Netscape和Sun公司的工程师用了将近一年半的时间来开发Swing，Swing在AWT上进行了巨大的改进。<br>
+              　　虽然有些Swing组件替代了AWT的重量组件，但Swing不是AWT的替代品，而是AWT的扩展，Swing使用了大量的AWT下层构件，包括对图形、字体和布局管理器的支持。要更深入了解Swing，就必须对AWT的下层构件有基本的了解。<br>
+              　　与所有其他软件一样，Swing还不完美。到现在为止，Swing中仍有一些程序错误。在某些地方还表现出了一些设计缺陷，但它是一个可靠的用户界面工具包，比原来的AWT有了很大改进。 
+              <b> </b> </p>
+            <p> <b></b>　　 [<a href="index.html" target="_self">目录</a>][上一页][<a href="s02.htm" target="_self">下一页</a>](飒龙收藏/2002.5.18)</p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </td>
+  </tr>
+</tbody>
+</table>
+<script language="javascript">bottomprint()</script>
+</body>
+</html>

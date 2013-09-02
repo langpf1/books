@@ -1,0 +1,1584 @@
+<SCRIPT LANGUAGE="JavaScript" SRC="/-fs0/sys/pop-up.js"></SCRIPT>
+
+<SCRIPT LANGUAGE="JavaScript" SRC="/-fs0/sys/pop-up-all.js"></SCRIPT>
+
+<html>
+<head>
+<title>易都网--Java 2 图形设计卷Ⅱ：SWING</title>
+<LINK rel="stylesheet" href="../../../_public/javaa.css">
+<meta http-equiv="Content-Type" content="text/html; charset=GBK">
+<script language="JavaScript" src="../../../_public/javaa.js"></script>
+<meta name="keywords" content="Java,JSP,ASP,PHP,J2EE,EJB,JavaScript,C/C++,ASM,CSS,HTML,XML,网络安全,MySQL,ACCESS">
+</head>
+<body bgcolor="#FFFFFF">
+<table border=0 cellpadding=0 cellspacing=0 width="100%">
+  <tbody> 
+  <script language="javascript">print2()</script>
+  <tr> 
+    <td width="100%"> 
+      <table bgcolor=#EEEEEE border=0 cellpadding=3 cellspacing=0 width="100%">
+        <tbody> 
+        <tr> 
+          <td class=f1 id=thetd width="100%"> 
+            <p>[<a href="index.html" target="_self">目录</a>][<a href="s09.htm">上一页</a>][<a href="s11.htm">下一页</a>]</p>
+            <p align="center"><b>第10章 菜单和工具条</b></p>
+            <p> 　　菜单和工具条是现代用户界面的重要组成部分。Swing提供了对这两者的完全支持。Swing提供菜单组件（即菜单条中的菜单和弹出式菜单中的菜单）和菜单项组件（包括复选框和单选按钮菜单项）。<br>
+              　　Swing还提供一个工具条组件，根据工具条的方向，工具条组件包含一行按钮或一列按钮。工具条通常提供对普通特性的简单访问。通常，除键盘捷径键提供对相同功能的访问外，菜单栏和工具条不提供对相同功能集的访问。工具条还可以是悬浮的，这样，可以把工具条在窗口中任意拖动或拖到一个单独的窗口中。<br>
+              　　Swing菜单和菜单项是按钮，因为JMenuItem扩展AbstractButton，JMenu扩展JMenuItem，如图10-1所示。因此，Swing菜单和菜单项继承了如下功能，即包含文本和（或)图标、显示光标进入时的图标和助记符等。<br>
+              　　图10-1示出了JMenuItem和JMenu的父组件，它们最后都归于java.awt.Container，以强调菜单和菜单项都是容器。可以把任何类型的组件（从包含一个动画GIF的标签到JTree的一个实例）添加到一个菜单或菜单项中。<br>
+              　　菜单和菜单项还实现MenuElement接口，以便参与菜单事件的处理。MenuElement接口在10.7节“菜单元素”中介绍。<br>
+              　　工具条和弹出式菜单都扩展JComponent类，即任意组件都可以添加到一个工具条或弹出式菜单中。<br>
+              　　本章将介绍下面的组件：<br>
+              　　·JMenuItem<br>
+              　　·JCheckBoxMenuItem<br>
+              　　·JRadioButtonMenuItem<br>
+              　　·JMenu<br>
+              　　·JPopupMenu<br>
+              　　·JMenuBar<br>
+              　　·JToolBar<br>
+            </p>
+            <p> <b>10.1 菜单、菜单栏和工具条</b></p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例10-1 JRootPane中的菜单栏和工具条</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class Test extends JApplet {<br>
+              Icon <br>
+              dukeStanding = new ImageIcon(&quot;duke_standing.gif&quot;),<br>
+              dukeWaving = new ImageIcon(&quot;duke_waving.gif&quot;),<br>
+              dukeStandingSmall = <br>
+              new ImageIcon(&quot;duke_standing_small.gif&quot;),<br>
+              dukeWavingSmall = new ImageIcon(&quot;duke_waving_small.gif&quot;);</p>
+            <p> public void init() {<br>
+              Container contentPane = getContentPane();<br>
+              Action[] actions = {<br>
+              new NewAction(),<br>
+              new OpenAction(),<br>
+              new CutAction(),<br>
+              new CopyAction(),<br>
+              new PasteAction(),<br>
+              new ExitAction()<br>
+              };<br>
+              JToolBar toolbar = new JToolBar();<br>
+              JMenuBar menubar = new JMenuBar();<br>
+              JMenu fileMenu = new JMenu(&quot;File&quot;);</p>
+            <p> JRadioButton <br>
+              menubarDuke = new JRadioButton(dukeStandingSmall),<br>
+              menuDuke = new JRadioButton(dukeStandingSmall),<br>
+              toolbarDuke = new JRadioButton(dukeStanding);<br>
+              <br>
+              menuDuke.setRolloverIcon(dukeWavingSmall);<br>
+              menubarDuke.setRolloverIcon(dukeWavingSmall);<br>
+              toolbarDuke.setRolloverIcon(dukeWaving);</p>
+            <p> menubar.add(menubarDuke);<br>
+              toolbar.add(toolbarDuke);<br>
+              fileMenu.add(menuDuke);</p>
+            <p> for(int i=0; i &lt; actions.length; ++i) {<br>
+              fileMenu.add(actions[i]);</p>
+            <p> if(i != actions.length-1)<br>
+              toolbar.add(actions[i]);</p>
+            <p> if(i == 2 || i == actions.length-2){<br>
+              toolbar.addSeparator();<br>
+              fileMenu.addSeparator();<br>
+              }<br>
+              }<br>
+              menubar.add(fileMenu);</p>
+            <p> contentPane.add(toolbar, BorderLayout.NORTH);<br>
+              getRootPane().setJMenuBar(menubar);<br>
+              System.out.println(contentPane.getClass().getName());<br>
+              LayoutManager lm = contentPane.getLayout();<br>
+              System.out.println(lm.getClass());</p>
+            <p> }<br>
+              class NewAction extends AbstractAction {<br>
+              public NewAction() {<br>
+              super(&quot;New ...&quot;, new ImageIcon(&quot;new.gif&quot;));<br>
+              }<br>
+              public void actionPerformed(ActionEvent event) {<br>
+              showStatus(&quot;new&quot;);<br>
+              }<br>
+              }<br>
+              class OpenAction extends AbstractAction {<br>
+              public OpenAction() {<br>
+              super(&quot;Open ...&quot;, new ImageIcon(&quot;open.gif&quot;));<br>
+              }<br>
+              public void actionPerformed(ActionEvent event) {<br>
+              showStatus(&quot;open&quot;);<br>
+              }<br>
+              }<br>
+              class CutAction extends AbstractAction {<br>
+              public CutAction() {<br>
+              super(&quot;Cut&quot;, new ImageIcon(&quot;cut.gif&quot;));<br>
+              }<br>
+              public void actionPerformed(ActionEvent event) {<br>
+              showStatus(&quot;cut&quot;);<br>
+              }<br>
+              }<br>
+              class CopyAction extends AbstractAction {<br>
+              public CopyAction() {<br>
+              super(&quot;Copy&quot;, new ImageIcon(&quot;copy.gif&quot;));<br>
+              }<br>
+              public void actionPerformed(ActionEvent event) {<br>
+              showStatus(&quot;copy&quot;);<br>
+              }<br>
+              }<br>
+              class PasteAction extends AbstractAction {<br>
+              public PasteAction() {<br>
+              super(&quot;Paste&quot;, new ImageIcon(&quot;paste.gif&quot;));<br>
+              }<br>
+              public void actionPerformed(ActionEvent event) {<br>
+              showStatus(&quot;paste&quot;);<br>
+              }<br>
+              }<br>
+              class ExitAction extends AbstractAction {<br>
+              public ExitAction() {<br>
+              super(&quot;Exit&quot;);<br>
+              putValue(Action.SMALL_ICON, dukeWavingSmall);<br>
+              }<br>
+              public void actionPerformed(ActionEvent event) {<br>
+              System.exit(0);<br>
+              }<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> <b>10.2 菜单和弹出式菜单</b></p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例10-2 一个简单的菜单举例</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class Test extends JApplet {<br>
+              public void init() {<br>
+              JMenuBar mb = new JMenuBar();<br>
+              JMenu fileMenu = new JMenu(&quot;File&quot;);<br>
+              JMenu pullRightMenu = new JMenu(&quot;pull right&quot;);</p>
+            <p> fileMenu.add(&quot;New ...&quot;);<br>
+              fileMenu.add(&quot;Open ...&quot;);<br>
+              fileMenu.add(&quot;Save&quot;);<br>
+              fileMenu.add(&quot;Save As ..&quot;);<br>
+              fileMenu.addSeparator();<br>
+              fileMenu.add(pullRightMenu);<br>
+              fileMenu.add(&quot;Exit&quot;);</p>
+            <p> pullRightMenu.add(new JCheckBoxMenuItem(&quot;Bush&quot;));<br>
+              pullRightMenu.add(new JCheckBoxMenuItem(&quot;Tonic&quot;));<br>
+              pullRightMenu.add(new JCheckBoxMenuItem(&quot;Radio Head&quot;));<br>
+              pullRightMenu.add(new JCheckBoxMenuItem(&quot;Marcy Playground&quot;));<br>
+              pullRightMenu.add(new JCheckBoxMenuItem(&quot;Silver Chair&quot;));</p>
+            <p> mb.add(fileMenu);<br>
+              setJMenuBar(mb);<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> <b>10.3 JMenuItem</b></p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例10-3 安装一些菜单项</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class Test extends JApplet {<br>
+              public void init() {<br>
+              Container contentPane = getContentPane();<br>
+              Icon newIcon = new ImageIcon(&quot;new.gif&quot;, <br>
+              &quot;Create a new document&quot;);<br>
+              Icon openIcon = new ImageIcon(&quot;open.gif&quot;,<br>
+              &quot;Open an existing document&quot;);</p>
+            <p> JMenuBar mb = new JMenuBar();<br>
+              JMenu fileMenu = new JMenu(&quot;File&quot;);</p>
+            <p> JMenuItem newItem = new JMenuItem(newIcon);<br>
+              JMenuItem openItem = new JMenuItem(&quot;Open ...&quot;, openIcon);<br>
+              JMenuItem saveItem = new JMenuItem(&quot;Save&quot;);<br>
+              JMenuItem saveAsItem = new JMenuItem(&quot;Save As ...&quot;);<br>
+              JMenuItem exitItem = new JMenuItem(&quot;Exit&quot;, 'x');</p>
+            <p> fileMenu.add(newItem);<br>
+              fileMenu.add(openItem);<br>
+              fileMenu.add(saveItem);<br>
+              fileMenu.add(saveAsItem);<br>
+              fileMenu.addSeparator();<br>
+              fileMenu.add(exitItem);</p>
+            <p> MenuItemListener listener = new MenuItemListener(this);</p>
+            <p> newItem.addActionListener(listener);<br>
+              openItem.addActionListener(listener);<br>
+              saveItem.addActionListener(listener);<br>
+              saveAsItem.addActionListener(listener);</p>
+            <p> exitItem.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              System.exit(0);<br>
+              }<br>
+              });</p>
+            <p> mb.add(fileMenu);<br>
+              setJMenuBar(mb);<br>
+              }<br>
+              }<br>
+              class MenuItemListener implements ActionListener {<br>
+              private JApplet applet;</p>
+            <p> public MenuItemListener(JApplet applet) {<br>
+              this.applet = applet;<br>
+              }<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              JMenuItem item = (JMenuItem)e.getSource();<br>
+              ImageIcon icon = (ImageIcon)item.getIcon();</p>
+            <p> if(icon != null)<br>
+              System.out.println(icon.getDescription());<br>
+              else<br>
+              System.out.println(item.getText());<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> <b>10.3.1 菜单项快捷键助记符键</b></p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例10-4 带助记符键和快捷键的菜单项</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class Test extends JFrame {<br>
+              public Test() { <br>
+              Container contentPane = getContentPane();</p>
+            <p> JMenuBar mb = new JMenuBar();<br>
+              JMenu fileMenu = new JMenu(&quot;File&quot;);<br>
+              JMenuItem exitItem = new JMenuItem(&quot;Exit&quot;);</p>
+            <p> fileMenu.add(&quot;New ...&quot;);<br>
+              fileMenu.add(&quot;Open ...&quot;);<br>
+              fileMenu.add(&quot;Save&quot;);<br>
+              fileMenu.add(&quot;Save As ..&quot;);<br>
+              fileMenu.addSeparator();<br>
+              fileMenu.add(exitItem);</p>
+            <p> exitItem.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              System.exit(0);<br>
+              }<br>
+              });</p>
+            <p> KeyStroke ks = KeyStroke.getKeyStroke(KeyEvent.VK_X, <br>
+              Event.ALT_MASK);<br>
+              exitItem.setAccelerator(ks);</p>
+            <p> fileMenu.setMnemonic('F');<br>
+              exitItem.setMnemonic(KeyEvent.VK_X);</p>
+            <p> mb.add(fileMenu);<br>
+              setJMenuBar(mb);<br>
+              }<br>
+              public static void main(String args[]) {<br>
+              GJApp.launch(new Test(), <br>
+              &quot;Accelerators and Mnemonics&quot;,300,300,450,300);<br>
+              }<br>
+              }<br>
+              class GJApp extends WindowAdapter {<br>
+              static private JPanel statusArea = new JPanel();<br>
+              static private JLabel status = new JLabel(&quot; &quot;);</p>
+            <p> public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h) {<br>
+              f.setTitle(title);<br>
+              f.setBounds(x,y,w,h);<br>
+              f.setVisible(true);</p>
+            <p> statusArea.setBorder(BorderFactory.createEtchedBorder());<br>
+              statusArea.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));<br>
+              statusArea.add(status);<br>
+              status.setHorizontalAlignment(JLabel.LEFT);</p>
+            <p> f.setDefaultCloseOperation(<br>
+              WindowConstants.DISPOSE_ON_CLOSE);</p>
+            <p> f.addWindowListener(new WindowAdapter() {<br>
+              public void windowClosed(WindowEvent e) {<br>
+              System.exit(0);<br>
+              }<br>
+              });<br>
+              }<br>
+              static public JPanel getStatusArea() {<br>
+              return statusArea;<br>
+              }<br>
+              static public void updateStatus(String s) {<br>
+              status.setText(s);<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 10.3.2 JMenuItem属性</p>
+            <p>&nbsp;</p>
+            <p> 10.3.3 JMenuItem事件</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例10-5 监听菜单项动作和菜单项变化事件</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import javax.swing.event.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class Test extends JApplet {<br>
+              public void init() {<br>
+              JMenuBar mb = new JMenuBar();<br>
+              JMenu fileMenu = new JMenu(&quot;File&quot;);<br>
+              JMenuItem newItem = new JMenuItem(&quot;New ...&quot;),<br>
+              openItem = new JMenuItem(&quot;Open ...&quot;),<br>
+              saveItem = new JMenuItem(&quot;Save&quot;),<br>
+              saveAsItem = new JMenuItem(&quot;Save As ...&quot;),<br>
+              exitItem = new JMenuItem(&quot;Exit&quot;);<br>
+              Listener listener = new Listener(this);</p>
+            <p> fileMenu.add(newItem);<br>
+              fileMenu.add(openItem);<br>
+              fileMenu.add(saveItem);<br>
+              fileMenu.add(saveAsItem);<br>
+              fileMenu.addSeparator();<br>
+              fileMenu.add(exitItem);</p>
+            <p> newItem.setActionCommand(&quot;Create a New Document&quot;);<br>
+              openItem.setActionCommand(&quot;Open an Existing Document&quot;);<br>
+              saveItem.setActionCommand(&quot;Save Document&quot;);<br>
+              saveAsItem.setActionCommand(&quot;Save Document As ...&quot;);<br>
+              exitItem.setActionCommand(&quot;Exit the applet&quot;);</p>
+            <p> newItem.addChangeListener(listener);<br>
+              openItem.addChangeListener(listener);<br>
+              saveItem.addChangeListener(listener);<br>
+              saveAsItem.addChangeListener(listener);<br>
+              exitItem.addChangeListener(listener);</p>
+            <p> mb.add(fileMenu);<br>
+              setJMenuBar(mb);</p>
+            <p> exitItem.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              System.exit(0);<br>
+              }<br>
+              });<br>
+              }<br>
+              }<br>
+              class Listener implements ChangeListener {<br>
+              private JApplet applet;</p>
+            <p> public Listener(JApplet applet) {<br>
+              this.applet = applet;<br>
+              }<br>
+              public void stateChanged(ChangeEvent e) {<br>
+              JMenuItem b = (JMenuItem)e.getSource();</p>
+            <p> if(b.isArmed())<br>
+              applet.showStatus(b.getActionCommand());<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 10.3.4 JMenuItem类总结</p>
+            <p>&nbsp;</p>
+            <p> 10.3.5 AWT兼容</p>
+            <p>&nbsp;</p>
+            <p> 10.4 JCheckBoxMenuItem</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例10-6 实例化复选框菜单项</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class Test extends JApplet {<br>
+              public void init() {<br>
+              Container contentPane = getContentPane();</p>
+            <p> JMenuBar mb = new JMenuBar();<br>
+              JMenu checkBoxMenu = new JMenu(&quot;Endangered Species&quot;);</p>
+            <p> ImageIcon crabIcon = new ImageIcon(&quot;crab.gif&quot;);<br>
+              ImageIcon eagleIcon = new ImageIcon(&quot;eagle.gif&quot;);</p>
+            <p> JMenuItem <br>
+              crabItem = new JCheckBoxMenuItem(crabIcon),<br>
+              eagleItem = new JCheckBoxMenuItem(&quot;eagle&quot;, <br>
+              eagleIcon, true),<br>
+              ladybugItem = new JCheckBoxMenuItem(&quot;ladybug&quot;);</p>
+            <p> checkBoxMenu.add(crabItem);<br>
+              checkBoxMenu.add(eagleItem);<br>
+              checkBoxMenu.add(ladybugItem);</p>
+            <p> ladybugItem.setMnemonic('l');</p>
+            <p> mb.add(checkBoxMenu);<br>
+              setJMenuBar(mb);<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 10.4.1 JCheckBoxMenuItem属性</p>
+            <p>&nbsp;</p>
+            <p> 10.4.2 JCheckBoxMenuItem事件</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例10-7 访问JCheckBoxMenuItem状态</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import javax.swing.event.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class Test extends JApplet {<br>
+              private ImageIcon crabIcon = new ImageIcon(&quot;crab.gif&quot;);<br>
+              private ImageIcon eagleIcon = new ImageIcon(&quot;eagle.gif&quot;);</p>
+            <p> private JCheckBoxMenuItem <br>
+              crabItem = new JCheckBoxMenuItem(crabIcon),<br>
+              eagleItem = new JCheckBoxMenuItem(&quot;eagle&quot;, eagleIcon),<br>
+              ladybugItem = new JCheckBoxMenuItem(&quot;ladybug&quot;);</p>
+            <p> public void init() {<br>
+              Container contentPane = getContentPane();</p>
+            <p> JMenuBar mb = new JMenuBar();<br>
+              JMenu checkBoxMenu = new JMenu(&quot;Endangered Species&quot;);<br>
+              Listener listener = new Listener();</p>
+            <p> checkBoxMenu.add(crabItem);<br>
+              checkBoxMenu.add(eagleItem);<br>
+              checkBoxMenu.add(ladybugItem);</p>
+            <p> crabItem.addActionListener(listener);<br>
+              eagleItem.addActionListener(listener);<br>
+              ladybugItem.addActionListener(listener);</p>
+            <p> mb.add(checkBoxMenu);<br>
+              setJMenuBar(mb);<br>
+              }<br>
+              class Listener implements ActionListener {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              showStatus(&quot;crab: &quot; + crabItem.getState() + &quot;, &quot; 
+              +<br>
+              &quot;eagle: &quot; + eagleItem.getState() + &quot;, &quot; +<br>
+              &quot;ladybug: &quot; + ladybugItem.getState());<br>
+              }<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 10.4.3 JCheckBoxMenuItem类总结</p>
+            <p>&nbsp;</p>
+            <p> 10.4.4 AWT兼容</p>
+            <p>&nbsp;</p>
+            <p> 10.5 JRadioButtonMenuItem</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例10-8 实例化单选按钮菜单项</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import javax.swing.event.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class Test extends JApplet {<br>
+              public void init() {<br>
+              Container contentPane = getContentPane();</p>
+            <p> JMenuBar mb = new JMenuBar();<br>
+              JMenu radioMenu = new JMenu(&quot;Favorite Animal&quot;);</p>
+            <p> ImageIcon crabIcon = new ImageIcon(&quot;crab.gif&quot;);<br>
+              ImageIcon eagleIcon = new ImageIcon(&quot;eagle.gif&quot;);</p>
+            <p> final JMenuItem <br>
+              crabItem = new JRadioButtonMenuItem(crabIcon),<br>
+              eagleItem = new JRadioButtonMenuItem(&quot;eagle&quot;, <br>
+              eagleIcon),<br>
+              ladybugItem = new JRadioButtonMenuItem(&quot;ladybug&quot;);</p>
+            <p> radioMenu.add(crabItem);<br>
+              radioMenu.add(eagleItem);<br>
+              radioMenu.add(ladybugItem);</p>
+            <p> mb.add(radioMenu);<br>
+              setJMenuBar(mb);<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 10.5.1 JRadioButtonMenuItem属性</p>
+            <p>&nbsp;</p>
+            <p> 10.5.2 JRadioButtonMenuItem事件</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例10-9 为JRadioButton的实例监视事件</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import javax.swing.event.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class Test extends JApplet {<br>
+              private ImageIcon crabIcon = new ImageIcon(&quot;crab.gif&quot;, 
+              <br>
+              &quot;Crab&quot;);<br>
+              private ImageIcon eagleIcon = new ImageIcon(&quot;eagle.gif&quot;, 
+              <br>
+              &quot;Eagle&quot;);<br>
+              private JMenuItem <br>
+              crabItem = new JRadioButtonMenuItem(crabIcon),<br>
+              eagleItem = new JRadioButtonMenuItem(&quot;eagle&quot;, <br>
+              eagleIcon),<br>
+              ladybugItem = new JRadioButtonMenuItem(&quot;ladybug&quot;);</p>
+            <p> public void init() {<br>
+              Container contentPane = getContentPane();</p>
+            <p> JMenuBar mb = new JMenuBar();<br>
+              JMenu radioMenu = new JMenu(&quot;Favorite Animal&quot;);</p>
+            <p> AnItemListener itemListener = new AnItemListener();<br>
+              AnActionListener actionListener = new AnActionListener();<br>
+              AChangeListener changeListener = new AChangeListener();</p>
+            <p> radioMenu.add(crabItem);<br>
+              radioMenu.add(eagleItem);<br>
+              radioMenu.add(ladybugItem);</p>
+            <p> ButtonGroup group = new ButtonGroup();<br>
+              group.add(crabItem);<br>
+              group.add(eagleItem);<br>
+              group.add(ladybugItem);</p>
+            <p> mb.add(radioMenu);<br>
+              setJMenuBar(mb);</p>
+            <p> crabItem.addItemListener(itemListener);<br>
+              eagleItem.addItemListener(itemListener);<br>
+              ladybugItem.addItemListener(itemListener);</p>
+            <p> crabItem.addActionListener(actionListener);<br>
+              eagleItem.addActionListener(actionListener);<br>
+              ladybugItem.addActionListener(actionListener);</p>
+            <p> crabItem.addChangeListener(changeListener);<br>
+              eagleItem.addChangeListener(changeListener);<br>
+              ladybugItem.addChangeListener(changeListener);<br>
+              }<br>
+              private String getItemDescription(JMenuItem item) {<br>
+              String s;<br>
+              ImageIcon icon = (ImageIcon)item.getIcon();</p>
+            <p> if(icon != null) return icon.getDescription();<br>
+              else return item.getText();<br>
+              }</p>
+            <p> // Inner class event handlers follow ...</p>
+            <p> class AnActionListener implements ActionListener {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              JMenuItem item = (JMenuItem) e.getSource();<br>
+              String s = getItemDescription(item);<br>
+              showStatus(s + &quot; activated&quot;);</p>
+            <p> System.out.println(&quot;action event fired&quot;);<br>
+              }<br>
+              };<br>
+              class AChangeListener implements ChangeListener { <br>
+              public void stateChanged(ChangeEvent e) {<br>
+              Object[] selectedObjs = <br>
+              ladybugItem.getSelectedObjects();</p>
+            <p> if(selectedObjs == null)<br>
+              System.out.println(&quot;selected objs is null&quot;);<br>
+              else<br>
+              System.out.println(selectedObjs[0] + &quot;selected&quot;);</p>
+            <p> JMenuItem item = (JMenuItem)e.getSource();</p>
+            <p> if(item.isArmed()) {<br>
+              String s = getItemDescription(item);<br>
+              showStatus(s + &quot; armed&quot;);<br>
+              }<br>
+              System.out.println(&quot;change event fired&quot;);<br>
+              }<br>
+              };<br>
+              class AnItemListener implements ItemListener { <br>
+              public void itemStateChanged(ItemEvent e) {<br>
+              JMenuItem item = (JMenuItem) e.getSource();<br>
+              String s = getItemDescription(item);</p>
+            <p> if(e.getStateChange() == ItemEvent.SELECTED)<br>
+              s += &quot; selected&quot;;<br>
+              else<br>
+              s += &quot; deselected&quot;;</p>
+            <p> showStatus(s);<br>
+              System.out.println(&quot;item event fired&quot;);<br>
+              }<br>
+              };<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 10.5.3 JRadioButtonMenuItem类总结</p>
+            <p>&nbsp;</p>
+            <p> 10.5.4 AWT兼容</p>
+            <p>&nbsp;</p>
+            <p> 10.6 JMenu</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例10-10 JMenu的一个简单例子</b></p>
+            <hr noshade size="1">
+            <hr size="1" noshade>
+            <p> 10.6.1 动态修改菜单</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例10-11 一个自修改菜单</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import java.util.Vector;
+            <p>public class Test extends JApplet {<br>
+              private SelfModifyingMenu selfModifyingMenu;</p>
+            <p> public void init() {<br>
+              JMenuBar menuBar = new JMenuBar();<br>
+              createMenus(menuBar);<br>
+              setJMenuBar(menuBar);<br>
+              }<br>
+              public void createMenus(JMenuBar mbar) {<br>
+              mbar.add(createFileMenu());<br>
+              mbar.add(selfModifyingMenu = new SelfModifyingMenu());<br>
+              }<br>
+              private JMenu createFileMenu() {<br>
+              JMenu fileMenu = new JMenu(&quot;File&quot;); <br>
+              JMenuItem quitItem = new JMenuItem(&quot;Quit&quot;);</p>
+            <p> fileMenu.add(quitItem);</p>
+            <p> quitItem.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent event) {<br>
+              System.exit(0);<br>
+              }<br>
+              });<br>
+              return fileMenu;<br>
+              }<br>
+              }<br>
+              class SelfModifyingMenu extends JMenu {<br>
+              private Vector newItems = new Vector();<br>
+              private Listener menuItemListener = new Listener();<br>
+              private JMenuItem toggleItem, enablerItem, <br>
+              addItem, removeItem;</p>
+            <p> public SelfModifyingMenu() {<br>
+              super(&quot;Self Modifying Menu&quot;);</p>
+            <p> add(enablerItem = new JMenuItem(&quot;Disable Item Below&quot;));<br>
+              add(toggleItem = new JMenuItem(&quot;Enable/Disable Me&quot;));<br>
+              addSeparator();</p>
+            <p> add(addItem = new JMenuItem(&quot;Add a JMenuItem ...&quot;));<br>
+              add(removeItem = new JMenuItem(<br>
+              &quot;Remove last JMenuItem ...&quot;));<br>
+              addItem.setFont(new Font(&quot;Helvetica&quot;, Font.BOLD, 18));<br>
+              addSeparator();</p>
+            <p> enablerItem.addActionListener(menuItemListener);<br>
+              toggleItem.addActionListener(menuItemListener);<br>
+              addItem.addActionListener(menuItemListener);<br>
+              removeItem.addActionListener(menuItemListener);<br>
+              }<br>
+              public void addItem() {<br>
+              JMenuItem newItem = <br>
+              new JMenuItem(&quot;Extra Item #&quot; + newItems.size());<br>
+              <br>
+              add(newItem);<br>
+              newItems.addElement(newItem);<br>
+              }<br>
+              public void removeLastItem() {<br>
+              if(newItems.size() == 0)<br>
+              System.out.println(&quot;Nothing to remove!&quot;);<br>
+              else {<br>
+              JMenuItem removeMe = <br>
+              (JMenuItem)newItems.lastElement();</p>
+            <p> remove(removeMe);<br>
+              newItems.removeElement(removeMe);<br>
+              }<br>
+              }<br>
+              public void toggleItem() {<br>
+              if(toggleItem.isEnabled()) toggleItem.setEnabled(false);<br>
+              else toggleItem.setEnabled(true);<br>
+              }<br>
+              class Listener implements ActionListener {<br>
+              public void actionPerformed(ActionEvent event) {<br>
+              JMenuItem item = (JMenuItem)event.getSource();</p>
+            <p> if(item == enablerItem) {<br>
+              toggleItem();</p>
+            <p> if(toggleItem.isEnabled()) <br>
+              enablerItem.setText(&quot;Disable Item Below&quot;);<br>
+              else<br>
+              enablerItem.setText(&quot;Enable Item Below&quot;);<br>
+              }<br>
+              else if(item == addItem) addItem();<br>
+              else if(item == removeItem) removeLastItem();<br>
+              }<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 10.6.2 右拉式菜单</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例10-12 右拉式菜单</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class Test extends JApplet {</p>
+            <p> public void init() {<br>
+              JMenuBar menuBar = new JMenuBar();<br>
+              createMenus(menuBar);<br>
+              setJMenuBar(menuBar);<br>
+              }<br>
+              public void createMenus(JMenuBar mbar) {<br>
+              mbar.add(createFileMenu());<br>
+              mbar.add(createCascadingMenu());<br>
+              }<br>
+              private JMenu createFileMenu() {<br>
+              JMenu fileMenu = new JMenu(&quot;File&quot;); <br>
+              JMenuItem quitItem = new JMenuItem(&quot;Quit&quot;);</p>
+            <p> fileMenu.add(quitItem);</p>
+            <p> quitItem.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent event) {<br>
+              System.exit(0);<br>
+              }<br>
+              });<br>
+              return fileMenu;<br>
+              }<br>
+              private JMenu createCascadingMenu() {<br>
+              JMenu cascading = new JMenu(&quot;Cascading&quot;, true);<br>
+              JMenu submenu = new JMenu(&quot;pull right menu 1&quot;, true);<br>
+              JMenu subsubmenu = new JMenu(&quot;pull right menu 2&quot;, true);</p>
+            <p> submenu.add(&quot;submenu item 1&quot;);<br>
+              submenu.add(&quot;submenu item 2&quot;);<br>
+              submenu.add(&quot;submenu item 3&quot;);<br>
+              submenu.add(&quot;submenu item 4&quot;);<br>
+              submenu.add(&quot;submenu item 5&quot;);</p>
+            <p> subsubmenu.add(&quot;subsubmenu item 1&quot;);<br>
+              subsubmenu.add(&quot;subsubmenu item 2&quot;);<br>
+              subsubmenu.add(&quot;subsubmenu item 3&quot;);<br>
+              subsubmenu.add(&quot;subsubmenu item 4&quot;);<br>
+              subsubmenu.add(&quot;subsubmenu item 5&quot;);</p>
+            <p> submenu.add(subsubmenu);<br>
+              cascading.add(submenu);</p>
+            <p> return cascading;<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 10.6.3 JMenu属性</p>
+            <p>&nbsp;</p>
+            <p> 10.6.4 JMenu事件</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例10-13 监听菜单事件</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import javax.swing.event.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class Test extends JApplet {<br>
+              public void init() {<br>
+              JMenuBar mb = new JMenuBar();<br>
+              JMenu fileMenu = new JMenu(&quot;File&quot;);</p>
+            <p> fileMenu.add(&quot;New ...&quot;);<br>
+              fileMenu.add(&quot;Open ...&quot;);<br>
+              fileMenu.add(&quot;Save&quot;);<br>
+              fileMenu.add(&quot;Save As ..&quot;);<br>
+              fileMenu.addSeparator();<br>
+              fileMenu.add(&quot;Exit&quot;);</p>
+            <p> mb.add(fileMenu);<br>
+              setJMenuBar(mb);</p>
+            <p> fileMenu.addMenuListener(new MenuListener() {<br>
+              public void menuCanceled(MenuEvent e) {<br>
+              System.out.println(&quot;menu canceled&quot;);<br>
+              }<br>
+              public void menuSelected(MenuEvent e) {<br>
+              System.out.println(&quot;menu selected&quot;);<br>
+              }<br>
+              public void menuDeselected(MenuEvent e) {<br>
+              System.out.println(&quot;menu deselected&quot;);<br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p align="center">&nbsp; </p>
+            <p> 10.6.5 JMenu类总结</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例10-14 显示一个菜单条中菜单的信息</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class Test extends JApplet {<br>
+              public void init() {<br>
+              Container contentPane = getContentPane();</p>
+            <p> final JMenuBar mb = new JMenuBar();<br>
+              final MenuBarPrinter printer = new MenuBarPrinter();</p>
+            <p> JMenu fileMenu = new JMenu(&quot;File&quot;);<br>
+              JMenu editMenu = new JMenu(&quot;Edit&quot;);<br>
+              JMenuItem exitItem = new JMenuItem(&quot;Exit&quot;);</p>
+            <p> fileMenu.setMnemonic('F');<br>
+              editMenu.setMnemonic('F');</p>
+            <p> fileMenu.add(&quot;New ...&quot;);<br>
+              fileMenu.add(&quot;Open ...&quot;);<br>
+              fileMenu.add(&quot;Save&quot;);<br>
+              fileMenu.add(&quot;Save As ..&quot;);<br>
+              fileMenu.addSeparator();<br>
+              fileMenu.add(exitItem);</p>
+            <p> editMenu.add(&quot;Cut&quot;);<br>
+              editMenu.add(&quot;Copy&quot;);<br>
+              editMenu.add(&quot;Paste&quot;);</p>
+            <p> mb.add(fileMenu);<br>
+              mb.add(editMenu);<br>
+              setJMenuBar(mb);</p>
+            <p> JButton button = new JButton(&quot;show menu information&quot;);<br>
+              contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(button);</p>
+            <p> button.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              printer.print(mb);<br>
+              }<br>
+              });</p>
+            <p> exitItem.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              System.exit(0);<br>
+              }<br>
+              });<br>
+              }<br>
+              }<br>
+              class MenuBarPrinter {<br>
+              static public void print(JMenuBar menubar) {<br>
+              int numMenus = menubar.getMenuCount();<br>
+              JMenu nextMenu;<br>
+              <br>
+              JMenuItem nextItem;</p>
+            <p> System.out.println();<br>
+              System.out.println(&quot;MenuBar has &quot; + <br>
+              menubar.getMenuCount() + <br>
+              &quot; menus&quot;);<br>
+              System.out.println();</p>
+            <p> for(int i=0; i &lt; numMenus; ++i) {<br>
+              nextMenu = menubar.getMenu(i);<br>
+              System.out.println(nextMenu.getText() + &quot; menu ...&quot;);<br>
+              System.out.println(nextMenu);</p>
+            <p> int numItems = nextMenu.getItemCount();</p>
+            <p> for(int j=0; j &lt; numItems; ++j) {<br>
+              nextItem = nextMenu.getItem(j);<br>
+              System.out.println(nextItem);<br>
+              }<br>
+              System.out.println();<br>
+              }<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 10.6.6 AWT兼容</p>
+            <p>&nbsp;</p>
+            <p> 10.7 菜单元素</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例10-15 实现定制菜单元素</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import java.util.*;
+            <p>public class Test extends JApplet {<br>
+              public void init() {<br>
+              Container contentPane = getContentPane();<br>
+              JMenuBar menuBar = new JMenuBar();<br>
+              JMenu fileMenu = new JMenu(&quot;File&quot;);</p>
+            <p> fileMenu.add(new UnderlineElement(&quot;item one&quot;));<br>
+              fileMenu.add(new UnderlineElement(&quot;item two&quot;));<br>
+              fileMenu.add(new UnderlineElement(&quot;item three&quot;));</p>
+            <p> menuBar.add(fileMenu);<br>
+              setJMenuBar(menuBar);<br>
+              }<br>
+              }<br>
+              class UnderlineElement extends JButton implements MenuElement {<br>
+              private boolean drawUnderline = false;</p>
+            <p> public UnderlineElement(String s) {<br>
+              super(s);<br>
+              setBorder(BorderFactory.createEmptyBorder(2,2,2,2));<br>
+              }<br>
+              public Component getComponent() {<br>
+              return this;<br>
+              }<br>
+              public MenuElement[] getSubElements() {<br>
+              return new MenuElement[0];<br>
+              }<br>
+              public void menuSelectionChanged(boolean b) {<br>
+              drawUnderline = b;<br>
+              repaint();<br>
+              }<br>
+              public void paintComponent(Graphics g) {<br>
+              super.paintComponent(g);</p>
+            <p> Insets insets = getInsets();</p>
+            <p> if(drawUnderline) {<br>
+              FontMetrics fm = g.getFontMetrics();<br>
+              g.drawLine(insets.left, insets.top + fm.getHeight(),<br>
+              fm.stringWidth(getText()), <br>
+              insets.top + fm.getHeight());<br>
+              }<br>
+              }<br>
+              public void processKeyEvent(KeyEvent me,<br>
+              MenuElement[] element, <br>
+              MenuSelectionManager msm) {<br>
+              }<br>
+              public void processMouseEvent(MouseEvent me) {<br>
+              super.processMouseEvent(me);<br>
+              MenuSelectionManager.defaultManager().processMouseEvent(<br>
+              me);<br>
+              }<br>
+              public void processMouseEvent(MouseEvent me, <br>
+              MenuElement[] element, <br>
+              MenuSelectionManager msm) {<br>
+              if(me.getID() == MouseEvent.MOUSE_CLICKED || <br>
+              me.getID() == MouseEvent.MOUSE_RELEASED) {</p>
+            <p> msm.setSelectedPath(null);<br>
+              doClick();<br>
+              }<br>
+              else<br>
+              msm.setSelectedPath(getPath());<br>
+              }<br>
+              public MenuElement[] getPath() {<br>
+              MenuSelectionManager defaultManager = <br>
+              MenuSelectionManager.defaultManager();<br>
+              MenuElement oldPath[] = defaultManager.getSelectedPath();<br>
+              MenuElement newPath[];<br>
+              int len = oldPath.length;</p>
+            <p> if(len &gt; 0) {<br>
+              MenuElement lastElement = oldPath[len-1];<br>
+              Component parent = getParent();</p>
+            <p> if (lastElement == parent) {<br>
+              newPath = new MenuElement[len+1];</p>
+            <p> System.arraycopy(oldPath, 0, newPath, 0, len);<br>
+              newPath[len] = this;<br>
+              }<br>
+              else {<br>
+              int j;</p>
+            <p> for (j = len-1; j &gt;= 0; j--) {<br>
+              if (oldPath[j].getComponent() == parent)<br>
+              break;<br>
+              }<br>
+              newPath = new MenuElement[j+2];<br>
+              System.arraycopy(oldPath, 0, newPath, 0, j+1);<br>
+              newPath[j+1] = this;<br>
+              }<br>
+              }<br>
+              else<br>
+              return new MenuElement[0];</p>
+            <p> return newPath;<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 10.8 JPopupMenu</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例10-16 使用弹出式菜单</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import javax.swing.event.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class Test extends JApplet {<br>
+              public void init() {<br>
+              Container contentPane = getContentPane();<br>
+              final JLabel label = new JLabel(&quot;Click here for popup&quot;);<br>
+              final JPopupMenu popup = new JPopupMenu();<br>
+              final JSlider slider = new JSlider();</p>
+            <p> popup.add(new JMenuItem(&quot;Copy&quot;, new ImageIcon(this.getClass().getResource(&quot;copy.gif&quot;))));<br>
+              popup.add(new CutAction(new ImageIcon(this.getClass().getResource(&quot;cut.gif&quot;))));<br>
+              popup.addSeparator();<br>
+              popup.add(slider);</p>
+            <p> label.addMouseListener(new MouseAdapter() {<br>
+              public void mousePressed (MouseEvent e) { <br>
+              popup.show(label, e.getX(), e.getY());<br>
+              }<br>
+              });<br>
+              slider.addChangeListener(new ChangeListener() {<br>
+              public void stateChanged(ChangeEvent e) {<br>
+              if( ! slider.getValueIsAdjusting())<br>
+              popup.setVisible(false);<br>
+              }<br>
+              });</p>
+            <p> label.setHorizontalAlignment(JLabel.CENTER);<br>
+              contentPane.add(label, BorderLayout.CENTER);<br>
+              }<br>
+              class CutAction extends AbstractAction {<br>
+              java.net.URL iconurl;<br>
+              <br>
+              public CutAction(Icon icon) {<br>
+              //super(&quot;Cut&quot;, new ImageIcon(&quot;cut.gif&quot;));<br>
+              super(&quot;Cut&quot;,icon);<br>
+              }<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              System.out.println(&quot;cut&quot;);<br>
+              }<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 10.8.1 弹出式菜单触发器</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例10-17 显示一个弹出式菜单以响应弹出式菜单触发器</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class Test extends JApplet {<br>
+              private JPopupMenu popup = new JPopupMenu();</p>
+            <p> public void init() {<br>
+              Container contentPane = getContentPane();</p>
+            <p> popup.add(new JMenuItem(&quot;item one&quot;));<br>
+              popup.add(new JMenuItem(&quot;item two&quot;));<br>
+              popup.add(new JMenuItem(&quot;item three&quot;));<br>
+              popup.add(new JMenuItem(&quot;item four&quot;));</p>
+            <p> contentPane.addMouseListener(new MouseAdapter() {<br>
+              public void mousePressed (MouseEvent e) { <br>
+              showPopup(e); <br>
+              }<br>
+              public void mouseClicked (MouseEvent e) { <br>
+              showPopup(e); <br>
+              }<br>
+              public void mouseReleased(MouseEvent e) { <br>
+              showPopup(e); <br>
+              }<br>
+              });<br>
+              }<br>
+              void showPopup(MouseEvent e) {<br>
+              if(e.isPopupTrigger())<br>
+              popup.show(this, e.getX(), e.getY());<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 10.8.2 轻量/中量/重量弹出式菜单</p>
+            <p>&nbsp;</p>
+            <p> 10.8.3 弹出式菜单调用者</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例10-18 相对于其调用者显示弹出式菜单</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class Test extends JApplet {<br>
+              JComboBox combobox = new JComboBox();<br>
+              JPopupMenu popup = new JPopupMenu();<br>
+              ColoredCanvas popupRelativeToMe;<br>
+              ColoredCanvas blueCanvas, redCanvas, yellowCanvas;</p>
+            <p> public void init() {<br>
+              Container contentPane = getContentPane();<br>
+              blueCanvas = new ColoredCanvas(Color.blue);<br>
+              redCanvas = new ColoredCanvas(Color.red);<br>
+              yellowCanvas = new ColoredCanvas(Color.yellow);<br>
+              popupRelativeToMe = blueCanvas;</p>
+            <p> popup.add(new JMenuItem(&quot;item one&quot;));<br>
+              popup.add(new JMenuItem(&quot;item two&quot;));<br>
+              popup.add(new JMenuItem(&quot;item three&quot;));<br>
+              popup.add(new JMenuItem(&quot;item four&quot;));</p>
+            <p> contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(new JLabel(&quot;Popup Over:&quot;));<br>
+              contentPane.add(combobox); <br>
+              contentPane.add(blueCanvas);<br>
+              contentPane.add(redCanvas);<br>
+              contentPane.add(yellowCanvas);</p>
+            <p> combobox.addItem(&quot;Blue Canvas&quot;);<br>
+              combobox.addItem(&quot;Yellow Canvas&quot;);<br>
+              combobox.addItem(&quot;Red Canvas&quot;);</p>
+            <p> combobox.addItemListener(new ItemListener() {<br>
+              public void itemStateChanged(ItemEvent event) {<br>
+              if(event.getStateChange() == ItemEvent.SELECTED) {<br>
+              JComboBox c = (JComboBox)event.getSource();<br>
+              String label = (String)c.getSelectedItem();</p>
+            <p> if(label.equals(&quot;Blue Canvas&quot;))<br>
+              popupRelativeToMe = blueCanvas;<br>
+              else if(label.equals(&quot;Red Canvas&quot;))<br>
+              popupRelativeToMe = redCanvas;<br>
+              else if(label.equals(&quot;Yellow Canvas&quot;))<br>
+              popupRelativeToMe = yellowCanvas;</p>
+            <p> popup.show(popupRelativeToMe, 5, 5);<br>
+              }<br>
+              }<br>
+              });<br>
+              }<br>
+              }<br>
+              class ColoredCanvas extends JPanel {<br>
+              private Color color;</p>
+            <p> public ColoredCanvas(Color color) {<br>
+              this.color = color;<br>
+              }<br>
+              public void paintComponent(Graphics g) {<br>
+              super.paintComponent(g);</p>
+            <p> Dimension size = getSize();<br>
+              g.setColor (color);<br>
+              g.fill3DRect(0,0,size.width-1,size.height-1,true);<br>
+              }<br>
+              public Dimension getPreferredSize() {<br>
+              return new Dimension(100,100);<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 10.8.4 JPopupMenu属性</p>
+            <p>&nbsp;</p>
+            <p> 10.8.5 JPopupMenu事件</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例10-19 弹出式菜单事件的清单</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import javax.swing.event.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import java.beans.*;
+            <p>public class Test extends JApplet {<br>
+              public void init() {<br>
+              final Container contentPane = getContentPane();<br>
+              final JPopupMenu popup = new JPopupMenu();<br>
+              <br>
+              popup.add(new JMenuItem(&quot;item one&quot;));<br>
+              popup.add(new JMenuItem(&quot;item two&quot;));<br>
+              popup.add(new JMenuItem(&quot;item three&quot;));<br>
+              popup.add(new JMenuItem(&quot;item four&quot;));</p>
+            <p> popup.addPopupMenuListener(new PopupMenuListener() {<br>
+              public void popupMenuCanceled(PopupMenuEvent e) {<br>
+              showStatus(&quot;menu canceled&quot;);<br>
+              }<br>
+              public void popupMenuWillBecomeVisible(<br>
+              PopupMenuEvent e) {<br>
+              showStatus(&quot;menu will become visible&quot;);<br>
+              }<br>
+              public void popupMenuWillBecomeInvisible(<br>
+              PopupMenuEvent e) {<br>
+              showStatus(&quot;menu will become invisible&quot;);<br>
+              }<br>
+              });<br>
+              addMouseListener(new MouseAdapter() {<br>
+              public void mousePressed (MouseEvent e) { <br>
+              popup.show(contentPane, e.getX(), e.getY());<br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 10.8.6 JPopupMenu类总结</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例10-20 为弹出式菜单设置位置、边框和调用者</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class Test extends JApplet {<br>
+              private JPopupMenu popup = new JPopupMenu();</p>
+            <p> public void init() {<br>
+              Container contentPane = getContentPane();<br>
+              JLabel label = new JLabel(&quot;Click To Show Popup&quot;);</p>
+            <p> popup.add(new JMenuItem(&quot;item one&quot;));<br>
+              popup.add(new JMenuItem(&quot;item two&quot;));<br>
+              popup.add(new JMenuItem(&quot;item three&quot;));<br>
+              popup.add(new JMenuItem(&quot;item four&quot;));</p>
+            <p> label.setHorizontalAlignment(JLabel.CENTER);<br>
+              contentPane.add(label, BorderLayout.CENTER);</p>
+            <p> label.addMouseListener(new MouseAdapter() {<br>
+              public void mousePressed(MouseEvent e) {<br>
+              //if(e.isPopupTrigger()) {<br>
+              popup.setVisible(true);<br>
+              //}<br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 10.8.7 AWT兼容</p>
+            <p>&nbsp;</p>
+            <p> 10.9 JMenuBar</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例10-21 一个简单的菜单栏</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import java.util.*;
+            <p>public class Test extends JFrame {<br>
+              public Test() {<br>
+              final JMenuBar mb = new JMenuBar();<br>
+              final JMenu fileMenu = new JMenu(&quot;File&quot;);<br>
+              JMenuItem exitItem = new JMenuItem(&quot;Exit&quot;);</p>
+            <p> fileMenu.add(&quot;New ...&quot;);<br>
+              fileMenu.add(&quot;Open ...&quot;);<br>
+              fileMenu.add(&quot;Save&quot;);<br>
+              fileMenu.add(&quot;Save As ..&quot;);<br>
+              fileMenu.addSeparator();<br>
+              fileMenu.add(exitItem);</p>
+            <p> mb.add(new JLabel(<br>
+              new ImageIcon(&quot;smiley_face_small.gif&quot;)));</p>
+            <p> mb.add(fileMenu);</p>
+            <p> // Either one of the following two lines will <br>
+              // attach the menu bar to the application<br>
+              //setJMenuBar(mb);<br>
+              getRootPane().setJMenuBar(mb);</p>
+            <p> exitItem.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              dispose();<br>
+              System.exit(0);<br>
+              }<br>
+              });<br>
+              System.out.println(&quot;component count: &quot; + <br>
+              mb.getComponentCount());<br>
+              System.out.println(&quot;first component: &quot; + <br>
+              (mb.getComponentAtIndex(0)).getClass().getName());</p>
+            <p> System.out.println(&quot;menu count: &quot; + (mb.getMenuCount()));</p>
+            <p> JMenu menu = mb.getMenu(0);<br>
+              if(menu == null) System.out.println(&quot;null menu&quot;);<br>
+              else System.out.println(&quot;got menu&quot;);<br>
+              }<br>
+              public static void main(String args[]) {<br>
+              GJApp.launch(new Test(), <br>
+              &quot;A Menu Bar&quot;,300,300,300,250); <br>
+              }<br>
+              }<br>
+              class GJApp extends WindowAdapter {<br>
+              static private JPanel statusArea = new JPanel();<br>
+              static private JLabel status = new JLabel(&quot; &quot;);<br>
+              static private ResourceBundle resources;</p>
+            <p> public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h) {<br>
+              launch(f,title,x,y,w,h,null); <br>
+              }<br>
+              public static void launch(final JFrame f, String title,<br>
+              final int x, final int y, <br>
+              final int w, int h,<br>
+              String propertiesFilename) {<br>
+              f.setTitle(title);<br>
+              f.setBounds(x,y,w,h);<br>
+              f.setVisible(true);</p>
+            <p> statusArea.setBorder(BorderFactory.createEtchedBorder());<br>
+              statusArea.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));<br>
+              statusArea.add(status);<br>
+              status.setHorizontalAlignment(JLabel.LEFT);</p>
+            <p> f.setDefaultCloseOperation(<br>
+              WindowConstants.DISPOSE_ON_CLOSE);</p>
+            <p> if(propertiesFilename != null) {<br>
+              resources = ResourceBundle.getBundle(<br>
+              propertiesFilename, Locale.getDefault());<br>
+              }</p>
+            <p> f.addWindowListener(new WindowAdapter() {<br>
+              public void windowClosed(WindowEvent e) {<br>
+              System.exit(0);<br>
+              }<br>
+              });<br>
+              }<br>
+              static public JPanel getStatusArea() {<br>
+              return statusArea;<br>
+              }<br>
+              static public void showStatus(String s) {<br>
+              status.setText(s);<br>
+              }<br>
+              static Object getResource(String key) {<br>
+              if(resources != null) {<br>
+              return resources.getString(key);<br>
+              }<br>
+              return null;<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 10.9.1 菜单栏菜单和组件</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例10-22 菜单栏中的菜单和组件</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class Test extends JApplet {<br>
+              public void init() {<br>
+              Container contentPane = getContentPane();</p>
+            <p> final JMenuBar mb = new JMenuBar();<br>
+              JMenu fileMenu = new JMenu(&quot;File&quot;);<br>
+              JMenu editMenu = new JMenu(&quot;Edit&quot;);<br>
+              JMenuItem exitItem = new JMenuItem(&quot;Exit&quot;);<br>
+              JButton compButton = new JButton(<br>
+              &quot;show menubar components ...&quot;);<br>
+              JButton menuButton = new JButton(<br>
+              &quot;show menubar menus ...&quot;);</p>
+            <p> fileMenu.add(&quot;New ...&quot;);<br>
+              fileMenu.add(&quot;Open ...&quot;);<br>
+              fileMenu.add(&quot;Save&quot;);<br>
+              fileMenu.add(&quot;Save As ..&quot;);<br>
+              fileMenu.addSeparator();<br>
+              fileMenu.add(exitItem);</p>
+            <p> editMenu.add(&quot;Undo&quot;);<br>
+              editMenu.addSeparator();<br>
+              editMenu.add(&quot;Cut&quot;);<br>
+              editMenu.add(&quot;Copy&quot;);<br>
+              editMenu.add(&quot;Paste&quot;);</p>
+            <p> mb.setMargin(new Insets(30,20,10,5));<br>
+              mb.add(new JLabel(new ImageIcon(&quot;smiley.gif&quot;)));<br>
+              mb.add(fileMenu);<br>
+              mb.add(editMenu);</p>
+            <p> setJMenuBar(mb);<br>
+              contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(compButton);<br>
+              contentPane.add(menuButton);</p>
+            <p> exitItem.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              System.exit(0);<br>
+              }<br>
+              });<br>
+              menuButton.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              Component c;<br>
+              int cnt = mb.getMenuCount();</p>
+            <p> for(int i=0; i &lt; cnt; ++i) {<br>
+              c = mb.getMenu(i);<br>
+              System.out.println(c);<br>
+              System.out.println();<br>
+              }<br>
+              }<br>
+              });<br>
+              compButton.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              Component c;<br>
+              int cnt = mb.getComponentCount();</p>
+            <p> for(int i=0; i &lt; cnt; ++i) {<br>
+              c = mb.getComponentAtIndex(i);<br>
+              System.out.println(c);<br>
+              System.out.println();<br>
+              }<br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 10.9.2 JMenuBar属性</p>
+            <p>&nbsp;</p>
+            <p> 10.9.3 JMenuBar事件</p>
+            <p>&nbsp;</p>
+            <p> 10.9.4JMenuBar类总结</p>
+            <p>&nbsp;</p>
+            <p> 10.9.5 AWT兼容</p>
+            <p>&nbsp;</p>
+            <p> 10.10 JToolBar</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例10-23 把组件添加到一个菜单栏中</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              public Test() {<br>
+              Container contentPane = getContentPane();<br>
+              JToolBar tb = new JToolBar();<br>
+              JComboBox fontCombo = new JComboBox(),<br>
+              fontSizeCombo = new JComboBox();</p>
+            <p> JButton newButton = new JButton(new ImageIcon(&quot;new.gif&quot;)),<br>
+              openButton = new JButton(new ImageIcon(&quot;open.gif&quot;)),<br>
+              cutButton = new JButton(new ImageIcon(&quot;cut.gif&quot;)),<br>
+              copyButton = new JButton(new ImageIcon(&quot;copy.gif&quot;)),<br>
+              pasteButton = new JButton(new ImageIcon(&quot;paste.gif&quot;));</p>
+            <p> fontCombo.addItem(&quot;Helvetica&quot;);<br>
+              fontCombo.addItem(&quot;Palatino&quot;);<br>
+              fontCombo.addItem(&quot;Courier&quot;);<br>
+              fontCombo.addItem(&quot;Times&quot;);<br>
+              fontCombo.addItem(&quot;Times-Roman&quot;);</p>
+            <p> fontSizeCombo.addItem(&quot;10&quot;);<br>
+              fontSizeCombo.addItem(&quot;12&quot;);<br>
+              fontSizeCombo.addItem(&quot;14&quot;);<br>
+              fontSizeCombo.addItem(&quot;16&quot;);<br>
+              fontSizeCombo.addItem(&quot;18&quot;);</p>
+            <p> tb.add(newButton);<br>
+              tb.add(openButton);</p>
+            <p> tb.addSeparator();</p>
+            <p> tb.add(cutButton);<br>
+              tb.add(copyButton);<br>
+              tb.add(pasteButton);</p>
+            <p> tb.addSeparator();</p>
+            <p> tb.add(fontCombo);<br>
+              tb.add(fontSizeCombo);</p>
+            <p> contentPane.setLayout(new BorderLayout());<br>
+              contentPane.add(tb, BorderLayout.NORTH);<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p align="center"><b>例10-24 把组件添加到一个工具条中</b>(方法2)</p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              public Test() {<br>
+              Container contentPane = getContentPane();<br>
+              JToolBar tb = new JToolBar();<br>
+              JComboBox fontCombo = new JComboBox(),<br>
+              fontSizeCombo = new JComboBox();</p>
+            <p> JButton newButton = new JButton(new ImageIcon(&quot;new.gif&quot;)),<br>
+              openButton = new JButton(new ImageIcon(&quot;open.gif&quot;)),<br>
+              cutButton = new JButton(new ImageIcon(&quot;cut.gif&quot;)),<br>
+              copyButton = new JButton(new ImageIcon(&quot;copy.gif&quot;)),<br>
+              pasteButton = new JButton(new ImageIcon(&quot;paste.gif&quot;));</p>
+            <p> fontCombo.addItem(&quot;Helvetica&quot;);<br>
+              fontCombo.addItem(&quot;Palatino&quot;);<br>
+              fontCombo.addItem(&quot;Courier&quot;);<br>
+              fontCombo.addItem(&quot;Times&quot;);<br>
+              fontCombo.addItem(&quot;Times-Roman&quot;);</p>
+            <p> fontSizeCombo.addItem(&quot;10&quot;);<br>
+              fontSizeCombo.addItem(&quot;12&quot;);<br>
+              fontSizeCombo.addItem(&quot;14&quot;);<br>
+              fontSizeCombo.addItem(&quot;16&quot;);<br>
+              fontSizeCombo.addItem(&quot;18&quot;);</p>
+            <p> tb.add(newButton);<br>
+              tb.add(openButton);</p>
+            <p> tb.addSeparator();</p>
+            <p> tb.add(cutButton);<br>
+              tb.add(copyButton);<br>
+              tb.add(pasteButton);</p>
+            <p> tb.addSeparator();</p>
+            <p> tb.add(fontCombo);<br>
+              tb.add(fontSizeCombo);</p>
+            <p> newButton.setAlignmentY(0.5f);<br>
+              openButton.setAlignmentY(0.5f);<br>
+              cutButton.setAlignmentY(0.5f);<br>
+              copyButton.setAlignmentY(0.5f);<br>
+              pasteButton.setAlignmentY(0.5f);</p>
+            <p> newButton.setAlignmentX(0.5f);<br>
+              openButton.setAlignmentX(0.5f);<br>
+              cutButton.setAlignmentX(0.5f);<br>
+              copyButton.setAlignmentX(0.5f);<br>
+              pasteButton.setAlignmentX(0.5f);</p>
+            <p> fontCombo.setMaximumSize(fontCombo.getPreferredSize());<br>
+              fontSizeCombo.setMaximumSize(<br>
+              fontSizeCombo.getPreferredSize());</p>
+            <p> contentPane.setLayout(new BorderLayout());<br>
+              contentPane.add(tb, BorderLayout.NORTH);<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p>&nbsp;</p>
+            <p> 10.10.1 滚过式工具条</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例10-25 JTooBar.isRollover属性</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class Test extends JApplet {<br>
+              public void init() {<br>
+              Container contentPane = getContentPane();<br>
+              JToolBar toolbar = new JToolBar();</p>
+            <p> toolbar.add(new NewAction());<br>
+              toolbar.add(new OpenAction());<br>
+              toolbar.addSeparator();<br>
+              toolbar.add(new CutAction());<br>
+              toolbar.add(new CopyAction());<br>
+              toolbar.add(new PasteAction());</p>
+            <p> toolbar.putClientProperty(&quot;JToolBar.isRollover&quot;, <br>
+              Boolean.TRUE);</p>
+            <p> contentPane.add(toolbar, BorderLayout.NORTH);<br>
+              }<br>
+              class NewAction extends AbstractAction {<br>
+              public NewAction() {<br>
+              putValue(Action.SMALL_ICON, <br>
+              new ImageIcon(&quot;new.gif&quot;));<br>
+              }<br>
+              public void actionPerformed(ActionEvent event) {<br>
+              showStatus(&quot;new&quot;);<br>
+              }<br>
+              }<br>
+              class OpenAction extends AbstractAction {<br>
+              public OpenAction() {<br>
+              putValue(Action.SMALL_ICON, <br>
+              new ImageIcon(&quot;open.gif&quot;));<br>
+              }<br>
+              public void actionPerformed(ActionEvent event) {<br>
+              showStatus(&quot;open&quot;);<br>
+              }<br>
+              }<br>
+              class CutAction extends AbstractAction {<br>
+              public CutAction() {<br>
+              putValue(Action.SMALL_ICON, new ImageIcon(&quot;cut.gif&quot;));<br>
+              }<br>
+              public void actionPerformed(ActionEvent event) {<br>
+              showStatus(&quot;cut&quot;);<br>
+              }<br>
+              }<br>
+              class CopyAction extends AbstractAction {<br>
+              public CopyAction() {<br>
+              putValue(Action.SMALL_ICON, <br>
+              new ImageIcon(&quot;copy.gif&quot;));<br>
+              }<br>
+              public void actionPerformed(ActionEvent event) {<br>
+              showStatus(&quot;copy&quot;);<br>
+              }<br>
+              }<br>
+              class PasteAction extends AbstractAction {<br>
+              public PasteAction() {<br>
+              putValue(Action.SMALL_ICON, <br>
+              new ImageIcon(&quot;paste.gif&quot;));<br>
+              }<br>
+              public void actionPerformed(ActionEvent event) {<br>
+              showStatus(&quot;paste&quot;);<br>
+              }<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 10.10.2 在工具条中使用动作</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例10-26 把动作添加到一个工具条中</b></p>
+            <hr noshade size="1">
+            import javax.swing.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class Test extends JApplet {<br>
+              public void init() {<br>
+              Container contentPane = getContentPane();<br>
+              JToolBar toolbar = new JToolBar();</p>
+            <p> toolbar.add(new NewAction());<br>
+              toolbar.add(new OpenAction());<br>
+              toolbar.addSeparator();<br>
+              toolbar.add(new CutAction());<br>
+              toolbar.add(new CopyAction());<br>
+              toolbar.add(new PasteAction());</p>
+            <p> contentPane.add(toolbar, BorderLayout.NORTH);<br>
+              }<br>
+              class NewAction extends AbstractAction {<br>
+              public NewAction() {<br>
+              super(&quot;new&quot;, new ImageIcon(&quot;new.gif&quot;));<br>
+              }<br>
+              public void actionPerformed(ActionEvent event) {<br>
+              showStatus(&quot;new&quot;);<br>
+              }<br>
+              }<br>
+              class OpenAction extends AbstractAction {<br>
+              public OpenAction() {<br>
+              putValue(Action.SMALL_ICON, <br>
+              new ImageIcon(&quot;open.gif&quot;));<br>
+              }<br>
+              public void actionPerformed(ActionEvent event) {<br>
+              showStatus(&quot;open&quot;);<br>
+              }<br>
+              }<br>
+              class CutAction extends AbstractAction {<br>
+              public CutAction() {<br>
+              super(&quot;cut&quot;, new ImageIcon(&quot;cut.gif&quot;));<br>
+              putValue(Action.SMALL_ICON, new ImageIcon(&quot;cut.gif&quot;));<br>
+              }<br>
+              public void actionPerformed(ActionEvent event) {<br>
+              showStatus(&quot;cut&quot;);<br>
+              }<br>
+              }<br>
+              class CopyAction extends AbstractAction {<br>
+              public CopyAction() {<br>
+              putValue(Action.SMALL_ICON, <br>
+              new ImageIcon(&quot;copy.gif&quot;));<br>
+              }<br>
+              public void actionPerformed(ActionEvent event) {<br>
+              showStatus(&quot;copy&quot;);<br>
+              }<br>
+              }<br>
+              class PasteAction extends AbstractAction {<br>
+              public PasteAction() {<br>
+              putValue(Action.SMALL_ICON, <br>
+              new ImageIcon(&quot;paste.gif&quot;));<br>
+              }<br>
+              public void actionPerformed(ActionEvent event) {<br>
+              showStatus(&quot;paste&quot;);<br>
+              }<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 10.10.3 浮动工具条</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例10-27 固定位置的工具提示</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              public Test() {<br>
+              Container contentPane = getContentPane();<br>
+              JToolBar toolbar = new JToolBar();</p>
+            <p> String[] tooltipTexts = { &quot;new&quot;, &quot;open&quot;, &quot;cut&quot;, 
+              &quot;copy&quot;,<br>
+              &quot;paste&quot; <br>
+              };<br>
+              <br>
+              ImageIcon[] icons = { <br>
+              new ImageIcon(&quot;new.gif&quot;),<br>
+              new ImageIcon(&quot;open.gif&quot;),<br>
+              new ImageIcon(&quot;cut.gif&quot;),<br>
+              new ImageIcon(&quot;copy.gif&quot;),<br>
+              new ImageIcon(&quot;paste.gif&quot;) <br>
+              };</p>
+            <p> JButton[] buttons = { <br>
+              new ButtonWithFixedTooltip(icons[0],tooltipTexts[0]), <br>
+              new ButtonWithFixedTooltip(icons[1],tooltipTexts[1]), <br>
+              new ButtonWithFixedTooltip(icons[2],tooltipTexts[2]), <br>
+              new ButtonWithFixedTooltip(icons[3],tooltipTexts[3]), <br>
+              new ButtonWithFixedTooltip(icons[4],tooltipTexts[4]) <br>
+              };</p>
+            <p> for(int i=0; i &lt; buttons.length; ++i) {<br>
+              toolbar.add(buttons[i]);</p>
+            <p> if(tooltipTexts[i].equals(&quot;open&quot;))<br>
+              toolbar.addSeparator();<br>
+              }<br>
+              contentPane.add(toolbar, BorderLayout.NORTH);<br>
+              }<br>
+              }<br>
+              class ButtonWithFixedTooltip extends JButton { <br>
+              public ButtonWithFixedTooltip(Icon icon, String tooltipText) {<br>
+              super(icon);<br>
+              setToolTipText(tooltipText);<br>
+              }<br>
+              public Point getToolTipLocation(MouseEvent e){<br>
+              Dimension size = getSize();<br>
+              return new Point(0, size.height);<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 10.10.4 位置固定的工具提示</p>
+            <p>&nbsp;</p>
+            <p> 10.10.5 JToolBar属性</p>
+            <p>&nbsp;</p>
+            <p> 10.10.6 JMenuBar事件</p>
+            <p>&nbsp;</p>
+            <p> 10.10.7 JMenuBar类总结</p>
+            <p>&nbsp;</p>
+            <p> 10.10.8 AWT兼容</p>
+            <p>&nbsp;</p>
+            <p> 10.11 本章回顾 </p>
+            <p>&nbsp;</p>
+            <p>[<a href="index.html" target="_self">目录</a>][<a href="s09.htm">上一页</a>][<a href="s11.htm">下一页</a>](飒龙收藏/2002.5.18) 
+            </p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </td>
+  </tr>
+</tbody>
+</table>
+<script language="javascript">bottomprint()</script>
+</body>
+</html>

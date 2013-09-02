@@ -1,0 +1,678 @@
+<SCRIPT LANGUAGE="JavaScript" SRC="/-fs0/sys/pop-up.js"></SCRIPT>
+
+<SCRIPT LANGUAGE="JavaScript" SRC="/-fs0/sys/pop-up-all.js"></SCRIPT>
+
+<html>
+<head>
+<title>易都网--Java 2 图形设计卷Ⅱ：SWING</title>
+<LINK rel="stylesheet" href="../../../_public/javaa.css">
+<meta http-equiv="Content-Type" content="text/html; charset=GBK">
+<script language="JavaScript" src="../../../_public/javaa.js"></script>
+<meta name="keywords" content="Java,JSP,ASP,PHP,J2EE,EJB,JavaScript,C/C++,ASM,CSS,HTML,XML,网络安全,MySQL,ACCESS">
+</head>
+<body bgcolor="#FFFFFF">
+<table border=0 cellpadding=0 cellspacing=0 width="100%">
+  <tbody> 
+  <script language="javascript">print2()</script>
+  <tr> 
+    <td width="100%"> 
+      <table bgcolor=#EEEEEE border=0 cellpadding=3 cellspacing=0 width="100%">
+        <tbody> 
+        <tr> 
+          <td class=f1 id=thetd width="100%"> 
+            <p>[<a href="index.html" target="_self">目录</a>][<a href="s12.htm">上一页</a>][<a href="s14.htm">下一页</a>]</p>
+            <p align="center"><b>第13章 滚动</b></p>
+            <p>　　本章介绍Swing的滚动体系结构，这个体系结构包括两个轻量Swing容器、一个Scrollable接口、和一个JScrollBar类。其中，这两个轻量Swing容器是JViewport和JScrollPane，设计这个Scrollable接口来支持有特殊滚动需求的组件。<br>
+              　　JViewport实例很少被实例化，也很少被直接使用，然而，本章仍将用相当大的篇幅来介绍JViewport类，因为它是Swing滚动体系结构的基础组件。<br>
+              　　设计JScrollPane组件来替代AWT的重量组件ScrollPane。JScrollPane在AWT的ScrollPane基础上做了许多改进，包括具有配置行头部的能力和具有指定在滚动窗格角部组件的能力。<br>
+              　　Scrollable接口是为表格、树、文本组件和列表等包含数据行或数据列的可滚动组件而设计的。<br>
+              　　JScrollBar组件是一个用来实现手动滚动的滚动条。虽然Swing的JScrollPane组件在大多数滚动情况是足够用了，但是，有时为了性能或资源的考，还必须实现手动滚动。在这种情况下，可以用JScrollBar组件来滚动容器的内容。 
+            </p>
+            <p> <b>13.1 JViewport</b></p>
+            <p>　　JViewport类是Swing滚动体系结构的基础。就如它的名字所指出的那样，JViewport的实例提供一个视口，视图的特定区域可以显示在这个视口中。可以操纵由视口显示的视图的位置，以便在不同的时刻，使不同的视图区域出现在这个视口中。<br>
+              　　图13-1所示的小应用程序包含JViewport的一个实例，它的视图是JLabel的一个实例。该标签配备了一幅比显示图像的视口还要大的图像。这个小应用程序提供了四个用于调整视口中视图位置的按钮。<br>
+              　　图13-1中的左图显示这个小应用程序开始时的样子。右图显示出在反复激活up和left按钮后，这个小应用程序的梯子。应该强调的是，反复激活按钮不是滚动视口中视图最理想的方式，但是它说明了一个视口是怎样调整其视图位置的。<br>
+              　　这个小应用程序创建JViewport的一个实例和JLabel的一个实例。通过调用JVieweport.setView()来指定这个标签作为视口的视图。这个小应用程序还创建了一个ControlPanel实例（它是JPanel的一个扩展），这个实例包含了四个用于滚动标签的按钮。 
+            </p>
+            <p align="center"><b>例13-1 用JViewport的一个实例来滚动一幅图像</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              public Test() {<br>
+              Container contentPane = getContentPane();<br>
+              JViewport viewport = new JViewport();<br>
+              JPanel view = new JPanel();</p>
+            <p> view.add(new JLabel(<br>
+              new ImageIcon(&quot;anjinAndMariko.gif&quot;)));</p>
+            <p> viewport.setView(view);</p>
+            <p> contentPane.add(new ControlPanel(viewport), <br>
+              BorderLayout.NORTH);<br>
+              contentPane.add(viewport, BorderLayout.CENTER);<br>
+              }<br>
+              }<br>
+              class ControlPanel extends JPanel { <br>
+              private JViewport viewport;</p>
+            <p> private JButton[] buttons = {<br>
+              new JButton(&quot;up&quot;), new JButton(&quot;down&quot;),<br>
+              new JButton(&quot;left&quot;), new JButton(&quot;right&quot;)<br>
+              };</p>
+            <p> public ControlPanel(JViewport vp) {<br>
+              viewport = vp;</p>
+            <p> for(int i=0; i &lt; buttons.length; ++i) {<br>
+              add(buttons[i]);</p>
+            <p> buttons[i].addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              scroll(e.getActionCommand());<br>
+              }<br>
+              });<br>
+              }<br>
+              }<br>
+              private void scroll(String actionCmd) {<br>
+              Point vp = viewport.getViewPosition();</p>
+            <p> if(actionCmd.equals(&quot;up&quot;)) vp.y += 5; <br>
+              else if(actionCmd.equals(&quot;down&quot;)) vp.y -= 5; <br>
+              else if(actionCmd.equals(&quot;left&quot;)) vp.x += 5; <br>
+              else if(actionCmd.equals(&quot;right&quot;)) vp.x -= 5; </p>
+            <p> viewport.setViewPosition(vp);<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 13.1.1 拖动视口中的视图</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例13-2 拖动视口中的视图</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              public Test() {<br>
+              Container contentPane = getContentPane();<br>
+              JLabel label = new JLabel(new ImageIcon(&quot;pic.gif&quot;));<br>
+              JViewport vp = new JViewport();<br>
+              ViewportDragListener listener = <br>
+              new ViewportDragListener(vp);</p>
+            <p> vp.setView(label);<br>
+              vp.addMouseListener(listener);<br>
+              vp.addMouseMotionListener(listener);</p>
+            <p> contentPane.add(vp, BorderLayout.CENTER);<br>
+              }<br>
+              }<br>
+              class ViewportDragListener extends MouseAdapter<br>
+              implements MouseMotionListener {<br>
+              private JViewport viewport;<br>
+              private Point last = new Point(), scrollTo = new Point();</p>
+            <p> public ViewportDragListener(JViewport viewport) {<br>
+              this.viewport = viewport; <br>
+              }<br>
+              public void mousePressed(MouseEvent e) {<br>
+              last.x = e.getPoint().x;<br>
+              last.y = e.getPoint().y;<br>
+              }<br>
+              public void mouseMoved(MouseEvent e) {<br>
+              }<br>
+              public void mouseDragged(MouseEvent e) {<br>
+              Point drag = e.getPoint();<br>
+              Point viewPos = viewport.getViewPosition();<br>
+              Point offset = new Point(drag.x-last.x, drag.y-last.y);<br>
+              last.x = drag.x;<br>
+              last.y = drag.y;</p>
+            <p> if(viewport.contains(drag)) {<br>
+              scrollTo.x = viewPos.x - offset.x;<br>
+              scrollTo.y = viewPos.y - offset.y;<br>
+              viewport.setViewPosition(scrollTo);<br>
+              }<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 13.1.2 使用scrollRectToVisible</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例13-3 使用scrollRectToVisible()</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;<br>
+            import javax.swing.event.*;
+            <p>public class Test extends JApplet {<br>
+              private JButton buttons[] = {<br>
+              new JButton(), new JButton(), new JButton(),<br>
+              new JButton(), new JButton(), new JButton(),<br>
+              new JButton(), new JButton(), new JButton(),<br>
+              new JButton(), new JButton(), new JButton(),<br>
+              new JButton(), new JButton(), new JButton(),<br>
+              new JButton(), new JButton(), new JButton(),<br>
+              };<br>
+              public Test() {<br>
+              Container contentPane = getContentPane();<br>
+              JViewport viewport = new JViewport();<br>
+              JPanel view = new JPanel();<br>
+              JPanel controlPanel = new ControlPanel(buttons);</p>
+            <p> view.setLayout(new GridLayout(0,3));</p>
+            <p> for(int i=0; i &lt; buttons.length; ++i) {<br>
+              buttons[i].setText(&quot;button # &quot; + i);<br>
+              buttons[i].setPreferredSize(new Dimension(150,50));<br>
+              view.add(buttons[i]);<br>
+              }</p>
+            <p> viewport.setView(view);</p>
+            <p> contentPane.add(controlPanel, BorderLayout.NORTH);<br>
+              contentPane.add(viewport, BorderLayout.CENTER);<br>
+              }<br>
+              }<br>
+              class ControlPanel extends JPanel { <br>
+              private JComboBox combo = new JComboBox();</p>
+            <p> public ControlPanel(final JButton[] buttons) {<br>
+              add(combo);</p>
+            <p> for(int i=0; i &lt; buttons.length; ++i) {<br>
+              combo.addItem(&quot;button number &quot; + i);<br>
+              }<br>
+              combo.addItemListener(new ItemListener() {<br>
+              public void itemStateChanged(ItemEvent e) {<br>
+              int index = combo.getSelectedIndex();<br>
+              JButton button = buttons[index];<br>
+              Dimension size = button.getSize();</p>
+            <p> buttons[index].scrollRectToVisible(<br>
+              new Rectangle(0,0, size.width,size.height));<br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 13.1.3 JViewport属性</p>
+            <p>&nbsp;</p>
+            <p> 13.1.4 JViewport事件</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例13-4 对JViewport变化事件的响应</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;<br>
+            import javax.swing.event.*;
+            <p>public class Test extends JApplet {<br>
+              public Test() {<br>
+              Container contentPane = getContentPane();<br>
+              JViewport viewport = new JViewport();<br>
+              JPanel view = new JPanel();</p>
+            <p> view.add(new JLabel(<br>
+              new ImageIcon(&quot;anjinAndMariko.gif&quot;)));</p>
+            <p> viewport.setView(view);</p>
+            <p> contentPane.add(new ControlPanel(viewport), <br>
+              BorderLayout.NORTH);<br>
+              contentPane.add(viewport, BorderLayout.CENTER);<br>
+              contentPane.add(new StatusPanel(viewport),<br>
+              BorderLayout.SOUTH);<br>
+              }<br>
+              }<br>
+              class StatusPanel extends JPanel { <br>
+              private JLabel extentLabel = new JLabel(),<br>
+              viewPositionLabel = new JLabel(),<br>
+              viewSizeLabel = new JLabel();<br>
+              private JViewport viewport;</p>
+            <p> public StatusPanel(JViewport vp) {<br>
+              viewport = vp;</p>
+            <p> setBorder(BorderFactory.createEtchedBorder());<br>
+              setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));</p>
+            <p> extentLabel.setAlignmentX(0.5f);<br>
+              viewPositionLabel.setAlignmentX(0.5f);<br>
+              viewSizeLabel.setAlignmentX(0.5f);</p>
+            <p> add(extentLabel);<br>
+              add(viewPositionLabel);<br>
+              add(viewSizeLabel);</p>
+            <p> viewport.addChangeListener(new ChangeListener() {<br>
+              public void stateChanged(ChangeEvent e) {<br>
+              Dimension extent = viewport.getExtentSize();<br>
+              Point viewPosition = viewport.getViewPosition();<br>
+              Rectangle viewSize = viewport.getViewRect();</p>
+            <p> extentLabel.setText(&quot;View Extent: &quot; + <br>
+              extent.toString());<br>
+              viewPositionLabel.setText(&quot;View Position: &quot; + <br>
+              viewPosition.toString());<br>
+              viewSizeLabel.setText(&quot;View Size: &quot; + <br>
+              viewSize.toString());<br>
+              revalidate();<br>
+              }<br>
+              });<br>
+              }<br>
+              }<br>
+              class ControlPanel extends JPanel { <br>
+              private JViewport viewport;</p>
+            <p> private JButton[] buttons = {<br>
+              new JButton(&quot;up&quot;), new JButton(&quot;down&quot;),<br>
+              new JButton(&quot;left&quot;), new JButton(&quot;right&quot;),<br>
+              };</p>
+            <p> public ControlPanel(JViewport vp) {<br>
+              viewport = vp;</p>
+            <p> for(int i=0; i &lt; buttons.length; ++i) {<br>
+              add(buttons[i]);</p>
+            <p> buttons[i].addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              scroll(e.getActionCommand());<br>
+              }<br>
+              });<br>
+              }<br>
+              }<br>
+              private void scroll(String actionCmd) {<br>
+              Point vp = viewport.getViewPosition();</p>
+            <p> if(actionCmd.equals(&quot;up&quot;)) vp.y += 5; <br>
+              else if(actionCmd.equals(&quot;down&quot;)) vp.y -= 5; <br>
+              else if(actionCmd.equals(&quot;left&quot;)) vp.x += 5; <br>
+              else if(actionCmd.equals(&quot;right&quot;)) vp.x -= 5; </p>
+            <p> viewport.setViewPosition(vp);<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 13.1.5 JViewport类总结</p>
+            <p>&nbsp;</p>
+            <p>13.1.6 AWT兼容</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例13-5 使用JScrollPane</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;<br>
+            import javax.swing.event.*;
+            <p>public class Test extends JApplet {<br>
+              public Test() {<br>
+              Container contentPane = getContentPane();<br>
+              JLabel view = new JLabel(new ImageIcon(&quot;cutlery.jpg&quot;,<br>
+              &quot;A picture of cutlery&quot;));<br>
+              JScrollPane sp = new JScrollPane(view);</p>
+            <p> contentPane.add(sp);<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 13.2 JScrollPane</p>
+            <p>&nbsp;</p>
+            <p> 13.2.1 滚动窗格的头部</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例13-6 为滚动窗格的头部指定视图</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              public Test() {<br>
+              Container contentPane = getContentPane();<br>
+              JLabel columnHeaderView = new JLabel(<br>
+              new ImageIcon(&quot;horizontalRuler.jpg&quot;,<br>
+              &quot;horizontal ruler&quot;));<br>
+              JLabel rowHeaderView = new JLabel(<br>
+              new ImageIcon(&quot;verticalRuler.jpg&quot;,<br>
+              &quot;vertical ruler&quot;));<br>
+              JLabel view = new JLabel(<br>
+              new ImageIcon(&quot;grapes.jpg&quot;,<br>
+              &quot;grapes&quot;));</p>
+            <p> JScrollPane sp = new JScrollPane(view);</p>
+            <p> sp.setColumnHeaderView(columnHeaderView);<br>
+              sp.setRowHeaderView(rowHeaderView);</p>
+            <p> sp.setViewportBorder(<br>
+              BorderFactory.createRaisedBevelBorder());</p>
+            <p> contentPane.add(sp);<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p align="center"><b>例13-7 设置头部视口</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              public void init() {<br>
+              Container contentPane = getContentPane();<br>
+              JViewport columnHeaderViewport = new JViewport();<br>
+              JViewport rowHeaderViewport = new JViewport();</p>
+            <p> JLabel columnHeaderView = new JLabel(<br>
+              new ImageIcon(&quot;horizontalRuler.jpg&quot;));<br>
+              JLabel rowHeaderView = new JLabel(<br>
+              new ImageIcon(&quot;verticalRuler.jpg&quot;));<br>
+              JLabel view = new JLabel(<br>
+              new ImageIcon(&quot;strawberry.jpg&quot;));</p>
+            <p> JScrollPane sp = new JScrollPane(view);</p>
+            <p> sp.setToolTipText(<br>
+              &quot;Drag the headers to drag the picture!&quot;);</p>
+            <p> HeaderViewDragListener verticalHeaderListener = <br>
+              new HeaderViewDragListener(sp, <br>
+              SwingConstants.VERTICAL);</p>
+            <p> HeaderViewDragListener horizontalHeaderListener = <br>
+              new HeaderViewDragListener(sp, <br>
+              SwingConstants.HORIZONTAL);</p>
+            <p> columnHeaderViewport.addMouseListener(<br>
+              horizontalHeaderListener);<br>
+              columnHeaderViewport.addMouseMotionListener(<br>
+              horizontalHeaderListener);</p>
+            <p> rowHeaderViewport.addMouseListener(<br>
+              verticalHeaderListener);<br>
+              rowHeaderViewport.addMouseMotionListener(<br>
+              verticalHeaderListener);</p>
+            <p> // headers must be set before header views<br>
+              sp.setColumnHeader(columnHeaderViewport);<br>
+              sp.setRowHeader(rowHeaderViewport);</p>
+            <p> sp.setColumnHeaderView(columnHeaderView);<br>
+              sp.setRowHeaderView(rowHeaderView);</p>
+            <p> contentPane.add(sp);<br>
+              }<br>
+              }<br>
+              class HeaderViewDragListener extends MouseAdapter<br>
+              implements MouseMotionListener,<br>
+              SwingConstants {<br>
+              private Point last = new Point();<br>
+              private JScrollPane scrollpane; <br>
+              private int orientation;</p>
+            <p> public HeaderViewDragListener(JScrollPane sp, int orient) {<br>
+              scrollpane = sp;<br>
+              orientation = orient;<br>
+              }<br>
+              public void mousePressed(MouseEvent e) {<br>
+              last.x = e.getPoint().x;<br>
+              last.y = e.getPoint().y;<br>
+              }<br>
+              public void mouseMoved(MouseEvent e) {<br>
+              }<br>
+              public void mouseDragged(MouseEvent e) {<br>
+              JViewport headerViewport = (JViewport)e.getSource();<br>
+              JViewport scrollpaneViewport = scrollpane.getViewport();<br>
+              Dimension viewSize = scrollpaneViewport.getViewSize(),<br>
+              extent = scrollpaneViewport.getExtentSize();</p>
+            <p> Point drag = e.getPoint();<br>
+              Point offset = new Point(drag.x-last.x, drag.y-last.y);<br>
+              Point headerPosition = new Point(), viewportPosition;</p>
+            <p> viewportPosition = scrollpaneViewport.getViewPosition();</p>
+            <p> if(orientation == HORIZONTAL) {<br>
+              int nextX = viewportPosition.x - offset.x;<br>
+              int rightEdge = extent.width + nextX;</p>
+            <p> if(nextX &gt; 0 &amp;&amp; rightEdge &lt; viewSize.width) {<br>
+              headerPosition.x = nextX;<br>
+              viewportPosition.x = nextX;<br>
+              }<br>
+              }<br>
+              if(orientation == VERTICAL) { <br>
+              int nextY = viewportPosition.y - offset.y;<br>
+              int bottomEdge = extent.height + nextY;</p>
+            <p> if(nextY &gt; 0 &amp;&amp; bottomEdge &lt; viewSize.height) {<br>
+              headerPosition.y = nextY;<br>
+              viewportPosition.y = nextY;<br>
+              }<br>
+              }<br>
+              headerViewport.setViewPosition(headerPosition);<br>
+              scrollpaneViewport.setViewPosition(viewportPosition);</p>
+            <p> last.x = drag.x;<br>
+              last.y = drag.y;<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p>&nbsp;</p>
+            <p> 13.2.2 滚动窗的角部</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例13-8 指定滚动窗格的角部的组件</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import javax.swing.*;<br>
+            import javax.swing.border.*;
+            <p>public class Test extends JApplet {<br>
+              public Test() {<br>
+              Container contentPane = getContentPane();<br>
+              JLabel columnHeaderView = new JLabel(<br>
+              new ImageIcon(&quot;horizontalRuler.jpg&quot;));<br>
+              JLabel rowHeaderView = new JLabel(<br>
+              new ImageIcon(&quot;verticalRuler.jpg&quot;));<br>
+              JLabel view = new JLabel(<br>
+              new ImageIcon(&quot;anjinAndMariko.gif&quot;));</p>
+            <p> JScrollPane sp = new JScrollPane(view);</p>
+            <p> JPanel corners[] = {<br>
+              new JPanel(), new JPanel(),<br>
+              new JPanel(), new JPanel()<br>
+              };<br>
+              String cornerConstants[] = {<br>
+              ScrollPaneConstants.UPPER_LEFT_CORNER,<br>
+              ScrollPaneConstants.LOWER_LEFT_CORNER,<br>
+              ScrollPaneConstants.UPPER_RIGHT_CORNER,<br>
+              ScrollPaneConstants.LOWER_RIGHT_CORNER,<br>
+              };<br>
+              Border border = BorderFactory.createEtchedBorder();</p>
+            <p> for(int i=0; i &lt; corners.length; ++i) {<br>
+              corners[i].setBorder(border);<br>
+              sp.setCorner(cornerConstants[i], corners[i]);<br>
+              }</p>
+            <p> sp.setColumnHeaderView(columnHeaderView);<br>
+              sp.setRowHeaderView(rowHeaderView);<br>
+              contentPane.add(sp);<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 13.2.3 JViewport属性</p>
+            <p>&nbsp;</p>
+            <p> 13.2.4 JViewport事件</p>
+            <p>&nbsp;</p>
+            <p> 13.2.5 JViewport类总结</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例13-9 透明和不透明滚动窗格</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              public void init() {<br>
+              Container contentPane = new CustomContentPane();<br>
+              JLabel view1 = new JLabel(<br>
+              new ImageIcon(&quot;gjMedium.gif&quot;));<br>
+              JLabel view2 = new JLabel(<br>
+              new ImageIcon(&quot;anjinAndMariko.gif&quot;));</p>
+            <p> JScrollPane sp1 = new JScrollPane(view1);<br>
+              JScrollPane sp2 = new JScrollPane(view2);</p>
+            <p> setContentPane(contentPane);<br>
+              sp1.setPreferredSize(new Dimension(250,250));<br>
+              sp2.setPreferredSize(new Dimension(250,250));</p>
+            <p> contentPane.add(sp1);<br>
+              contentPane.add(sp2);<br>
+              }<br>
+              }<br>
+              class CustomContentPane extends JPanel { <br>
+              private ImageIcon rain = new ImageIcon(&quot;rain.gif&quot;);</p>
+            <p> public CustomContentPane() {<br>
+              setLayout(new FlowLayout());<br>
+              } <br>
+              public void paintComponent(Graphics g) {<br>
+              int rainw = rain.getIconWidth();<br>
+              int rainh = rain.getIconHeight();</p>
+            <p> Dimension size = getSize();</p>
+            <p> for(int row=0; row &lt; size.height; row += rainh)<br>
+              for(int col=0; col &lt; size.width; col += rainw)<br>
+              rain.paintIcon(this,g,col,row);<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 13.2.6 AWT兼容</p>
+            <p>&nbsp;</p>
+            <p> 13.3 Scrollable接口</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例13-10 跟踪视口宽度</b></p>
+            <hr noshade size="1">
+            import java.io.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;<br>
+            import javax.swing.text.*;
+            <p>public class Test extends JApplet {<br>
+              private JTextArea textArea = new JTextArea();</p>
+            <p> public void init() {<br>
+              Container contentPane = getContentPane();</p>
+            <p> readFile();</p>
+            <p> contentPane.add(new ControlPanel(), BorderLayout.NORTH);<br>
+              contentPane.add(new JScrollPane(textArea), <br>
+              BorderLayout.CENTER);<br>
+              }<br>
+              private void readFile() {<br>
+              DefaultEditorKit kit = new DefaultEditorKit();</p>
+            <p> try {<br>
+              kit.read(new FileReader(&quot;Test.java&quot;),<br>
+              textArea.getDocument(), 0);<br>
+              }<br>
+              catch(Exception ex) { ex.printStackTrace(); }<br>
+              }<br>
+              class ControlPanel extends JPanel { <br>
+              public ControlPanel() {<br>
+              final JCheckBox cb = new JCheckBox(&quot;wrap&quot;);</p>
+            <p> add(cb);</p>
+            <p> cb.addItemListener(new ItemListener() {<br>
+              public void itemStateChanged(ItemEvent e) {<br>
+              if(cb.isSelected())<br>
+              textArea.setLineWrap(true);<br>
+              else<br>
+              textArea.setLineWrap(false);<br>
+              }<br>
+              });<br>
+              }<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 13.4 JScrollBar</p>
+            <p>&nbsp;</p>
+            <p>&nbsp;</p>
+            <p> 13.4.1 使用Swing的JScrollBar类进行手动滚动</p>
+            <p>&nbsp;</p>
+            <p> 13.4.2 块增量和单元增量</p>
+            <p>&nbsp;</p>
+            <p> 13.4.3 JScrollBar属性</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例13-11 为JScrollBar的实例指定单增量和块增量</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;<br>
+            import javax.swing.event.*;
+            <p>public class Test extends JApplet {<br>
+              private JScrollBar vsb = new JScrollBar(JScrollBar.VERTICAL);<br>
+              private SSPanel panel = new SSPanel();</p>
+            <p> public Test() {<br>
+              Container contentPane = getContentPane();</p>
+            <p> contentPane.add(panel, BorderLayout.CENTER);<br>
+              contentPane.add(vsb, BorderLayout.EAST);</p>
+            <p> vsb.addAdjustmentListener(new AdjustmentListener() {<br>
+              public void adjustmentValueChanged(<br>
+              AdjustmentEvent e) {<br>
+              JScrollBar sb = (JScrollBar)e.getSource();<br>
+              showScrollBarValues();<br>
+              panel.setTopIndexByPixelValue(e.getValue());<br>
+              panel.repaint();<br>
+              }<br>
+              });<br>
+              }<br>
+              public void paint(Graphics g) {<br>
+              Dimension pref = panel.getPreferredSize();<br>
+              Dimension size = panel.getSize();<br>
+              int extent = size.height, max = pref.height;<br>
+              int value = Math.max(0, <br>
+              Math.min(vsb.getValue(), max - extent));</p>
+            <p> vsb.setVisible(extent &lt; max);<br>
+              vsb.setUnitIncrement(panel.getUnitHeight());<br>
+              vsb.setBlockIncrement(extent - vsb.getUnitIncrement());<br>
+              vsb.setValues(value, extent, 0, max);</p>
+            <p> showScrollBarValues();<br>
+              super.paint(g);<br>
+              }<br>
+              private void showScrollBarValues() {<br>
+              showStatus(&quot;min: &quot; + vsb.getMinimum() +<br>
+              &quot;, max: &quot; + vsb.getMaximum() +<br>
+              &quot;, visible amount: &quot; + <br>
+              vsb.getVisibleAmount() +<br>
+              &quot;, value: &quot; + vsb.getValue());<br>
+              }<br>
+              }<br>
+              class SSPanel extends JPanel { <br>
+              private int topIndex = 0;<br>
+              private int fh;</p>
+            <p> private String[] data = {<br>
+              &quot;Brown, Ted: 000-00-0001&quot;, &quot;Brown, Ted: 000-00-0002&quot;,<br>
+              &quot;Brown, Ted: 000-00-0003&quot;, &quot;Brown, Ted: 000-00-0004&quot;,<br>
+              &quot;Brown, Ted: 000-00-0005&quot;, &quot;Brown, Ted: 000-00-0006&quot;,<br>
+              &quot;Brown, Ted: 000-00-0007&quot;, &quot;Brown, Ted: 000-00-0008&quot;,<br>
+              &quot;Brown, Ted: 000-00-0009&quot;, &quot;Brown, Ted: 000-00-00010&quot;,<br>
+              &quot;Brown, Ted: 000-00-00011&quot;, &quot;Brown, Ted: 000-00-00012&quot;,<br>
+              &quot;Brown, Ted: 000-00-00013&quot;, &quot;Brown, Ted: 000-00-00014&quot;,<br>
+              &quot;Brown, Ted: 000-00-00015&quot;, &quot;Brown, Ted: 000-00-00016&quot;,<br>
+              &quot;Brown, Ted: 000-00-00017&quot;, &quot;Brown, Ted: 000-00-00018&quot;,<br>
+              &quot;Brown, Ted: 000-00-00019&quot;, &quot;Brown, Ted: 000-00-00020&quot;,<br>
+              &quot;Brown, Ted: 000-00-00021&quot;, &quot;Brown, Ted: 000-00-00022&quot;,<br>
+              &quot;Brown, Ted: 000-00-00023&quot;, &quot;Brown, Ted: 000-00-00024&quot;,<br>
+              &quot;Brown, Ted: 000-00-00025&quot;, &quot;Brown, Ted: 000-00-00026&quot;,<br>
+              &quot;Brown, Ted: 000-00-00027&quot;, &quot;Brown, Ted: 000-00-00028&quot;,<br>
+              &quot;Brown, Ted: 000-00-00029&quot;, &quot;Brown, Ted: 000-00-00030&quot;,<br>
+              };<br>
+              public void paintComponent(Graphics g) {<br>
+              Color color = g.getColor();<br>
+              super.paintComponent(g);<br>
+              g.setColor(color);</p>
+            <p> Dimension size = getSize();<br>
+              Insets insets = getInsets();<br>
+              int y = insets.top;</p>
+            <p> for(int i = topIndex; i &lt; data.length; ++i, y += fh) {<br>
+              g.drawString(data[i], 0, y);</p>
+            <p> if(y + fh &gt; size.height - insets.bottom)<br>
+              break;<br>
+              }<br>
+              }<br>
+              public void setTopIndexByPixelValue(int pixelValue) {<br>
+              topIndex = pixelValue / fh;<br>
+              }<br>
+              public int getUnitHeight() {<br>
+              return fh;<br>
+              }<br>
+              public Dimension getPreferredSize() {<br>
+              Dimension dim = new Dimension();<br>
+              Graphics g = getGraphics();</p>
+            <p> try {<br>
+              FontMetrics fm = g.getFontMetrics();<br>
+              fh = fm.getHeight();</p>
+            <p> dim.width = fm.stringWidth(data[data.length-1]);<br>
+              dim.height = fm.getHeight() * (data.length + 1);<br>
+              }<br>
+              finally {<br>
+              g.dispose();<br>
+              }<br>
+              return dim;<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 13.4.4 JScrollBar事件</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例13-12 使用JScrollBar的valueIsAdjusting属性</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              public Test() {<br>
+              Container contentPane = getContentPane();<br>
+              JScrollBar sb = new JScrollBar();</p>
+            <p> contentPane.add(sb, BorderLayout.EAST);</p>
+            <p> sb.addAdjustmentListener(new AdjustmentListener() {<br>
+              public void adjustmentValueChanged(<br>
+              AdjustmentEvent e) {<br>
+              JScrollBar jsb = (JScrollBar)e.getAdjustable();</p>
+            <p> if(jsb.getValueIsAdjusting())<br>
+              showStatus(&quot;adjusting ...&quot;);<br>
+              else<br>
+              showStatus(Integer.toString(e.getValue()));<br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 13.4.5 JScrollBar类总结</p>
+            <p>&nbsp;</p>
+            <p> 13.4.6 AWT兼容</p>
+            <p>&nbsp;</p>
+            <p> 13.5 本章回顾</p>
+            <p>&nbsp;</p>
+            <p>[<a href="index.html" target="_self">目录</a>][<a href="s12.htm">上一页</a>][<a href="s14.htm">下一页</a>](飒龙收藏/2002.5.18) 
+            </p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </td>
+  </tr>
+</tbody>
+</table>
+<script language="javascript">bottomprint()</script>
+</body>
+</html>

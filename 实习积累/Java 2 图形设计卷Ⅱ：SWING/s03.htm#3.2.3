@@ -1,0 +1,874 @@
+<SCRIPT LANGUAGE="JavaScript" SRC="/-fs0/sys/pop-up.js"></SCRIPT>
+
+<SCRIPT LANGUAGE="JavaScript" SRC="/-fs0/sys/pop-up-all.js"></SCRIPT>
+
+<html>
+<head>
+<title>易都网--Java 2 图形设计卷Ⅱ：SWING</title>
+<LINK rel="stylesheet" href="../../../_public/javaa.css">
+<meta http-equiv="Content-Type" content="text/html; charset=GBK">
+<script language="JavaScript" src="../../../_public/javaa.js"></script>
+<meta name="keywords" content="Java,JSP,ASP,PHP,J2EE,EJB,JavaScript,C/C++,ASM,CSS,HTML,XML,网络安全,MySQL,ACCESS">
+</head>
+<body bgcolor="#FFFFFF">
+<table border=0 cellpadding=0 cellspacing=0 width="100%">
+  <tbody> 
+  <script language="javascript">print2()</script>
+  <tr> 
+    <td width="100%"> 
+      <table bgcolor=#EEEEEE border=0 cellpadding=3 cellspacing=0 width="100%">
+        <tbody> 
+        <tr> 
+          <td class=f1 id=thetd width="100%"> 
+            <p>[<a href="index.html" target="_self">目录</a>][<a href="s02.htm" target="_self">上一页</a>][<a href="s04.htm" target="_self">下一页</a>]</p>
+            <p align="center"><b>第3章 Swing组件的体系结构</b></p>
+            <p>　　轻量Swing组件把它们的界面样式(look and feel)交给一个UI代表来处理，这个UI代表负责绘制组件（即look）并处理组件的事件（即feel)。可在构造组件之时或之后，把UI代表插入这个组件中。“插入式界面样式”这个术语在1.4节中介绍过。<br>
+              　　Swing的插入式界面样式由一个基于Smalltalk的“模型-视图-控制器（Model-View-Controller，MVC）”设计的组件体系结构和用于管理界面样式的下层构件组成。前者是本章重点，首先我们给出典型的MVC的概览，然后再介绍Swing 
+              MVC的实现。后者稍后将在第7章中介绍。 </p>
+            <p> <b><a name="3.1"></a>3.1 典型的“模型-视图-控制器”体系结构</b></p>
+            <p>　　MVC体系结构是为那些需要为同样的数据提供多个视图的应用程序而设计的。MVC把应用程序分为三种对象类型：<br>
+              　　·模型：维护数据并提供数据访问方法。<br>
+              　　·视图：绘制模型的部分数据或所有数据的可视图。<br>
+              　　·控制器：处理事件。<br>
+              　　模型负责维护数据，例如，一个笔记本应用程序将把文档文本存储在模型中。模型通常提供访问和修改数据的方法。当模型变化时，这个模型还把事件发送给已登记的视图，对此，视图根据模型的变化来更新自己。<br>
+              　　视图负责提供模型的部分数据的可视图。例如，一个笔记本应用程序通过显示存储在模型中的部分文本或所有文本来提供当前文档的一个视图。<br>
+              　　控制器为视图处理事件。鼠标和动作监听器等AWT和Swing监听器都是MVC控制器。前面提到的笔记本应用程序应该有鼠标和键盘监听器，以便适时地改变模型或视图。<br>
+              　　MVC需要很强的设计功能。首先，应当可以把多个视图和控制器插入到单个模型中，这是Swing插入式界面样式的基础。<br>
+              　　其次，当模型改变时，模型的视图能够自动地得到通知；在一个视图中改变模型的属性，将导致模型其他的视图也随之更新。<br>
+              　　最后，由于模型独立于视图，所以，不需要修改模型来适应新类型的视图或控制器。</p>
+            <p> <b><a name="3.1.1"></a>3.1.1 插入式视图和控制器</b></p>
+            <p>　　Swing(和AWT)容器把定位它们所包含的组件及确定这些组件的大小的工作委托给一个布局管理器。布局管理器封装了布局组件的策略。例如，FlowLayout布局管理器的策略是用组件的首选大小来安排组件的大小，并以从左到右、从上到下的顺序定位组件。<br>
+              　　封装的策略使它们是可插入的；例如，布局管理器可以在编译时，也可以在运行时刻插入到容器中。<br>
+              　　通过封装在视图中可视地表示数据的策略及封装控制器中处理事件的策略，MVC体系结构提供了可插入视图和控制器。就像布局管理器可以插入到AWT和Swing组件中一样，视图和控制器也可以插入到模型中。 
+            </p>
+            <p> <b><a name="3.1.2"></a>3.1.2 视图更新</b></p>
+            <p>　　Swing(和AWT)事件由向事件源登记了的事件监听器来处理。例如，按钮的激活事件由一个对象所处理，这个对象实现ActionListener接口，并且通过调用这个按钮的addActionListener方法向这个按钮进行了登记（注：处理按钮动作事件的例子，请参见8.4节“JButton事件”）<br>
+              　　事件源和监听器是Observer样式的一个例子，Observer样式允许单个对象在所观察的对象修改时通知许多观察器。Observer样式需要在被观察对象与它的观察器之间有一个很小的接口区。例如，上面描述的动作监听器可以是任何类型的对象，只要它实现ActionListener接口。而且，按钮除了知道如何和何时通过观察器之外，对观察器一无所知。<br>
+              　　当模型改变时，MVC体系结构使用Observer样式来通知视图。模型可以有许多视图，所有的视图通常都用模型的通知来同步。而且，任何类型的视图都可以在不使模型本身有任务变化的情况下观察一个模型。<br>
+              　　图3-1示出了一个典型的MVC实现的信息流，并说明了在模型变化时，视图如何更新。<br>
+              　　事件由控制器处理，控制器根据事件的类型来改变模型或一个或多个视图。<br>
+              　　模型维护一个视图列表，这些视图为获得模型变化通知已经向模型登记过了。当模型发生变化时，该模型通知已向此模型登记的每个视图。视图通常从该模型中获得信息以进一步澄清这个事件，接着再更新它们自己。<br>
+              　　<b>Swing提示</b><br>
+              　　MVC的优点<br>
+              　　很久以来，MVC体系结构一直是建立Smalltalk应用程序的基础。<br>
+              　　面向对象开发的最基础的方面是确认抽象并在类中封装抽象。例如，一个工资册应用程序可能确认雇员、工资等抽象。在类中封装抽象允许在对象间建立松散的联系，这样就减少了依赖性，增加了灵活性和再使用性。<br>
+              　　MVC封装了三个在大多数图形应用程序都存在的通用抽象：模型、视图和控制器。通过封装其他体系结构的优秀特性，MVC应用程序比相应的传统应用程序更灵活和更具有使用性。 
+            </p>
+            <p> <b><a name="3.2"></a>3.2 Swing MVC</b></p>
+            <p>　　Swing MVC是典型MVC的专业版本，其设计目的是支持插入式界面模式而不是通用应用程序。Swing轻量组件由下面的对象组成：<br>
+              　　·一个维护组件的数据模型。<br>
+              　　·UI代表，它是一个带事件处理监听器的视图。<br>
+              　　·一个扩展JComponent的组件（注：参见第4章“JComponent”类）<br>
+              　　Swing模型可以直接对应典型的MVC模型；这两个模型都维护数据并提供数据访问方法，在它们发生变化时，它们都通知监听器。<br>
+              　　Swing组件把它们的界面样式交给一个UI代表来处理。UI代表与典型的MVC中的视图/控制器组合相对应。从现在开始，控制器又称作监听器。<br>
+              　　Swing监听器通常作为UI代表的内部类来实现。例如，一个滑杆的UI代表实现一个响应模型变化的变化监听器。这个变化监听器是作为BasicSliderUI的内部类实现的：</p>
+            <p>　　//From javax.swing.plaf.basic.BasicSliderUI.java:<br>
+              　　public class BasicSliderUI extends SliderUI{<br>
+              　　　...<br>
+              　　　//installUI is called when a UI is being installed<br>
+              　　　//for a component<br>
+              　　　public void installUI(JComponent c){<br>
+              　　　　...<br>
+              　　　　changeListener = createChangeListener(slider);<br>
+              　　　　...<br>
+              　　　　installListeners(slider);<br>
+              　　　}<br>
+              　　　...<br>
+              　　　protected ChangeListener<br>
+              　　　createChangeListener(JSlider slider){<br>
+              　　　　return new ChangeHander();<br>
+              　　　}<br>
+              　　　...<br>
+              　　　protected void installListeners(JSlider slider){<br>
+              　　　　...<br>
+              　　　　slider.getModel().addChangeListener(ChangeListener);<br>
+              　　　　...<br>
+              　　　}<br>
+              　　　...<br>
+              　　　public class ChangeHandler implements ChangeListener{<br>
+              　　　　public ovid stateChanged(ChangeEvent e){<br>
+              　　　　　if(!isDragging){<br>
+              　　　　　　calculateThumbLocation();<br>
+              　　　　　　slider.repaint();<br>
+              　　　　　}<br>
+              　　　　}<br>
+              　　　}<br>
+              　　　...<br>
+              　　}</p>
+            <p>　　BasicSliderUI创建了ChangeHandler的一个实例，该实例计算滑杆的滑块（即滑柄）的位置并重画该滑杆。<br>
+              　　根据组件所表现的复杂程度，组件代表可以有许多处理事件的内部类监听器。例如，BasicSliderUI类实现六个内部类监听器，如图3-2所示。</p>
+            <p><b><a name="3.2.1"></a>3.2.1 Swing组件</b></p>
+            <p>　　组件为开发人员提供了一个API以操纵构成一个Swing组件的对象集。组件间接地创建它们的UI代表，并在适当的时候把任务交给这些UI代表。参见3.2.6节“组件UI的案件”，参见“UI代表绘制”中有关创建UI代表以及“安装一个UI代表”组件把绘制任务交给它们的UI代表的有关介绍。<br>
+              　　通过提供传递方法和通过传送模型事件，组件还使它们的模型对开发人员透明。<br>
+              　　1.模型传递方法<br>
+              　　Swing组件为它们的模型提供传递方法，以便开发人员不需要直接访问模型来修改或查询状态。例如，下面列出的JSlider类的方法显示了滑杆是如何传递它们模型的最小值的。<br>
+              　　//From JSlider.java，pass-through model methods;<br>
+              　　public int getMinimum(){<br>
+              　　　　return getModel().getMinimum();<br>
+              　　}<br>
+              　　public void setMinimum(int minimum){<br>
+              　　　　int oldMin = getModel().getMinimum()；<br>
+              　　　　getModel().setMinimum(minimum);<br>
+              　　firePropertyChange(&quot; minimum&quot;,<br>
+              　　　　new Intger(oldMin),new Integer(minimum));<br>
+              　　}<br>
+              　　JSlider.setMinimum()在设置最小值后激发一个属性变化事件。组件模型的所有属性(一个滑杆的最小值和最大值)都应该激发属性变化事件。<br>
+              　　2.传送模型事件<br>
+              　　Swing组件还把模型事件传送给一个已向组件登记过的监听器。例如，一个滑杆作为一个变化监听器向其模型登记。当这个滑杆的模型激发了一个变化事件时，这个滑杆接着把一个变化事件发送给自己的变化监听器。JSlider类实现一个变化监听器，它只把一个状态变化事件发送给滑杆的变化监听器。与组件UI一样，JSlider等组件类常常在内部类中封装事件处理。<br>
+              　　下面列出了大大简化了的JSlider类进行监听的代码，其中说明了滑杆把状态变化发送给它们的监听器以响应模型状态的变化的方法（与其他Swing组件类的处理方法类似）。</p>
+            <p>　　//From JSlider.java:<br>
+              　　public class JSlider extends JComponent<br>
+              　　implements SwingConstants,Accessible{<br>
+              　　　...<br>
+              　　　protected ChangeListener changeListener=<br>
+              　　　　createChangeListener();<br>
+              　　　...<br>
+              　　　public JSlider(int orientation,int min,<br>
+              　　　　int max,int value){<br>
+              　　　　...<br>
+              　　　　sliderModel.addChangeListener(changeListener);<br>
+              　　　　...<br>
+              　　　}<br>
+              　　　public void addChangeListener(ChangeListener l){<br>
+              　　　　listenerList.add(ChangeListener,class,l);<br>
+              　　　}<br>
+              　　　public void removeChangeListener(changeListener l){<br>
+              　　　　listenerList.remove(Change Listener.class,l);<br>
+              　　　}<br>
+              　　　...<br>
+              　　　protected ChangeListener createChangeListener(){<br>
+              　　　　retrun new ModelListener();<br>
+              　　　}<br>
+              　　　...<br>
+              　　　private class ModelListener<br>
+              　　　implements ChangeLister,Serializable{<br>
+              　　　　public void stateChaged(ChangeEvent e){<br>
+              　　　　　//fire event to change listener registered<br>
+              　　　　　//with addChageListener() listed above<br>
+              　　　　　fireStateChanged();<br>
+              　　　　}<br>
+              　　　}<br>
+              　　}</p>
+            <p>　　JSlider构造方法把一个JSlider.ModelListener实例添加到滑杆的模型中。JSlider.ModelListener通过调用JSlider.fireStateChanged()方法来对模型变化做出反应。JSlider.fireStateChaged()方法把一个变化事件发送给滑杆的监听器。 
+            </p>
+            <p> <b><a name="3.2.2"></a>3.2.2 静态认识</b></p>
+            <p>　　轻量Swing组件的实现方式尽量与组成它们的MVC结构的对象的实现方式相类似。例如：Swing按钮由JButton类、ButtonUI类及其他对象组成。其他轻量Swing组件与此相同，以相似的类名实现相似的功能，如：JLabel与LabelUI、JCheckBox与CheckBoxUI、JTree与TreeUI等等。<br>
+              　　图3-2示出了组成Swing滑杆的类的类图。由于轻量Swing组件的MVC实现的一致性，所以图3-2对总体了解Swing MVC的根本思想是有所帮助的。<br>
+              　　与大多数轻量Swing组件一样，JSlider维护对其模型的一个引用。Swing模型由接口定义滑杆的模型实现BoundedRangeModel接口。有边界范围的模型跟踪最小值、最大值和当前值(注：有关滑杆和滑杆模型的更多信息，请参见11.2节“JSlider”)<br>
+              　　Swing提供缺省的模型实现，在组件模型没有被显式地指定时，则使用这个缺省模型。例如，如果一个滑杆的模型没有被显式地指定（通常都是这种情况），则用DefaultBoundeRangeModel的实例来实现滑杆。<br>
+              　　所有的Swing轻量组件扩展JComponent类，该类维护一个对组件UI的引用。ComponentUI类是javax.swing.plaf包中的一个抽象类，javax.swing.plaf包定义UI代表的基本功能。<br>
+              　　BasicSliderUI类在javax.swing.plaf.basic包中并且封装了基本的按钮功能。标准Swing界面样式的滑杆UI类扩展BasicSliderUI类并定制了缺省功能。 
+              <br>
+              　　BasicSliderUI类实现六个内部类监听器，其中的五个监听JSlider组件；这个滑杆模型中还包含BasicSliderUI.ChangeHandler。 
+              　　 </p>
+            <p> <b><a name="3.2.3"></a>3.2.3 动态认识</b></p>
+            <p>　　上一节提供了组成轻量Swing组件的对象之间关系的静态视图。本节提供一个组件的组成部分之间的相互关系的动态视图。<br>
+              　　图3-3示出了一个图表，与图3-1的目的相似，它说明了Swing实现的MVC的信息3-3中示的组件代表一个轻量Swing组件类，如JButton、JLabel、JSlider等等。<br>
+              　　因为一个UI代表的监听器几乎总是作为内部类来实现的，所以，图3-3中的监听器包含在UI代表中。<br>
+              　　图3-3中的模型代表组件的模型。例如，一个按钮的模型是ButtioModel接口的一个实现。<br>
+              　　“Swing MVC”中曾作过介绍，组件为其模型提供传递方法，不用直接访问一个组件的模型就能操纵模型值。因此，图3-3示出了组件变化它们的模型。<br>
+              　　我们还知道，JButton、JLabel和JSlider等组件监听它们的模型，以便把模型事件传送给组件自己的监听器。因此，图3-3描述这了种模型，所以，图3-3示了被组件 
+              模型更新的监听器。通常，监听器通过有选择地从模型获得信息并变化组件或UI代表来响应事件。<br>
+              　　案例<br>
+              　　图3-3图解说明了组成轻量Swing组件的对象相互通信的一般情况。本节介绍两个具体的例子以进一步阐明轻量Swing的组件通信。<br>
+              　　图3-4示出了一个滑杆属性被程序修改时所发生的事件序列。JSlider的paintTicks属性是滑杆的UI代表的一个属性，不是一个模型属性。<br>
+              　　Swing滑杆维护一个boolean属性，该属性决定滑杆是否绘制勾号（tick）标记。图3-4示出了JSlider.setPaintTicks()被调用时发生的事件序列。<br>
+              　　在设置了paintTicks属性后，JSlider.setPaintTicks()调用firePropertyChange()，firePropertyChange()则向滑杆的属性变化监听器报告属性变化事件。滑杆属性变化监听器之一是BasicSliderUI.PropertyChangeHandler的一个实例，它对这个事件的反映是强迫滑杆的UI代表更新滑杆。<br>
+              　　在把变化情况通知给监听器之后，JSlider.setPaintTicks()使滑杆重新生效并重画滑杆。<br>
+              　　除了图3-5是为图3-4所示的事件序列定制的以外，图3-5与图3-3类似。当JSlider.setPaintTicks()被激活后，这个滑杆更新UI代表的一个监听器。这个监听器便修改这个UI代表，这个UI代表获得这个组件本身的信息。<br>
+              　　图3-6示出在滑杆的轨道上按下鼠标后发生的事件序列。鼠标按下事件派发给滑杆，滑杆响应该事件，把一个事件发送给它的监听器。它的监听器之一是BasicSliderUI的TrackListener的一个实例。<br>
+              　　这个监听器通过调用BasicSliderUI.scrollDueToClickInTrack()来操纵滑杆的UI代表。这个UI代表然后调用JSlider.setValue()来设置滑杆的值。JSlider.setValue()方法是DefaultBounderRangeModel.setValue()的参数传递方法。参见3.2.1节“Swing组件”中对模型属性的组件传递方法的讨论。<br>
+              　　当这个模型值设置后，模型激发一个状态已变化事件，该事件由一个BasicSliderUI.ChangeHandler实例处理。变化监听器通过算滑杆的滑块位置，然后重画滑杆来处理这个事件。<br>
+              　　图3-7示出了图3-6中说明的事件序列的组件通信。滑杆激发一个由轨道监听器处理的事件。该监听器修改UI代表（它更新滑杆），然后滑杆又更新模型。模型激发一个状态变化事件，这个事件由一个变化监听器通过重画组件来处理。 
+            </p>
+            <p><b><a name="3.2.4"></a>3.2.4 模型</b></p>
+            <p>　　大多数轻量Swing组件都有这样一个模型，这个模型维护状态信息，并在信息变化时激发事件(有些组件（例如，JSeparater)没有模型），一个按钮的模型跟踪按钮的助记键及按钮是否待按下、按下或选取。按钮模型在它们的模型改变时将激发变化事件，当模型的选取状态变化时将激发项事件。<br>
+              　　Swing提示<br>
+              　　谁在监听?<br>
+              　　Swing组件由许多对象组成，例如，一个滑杆至少由九个对象组成，参见图3-2“滑杆组件类”。通过记住谁在监听谁有助于跟踪对象在做什么和了解对象之间是怎么交互的。<br>
+              　　组件监听其模型，其主要目的是把事件传送给已向组件登记过的监听器。组件还为模型属性提供传递方法。传送模型事件和提供模型属性的传递方法减少了直接访问组件模型的需要。<br>
+              　　UI代表监听器主要监听组件，有时也直接监听组件的模型。UI代表对组件和模型变化的响应通常是更新它们的外观，这通常要访问组件或模型，以便获得有关变化的更多信息。 
+              <br>
+              　　模型是当作JavaBeans的关联属性来实现的。如果修改一个属性导致激发一个属性变化事件，则这个属性就是关联的，并且这个属性的访问方法遵循如下名字的约定：<br>
+              　　public void setModel(&lt;<i>ModelInterface</i>&gt;model)<br>
+              　　public &lt;<i>ModelIntervace</i>&gt;getModel()<br>
+              　　&lt; ModelInterface &gt;表示定义模型类型的接口名。<br>
+              　　1.模型事件<br>
+              　　模型具有激发大量事件的潜能。例如，当一个滑杆的滑块拖动时，该滑杆的模型激发一个连续不断的事件流，指示这个滑杆的值正在改变。因此，从性能方面来看，模型为每个激发的事件创建一个事件不总是实现的。<br>
+              　　为了大大减少由一个模型创建的事件对象的数量，模型激发一个由javax.swing.event.ChangeEvent类定义的特殊事件类型。变化事件与大多数其他事件不同，因为它们仅包含事件源这一种信息。这样，每个模型可以对所有的变化通知重复使用一个变化事件。<br>
+              　　激发变化事件称为轻量通知，因为很少的信息与事件有关。激发其他的事件（例如，由按钮激发的动作事件）称为状态通知，因为该事件除包含事件之外还包含许多状态信息。<br>
+              　　轻量通知用于要经常修改的模型属性。监听轻量通知的监听器（指实现ChangeListener接口的监听器）询问从变化事件获得的事件源，以了解与变化有关的更多信息。<br>
+              　　对很少变化的模型属性则使用状态通知。例如，从一个列表模型中删除一个元素产生一个状态通知，该通知包括删除行的索引值。<br>
+              　　2.Swing模型<br>
+              　　表3-1列出了Swing模型接口以及与模型有关的组件。该表还指出了模型是否提供了轻量或状态通知以及Swing是否提供了模型接口的一个抽象实现。</p>
+            <p> 　　　　　　　　　　　　<b>表3-1 Swing模型</b><br>
+              <font face="Fixedsys, 宋体">　　━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br>
+              　　模型接口　　　　　　　　使用者　　　　　　　　　　　通知<sup>②</sup>　抽象类 <br>
+              　　─────────────────────────────────<br>
+              　　BoundedRangeModel　　JProgressBar、JSlider　　　　　 LW<br>
+              　　ButtonModel　　　　　JButton、JCheckBox、　　　　　　LW/ST<br>
+              　　　　　　　　　　　　 JCheckBoxMenuItem、<br>
+              　　　　　　　　　　　　 JMenu、JMenuItem、<br>
+              　　　　　　　　　　　　 JRadioButton、<br>
+              　　　　　　　　　　　　 JRadioButtonMenuItem<br>
+              　　　　　　　　　　　　 JToggleButton<br>
+              　　ComboBoxModel　　　　JComboBox　　　　　　　　　　 　ST<br>
+              　　Document1<sup>①</sup>　　　　　JEditorPane、JPasswordField、<br>
+              　　　　　　　　　　　　 JTextArea　　　　　　　　　　　 ST<br>
+              　　　　　　　　　　　　 JTextField、JTextPane<br>
+              　　ListModel　　　　　　JList　　　　　　　　　　　　 　ST<br>
+              　　ListSelectionModel　 JList、JTable　　　　　　　　　 ST<br>
+              　　SingleSelectionModel JMenuBar、JPopupMenu、<br>
+              　　　　　　　　　　　　 JTabbedPane 　　　　　　　　　　LW<br>
+              　　TableModel　　　　　 JTable 　　　　　　　　　　　　 ST<br>
+              　　TableColumnModel　　 JTable 　　　　　　　　　　　　 ST<br>
+              　　TreeModel　　　　　　JTree 　　　　　　　　　　　　　ST<br>
+              　　TreeSelectionModel　 JTree 　　　　　　　　　　　　　ST<br>
+              　　━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br>
+              　　①Document接口在javax.swing.text包中<br>
+              　　②LW=轻量通知　ST=状态通知</font></p>
+            <p>　　所有的Swing模型都由javax.swing包中的接口定义，并且所有的Swing模型都有一个缺省的实现。例如，ButtonModel接口由DefaultButtonModel类来实现，ListModel由DefaultListModel来实现，如此类推。在没有为组件显式地设置模型时，就使用缺省实现。<br>
+              　　有些模型如ListModel、TableModel和文本包中的Document接口，提供了抽象实现供开发人员去扩展。抽象的模型实现至少为监听器和事件激发方法提供了登记方法，这使得它们具有子类化的价值。提供抽象实现的模型是更复杂的Swing模型。<br>
+              　　3.一个模型的多个说明<br>
+              　　MVC体系结构的优点之一是可以把多个视图附加在单个模型上。而且，因为模型向它们的视图广播变化，所以模型的所有视图很容易保持同步。<br>
+              　　<a href="s03_t08.htm" target="_blank">图3-8</a>所示的小应用程序含有两个组件：一个滑杆和一个滚动窗格，它们共享DefaultBoundedRangeModel的一个实例。滑杆使用这个模型来定位其滑块的位置，滚动空格则使用这个模型来设置要显示的图形的比例。<br>
+              　　本例中的滑杆和滚动窗格（ImageView实例）共享一个DefaultBoundedRangeModel实例。通过调整滑杆来改变模型值会产生一个模型变化通知。滚动窗格响应这个模型通知，它根据这个模型值来调整它所显示的图像的比例。<br>
+              　　本例的小应用程序创建模型、滑杆和滚动窗格。把这个模型传送给JSlider和ImageView的构造方法，并且还把一个变化监听器添加到模型中。 
+              <br>
+              　　public class Test extends JApplet{<br>
+              　　　DefaultBoundedRangeModel model=<br>
+              　　　　new DefaultBoundedRangeModel(100,0,0,100);<br>
+              　　　JSlider slider = new JSlider(model);<br>
+              　　　JLabel readOut=new JLabel(&quot;100%&quot;);<br>
+              　　　//ImageIcon image = new ImageIcon(&quot;shortcake.jpg&quot;);原文<br>
+              　　　ImageIcon image = new ImageIcon(this.getClass().getResource(&quot;shortcake.jpg&quot;)); 
+              <br>
+              　　　ImageView imageView = new ImageView(image,model);<br>
+              　　　public void init(){<br>
+              　　　　Container contentPane =getContentPane();<br>
+              　　　　JPanel panel = new JPanel();<br>
+              　　　　panel.add(new JLabel(&quot; Set Image Size:&quot;));<br>
+              　　　　panel.add(slider);<br>
+              　　　　panel.add(readOut);<br>
+              　　　　contentPane.add(panel,BorderLayout.NORTH);<br>
+              　　　　contentPane.add(imageView,BorderLayout.CENTER);<br>
+              　　　　model.addChangeListener(new ReadOutSynchronizer());<br>
+              　　　}<br>
+              　　　...<br>
+              　　这个小应用程序的变化监听器对模型变化作出反应，它更新显示图像比例的readOut标签。此后还调用了这个标签的revalidate方法，以便这个标签重新布局和重画。有关revalidate方法的更多信息，请参见4.3.5节“Validate、Invalidate和Revalidate方法”。<br>
+              　　...<br>
+              　　class ReadoutSynchronizer implements ChangeListener{<br>
+              　　　public void stateChanged(ChangeEvent e){<br>
+              　　　　String s= Integer.toString(model.getValue());<br>
+              　　　　readOut.setText(s + &quot;%&quot;);<br>
+              　　　　readOut.revalidate();<br>
+              　　　}<br>
+              　　}} </p>
+            <p>　　接下来定义一个扩展JScrollPane的ImageView类，这个ImageView类必须以一个图像图标和一个有边界范围的模型为参数来构造。有关图标的更多信息，请参见第5章“边框、图标和动作”。有关滚动窗格的更多信息，则参见13.2节“JScrollPane”。<br>
+              　　ImageView构造方法把一个变化监听器添加到模型中。这个变化监听器作为ImageVew的一个内部类来实现，它根据模型值创建一个与原图像成比例的实例。接着，把与原图像成比例的实例显示在滚动窗格上。<br>
+              　　class ImageView extends JScrollPane {<br>
+              　　　... <br>
+              　　　public ImageView(ImageIcon icon, BoundedRangeModel model) {<br>
+              　　　　...<br>
+              　　　　<b>model.addChangeListener(new ModelListener());</b></p>
+            <p> 　　　　...<br>
+              　　　}<br>
+              　　　class <b>ModelListener implements ChangeListener</b> {<br>
+              　　　　public void stateChanged(ChangeEvent e) {<br>
+              　　　　　<b>BoundedRangeModel model</b> = <br>
+              　　　　　　<b>(BoundedRangeModel)e.getSource()</b>;</p>
+            <p> 　　　　　if( <b>! model.getValueIsAdjusting()</b>) {<br>
+              　　　　　　int min = <b>model.getMinimum()</b>, <br>
+              　　　　　　max = <b>model.getMaximum()</b>, <br>
+              　　　　　　span = max - min,<br>
+              　　　　　　value = <b>model.getValue()</b>;</p>
+            <p> 　　　　　　double multiplier = (double)value / (double)span;</p>
+            <p> 　　　　　　multiplier = multiplier == 0.0 ? <br>
+              　　　　　　　　　　　0.01 : multiplier;<br>
+              　　　　　<br>
+              　　　　　　Image scaled = originalImage.getScaledInstance(<br>
+              　　　　　　　　　(int)(originalSize.width * multiplier),<br>
+              　　　　　　　　　(int)(originalSize.height * multiplier),<br>
+              　　　　　　　　　Image.SCALE_FAST);</p>
+            <p> 　　　　　　icon.setImage(scaled);<br>
+              　　　　　　...<br>
+              　　　　　}<br>
+              　　　　}<br>
+              　　　}<br>
+              　　}<br>
+              　　例3-1列出了图3-8所示的小应用程序的完整代码。</p>
+            <p align="center"><b>例3-1　一个带多个视图的模型</b></p>
+            <hr>
+            <p>　　import javax.swing.*;<br>
+              　　import javax.swing.event.*;<br>
+              　　import java.awt.*;<br>
+              　　import java.awt.event.*;<br>
+              　　import java.util.*;</p>
+            <p>　　public class Test extends JApplet {<br>
+              　　　DefaultBoundedRangeModel model =<br>
+              　　　　new DefaultBoundedRangeModel(100,0,0,100);</p>
+            <p> 　　　JSlider slider = new JSlider(model);<br>
+              　　　JLabel readOut = new JLabel(&quot;100%&quot;);</p>
+            <p> 　　　//ImageIcon image = new ImageIcon(&quot;shortcake.jpg&quot;); 
+              原文 <br>
+              　　　ImageIcon image = new ImageIcon(this.getClass().getResource(&quot;shortcake.jpg&quot;));<br>
+              <br>
+              　　　ImageView imageView = new ImageView(image, model);</p>
+            <p> 　　　public void init() {<br>
+              　　　　Container contentPane = getContentPane();<br>
+              　　　　JPanel panel = new JPanel();</p>
+            <p> 　　　　panel.add(new JLabel(&quot;Set Image Size:&quot;));<br>
+              　　　　panel.add(slider);<br>
+              　　　　panel.add(readOut);</p>
+            <p> 　　　　contentPane.add(panel, BorderLayout.NORTH);<br>
+              　　　　contentPane.add(imageView, BorderLayout.CENTER);</p>
+            <p> 　　　　model.addChangeListener(new ReadOutSynchronizer());<br>
+              　　　}<br>
+              　　　class ReadOutSynchronizer implements ChangeListener {<br>
+              　　　　public void stateChanged(ChangeEvent e) {<br>
+              　　　　　String s = Integer.toString(model.getValue());<br>
+              　　　　　readOut.setText(s + &quot;%&quot;);<br>
+              　　　　　readOut.revalidate();<br>
+              　　　　}<br>
+              　　　}<br>
+              　　}<br>
+              　　class ImageView extends JScrollPane {<br>
+              　　　JPanel panel = new JPanel();<br>
+              　　　Dimension originalSize = new Dimension();<br>
+              　　　Image originalImage;<br>
+              　　　ImageIcon icon;</p>
+            <p> 　　　public ImageView(ImageIcon icon, BoundedRangeModel model) {<br>
+              　　　　panel.setLayout(new BorderLayout());<br>
+              　　　　panel.add(new JLabel(icon));</p>
+            <p> 　　　　this.icon = icon;<br>
+              　　　　this.originalImage = icon.getImage();</p>
+            <p> 　　　　setViewportView(panel);<br>
+              　　　　model.addChangeListener(new ModelListener());</p>
+            <p> 　　　　originalSize.width = icon.getIconWidth();<br>
+              　　　　originalSize.height = icon.getIconHeight();<br>
+              　　　}<br>
+              　　　class ModelListener implements ChangeListener {<br>
+              　　　　public void stateChanged(ChangeEvent e) {<br>
+              　　　　　BoundedRangeModel model = <br>
+              　　　　　　(BoundedRangeModel)e.getSource();</p>
+            <p> 　　　　　if( ! model.getValueIsAdjusting()) {<br>
+              　　　　　　int min = model.getMinimum(), <br>
+              　　　　　　max = model.getMaximum(), <br>
+              　　　　　　span = max - min,<br>
+              　　　　　　value = model.getValue();</p>
+            <p> 　　　　　　double multiplier = (double)value / (double)span;</p>
+            <p> 　　　　　　multiplier = multiplier == 0.0 ? <br>
+              　　　　　　0.01 : multiplier;<br>
+              <br>
+              　　　　　　Image scaled = originalImage.getScaledInstance(<br>
+              　　　　　　　(int)(originalSize.width * multiplier),<br>
+              　　　　　　　(int)(originalSize.height * multiplier),<br>
+              　　　　　　Image.SCALE_FAST);</p>
+            <p> 　　　　　　icon.setImage(scaled);<br>
+              　　　　　　panel.revalidate();<br>
+              　　　　　}<br>
+              　　　　}<br>
+              　　　}<br>
+              　　}</p>
+            <p>　　test.html文件：</p>
+            <p>　　&lt;title&gt;Test&lt;/title&gt;<br>
+              　　&lt;hr&gt;<br>
+              　　&lt;applet code=&quot;Test.class&quot; width=375 height=400&gt;<br>
+              　　&lt;/applet&gt;<br>
+              　　&lt;hr&gt;</p>
+            <p> 　　注：如用IE浏览器浏览test.html，JApplet不能正常显示，不过你可以用appletview test.html命令来浏览。</p>
+            <hr>
+            <p>　　4.轻量事件通知<br>
+              　　由“模型”一节我们知道，模型能够提供轻量通知和状态通知两种通知。轻量通知使用一个只知道事件源的ChangeEvent(变化事件)，状态通知则使用提供有关变化的更多信息的事件。<br>
+              　　变化事件由一些事件来处理，这些对象的类实现ChangeListener接口。接口总结3-1对ChangeListener接口进行了总结。<br>
+              　　接口总结3-1 ChangeListener<br>
+              　　public abstract void stateChanged (ChageEvent)<br>
+              　　与大多数监听器一样，ChangeListener接口只定义了一个方法。StateChanged方法以ChangeEvent的一个实例作为参数。类总结3-1中介绍了ChangeEvent类。<br>
+              　　类总结3-1 ChangeEvent<br>
+              　　扩展：java.util.EventObject<br>
+              　　构造方法<br>
+              　　public ChageEvent(Object source)<br>
+              　　ChangeEvent类仅提供了一个构造方法，没有提供其他方法。ChangeEvent构造方法以事件源作为参数。<br>
+              　　图3-9所示的小应用程序通过监控滑杆的值来说明轻量通知。一个变化监听器添加到这个小应用程序的滑杆中以获得滑杆值并更新这个小应用程序的状态区。<br>
+              　　图3-9轻量通知<br>
+              　　例3-2列出了图3-9所示的小应用程序的代码</p>
+            <p align="center"> <b>例3-2一个滑杆的轻量通知</b> </p>
+            <p>　　import java.awt.*;<br>
+              　　import javax.swing.*;<br>
+              　　import javax.swing.event.*;<br>
+              　　public class Test extends JApplet{<br>
+              　　　public void init(){<br>
+              　　　　JSlider slider = new JSlider(0,100,50);<br>
+              　　　　　getContentPane().add(slider,BorderLayout.CENTER);<br>
+              　　　　　slider.addChangeListener(new ChangeListener(){<br>
+              　　　　　　public void stateChanged(ChangeEvent e){<br>
+              　　　　　　JSlider s = (JSlider) e.getSource();<br>
+              　　　　　　showStatus(Integer.toString(s.getValue()));<br>
+              　　　　　}<br>
+              　　　　});<br>
+              　　　}<br>
+              　　} </p>
+            <p>　　5.状态事件通知<br>
+              　　对不经常变化的模型属性，模型使用状态通知。状态通知激发所有类型的事件，并且提供比事件源更多信息（轻量事件通知仅提供事件源一种信息）。例如，当选取或取消选取一个单选按钮时，按钮模型将激发一个项事件。<br>
+              　　6.属性变化通知<br>
+              　　当模型的关联属性变化时（当一个属性的变化激发一个属性变化事件，则这个属性称作关联属性。）模型会以一个java.beans.PropertyChangeEvent的形式产生状态通知。属性变化通知由一些对象来处理，这些对象的类实现java.beans.PropertyChangeListener接口，接口总结3-2中总结了这个接口。 
+              <br>
+            </p>
+            <table width="100%" border="1" cellspacing="0" cellpadding="0" bordercolorlight="#000000" bordercolordark="#FFFFFF">
+              <tr bgcolor="#CCCCCC"> 
+                <td> 
+                  <p><b>接口总结3-2 PropertyChangeListener</b></p>
+                </td>
+              </tr>
+            </table>
+            <p>　　public void propertyChange(PropertyChangeEvent)<br>
+              　　PropertyChangeListener只定义了一个方法，该方法所带参数是PropertyChangeEvent的一个实例。类总结3-2总结了PropertyChangeEvent类。</p>
+            <table width="100%" border="1" cellspacing="0" cellpadding="0" bordercolorlight="#000000" bordercolordark="#FFFFFF">
+              <tr bgcolor="#CCCCCC"> 
+                <td> 
+                  <p><b>类总结3-2 PropertyChangeEvent</b></p>
+                </td>
+              </tr>
+            </table>
+            <p>　　扩展：java.utilEventObject<br>
+              　　1.构造方法<br>
+              　　public PropertyChangeEvent(Object source,String propertyName,Object 
+              oldValue,Object newValue)<br>
+              　　属性变化事件以事件源、属性名、属性的旧值和新值为参数来构造。<br>
+              　　2.方法<br>
+              　　public String getPropertyName()<br>
+              　　public Object getNewValue()<br>
+              　　public Object getOldValue()<br>
+              　　public void setPropagationld(Object propagationld)<br>
+              　　public Object getPropagationld() </p>
+            <hr>
+            <p> 　　属性变化监听器一般都要注意属性名的变化，因为大多数监听器对它们处理的属性是有选择的。同样，几乎所有的属性变化监听器都要跟踪属性的新值。属性变化监听器设计如下：</p>
+            <p>　　//code fragment...<br>
+              　　SomePropertyChangeListener implements PropertyChangeListener{<br>
+              　　　public void propertyChange(PropertyChangeEvent e){<br>
+              　　　　String name=e.getName();<br>
+              　　　　//if property is one this listener is interested in ...<br>
+              　　　　if(name.equals(&quot; PropertyImInterestedIn&quot;)){<br>
+              　　　　　SomeType newValue = (SomeType)e.getNewValue();<br>
+              　　　　　//act upon new value...<br>
+              　　　　}<br>
+              　　　}<br>
+              　　图3-10所示的应用程序用一个树和一个用于设置该树的rootVisible属性的复选框举例说明了处理模型属性变化事件。如果rootVisible属性是true，则树的根节点是可视的，否则，根节点是隐藏的。<br>
+              　　----<br>
+              　　图3-10　<a href="s03_tu10.jar">模型属性变化通知</a>(当下载对话框出现时，可直接点击打开按钮试试)<br>
+              　　----<br>
+              　　这个应用程序实现一个属性变化监听器，该监听器在树的rootVisible属性修改时，显示一个消息对话框。</p>
+            <p>　　　class PropertyListener implements PropertyChangeListener {<br>
+              　　　　public void propertyChange(PropertyChangeEvent e) {<br>
+              　　　　　String name = e.getPropertyName();</p>
+            <p> 　　　　　if(name.equals(JTree.ROOT_VISIBLE_PROPERTY)) {<br>
+              　　　　　　String msg = &quot;Root Visible Property: &quot; +<br>
+              　　　　　　e.getNewValue().toString();</p>
+            <p> 　　　　　　JOptionPane.showMessageDialog(<br>
+              　　　　　　Test.this, // parent comp<br>
+              　　　　　　msg, // message <br>
+              　　　　　　&quot;Property Change&quot;, // title<br>
+              　　　　　　JOptionPane.INFORMATION_MESSAGE);<br>
+              　　　　　}<br>
+              　　　　}<br>
+              　　　}<br>
+              　　大多数属性变化监听器只对特定类型事件源的关联属性的一个子集感兴趣。属性变化监听器通常通过获取改变的属性的名字，并把它与一个公共常量相比较，以决定是否处理这个属性变化。下面就是这种属性变化监听器的例子。<br>
+              　　例3-3列出了图3-10所示的应用程序的完整代码。<br>
+            </p>
+            <p align="center"><b>例3-3　处理模型属性变化通知 </b></p>
+            <hr size="1" noshade>
+            <p> 　　import javax.swing.*;<br>
+              　　import java.awt.*;<br>
+              　　import java.awt.event.*;<br>
+              　　import java.util.*;<br>
+              　　import java.beans.*;</p>
+            <p>　　public class Test extends JFrame {<br>
+              　　　JTree tree = new JTree();</p>
+            <p> 　　　public Test() {<br>
+              　　　　Container contentPane = getContentPane();<br>
+              　　　　JScrollPane scrollPane = new JScrollPane(tree);</p>
+            <p> 　　　　contentPane.add(new ControlPanel(), BorderLayout.NORTH);<br>
+              　　　　contentPane.add(scrollPane, BorderLayout.CENTER);</p>
+            <p> 　　　　tree.addPropertyChangeListener(new PropertyListener());<br>
+              　　　}<br>
+              　　　class ControlPanel extends JPanel {<br>
+              　　　　JCheckBox showRoot = new JCheckBox(&quot;show root node&quot;);</p>
+            <p> 　　　　public ControlPanel() {<br>
+              　　　　　showRoot.setSelected(tree.isRootVisible());</p>
+            <p> 　　　　　setLayout(new FlowLayout());<br>
+              　　　　　add(showRoot);</p>
+            <p> 　　　　　showRoot.addActionListener(new ActionListener() {<br>
+              　　　　　　public void actionPerformed(ActionEvent e) {<br>
+              　　　　　　　tree.setRootVisible(showRoot.isSelected()); <br>
+              　　　　　　}<br>
+              　　　　　});<br>
+              　　　　}<br>
+              　　　}<br>
+              　　　class PropertyListener implements PropertyChangeListener {<br>
+              　　　　public void propertyChange(PropertyChangeEvent e) {<br>
+              　　　　　String name = e.getPropertyName();</p>
+            <p> 　　　　　if(name.equals(JTree.ROOT_VISIBLE_PROPERTY)) {<br>
+              　　　　　　String msg = &quot;Root Visible Property: &quot; +<br>
+              　　　　　　e.getNewValue().toString();</p>
+            <p> 　　　　　　JOptionPane.showMessageDialog(<br>
+              　　　　　　Test.this, // parent comp<br>
+              　　　　　　msg, // message <br>
+              　　　　　　&quot;Property Change&quot;, // title<br>
+              　　　　　　JOptionPane.INFORMATION_MESSAGE);<br>
+              　　　　　}<br>
+              　　　　}<br>
+              　　　}<br>
+              　　　public static void main(String args[]) {<br>
+              　　　　GJApp.launch(new Test(), <br>
+              　　　　&quot;Model Property Changes&quot;,300,300,450,300);<br>
+              　　　}<br>
+              　　}<br>
+              　　class GJApp extends WindowAdapter {<br>
+              　　　static private JPanel statusArea = new JPanel();<br>
+              　　　static private JLabel status = new JLabel(&quot; &quot;);<br>
+              　　　static private ResourceBundle resources;</p>
+            <p> 　　　public static void launch(final JFrame f, String title,<br>
+              　　　final int x, final int y, <br>
+              　　　final int w, int h) {<br>
+              　　　　　launch(f,title,x,y,w,h,null); <br>
+              　　　}<br>
+              　　　public static void launch(final JFrame f, String title,<br>
+              　　　final int x, final int y, <br>
+              　　　final int w, int h,<br>
+              　　　String propertiesFilename) {<br>
+              　　　　f.setTitle(title);<br>
+              　　　　f.setBounds(x,y,w,h);<br>
+              　　　　f.setVisible(true);</p>
+            <p> 　　　　statusArea.setBorder(BorderFactory.createEtchedBorder());<br>
+              　　　　statusArea.setLayout(new FlowLayout(FlowLayout.LEFT,0,0));<br>
+              　　　　statusArea.add(status);<br>
+              　　　　status.setHorizontalAlignment(JLabel.LEFT);</p>
+            <p> 　　　　f.setDefaultCloseOperation(<br>
+              　　　　WindowConstants.DISPOSE_ON_CLOSE);</p>
+            <p> 　　　　if(propertiesFilename != null) {<br>
+              　　　　　resources = ResourceBundle.getBundle(<br>
+              　　　　　　propertiesFilename, Locale.getDefault());<br>
+              　　　　}</p>
+            <p> 　　　　f.addWindowListener(new WindowAdapter() {<br>
+              　　　　　public void windowClosed(WindowEvent e) {<br>
+              　　　　　　System.exit(0);<br>
+              　　　　　}<br>
+              　　　　});<br>
+              　　　}<br>
+              　　　static public JPanel getStatusArea() {<br>
+              　　　　return statusArea;<br>
+              　　　}<br>
+              　　　static public void showStatus(String s) {<br>
+              　　　　status.setText(s);<br>
+              　　　}<br>
+              　　　static Object getResource(String key) {<br>
+              　　　　if(resources != null) {<br>
+              　　　　　return resources.getString(key);<br>
+              　　　　}<br>
+              　　　　return null;<br>
+              　　　}<br>
+              　　}<br>
+            </p>
+            <hr size="1" noshade>
+            <table width="100%" border="1" cellspacing="0" cellpadding="0" bordercolorlight="#000000" bordercolordark="#FFFFFF">
+              <tr bgcolor="#CCCCCC"> 
+                <td> 
+                  <p><b>Swing提示</b></p>
+                </td>
+              </tr>
+            </table>
+            <p><b>一个模型的多个视图</b><br>
+              　　一个Swing模型可以有多个视图，这点常常得不到人们的重视。初看起来，一个模型带多个视图是毫无意义的，例如，使一个进度条和一个滚动条共享一个模型有什么价值呢？<br>
+              　　图3-8所示的小应用程序提供了一个模型带多个视图的例子。该小应用程序的滑杆和滚动窗格共享一个模型，以便滑杆的变化能在滚动窗格中显示的图像上得到反应。<br>
+              　　还有许多其他的多个视图共享一个模型的情况。例如，可以在JTable实例和一个定制组件之间共享一个表格模型。这个定制组件绘制表格模型中所含数据的图表。把模型与视图分离使Swing组件更灵活和更具有再使用性。 
+            </p>
+            <hr size="1" noshade>
+            <p><b>3.2.5 UI代表</b></p>
+            <p>　　组件把实现其用户界面(UI)的任务交给一个UI代表来完成。<br>
+              　　UI代表是在它们的组件的构造方法中实例化的，并且可以作为组件的一个关联属性来访问。例如，下面所列的JSlider.java的部分代码举例说明了一个滑杆是如何创建它的代表的以及滑杆的UI代表是如何被访问的。<br>
+              　　//From.JSlider.java<br>
+              　　//Note:the ui object below is a protected member of JComponent<br>
+              　　class JSlider extends JComponent<br>
+              　　　implemebts SwingConstants,Accessible{<br>
+              　　　...<br>
+              　　　public JSlider(int orientation ,int min,int max,int value){<br>
+              　　　　...<br>
+              　　　　updateUI();<br>
+              　　　}<br>
+              　　　...<br>
+              　　　public void updateUI(){<br>
+              　　　　...<br>
+              　　　　setUI((SliderUI) UIManager.getUI(this));<br>
+              　　　}<br>
+              　　　...<br>
+              　　　public SliderUI(){<br>
+              　　　　return (SliderUI) ui;<br>
+              　　　}<br>
+              　　　...<br>
+              　　}<br>
+              　　与其他的轻量Swing组件一样，JSlider也通过UIManager获得UI代表。在3.2.6节中介绍了UIManager.getUI()实例化一个UI代表的方式：这里知道UIManager.getUI()返回一个UI代表就够了。<br>
+              　　表3-2示出了在JComponent类中定义的、与组件的UI代表有关的方法（注：JComponent类是所有轻量Swing组件的超类，参见第4章“JComponent类”）。<br>
+              　　所有的轻量Swing组件都继承表3-2所列的方法，以设置和获得它们的UI代表。其中updateUI方法更新UI代表以便与当前的界面样式匹配。getUIClassID方法返回一个表示组件的UI代表类的字符串，该方法还用于对UI代表实例化，参见3.2.6节中有关创建UI代表的介绍。<br>
+              　　　　　　<b>表3-2 JComponent的UI代表方法</b><br>
+              　　━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br>
+              　　方法　　　　　　　　　　　描述 <br>
+              　　─────────────────────────────────<br>
+              　　&lt;UI&gt;getUI()　　返回对一个组件的UI代表的一个引用 <br>
+              　　─────────────────────────────────<br>
+              　　void setUI(&lt;UI&gt;)　　设置一个组件的UI代表<br>
+              　　─────────────────────────────────<br>
+              　　void updateUI()　　为当前的界面样式更新一个组件的UI代表<br>
+              　　─────────────────────────────────<br>
+              　　String getUIClassID()　返回一个字符串，该字符串是这个UI代表的类名<br>
+              　　━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br>
+              　　①&lt;UI&gt;=UI代表类名，例如，ButtonUI、LabelUI等等。 <br>
+              　　表3-2中的&lt;UI&gt;指一个组件的UI代表的类名。例如，JButton以如下方式定义表3-2所列的前两种方法：<br>
+              　　ButtonUI getUI()<br>
+              　　void setUI(ButtonUI ui)<br>
+              　　UI代表的类名可以通过从组件的类名中去掉“J”并添加上一个“UI”来获得。例如，JButton的UI代表的类名是ButtonUI，JSlider的UI代表类名则是SliderUI。<br>
+              　　UI代表类名表示的是javax.swing.plaf包中的抽象类。例如，一个按钮的UI代表的全称类名是抽象的javax.swing.plaf.ButtonUI。<br>
+              　　javax.swing.plaf包还包括抽象的ComponentUI类，该类为所有的UI代表定义基本行为。ComponentUI类是javax.swing.plaf中抽象UI代表类的超类。例如，ButtonUI和SliderUI，以及所有其他的javax.swing.plaf 
+              UI类都扩展javax.swing.plaf.ComponentUI。<br>
+              　　Javax.swing.plaf.basic包提供实现Swing界面样式的通用部分的类。javax.swing.plaf.basic包的UI代表提供缺省绘制功能和一些事件处理行为，它们可以在需要时用与界面样式有关的类来重载。<br>
+              　　图3-11示出了BasicSliderUI类的类图。<br>
+              　　滑杆的UI代表跟踪与滑杆的外观有关的属性。滑杆UI代表还为缺省事件处理行为使用了许多监听器。<br>
+              　　BasicSliderUI类被MetalSliderUI、WindowsSliderUI和MotifSliderUI等与界面样式有关的滑杆UI类扩展。<br>
+              　　与“模型”中对模型的介绍一样，下面对UI代表的讨论将通过考察UI代表的案例，从静态认识转移到动态认识。 </p>
+            <p> <b>3.2.6 组件UI的案例</b></p>
+            <p>　　为了理解UI代表是怎样与它们的组件一起工作的，有必要了解两个关键案例：绘制UI代表，把UI代表安装到一个组件中。<br>
+              　　1.绘制UI代表<br>
+              　　图3-12所示的流程图显示了在Swing按钮绘制时(注：有关绘制Swing轻量组件更详细的情况，请参见4.3节“绘制JComponent“。)所发生的事件序列。图3-12中示出的序列对所有的轻量组件都是类似的。JButton.paintComponent()为这个按钮的UI代表调用updage方法。BasicButtonUI.paint()方法绘制这个组件，这个按钮然后绘制该按钮的边框和这个组件的子组件。<br>
+              　　如图3-12所示，JLabel、JButton等组件类与它们的UI代表一起共同完成绘制任务。UI代表负责绘制组件本身，组件类负责绘制组件的边框和组件的子组件(注：大多数组件没有子组件)。 
+              <br>
+              　　2.安装一个UI代表<br>
+              　　图3-13图解说明了把一个UI代表插入一个组件时发生的事件序列。<br>
+              　　从JButton构造方法中激活JButton.updateUI()。与其他轻量Swing组件的updateUI方法一样，JButton.updateUI()从UI管理器获得它的UI代表。这个按钮把一个对它本身的引用传递给UIManager.getUI()：<br>
+              　　//From JButton.java<br>
+              　　public void updateUI(){<br>
+              　　　setUI((Button) UIManager.getUI(this));<br>
+              　　}<br>
+              　　UIManager.getUI()使用UIDefault的一个实例，并调用UIDefaults.getUI()来创建UI代表。<br>
+              　　//From UIManager.java<br>
+              　　public static ComponentUI getUI(JComponent target){<br>
+              　　　...<br>
+              　　　ComponentUI ui=null;<br>
+              　　　...<br>
+              　　　if(ui==null){<br>
+              　　　　ui=getDefaults().getUI(target);<br>
+              　　　}<br>
+              　　　return ui;<br>
+              　　}<br>
+              　　UIDefaults.getUI()是所有动作发生的地方，包括实例化UI代表。下面列出了UIDefaluts.getUI方法：<br>
+              　　//From UIDefaults.java:<br>
+              　　public ComponentUI getUI(JComponent target){<br>
+              　　　ClassLoader uiClassLoader=<br>
+              　　　　target.getClass().getClassLoader();<br>
+              　　　Class uiClass=getUIClass (target.getUIClass(),<br>
+              　　　　　　uiClassLoader);<br>
+              　　　　object uiObject = null;<br>
+              　　　if(uiClass==null){<br>
+              　　　　getUIError(&quot;no ComponentUI class for: &quot;+target);<br>
+              　　　}<br>
+              　　　else{<br>
+              　　　　try{<br>
+              　　　　　Method m=(Method) get(uiClass);<br>
+              　　　　　if(m==null){<br>
+              　　　　　　Class acClass=javax.swing.JComponent.class;<br>
+              　　　　　　m=uiClass.getMethod(&quot; createUI&quot;,<br>
+              　　　　　　　new Class[]{acClass})<br>
+              　　　　　　put(uiClass,m);<br>
+              　　　　　}<br>
+              　　　　　　uiObject = m.invoke(null,new object[]{target});<br>
+              　　　　}<br>
+              　　　　catch (NoSuchMethodException e){<br>
+              　　　　　getUIError(&quot; static createUI() method not&quot;+<br>
+              　　　　　　&quot; found in&quot;+ uiClass);<br>
+              　　　　}<br>
+              　　　　catch(Exception e){<br>
+              　　　　　getUIError(&quot; createUI() failed for&quot;+ target +<br>
+              　　　　　　&quot; &quot;+e);<br>
+              　　　　}<br>
+              　　　}<br>
+              　　　return(ComponentUI) uiObject;<br>
+              　　}<br>
+              　　UIDefaults.getUI()必须能够实例化任何类型的UI代表。例如，如果当前的界面样式是Java的界面样式，则必须为滑杆实例化MetalSliderUI实例；如果当前的界面样式是Windows的界面样式，则必须为滑杆实例化WindowsSliderUI实例，等等。另外，UIDefaults.getUI()还必须能够实例化那些将开发出来的UI代表实例。显然，用new语句来实例化UI代表不是一个可行的选择。<br>
+              　　为了实例化任何类型的UI代表，UIDefaults.getUI()使用了Java的反射功能。UIDefaults.getUI()以一个对组件的引用（UI代表就是为这个组件的而创建的）作为参数。再用这个组件来获得对这个UI代表类的引用。<br>
+              　　有了UI代表类，再把反射功能用于获得对UI代表的static createUI方法的一个引用，然后再用Method.invoke()来调用这个方法（用这个组件作为参数）。所有UI代表实现一个 
+              static createUI方法，该方法返回一个对UI代表的引用。下面介绍有关createUI方法的更多信息。</p>
+            <p>　　1、ComponentUI类<br>
+              　　swing.plaf包中的ComponentUI类是所有SwingUI代表的抽象基类。UI代表不维护对组件的引用，反之，ComponentUI类的方法接受一个对JComponent的引用作为参数这样，一个UI代表可以被多个组件所共享。在JComponent上操作的共享对象是Swing的一个中心主题，例如，边框和图标设计成以一种类似的方式共享(参见第5章“边框，图标和动作”）</p>
+            <p></p>
+            <p>&nbsp; </p>
+            <p>&nbsp;</p>
+            <p>&nbsp;</p>
+            <p><br>
+              <br>
+              ----<br>
+              　　<a href="#" onclick=window.open("s03_t14.htm","s03_t14","width=300,height=170,toolbar=0,status=0,location=0,menubar=0,resizable=1") language=javaScript>图3-14</a> 
+              一个定制的界面样式<br>
+              ---- <br>
+              　　例3-4 列出了图3-14所示的小应用程序的完整代码。</p>
+            <p align="center"> <b>例3-4 一个定制的UI代表</b></p>
+            <hr size="1" noshade>
+            import javax.swing.*;<br>
+            import javax.swing.border.*;<br>
+            import javax.swing.plaf.basic.*;<br>
+            import java.awt.*;<br>
+            import java.awt.event.*;
+            <p>public class Test extends JApplet {<br>
+              private String s = new String();</p>
+            <p> public void init() {<br>
+              Container contentPane = getContentPane();<br>
+              JButton button = new JButton(new ImageIcon(this.getClass().getResource(&quot;punch.gif&quot;)));</p>
+            <p> button.setUI(new PopOutButtonUI());<br>
+              contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(button);</p>
+            <p> button.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              showStatus(s += '+');<br>
+              }<br>
+              });<br>
+              }<br>
+              }<br>
+              class PopOutButtonUI extends BasicButtonUI { <br>
+              public void installUI(JComponent c) {<br>
+              AbstractButton button = (AbstractButton)c;<br>
+              Border border = button.getBorder();</p>
+            <p> ImageIcon icon = (ImageIcon)button.getIcon();<br>
+              int iconW = icon.getIconWidth();<br>
+              int iconH = icon.getIconHeight();</p>
+            <p> Image scaled = icon.getImage().getScaledInstance(<br>
+              iconW + (iconW/3),<br>
+              iconH + (iconH/3),<br>
+              Image.SCALE_SMOOTH);</p>
+            <p> c.putClientProperty(&quot;oldBorder&quot;, border);<br>
+              c.setBorder(null);</p>
+            <p> button.setRolloverIcon(new ImageIcon(scaled));<br>
+              installListeners(button);<br>
+              }<br>
+              public void uninstallUI(JComponent c) {<br>
+              Border border = (Border)c.getClientProperty(&quot;oldBorder&quot;);</p>
+            <p> c.putClientProperty(&quot;oldBorder&quot;, null);<br>
+              c.setBorder(border);<br>
+              uninstallListeners((AbstractButton)c);<br>
+              }<br>
+              public Dimension getPreferredSize(JComponent c) {<br>
+              Dimension ps = super.getPreferredSize(c);</p>
+            <p> ps.width += ps.width/3;<br>
+              ps.height += ps.height/3;</p>
+            <p> return ps;<br>
+              }<br>
+              public boolean contains(JComponent c, int x, int y) {<br>
+              AbstractButton button = (AbstractButton)c;<br>
+              ButtonModel model = button.getModel();<br>
+              Icon icon = getIcon(button, model);</p>
+            <p> Rectangle iconBounds = new Rectangle(<br>
+              0,0,icon.getIconWidth(),icon.getIconHeight());</p>
+            <p> return iconBounds.contains(x,y);<br>
+              }<br>
+              public void paint(Graphics g, JComponent c) {<br>
+              AbstractButton button = (AbstractButton)c;<br>
+              ButtonModel model = button.getModel();</p>
+            <p> Icon icon = getIcon(button, model);<br>
+              Insets insets = c.getInsets();</p>
+            <p> icon.paintIcon(c,g,insets.left,insets.top);<br>
+              }<br>
+              private Icon getIcon(AbstractButton b, ButtonModel m) {<br>
+              return (m.isRollover() &amp;&amp; ! m.isPressed()) ?<br>
+              b.getRolloverIcon() : b.getIcon();<br>
+              }<br>
+              } </p>
+            <hr size="1" noshade>
+            <p>&nbsp; </p>
+            <p> 3.2.7 监听器</p>
+            <p>----<br>
+        　　<a href="#" onclick=window.open("s03_t15.htm","s03_t15","width=325,height=75,toolbar=0,status=0,location=0,menubar=0,resizable=1") language=javaScript>图3-15</a> 
+ 定制的事件处理<br>
+              ---- </p>
+            <p align="center"><b>例3-5 一个定制监听器的实现</b></p>
+            <hr size="1" noshade>
+            <p>import javax.swing.*;<br>
+              import javax.swing.event.*;<br>
+              import javax.swing.plaf.basic.*;<br>
+              import java.awt.*;<br>
+              import java.awt.event.*;<br>
+              import java.beans.*;</p>
+            <p>public class Test extends JApplet {<br>
+              public void init() {<br>
+              Container contentPane = getContentPane();<br>
+              final JSlider slider = new JSlider();<br>
+              final JCheckBox checkBox = new JCheckBox(&quot;Annotate&quot;);</p>
+            <p> slider.setUI(new AnnotatedSliderUI(slider));</p>
+            <p> contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(checkBox);<br>
+              contentPane.add(slider);</p>
+            <p> checkBox.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              boolean selected = checkBox.isSelected();</p>
+            <p> slider.putClientProperty(<br>
+              AnnotatedSliderUI.ANNOTATE_PROPERTY, <br>
+              selected ? Boolean.TRUE : Boolean.FALSE);</p>
+            <p> slider.repaint();<br>
+              }<br>
+              });<br>
+              }<br>
+              }<br>
+              class AnnotatedSliderUI extends BasicSliderUI {<br>
+              public static String ANNOTATE_PROPERTY = <br>
+              &quot;AnnotatedSliderUI.annotate&quot;;<br>
+              boolean annotate = false;</p>
+            <p> public AnnotatedSliderUI(JSlider slider) {<br>
+              super(slider);<br>
+              }<br>
+              public Dimension getPreferredSize(JComponent c) {<br>
+              Dimension d = super.getPreferredSize(c);<br>
+              return new Dimension(d.width,d.height+20);<br>
+              }<br>
+              public void paint(Graphics g, JComponent c) {<br>
+              if(annotate) {<br>
+              JSlider slider = (JSlider)c;<br>
+              int v = slider.getValue();</p>
+            <p> g.setColor(UIManager.getColor(&quot;Label.foreground&quot;));<br>
+              g.setFont(new Font(&quot;Dialog&quot;, Font.PLAIN, 28));<br>
+              g.drawString((new Integer(v)).toString(),10,33);<br>
+              }<br>
+              super.paint(g,c);<br>
+              }<br>
+              protected PropertyChangeListener <br>
+              createPropertyChangeListener(JSlider slider) {<br>
+              return new AnnotatePropertyListener();<br>
+              }<br>
+              protected class AnnotatePropertyListener <br>
+              extends BasicSliderUI.PropertyChangeHandler {<br>
+              public void propertyChange(PropertyChangeEvent e) {<br>
+              System.out.println(&quot;property changed&quot;);<br>
+              super.propertyChange(e);</p>
+            <p> String name = e.getPropertyName();</p>
+            <p> if(name.equals(ANNOTATE_PROPERTY)) {<br>
+              System.out.println(&quot;property changed&quot;);<br>
+              if(e.getNewValue() != null) {<br>
+              annotate = <br>
+              ((Boolean)e.getNewValue()).booleanValue();<br>
+              }<br>
+              }<br>
+              }<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p>&nbsp;</p>
+            <p>&nbsp;</p>
+            <p> 3.3 本章回顾</p>
+            <p>&nbsp; </p>
+            <p> <b></b>　　　　 [<a href="index.html" target="_self">目录</a>][<a href="s02.htm" target="_self">上一页</a>][<a href="s04.htm" target="_self">下一页</a>](飒龙收藏/2003.1.22) 
+            </p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </td>
+  </tr>
+</tbody>
+</table>
+<script language="javascript">bottomprint()</script>
+</body>
+</html>

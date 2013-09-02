@@ -1,0 +1,863 @@
+<SCRIPT LANGUAGE="JavaScript" SRC="/-fs0/sys/pop-up.js"></SCRIPT>
+
+<SCRIPT LANGUAGE="JavaScript" SRC="/-fs0/sys/pop-up-all.js"></SCRIPT>
+
+<html>
+<head>
+<title>易都网--Java 2 图形设计卷Ⅱ：SWING</title>
+<LINK rel="stylesheet" href="../../../_public/javaa.css">
+<meta http-equiv="Content-Type" content="text/html; charset=GBK">
+<script language="JavaScript" src="../../../_public/javaa.js"></script>
+<meta name="keywords" content="Java,JSP,ASP,PHP,J2EE,EJB,JavaScript,C/C++,ASM,CSS,HTML,XML,网络安全,MySQL,ACCESS">
+</head>
+<body bgcolor="#FFFFFF">
+<table border=0 cellpadding=0 cellspacing=0 width="100%">
+  <tbody> 
+  <script language="javascript">print2()</script>
+  <tr> 
+    <td width="100%"> 
+      <table bgcolor=#EEEEEE border=0 cellpadding=3 cellspacing=0 width="100%">
+        <tbody> 
+        <tr> 
+          <td class=f1 id=thetd width="100%"> 
+            <p>[<a href="index.html" target="_self">目录</a>][<a href="s11.htm">上一页</a>][<a href="s13.htm">下一页</a>]</p>
+            <p align="center"><b>第12章 轻量容器</b></p>
+            <p>　　本章讨论如下Swing轻量容器：<br>
+              　　·JPanel<br>
+              　　·JRootPane<br>
+              　　·JLayeredPane<br>
+              　　·JTabbedPane<br>
+              　　·JSplitPane<br>
+              　　JPanel是AWT的Canvas和Panel类的继承类。文本和图形都可以绘制到JPanel实例中，并且JPanel实例可以用作一个通用容器。<br>
+              　　JRootPane是一个包含在窗体、对话框、窗口、内部窗体和Swing小应用程序等Swing顶层容器中的容器。<br>
+              　　JLayeredPane允许把它所包含的组件放置在不同的层中。层控制显示组件的深度。<br>
+              　　JTabbedPane是一个能够包含多个组件的容器。JTabbedPane包含的多个组件一次只能显示一个。JTabbedPane的实例包含能够用于选取当前显示的组件的选项卡。<br>
+              　　JSplitPane包含两个组件，这两个组件由一个分隔体所分隔。可以拖动分隔体以改变每个组件所占据的空间大小。</p>
+            <p> <b>12.1 JPanel</b></p>
+            <p>　　JPanel是最简单的Swing组件之一；但它也是使用最多的组件之一。Swing在很多其他组件中使用了JPanel实例；例如，缺省时，JRootPane容器为它的内容窗格和玻璃窗格创建了JPanel实例，正如表12-1所反映的那样。<br>
+              　　JPanel类具有简单容器显示图形的画布的双重功能。图12-1示出的小应用程序创建了三个JPanel实例：一个包含“Name：”选项卡和文本域的控制面板、一个专门用作显示文本和图形的画布的窗格，以及包含上述控制面板和画面的第三个面板。<br>
+              　　例12-1中列出了图12-1中示出的小应用程序的代码。</p>
+            <p align="center"> <b>例12-1 一个使用了三个JPanel实例的小应用程序</b></p>
+            <hr noshade size="1"><pre>import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class Test extends JApplet {
+	public Test() {
+		Container contentPane = getContentPane();
+		JPanel panel = new JPanel(new BorderLayout());
+		JPanel controlPanel = new JPanel();
+		JPanel canvas = new Canvas();
+
+		canvas.setBorder(
+			BorderFactory.createLineBorder(Color.black));
+
+		controlPanel.add(new JLabel("Name:"));
+		controlPanel.add(new JTextField(20));
+
+		panel.add(controlPanel, BorderLayout.NORTH);
+		panel.add(canvas, BorderLayout.CENTER);
+
+		contentPane.add(panel);
+	}
+}
+class Canvas extends JPanel {
+	public void paintComponent(Graphics g) {
+		super.paintComponent(g);
+
+		Dimension size = getSize();
+		g.setColor(Color.black);
+		g.drawLine(50,50,size.width,size.height);
+		g.drawArc(20,40,25,25,0,290);
+		g.drawString("A JPanel Used as a Canvas", 20, 20);
+	}
+}
+</pre>
+            <hr size="1" noshade>
+            <p></p>
+            <p></p>
+            <p> <b>12.1.1 JPanel的属性</b></p>
+            <p>&nbsp;</p>
+            <p> 12.1.2 JPanel的事件</p>
+            <p>&nbsp;</p>
+            <p> 12.1.3 JPanel类总结</p>
+            <p>&nbsp;</p>
+            <p> 12.1.4 AWT兼容</p>
+            <p>&nbsp;</p>
+            <p> 12.2 JRootPane</p>
+            <p>&nbsp;</p>
+            <p> 12.2.1 RootPaneContainer接口</p>
+            <p>&nbsp;</p>
+            <p> 12.2.2 玻璃空格</p>
+            <p align="center"><b>例12-2 玻璃窗格测试小应用程序</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              private Component glassPane = new CustomGlassPane();</p>
+            <p> public void init() {<br>
+              JRadioButton rb = new JRadioButton();<br>
+              JButton button = new JButton(&quot;show glass pane&quot;);<br>
+              Container contentPane = getContentPane();</p>
+            <p> contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(button);</p>
+            <p> rb.setIcon(new ImageIcon(&quot;duke_standing.gif&quot;));<br>
+              rb.setRolloverIcon(new ImageIcon(&quot;duke_waving.gif&quot;));</p>
+            <p> setGlassPane(glassPane);<br>
+              contentPane.add(rb);</p>
+            <p> button.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              glassPane.setVisible(true);<br>
+              }<br>
+              });<br>
+              }<br>
+              }<br>
+              class CustomGlassPane extends JPanel {<br>
+              private JButton button;<br>
+              private String displayString = &quot;glass pane ... &quot;;</p>
+            <p> public CustomGlassPane() {<br>
+              addMouseListener(new MouseAdapter() {<br>
+              public void mousePressed(MouseEvent e) {<br>
+              setVisible(false);<br>
+              }<br>
+              });<br>
+              }<br>
+              public void paintComponent(Graphics g) {<br>
+              Dimension size = getSize();<br>
+              FontMetrics fm = g.getFontMetrics();<br>
+              int sw = fm.stringWidth(displayString);<br>
+              int fh = fm.getHeight();</p>
+            <p> g.setColor(Color.blue);</p>
+            <p> for(int row=fh; row &lt; size.height; row += fh)<br>
+              for(int col=0; col &lt; size.width; col += sw)<br>
+              g.drawString(displayString, col, row);<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 12.2.3 内容窗格</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例12-3 一个定制的内容窗格</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class ContentPaneTest extends JApplet {<br>
+              private JButton button = new JButton(&quot;show glass pane&quot;);</p>
+            <p> public void init() {<br>
+              setGlassPane(new CustomGlassPane(button));<br>
+              setContentPane(new CustomContentPane(button));</p>
+            <p> button.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              getGlassPane().setVisible(true);<br>
+              }<br>
+              });<br>
+              }<br>
+              }<br>
+              class CustomContentPane extends JPanel {<br>
+              private ImageIcon rain = new ImageIcon(&quot;rain.gif&quot;);<br>
+              private ImageIcon punch = new ImageIcon(&quot;punch.gif&quot;);<br>
+              private int rainw = rain.getIconWidth();<br>
+              private int rainh = rain.getIconHeight();</p>
+            <p> public CustomContentPane(JButton button) {<br>
+              add(button);<br>
+              add(new JLabel(&quot;I'm a JLabel in the Content Pane&quot;,<br>
+              punch, SwingConstants.RIGHT));<br>
+              }<br>
+              public void paintComponent(Graphics g) {<br>
+              Dimension size = getSize();</p>
+            <p> for(int row=0; row &lt; size.height; row += rainh)<br>
+              for(int col=0; col &lt; size.width; col += rainw)<br>
+              rain.paintIcon(this,g,col,row);<br>
+              }<br>
+              }<br>
+              class CustomGlassPane extends JPanel {<br>
+              private JButton button;<br>
+              private Point ulhc = new Point(20,20), last;<br>
+              private String displayString = <br>
+              &quot;I'm on the glass pane - drag me around!&quot;;</p>
+            <p> public CustomGlassPane(JButton b) {<br>
+              button = b;</p>
+            <p> setOpaque(false); <br>
+              addMouseListener(new MouseAdapter() {<br>
+              public void mousePressed(MouseEvent e) {<br>
+              last = e.getPoint();<br>
+              }<br>
+              public void mouseReleased(MouseEvent e) {<br>
+              setVisible(false);<br>
+              }<br>
+              });<br>
+              addMouseMotionListener(new MouseMotionAdapter() {<br>
+              public void mouseDragged(MouseEvent e) {<br>
+              Point drag = e.getPoint();<br>
+              ulhc.x += drag.x - last.x;<br>
+              ulhc.y += drag.y - last.y;</p>
+            <p> repaint();</p>
+            <p> last.x = drag.x;<br>
+              last.y = drag.y;<br>
+              }<br>
+              });<br>
+              }<br>
+              public void paintComponent(Graphics g) {<br>
+              FontMetrics fm = g.getFontMetrics();<br>
+              int sw = fm.stringWidth(displayString);<br>
+              int sh = fm.getHeight();<br>
+              int ascent = fm.getAscent();</p>
+            <p> g.drawRect(ulhc.x, ulhc.y, sw + 10, sh + 10);<br>
+              g.drawString(displayString, <br>
+              ulhc.x + 5, ulhc.y + ascent + 5);<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 12.2.4 JRootPane属性</p>
+            <p>&nbsp;</p>
+            <p> 12.2.5 JRootPane事件</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例12-4 一个传递事件的玻璃窗格</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import java.io.*;<br>
+            import javax.swing.*;<br>
+            import javax.swing.text.*;
+            <p>public class Test extends JApplet {<br>
+              Component glassPane = new AnnotationPane();<br>
+              JCheckBox annotations = new JCheckBox(&quot;annotations&quot;);</p>
+            <p> public void init() {<br>
+              createContainerHierarchy();<br>
+              setupGlassPane();<br>
+              }<br>
+              private void createContainerHierarchy() {<br>
+              Container contentPane = getContentPane();</p>
+            <p> JPanel controlPanel = new JPanel();<br>
+              JTextArea textArea = new JTextArea();<br>
+              JScrollPane scrollPane = new JScrollPane(textArea);</p>
+            <p> readFile(textArea.getDocument());</p>
+            <p> controlPanel.add(annotations);</p>
+            <p> contentPane.add(scrollPane, &quot;Center&quot;); // scroll pane<br>
+              contentPane.add(controlPanel, &quot;South&quot;); // panel</p>
+            <p> textArea.addMouseListener(new MouseAdapter() {<br>
+              public void mouseEntered(MouseEvent e) {<br>
+              System.out.println(&quot;enter&quot;);<br>
+              }<br>
+              });<br>
+              }<br>
+              private void setupGlassPane() {<br>
+              setGlassPane(glassPane);<br>
+              <br>
+              annotations.addItemListener(new ItemListener() {<br>
+              public void itemStateChanged(ItemEvent e) {<br>
+              if(e.getStateChange() == ItemEvent.SELECTED)<br>
+              glassPane.setVisible(true);<br>
+              else<br>
+              glassPane.setVisible(false);<br>
+              }<br>
+              });<br>
+              }<br>
+              private void readFile(Document doc) {<br>
+              try {<br>
+              Reader in = new FileReader(&quot;Test.java&quot;);<br>
+              char[] buff = new char[4096];<br>
+              int next;</p>
+            <p> while ((next = in.read(buff, 0, buff.length)) != -1)<br>
+              doc.insertString(<br>
+              doc.getLength(), new String(buff, 0, next), null);<br>
+              }<br>
+              catch(Exception e) {<br>
+              System.out.println(&quot;interruption&quot;);<br>
+              }<br>
+              }<br>
+              }<br>
+              class AnnotationPane extends JPanel {<br>
+              private Icon annotations[] = {<br>
+              new ImageIcon(&quot;annotation.gif&quot;),<br>
+              new ImageIcon(&quot;annotation_1.gif&quot;),<br>
+              new ImageIcon(&quot;annotation_2.gif&quot;)<br>
+              };<br>
+              public void paintComponent(Graphics g) {<br>
+              annotations[0].paintIcon(this, g, 400, 50);<br>
+              annotations[1].paintIcon(this, g, 10, 150);<br>
+              annotations[2].paintIcon(this, g, 10, 265);<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 12.2.6 JRootPane类总结</p>
+            <p>&nbsp;</p>
+            <p> 12.2.7 AWT兼容</p>
+            <p>&nbsp;</p>
+            <p> 12.3 JLayoutPane</p>
+            <p>&nbsp;</p>
+            <p> 12.3.1 回顾轻量组件的层序</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例12-5 添加到一个内容窗格中的按钮的程序</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              Container cp = getContentPane();</p>
+            <p> private final Component[] comps = {<br>
+              new JButton(), new JButton(), <br>
+              new JButton(), new JButton(), <br>
+              new JButton(), new JButton(), <br>
+              };<br>
+              public void init() {<br>
+              cp.setLayout(null);</p>
+            <p> for(int i=0; i &lt; comps.length; ++i) {<br>
+              AbstractButton button = (AbstractButton)comps[i];<br>
+              cp.add(button);</p>
+            <p> String t = &quot;Button #&quot;;</p>
+            <p> t += i + &quot; Index: &quot; + getIndexOf(button);</p>
+            <p> button.setText(t);<br>
+              button.setBounds(i*50, i*50, 350, 75);<br>
+              System.out.println(&quot;Adding: &quot; + button.getText());<br>
+              }<br>
+              }<br>
+              private int getIndexOf(Component button) {<br>
+              int ncomponents = cp.getComponentCount();</p>
+            <p> for(int i=0; i &lt; ncomponents; ++i) {<br>
+              Component c = cp.getComponent(i);<br>
+              if(button == c)<br>
+              return i;<br>
+              }<br>
+              return -1;<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p align="center">&nbsp;</p>
+            <p> 12.3.2 为组件分配器</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例12-6 所包含在一个分层窗格中的组件分配到层中</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              private JLayeredPane lp = new JLayeredPane();</p>
+            <p> private Integer[] layers = {<br>
+              JLayeredPane.FRAME_CONTENT_LAYER,<br>
+              JLayeredPane.DEFAULT_LAYER,<br>
+              JLayeredPane.PALETTE_LAYER,<br>
+              JLayeredPane.MODAL_LAYER,<br>
+              JLayeredPane.POPUP_LAYER,<br>
+              JLayeredPane.DRAG_LAYER,<br>
+              };<br>
+              private final Component[] comps = {<br>
+              new JButton(&quot;Frame Content&quot;), new JButton(&quot;Default&quot;), 
+              <br>
+              new JButton(&quot;Palette&quot;), new JButton(&quot;Modal&quot;), 
+              <br>
+              new JButton(&quot;Popup&quot;), new JButton(&quot;Drag&quot;), <br>
+              };<br>
+              public void init() {<br>
+              setContentPane(lp);<br>
+              lp.setLayout(null);</p>
+            <p> for(int i=0; i &lt; comps.length; ++i) {<br>
+              AbstractButton button = (AbstractButton)comps[i];</p>
+            <p> System.out.println(&quot;Adding: &quot; + button.getText());</p>
+            <p> lp.setLayer(button, layers[i].intValue());<br>
+              lp.add(button);<br>
+              }<br>
+              for(int i=0; i &lt; comps.length; ++i) {<br>
+              AbstractButton button = (AbstractButton)comps[i];<br>
+              String t = button.getText();<br>
+              String replacement = new String(&quot;Layer: &quot;);</p>
+            <p> replacement += t + &quot;(&quot; + lp.getLayer(button) + &quot;),&quot;;<br>
+              replacement += &quot; Index: &quot; + lp.getIndexOf(button);</p>
+            <p> button.setText(replacement);<br>
+              button.setBounds(i*50, i*50, 350, 75); <br>
+              }<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p>&nbsp;</p>
+            <p> 12.3.3 指定同一层中组件的位置</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例12-7 同一层中放置组件的缺省方式</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              private JLayeredPane lp = new JLayeredPane();</p>
+            <p> private Integer[] layers = {<br>
+              JLayeredPane.FRAME_CONTENT_LAYER,<br>
+              JLayeredPane.DEFAULT_LAYER,<br>
+              JLayeredPane.DEFAULT_LAYER,<br>
+              JLayeredPane.DEFAULT_LAYER,<br>
+              JLayeredPane.PALETTE_LAYER,<br>
+              JLayeredPane.MODAL_LAYER,<br>
+              JLayeredPane.POPUP_LAYER,<br>
+              JLayeredPane.DRAG_LAYER,<br>
+              };<br>
+              private final Component[] comps = {<br>
+              new JButton(&quot;Frame Content&quot;), new JButton(&quot;Default&quot;), 
+              <br>
+              new JButton(&quot;default 1&quot;), new JButton(&quot;default 2&quot;), 
+              <br>
+              new JButton(&quot;Palette&quot;), new JButton(&quot;Modal&quot;), 
+              <br>
+              new JButton(&quot;Popup&quot;), new JButton(&quot;Drag&quot;), <br>
+              };<br>
+              public void init() {<br>
+              setContentPane(lp);<br>
+              lp.setLayout(null);</p>
+            <p> for(int i=0; i &lt; comps.length; ++i) {<br>
+              AbstractButton button = (AbstractButton)comps[i];</p>
+            <p> lp.setLayer(button, layers[i].intValue());<br>
+              lp.add(button);<br>
+              }<br>
+              for(int i=0; i &lt; comps.length; ++i) {<br>
+              AbstractButton button = (AbstractButton)comps[i];<br>
+              String t = button.getText();<br>
+              String replacement = new String(&quot;Layer: &quot;);</p>
+            <p> replacement += t + &quot;(&quot; + lp.getLayer(button) + &quot;),&quot;;<br>
+              replacement += &quot; Index: &quot; + lp.getIndexOf(button);<br>
+              replacement += &quot; Position: &quot; + <br>
+              lp.getPosition(button);</p>
+            <p> button.setText(replacement);<br>
+              button.setBounds(i*50, i*50, 350, 75); <br>
+              }<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p align="center"><b>例12-8 显式地设置同层中组件的位置</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              private JLayeredPane lp = new JLayeredPane();</p>
+            <p> private Integer[] layers = {<br>
+              JLayeredPane.FRAME_CONTENT_LAYER,<br>
+              JLayeredPane.DEFAULT_LAYER,<br>
+              JLayeredPane.DEFAULT_LAYER,<br>
+              JLayeredPane.DEFAULT_LAYER,<br>
+              JLayeredPane.PALETTE_LAYER,<br>
+              JLayeredPane.MODAL_LAYER,<br>
+              JLayeredPane.POPUP_LAYER,<br>
+              JLayeredPane.DRAG_LAYER,<br>
+              };<br>
+              private final Component[] comps = {<br>
+              new JButton(&quot;Frame Content&quot;), new JButton(&quot;Default&quot;), 
+              <br>
+              new JButton(&quot;default 1&quot;), new JButton(&quot;default 2&quot;), 
+              <br>
+              new JButton(&quot;Palette&quot;), new JButton(&quot;Modal&quot;), 
+              <br>
+              new JButton(&quot;Popup&quot;), new JButton(&quot;Drag&quot;), <br>
+              };<br>
+              public void init() {<br>
+              setContentPane(lp);<br>
+              lp.setLayout(null);</p>
+            <p> for(int i=0; i &lt; comps.length; ++i) {<br>
+              AbstractButton button = (AbstractButton)comps[i];<br>
+              String t = button.getText();</p>
+            <p> lp.setLayer(button, layers[i].intValue());<br>
+              lp.add(button);<br>
+              }<br>
+              for(int i=0; i &lt; comps.length; ++i) {<br>
+              AbstractButton button = (AbstractButton)comps[i];<br>
+              String t = button.getText();<br>
+              String replacement = new String(&quot;Layer: &quot;);</p>
+            <p> if(t.equals(&quot;Default&quot;))<br>
+              lp.setPosition(button, 2); <br>
+              else if(t.equals(&quot;default 2&quot;))<br>
+              lp.setPosition(button, 0); </p>
+            <p> replacement += t + &quot;(&quot; + lp.getLayer(button) + &quot;),&quot;;<br>
+              replacement += &quot; Index: &quot; + lp.getIndexOf(button);<br>
+              replacement += &quot; Position: &quot; + <br>
+              lp.getPosition(button);</p>
+            <p> button.setText(replacement);<br>
+              button.setBounds(i*50, i*50, 350, 75); <br>
+              }<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p>&nbsp;</p>
+            <p>&nbsp;</p>
+            <p> 12.3.4 使用拖动层</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例12-9 使用拖动层</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              public void init() {<br>
+              setContentPane(new CustomContentPane());<br>
+              }<br>
+              }<br>
+              class CustomContentPane extends JLayeredPane {<br>
+              private ImageIcon rain = new ImageIcon(&quot;rain.gif&quot;);<br>
+              private ImageIcon punch = new ImageIcon(&quot;punch.gif&quot;);<br>
+              private ImageIcon skelly = new ImageIcon(&quot;skelly.gif&quot;);<br>
+              private int rainw = rain.getIconWidth();<br>
+              private int rainh = rain.getIconHeight();</p>
+            <p> private JLabel[] labels = { <br>
+              new JLabel(&quot;I stay put&quot;, punch, SwingConstants.RIGHT),<br>
+              new JLabel(&quot;Drag me around!&quot;, <br>
+              skelly, SwingConstants.RIGHT),<br>
+              };</p>
+            <p> public CustomContentPane() {<br>
+              Dragger listener = new Dragger();<br>
+              JCheckBox onDragLayer = new JCheckBox(&quot;Drag Layer&quot;);</p>
+            <p> // JLayeredPane has a null layout by default<br>
+              setLayout(new FlowLayout());</p>
+            <p> onDragLayer.setOpaque(false);</p>
+            <p> add(onDragLayer);<br>
+              add(labels[0]);<br>
+              add(labels[1]);</p>
+            <p> labels[1].addMouseMotionListener(listener);<br>
+              labels[1].addMouseListener(listener);</p>
+            <p> setLabelText();</p>
+            <p> onDragLayer.addItemListener(new ItemListener() {<br>
+              public void itemStateChanged(ItemEvent e) {<br>
+              if(e.getStateChange() == ItemEvent.SELECTED) {<br>
+              setLayer(labels[1], <br>
+              JLayeredPane.DRAG_LAYER.intValue());<br>
+              }<br>
+              else {<br>
+              setLayer(labels[1], <br>
+              JLayeredPane.DEFAULT_LAYER.intValue());<br>
+              <br>
+              }<br>
+              setLabelText();<br>
+              validate();<br>
+              }<br>
+              });<br>
+              }<br>
+              public void paintComponent(Graphics g) {<br>
+              Dimension size = getSize();</p>
+            <p> for(int row=0; row &lt; size.height; row += rainh)<br>
+              for(int col=0; col &lt; size.width; col += rainw)<br>
+              rain.paintIcon(this,g,col,row);<br>
+              }<br>
+              private void setLabelText() {<br>
+              for(int i=0; i &lt; labels.length; ++i) {<br>
+              JLabel label = labels[i];<br>
+              String t = new String(&quot;Layer: &quot;);</p>
+            <p> t += &quot;(&quot; + getLayer(label) + &quot;),&quot;;<br>
+              t += &quot; Index: &quot; + getIndexOf(label);</p>
+            <p> label.setText(t);<br>
+              }<br>
+              }<br>
+              }<br>
+              class Dragger extends MouseAdapter <br>
+              implements MouseMotionListener {<br>
+              Point press = new Point();<br>
+              boolean dragging = false;</p>
+            <p> public void mousePressed(MouseEvent event) {<br>
+              press.x = event.getX();<br>
+              press.y = event.getY();<br>
+              dragging = true;<br>
+              }<br>
+              public boolean isDragging() {<br>
+              return dragging;<br>
+              }<br>
+              public void mouseReleased(MouseEvent event) {<br>
+              dragging = false;<br>
+              }<br>
+              public void mouseClicked(MouseEvent event) {<br>
+              dragging = false;<br>
+              }<br>
+              public void mouseMoved(MouseEvent event) {<br>
+              // don't care<br>
+              }<br>
+              public void mouseDragged(MouseEvent event) {<br>
+              Component c = (Component)event.getSource();</p>
+            <p> if(dragging) {<br>
+              Point loc = c.getLocation();<br>
+              Point pt = new Point();<br>
+              pt.x = event.getX() + loc.x - press.x;<br>
+              pt.y = event.getY() + loc.y - press.y;<br>
+              c.setLocation(pt.x, pt.y);<br>
+              c.getParent().repaint();<br>
+              }<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 12.3.5 JLayeredPane属性</p>
+            <p>&nbsp;</p>
+            <p> 12.3.6 JLayeredPane类总结</p>
+            <p>&nbsp;</p>
+            <p> 12.3.7 AWT兼容</p>
+            <p>&nbsp;</p>
+            <p> 12.4 JTablePane</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例12-10 JTabbedPane的一个简单实例</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              public Test() {<br>
+              Container contentPane = getContentPane();<br>
+              JTabbedPane tp = new JTabbedPane();<br>
+              JPanel panelOne = new JPanel();<br>
+              JPanel panelTwo = new JPanel();</p>
+            <p> panelOne.add(new JButton(&quot;button in panel 1&quot;));<br>
+              panelTwo.add(new JButton(&quot;button in panel 2&quot;));</p>
+            <p> tp.add(panelOne, &quot;Panel One&quot;);<br>
+              tp.addTab(&quot;Panel Two&quot;, <br>
+              new ImageIcon(&quot;document.gif&quot;),<br>
+              panelTwo, <br>
+              &quot;tooltip text&quot;);</p>
+            <p> contentPane.setLayout(new BorderLayout());<br>
+              contentPane.add(tp);<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 12.4.1 选项卡的位置</p>
+            <p>&nbsp;</p>
+            <p> 12.4.2 JTabbedPane的属性</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例12-11 为JTabbedPane的实例设置选项卡放置位置</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              private JTabbedPane tp = new JTabbedPane(SwingConstants.BOTTOM);<br>
+              private JComboBox combo = new JComboBox();</p>
+            <p> public Test() {<br>
+              Container contentPane = getContentPane();<br>
+              JPanel comboPanel = new JPanel();<br>
+              JPanel panelOne = new JPanel();<br>
+              JPanel panelTwo = new JPanel();</p>
+            <p> tp.add(panelOne, &quot;Panel One&quot;);<br>
+              tp.addTab(&quot;Panel Two&quot;, <br>
+              new ImageIcon(&quot;document.gif&quot;),<br>
+              panelTwo, <br>
+              &quot;tooltip text&quot;);</p>
+            <p> combo.addItem(&quot;TOP&quot;);<br>
+              combo.addItem(&quot;LEFT&quot;);<br>
+              combo.addItem(&quot;RIGHT&quot;);<br>
+              combo.addItem(&quot;BOTTOM&quot;);</p>
+            <p> setComboValue();</p>
+            <p> comboPanel.add(new JLabel(&quot;Tab Placement:&quot;));<br>
+              comboPanel.add(combo);</p>
+            <p> contentPane.setLayout(new BorderLayout());<br>
+              contentPane.add(comboPanel, BorderLayout.NORTH);<br>
+              contentPane.add(tp, BorderLayout.CENTER);</p>
+            <p> combo.addItemListener(new ItemListener() {<br>
+              public void itemStateChanged(ItemEvent e) {<br>
+              JComboBox cb = (JComboBox)e.getSource();<br>
+              int state = e.getStateChange();</p>
+            <p> if(state == ItemEvent.SELECTED) {<br>
+              String s = (String)cb.getSelectedItem();</p>
+            <p> if(s.equals(&quot;TOP&quot;))<br>
+              tp.setTabPlacement(JTabbedPane.TOP);<br>
+              else if(s.equals(&quot;LEFT&quot;))<br>
+              tp.setTabPlacement(JTabbedPane.LEFT);<br>
+              else if(s.equals(&quot;RIGHT&quot;))<br>
+              tp.setTabPlacement(JTabbedPane.RIGHT);<br>
+              else if(s.equals(&quot;BOTTOM&quot;))<br>
+              tp.setTabPlacement(JTabbedPane.BOTTOM);</p>
+            <p> tp.validate();<br>
+              }<br>
+              }<br>
+              });<br>
+              }<br>
+              private void setComboValue() {<br>
+              int placement = tp.getTabPlacement();<br>
+              String selectedItem = null;</p>
+            <p> switch(placement) {<br>
+              case JTabbedPane.TOP:<br>
+              selectedItem = &quot;TOP&quot;;<br>
+              break;<br>
+              case JTabbedPane.LEFT:<br>
+              selectedItem = &quot;LEFT&quot;;<br>
+              break;<br>
+              case JTabbedPane.RIGHT:<br>
+              selectedItem = &quot;RIGHT&quot;;<br>
+              break;<br>
+              case JTabbedPane.BOTTOM:<br>
+              selectedItem = &quot;BOTTOM&quot;;<br>
+              break;<br>
+              }<br>
+              combo.setSelectedItem(selectedItem);<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 12.4.3 JTabbedPane的事件</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例12-12 响应JTabbedPane的变化事件</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;<br>
+            import javax.swing.event.*;
+            <p>public class Test extends JApplet {</p>
+            <p> public Test() {<br>
+              Container contentPane = getContentPane();<br>
+              JTabbedPane tp = new JTabbedPane();<br>
+              JPanel panelOne = new JPanel();<br>
+              JPanel panelTwo = new JPanel();</p>
+            <p> tp.add(panelOne, &quot;Panel One&quot;);<br>
+              tp.addTab(&quot;Panel Two&quot;, <br>
+              new ImageIcon(&quot;document.gif&quot;),<br>
+              panelTwo, <br>
+              &quot;tooltip text&quot;);</p>
+            <p> contentPane.setLayout(new BorderLayout());<br>
+              contentPane.add(tp);</p>
+            <p> tp.addChangeListener(new ChangeListener() {<br>
+              public void stateChanged(ChangeEvent e) {<br>
+              JTabbedPane tabbedPane = <br>
+              (JTabbedPane)e.getSource();</p>
+            <p> int index = tabbedPane.getSelectedIndex();<br>
+              String s = tabbedPane.getTitleAt(index);</p>
+            <p> showStatus(s + &quot; selected&quot;);<br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 12.4.4 JTabbedPane类总结</p>
+            <p>&nbsp;</p>
+            <p> 12.5 JSplitPane类</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例12-13 运行中的JSplitPane</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              public Test() {<br>
+              Container contentPane = getContentPane();<br>
+              JButton left, right;<br>
+              JSplitPane sp = new JSplitPane();<br>
+              ControlPanel cp = new ControlPanel(sp);</p>
+            <p> contentPane.setLayout(new BorderLayout());<br>
+              contentPane.add(sp, BorderLayout.CENTER);<br>
+              contentPane.add(cp, BorderLayout.NORTH);</p>
+            <p> left = (JButton)sp.getTopComponent();<br>
+              right = (JButton)sp.getBottomComponent();</p>
+            <p> System.out.println(&quot;left button minimum size: &quot; + <br>
+              left.getMinimumSize());<br>
+              System.out.println(&quot;right button minimum size: &quot; + <br>
+              right.getMinimumSize());</p>
+            <p> }<br>
+              }</p>
+            <p>class ControlPanel extends JPanel {<br>
+              private JSplitPane sp;</p>
+            <p> public ControlPanel(JSplitPane splitPane) {<br>
+              sp = splitPane;</p>
+            <p> JComboBox dividerSize = new JComboBox();<br>
+              JComboBox orientation = new JComboBox();</p>
+            <p> JCheckBox continuous = new JCheckBox(<br>
+              &quot;Continuous Layout&quot;);<br>
+              JCheckBox oneTouch = new JCheckBox(<br>
+              &quot;One Touch Expandable&quot;);</p>
+            <p> Integer initialSize = new Integer(sp.getDividerSize());<br>
+              dividerSize.addItem(initialSize.toString());<br>
+              dividerSize.addItem(&quot;10&quot;);<br>
+              dividerSize.addItem(&quot;20&quot;);<br>
+              dividerSize.addItem(&quot;30&quot;);<br>
+              dividerSize.addItem(&quot;40&quot;);</p>
+            <p> orientation.addItem(&quot;horizontal&quot;);<br>
+              orientation.addItem(&quot;vertical&quot;);</p>
+            <p> int initialOrientation = sp.getOrientation();<br>
+              if(initialOrientation == JSplitPane.HORIZONTAL_SPLIT)<br>
+              orientation.setSelectedItem(&quot;horizontal&quot;);<br>
+              else<br>
+              orientation.setSelectedItem(&quot;vertical&quot;);</p>
+            <p> boolean initialContinuousLayout = sp.isContinuousLayout();<br>
+              if(initialContinuousLayout)<br>
+              continuous.setSelected(true);</p>
+            <p> add(oneTouch);<br>
+              add(continuous);<br>
+              add(new JLabel(&quot;Divider Size:&quot;));<br>
+              add(dividerSize);<br>
+              add(new JLabel(&quot;Orientation:&quot;));<br>
+              add(orientation);</p>
+            <p> oneTouch.addItemListener(new ItemListener() {<br>
+              public void itemStateChanged(ItemEvent e) {<br>
+              if(e.getStateChange() == ItemEvent.SELECTED)<br>
+              sp.setOneTouchExpandable(true);<br>
+              else<br>
+              sp.setOneTouchExpandable(false);<br>
+              }<br>
+              });<br>
+              continuous.addItemListener(new ItemListener() {<br>
+              public void itemStateChanged(ItemEvent e) {<br>
+              if(e.getStateChange() == ItemEvent.SELECTED)<br>
+              sp.setContinuousLayout(true);<br>
+              else<br>
+              sp.setContinuousLayout(false);<br>
+              }<br>
+              });<br>
+              dividerSize.addItemListener(new ItemListener() {<br>
+              public void itemStateChanged(ItemEvent e) {<br>
+              JComboBox combo = (JComboBox)e.getSource();<br>
+              String s = (String)combo.getSelectedItem();</p>
+            <p> sp.setDividerSize(Integer.parseInt(s));<br>
+              }<br>
+              });<br>
+              orientation.addItemListener(new ItemListener() {<br>
+              public void itemStateChanged(ItemEvent e) {<br>
+              JComboBox combo = (JComboBox)e.getSource();<br>
+              String s = (String)combo.getSelectedItem();</p>
+            <p> if(s.equals(&quot;horizontal&quot;))<br>
+              sp.setOrientation(<br>
+              JSplitPane.HORIZONTAL_SPLIT);<br>
+              else<br>
+              sp.setOrientation(JSplitPane.VERTICAL_SPLIT);<br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 12.5.1 JSplitPane属性</p>
+            <p>&nbsp;</p>
+            <p> 12.5.2 JSplitPane事件</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例12-14 监视一个拆分窗格的分隔体的位置</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import java.beans.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              public Test() {<br>
+              Container contentPane = getContentPane();<br>
+              JSplitPane sp = new JSplitPane();</p>
+            <p> contentPane.add(sp, BorderLayout.CENTER);<br>
+              sp.addPropertyChangeListener(<br>
+              new PropertyChangeListener() {<br>
+              public void propertyChange(PropertyChangeEvent e) {<br>
+              if(e.getPropertyName().equals(<br>
+              JSplitPane.LAST_DIVIDER_LOCATION_PROPERTY)) {<br>
+              JSplitPane jsp = (JSplitPane)e.getSource();</p>
+            <p> int dl = jsp.getDividerLocation();</p>
+            <p> JButton lb = (JButton)jsp.getLeftComponent();<br>
+              JButton rb = (JButton)jsp.getRightComponent();</p>
+            <p> showStatus(&quot;Divider Location: &quot; + dl + &quot; / &quot; 
+              +<br>
+              lb.getText() + &quot;: &quot; + lb.getSize() + &quot; / &quot; +<br>
+              rb.getText() + &quot;: &quot; + rb.getSize()); <br>
+              }<br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 12.5.3 JSplitPane类总结</p>
+            <p>&nbsp;</p>
+            <p> 12.5.4 AWT兼容</p>
+            <p>&nbsp;</p>
+            <p> 12.6 本章回顾</p>
+            <p>&nbsp;</p>
+            <p>[<a href="index.html" target="_self">目录</a>][<a href="s11.htm">上一页</a>][<a href="s13.htm">下一页</a>](飒龙收藏/2002.5.18) 
+            </p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </td>
+  </tr>
+</tbody>
+</table>
+<script language="javascript">bottomprint()</script>
+</body>
+</html>

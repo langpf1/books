@@ -1,0 +1,804 @@
+<SCRIPT LANGUAGE="JavaScript" SRC="/-fs0/sys/pop-up.js"></SCRIPT>
+
+<SCRIPT LANGUAGE="JavaScript" SRC="/-fs0/sys/pop-up-all.js"></SCRIPT>
+
+<html>
+<head>
+<title>易都网--Java 2 图形设计卷Ⅱ：SWING</title>
+<LINK rel="stylesheet" href="../../../_public/javaa.css">
+<meta http-equiv="Content-Type" content="text/html; charset=GBK">
+<script language="JavaScript" src="../../../_public/javaa.js"></script>
+<meta name="keywords" content="Java,JSP,ASP,PHP,J2EE,EJB,JavaScript,C/C++,ASM,CSS,HTML,XML,网络安全,MySQL,ACCESS">
+</head>
+<body bgcolor="#FFFFFF">
+<table border=0 cellpadding=0 cellspacing=0 width="100%">
+  <tbody> 
+  <script language="javascript">print2()</script>
+  <tr> 
+    <td width="100%"> 
+      <table bgcolor=#EEEEEE border=0 cellpadding=3 cellspacing=0 width="100%">
+        <tbody> 
+        <tr> 
+          <td class=f1 id=thetd width="100%"> 
+            <p>[<a href="index.html" target="_self">目录</a>][<a href="s13.htm">上一页</a>][<a href="s15.htm">下一页</a>]</p>
+            <p align="center"><b>第14章 窗口和对话框</b></p>
+            <p>　　Swing的窗口（window）、窗体（frame)和对话框（dialog)是分别扩展AWT的window类Frame类和Dialog类的重量组件。当这三个组件都是窗口时，这三个组件之间的差别是不明显的，因此，有时在给定情况下要确定使用哪个组件是很困难的。为了澄清这些差别，表14-1列出了与这三个组件有关的一些属性。</p>
+            <p>　　　　　　　　表14-1 窗口、窗体和对话框属性<sup>①,②</sup><br>
+              　　━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━<br>
+              　　属性　　　　　窗口　　　窗体　　　　　对话框<br>
+              　　─────────────────────────────────<br>
+              　　模态　　　　　　否　　　　否　　　　　否/CSG<br>
+              　　可调整大小　　　否　　　　否/SG　　　　是/SG<br>
+              　　标题栏　　　　　否　　　　是　　　　　　是<br>
+              　　边框　　　　　　否　　　　是　　　　　　是<br>
+              　　标题　　　　　　否　　　　是/CSG　　　　是/CSG<br>
+              　　菜单栏　　　　　否　　　　是/SG　　　　否<br>
+              　　焦点管理器　　　是　　　　是　　　　　　是<br>
+              　　警告字符串　　　是/G　　　是/G　　　　　是/G<br>
+              　　图标图像<sup>③</sup>　　　否　　　　是/SG　　　　否<br>
+              　　链接到一个窗体　 是　　　否　　　　　　是<br>
+              　　─────────────────────────────────<br>
+              　　①是/否指缺省的属性状态<br>
+              　　②C=在构造时可设置，S=可使用的设置方法，G=可使用的获取方法（即get...()或is...())<br>
+              　　<sup>③不是所有的平台都支持窗口的图标化。</sup></p>
+            <p>　　窗口是这三个组件中最基本的组件，事实上，java.awt.Window是Frame和Dialog的超类。窗口没有边框、标题栏或菜单栏，而且不能调整其大小。如果需要在其他组件之上的无边框矩形区域中显示某些内容，则窗口是最合适的。<br>
+            </p>
+            <p> 14.1 JWindow</p>
+            <p align="center"><b>例14-1 使用JWindow来实现一个splash窗口</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>// This has been modified from the code in the book<br>
+              // to display the animated swing.gif in a window in the corner<br>
+              // of your desktop. A double click closes the window.</p>
+            <p>public class Test extends JFrame {<br>
+              Toolkit toolkit = Toolkit.getDefaultToolkit();<br>
+              JWindow window = new JWindow();<br>
+              JLabel label = new JLabel(new ImageIcon(&quot;swing.gif&quot;));</p>
+            <p> static public void main(String[] args) {<br>
+              JFrame frame = new Test();<br>
+              }<br>
+              public Test() {<br>
+              //label.setBorder(BorderFactory.createRaisedBevelBorder());<br>
+              window.getContentPane().add(label, &quot;Center&quot;);<br>
+              //centerWindow();<br>
+              // change location to suite taste ...<br>
+              window.setLocation(75,10);<br>
+              window.pack();<br>
+              window.show();</p>
+            <p> window.addMouseListener(new MouseAdapter() {<br>
+              public void mousePressed(MouseEvent e) {<br>
+              if(e.getClickCount() == 2) {<br>
+              window.dispose();<br>
+              System.exit(0);<br>
+              }<br>
+              }<br>
+              });<br>
+              }<br>
+              private void centerWindow() {<br>
+              Dimension scrnSize = toolkit.getScreenSize();<br>
+              Dimension labelSize = label.getPreferredSize();<br>
+              int labelWidth = labelSize.width,<br>
+              labelHeight = labelSize.height;</p>
+            <p> window.setLocation(scrnSize.width/2 - (labelWidth/2),<br>
+              scrnSize.height/2 - (labelHeight/2));<br>
+              window.pack();<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p align="center"><b>例14-2 一个作为应用程序窗口使用的JWindow实例</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              JWindow window = new JWindow();<br>
+              JMenuBar menuBar = new JMenuBar();<br>
+              JMenu fileMenu = new JMenu(&quot;File&quot;);<br>
+              JMenuItem quitItem;</p>
+            <p> public Test() {<br>
+              final Container contentPane = getContentPane();<br>
+              JButton button = new JButton(&quot;show window ...&quot;);</p>
+            <p> contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(button);</p>
+            <p> fileMenu.add(&quot;New&quot;);<br>
+              fileMenu.add(&quot;Open ...&quot;);<br>
+              fileMenu.add(&quot;Save&quot;);<br>
+              fileMenu.add(&quot;Save As ...&quot;);<br>
+              fileMenu.addSeparator();<br>
+              fileMenu.add(quitItem = new JMenuItem(&quot;Quit&quot;));</p>
+            <p> menuBar.add(fileMenu);</p>
+            <p> window.getRootPane().setJMenuBar(menuBar);<br>
+              window.getRootPane().setBorder(<br>
+              BorderFactory.createRaisedBevelBorder());</p>
+            <p> button.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              Point pt = contentPane.getLocation();</p>
+            <p> SwingUtilities.convertPointToScreen(<br>
+              pt, contentPane);</p>
+            <p> window.setBounds(pt.x + 10, pt.y + 10, 200, 200);<br>
+              window.show();</p>
+            <p> quitItem.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              window.dispose();<br>
+              }<br>
+              });<br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p>&nbsp;</p>
+            <p> 14.1.1 JWindow属性</p>
+            <p>&nbsp;</p>
+            <p> 14.1.2 JWindow类总结</p>
+            <p>&nbsp;</p>
+            <p> 14.1.3 AWT兼容</p>
+            <p>&nbsp;</p>
+            <p> 14.2 JDialog</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例14-3 运行中的JDialog</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              private ConstraintsPanel cp = new ConstraintsPanel();<br>
+              private JPanel buttonsPanel = new JPanel(); </p>
+            <p> private JButton showButton = new JButton(&quot;show dialog ...&quot;),<br>
+              okButton = new JButton(&quot;OK&quot;),<br>
+              applyButton = new JButton(&quot;Apply&quot;),<br>
+              cancelButton = new JButton(&quot;Cancel&quot;);</p>
+            <p> private JButton[] buttons = new JButton[] {<br>
+              okButton, applyButton, cancelButton,<br>
+              };</p>
+            <p> private JDialog dialog = new JDialog(null, // owner<br>
+              &quot;Constraints Dialog&quot;, // title<br>
+              true); // modal</p>
+            <p> public Test() {<br>
+              Container contentPane = getContentPane();<br>
+              Container dialogContentPane = dialog.getContentPane();</p>
+            <p> contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(showButton);</p>
+            <p> dialogContentPane.add(cp, BorderLayout.CENTER);<br>
+              dialogContentPane.add(buttonsPanel, BorderLayout.SOUTH);<br>
+              dialog.pack();</p>
+            <p> // setLocationRelativeTo must be called after pack(),<br>
+              // because dialog placement is based on dialog size.<br>
+              // Because the applet is not yet showing, calling<br>
+              // setLocationRelativeTo() here causes the dialog to be<br>
+              // shown centered on the screen.<br>
+              //<br>
+              // If setLocationRelativeTo() is not invoked, the dialog<br>
+              // will be located at (0,0) in screen coordinates.<br>
+              //dialog.setLocationRelativeTo(this);</p>
+            <p> for(int i=0; i &lt; buttons.length; ++i) {<br>
+              buttonsPanel.add(buttons[i]);<br>
+              }<br>
+              addButtonListeners();<br>
+              }<br>
+              private void addButtonListeners() {<br>
+              showButton.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              // calling setLocationRelativeTo() here causes<br>
+              // the dialog ito be centered over the applet.<br>
+              dialog.setLocationRelativeTo(Test.this);<br>
+              dialog.show();<br>
+              }<br>
+              });<br>
+              okButton.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              showStatus(&quot;OK button Activated&quot;);<br>
+              dialog.dispose();<br>
+              }<br>
+              });<br>
+              applyButton.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              showStatus(&quot;Apply button Activated&quot;);<br>
+              }<br>
+              });<br>
+              cancelButton.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              showStatus(&quot;Cancel button Activated&quot;);<br>
+              dialog.dispose();<br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 14.2.1 JDialog属性</p>
+            <p>&nbsp;</p>
+            <p> 14.2.2 JDialog类总结</p>
+            <p>&nbsp;</p>
+            <p> 14.2.3 AWT兼容</p>
+            <p>&nbsp;</p>
+            <p> 14.3 JOptionPane</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例14-4 用JOptionPane创建对话框</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              private JButton topButton = new JButton(<br>
+              &quot;show dialog created from option pane&quot;);<br>
+              private JButton bottomButton = new JButton(<br>
+              &quot;show dialog created with static method&quot;);</p>
+            <p> private String title = &quot;dialog title&quot;;<br>
+              private String message = &quot;message&quot;;</p>
+            <p> public Test() {<br>
+              Container contentPane = getContentPane();</p>
+            <p> contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(topButton);<br>
+              contentPane.add(bottomButton);</p>
+            <p> topButton.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              JOptionPane optionPane = new JOptionPane(<br>
+              message, // message<br>
+              JOptionPane.INFORMATION_MESSAGE); // messageType</p>
+            <p> JDialog dialog = optionPane.createDialog(<br>
+              topButton, // parentComponent<br>
+              title); // title</p>
+            <p> dialog.show();<br>
+              }<br>
+              });<br>
+              bottomButton.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              JOptionPane.showMessageDialog(<br>
+              bottomButton, // parentComponent<br>
+              message, // message<br>
+              title, // title<br>
+              JOptionPane.INFORMATION_MESSAGE); // messageType<br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 14.3.1 内部窗体</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例14-5 用JOptionPane创建内部窗体</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              private JButton button = new JButton(&quot;show internal frame&quot;);</p>
+            <p> public Test() {<br>
+              Container contentPane = getContentPane();</p>
+            <p> contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(button);</p>
+            <p> button.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              JOptionPane.showInternalMessageDialog(<br>
+              button, // parentComponent<br>
+              &quot;Break Time ...&quot;, // message<br>
+              &quot;Reminder!&quot;, // title<br>
+              JOptionPane.INFORMATION_MESSAGE); // messageType<br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 14.3.2 用JOptionPane静态方法创建对话框</p>
+            <p>&nbsp;</p>
+            <p> 14.3.3 消息对话框</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例14-6 显示具有不同消息类型的消息对话框</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              private JButton button = new JButton(&quot;show dialog ...&quot;);</p>
+            <p> private String title = &quot;dialog title&quot;;<br>
+              private String message = &quot;information&quot;;<br>
+              private int messageType = JOptionPane.INFORMATION_MESSAGE;<br>
+              private String messages[] = {<br>
+              &quot;information&quot;, &quot;error&quot;, &quot;warning&quot;, 
+              &quot;question&quot;, &quot;plain&quot;<br>
+              };</p>
+            <p> public Test() {<br>
+              Container contentPane = getContentPane();<br>
+              JPanel controlPanel = new ControlPanel(this);</p>
+            <p> contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(controlPanel);<br>
+              contentPane.add(button);</p>
+            <p> button.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              JOptionPane.showMessageDialog(<br>
+              button, // parentComponent<br>
+              message, // message<br>
+              title, // title<br>
+              messageType);<br>
+              }<br>
+              });<br>
+              }<br>
+              public void setMessageType(int messageType) {<br>
+              this.messageType = messageType;</p>
+            <p> switch(messageType) {<br>
+              case JOptionPane.INFORMATION_MESSAGE:<br>
+              message = messages[0]; <br>
+              break;<br>
+              case JOptionPane.ERROR_MESSAGE:<br>
+              message = messages[1]; <br>
+              break;<br>
+              case JOptionPane.WARNING_MESSAGE:<br>
+              message = messages[2]; <br>
+              break;<br>
+              case JOptionPane.QUESTION_MESSAGE:<br>
+              message = messages[3]; <br>
+              break;<br>
+              case JOptionPane.PLAIN_MESSAGE:<br>
+              message = messages[4]; <br>
+              break;<br>
+              }<br>
+              }<br>
+              }<br>
+              class ControlPanel extends JPanel { <br>
+              private JComboBox messageTypes = new JComboBox();<br>
+              private int[] typeValues = {<br>
+              JOptionPane.INFORMATION_MESSAGE,<br>
+              JOptionPane.ERROR_MESSAGE,<br>
+              JOptionPane.WARNING_MESSAGE,<br>
+              JOptionPane.QUESTION_MESSAGE,<br>
+              JOptionPane.PLAIN_MESSAGE,<br>
+              };<br>
+              private String[] typeNames = {<br>
+              &quot;JOptionPane.INFORMATION_MESSAGE&quot;,<br>
+              &quot;JOptionPane.ERROR_MESSAGE&quot;,<br>
+              &quot;JOptionPane.WARNING_MESSAGE&quot;,<br>
+              &quot;JOptionPane.QUESTION_MESSAGE&quot;,<br>
+              &quot;JOptionPane.PLAIN_MESSAGE&quot;,<br>
+              };</p>
+            <p> public ControlPanel(final Test applet) {<br>
+              add(messageTypes);</p>
+            <p> for(int i=0; i &lt; typeNames.length; ++i) {<br>
+              messageTypes.addItem(typeNames[i]);<br>
+              }<br>
+              messageTypes.addItemListener(new ItemListener() {<br>
+              public void itemStateChanged(ItemEvent e) {<br>
+              String s = (String)messageTypes.getSelectedItem();<br>
+              int type;</p>
+            <p> for(int i=0; i &lt; typeNames.length; ++i) {<br>
+              if(s.equals(typeNames[i]))<br>
+              applet.setMessageType(typeValues[i]);<br>
+              }<br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p align="center"><b>例14-7 替换消息对话框的缺省图标</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              private JButton button = new JButton(&quot;show dialog ...&quot;);</p>
+            <p> private String title = &quot;Reminder!&quot;;<br>
+              private String message = &quot;Dinner time&quot;;</p>
+            <p> public Test() {<br>
+              Container contentPane = getContentPane();</p>
+            <p> contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(button);</p>
+            <p> button.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              JOptionPane.showMessageDialog(<br>
+              button, // parentComponent<br>
+              message, // message<br>
+              title, // title<br>
+              JOptionPane.INFORMATION_MESSAGE,// messageType<br>
+              new ImageIcon(&quot;dining.gif&quot;)); // icon <br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p>&nbsp;</p>
+            <p> 14.3.4 确认对话框</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例14-8 使用确认对话框</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              private JButton button = new JButton(&quot;show dialog ...&quot;);</p>
+            <p> private String title = &quot;Unsaved Changes&quot;;<br>
+              private String message[] = {<br>
+              &quot;Unsaved Changes in File: dialog.fm&quot;,<br>
+              &quot; &quot;,<br>
+              &quot;Save before closing?&quot;,<br>
+              &quot; &quot;,<br>
+              };</p>
+            <p> public Test() {<br>
+              Container contentPane = getContentPane();</p>
+            <p> contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(button);</p>
+            <p> button.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              int result = JOptionPane.showConfirmDialog(<br>
+              button, // parentComponent<br>
+              message, // message<br>
+              title, // title<br>
+              JOptionPane.YES_NO_CANCEL_OPTION, // optionType<br>
+              JOptionPane.WARNING_MESSAGE, // messageType<br>
+              new ImageIcon(&quot;punch.gif&quot;)); // icon</p>
+            <p> switch(result) {<br>
+              case JOptionPane.CLOSED_OPTION: <br>
+              showStatus(&quot;Dialog Closed&quot;);<br>
+              break;<br>
+              case JOptionPane.YES_OPTION: <br>
+              showStatus(&quot;Yes&quot;);<br>
+              break;<br>
+              case JOptionPane.NO_OPTION: <br>
+              showStatus(&quot;No&quot;);<br>
+              break;<br>
+              case JOptionPane.CANCEL_OPTION:<br>
+              showStatus(&quot;Cancel&quot;);<br>
+              break;<br>
+              }<br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 14.3.5 输入对话框</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例14-9 有文本域的输入对话框</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              private JButton button = new JButton(&quot;show dialog ...&quot;);<br>
+              private String message = &quot;Please Enter Your Name&quot;;</p>
+            <p> public Test() {<br>
+              Container contentPane = getContentPane();</p>
+            <p> contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(button);</p>
+            <p> button.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              String s = JOptionPane.showInputDialog(message);</p>
+            <p> if(s == null)<br>
+              showStatus(&quot;cancel button activated&quot;);<br>
+              else<br>
+              showStatus(&quot;Name: &quot; + s);<br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p align="center"><b>例14-10 有组合框的输入对话框</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              private JButton button = new JButton(&quot;show dialog ...&quot;);</p>
+            <p> private String title = &quot;Animal Selection Dialog&quot;;<br>
+              private String message = &quot;Select your favorite animal:&quot;;<br>
+              private String[] selectionValues = {<br>
+              &quot;dog&quot;, &quot;cat&quot;, &quot;mouse&quot;, &quot;goat&quot;, 
+              &quot;koala&quot;, &quot;rabbit&quot;,<br>
+              };</p>
+            <p> public Test() {<br>
+              Container contentPane = getContentPane();</p>
+            <p> contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(button);</p>
+            <p> button.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              String s = (String)JOptionPane.showInputDialog(<br>
+              Test.this, // parentComponent<br>
+              message, // message<br>
+              title, // title<br>
+              JOptionPane.QUESTION_MESSAGE, // messageType<br>
+              null, // icon<br>
+              selectionValues, // selectionValues<br>
+              selectionValues[3]); // initialValue</p>
+            <p> if(s == null)<br>
+              showStatus(&quot;cancel button activated&quot;);<br>
+              else<br>
+              showStatus(s);<br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p align="center"><b>例14-11 带列表的输入对话框</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              private JButton button = new JButton(&quot;show dialog ...&quot;);</p>
+            <p> private String title = &quot;Animal Selection Dialog&quot;;<br>
+              private String message = &quot;Select your favorite animal:&quot;;<br>
+              private Object[] selectionValues = {<br>
+              &quot;dog&quot;, &quot;cat&quot;, &quot;mouse&quot;, &quot;goat&quot;, 
+              &quot;koala&quot;, &quot;rabbit&quot;,<br>
+              &quot;mouse&quot;, &quot;horse&quot;, &quot;kangaroo&quot;, &quot;iguana&quot;, 
+              &quot;tiger&quot;, &quot;lion&quot;,<br>
+              &quot;eagle&quot;, &quot;vulture&quot;, &quot;wolf&quot;, &quot;coyote&quot;, 
+              &quot;owl&quot;, &quot;snake&quot;,<br>
+              &quot;shrew&quot;, &quot;zebra&quot;, &quot;wildebeast&quot;<br>
+              };</p>
+            <p> public Test() {<br>
+              Container contentPane = getContentPane();</p>
+            <p> contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(button);</p>
+            <p> button.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              String s = (String)JOptionPane.showInputDialog(<br>
+              Test.this, // parentComponent<br>
+              message, // message<br>
+              title, // title<br>
+              JOptionPane.QUESTION_MESSAGE, // messageType<br>
+              null, // icon<br>
+              selectionValues, // selectionValues<br>
+              selectionValues[3]); // initialValue</p>
+            <p> if(s == null)<br>
+              showStatus(&quot;cancel button activated&quot;);<br>
+              else<br>
+              showStatus(s);<br>
+              }<br>
+              });<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p>&nbsp;</p>
+            <p> 14.3.6 选项对话框</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例14-12 使用一个选项对话框</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              private JButton button = new JButton(&quot;show dialog ...&quot;);<br>
+              private JButton applyButton = new JButton(&quot;Apply&quot;);<br>
+              private RotatePanel rotatePanel = new RotatePanel();<br>
+              private String title = &quot;Rotate&quot;;<br>
+              private Object[] buttonRowObjects = new Object[] {<br>
+              &quot;Ok&quot;, <br>
+              applyButton,<br>
+              &quot;Cancel&quot;,<br>
+              };</p>
+            <p> public Test() {<br>
+              Container contentPane = getContentPane();</p>
+            <p> contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(button);</p>
+            <p> applyButton.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              showStatus(rotatePanel.getSelectedAngle() + <br>
+              &quot; degrees&quot;);<br>
+              }<br>
+              });<br>
+              button.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              int value = JOptionPane.showOptionDialog(<br>
+              button, // parentComponent<br>
+              rotatePanel, // message<br>
+              title, // title<br>
+              JOptionPane.DEFAULT_OPTION, // optionType<br>
+              JOptionPane.PLAIN_MESSAGE, // messageType<br>
+              null, // icon<br>
+              buttonRowObjects, // options<br>
+              applyButton); // initialValue </p>
+            <p> switch(value) {<br>
+              case JOptionPane.CLOSED_OPTION:<br>
+              showStatus(<br>
+              &quot;Dialog closed with close box&quot;);<br>
+              break;<br>
+              case JOptionPane.OK_OPTION:<br>
+              showStatus(&quot;Ok button activated: &quot; +<br>
+              rotatePanel.getSelectedAngle() +<br>
+              &quot; degrees&quot;);<br>
+              break;<br>
+              case JOptionPane.CANCEL_OPTION:<br>
+              showStatus(&quot;Cancel button activated&quot;);<br>
+              break;<br>
+              }<br>
+              }<br>
+              });<br>
+              }<br>
+              }<br>
+              class RotatePanel extends JPanel { <br>
+              private ButtonGroup group = new ButtonGroup();</p>
+            <p> private JRadioButton[] buttons = {<br>
+              new JRadioButton(&quot;0&quot;),<br>
+              new JRadioButton(&quot;90&quot;),<br>
+              new JRadioButton(&quot;180&quot;),<br>
+              new JRadioButton(&quot;270&quot;),<br>
+              };<br>
+              public RotatePanel() {<br>
+              setBorder(BorderFactory.createTitledBorder(&quot;Angle:&quot;));</p>
+            <p> for(int i=0; i &lt; buttons.length; ++i) {<br>
+              if(i ==0)<br>
+              buttons[i].setSelected(true);</p>
+            <p> add(buttons[i]);<br>
+              group.add(buttons[i]);<br>
+              }<br>
+              }<br>
+              public String getSelectedAngle() {<br>
+              String rv = null; // rv = return value</p>
+            <p> for(int i=0; i &lt; buttons.length; ++i) {<br>
+              if(buttons[i].isSelected())<br>
+              rv = buttons[i].getText();<br>
+              }<br>
+              return rv;<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 14.3.7 JOptionPane属性</p>
+            <p>&nbsp;</p>
+            <p> 14.3.8 JOptionPane事件</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例14-13 监听从选项窗格激发的 PropertyChangeEvents</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import java.beans.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              private JButton button = new JButton(&quot;show dialog ...&quot;);</p>
+            <p> private String title = &quot;Update References&quot;;<br>
+              private JPanel messagePanel = new JPanel();<br>
+              private JCheckBox[] checkBoxes = {<br>
+              new JCheckBox(&quot;All Cross-References&quot;),<br>
+              new JCheckBox(&quot;Text Insets Marked for Manual Update&quot;),<br>
+              new JCheckBox(&quot;Text Insets Marked for Automatic Update&quot;),<br>
+              new JCheckBox(&quot;OLE Links Marked for Manual Update&quot;),<br>
+              new JCheckBox(&quot;OLE Links Marked for Automatic Update&quot;),<br>
+              };</p>
+            <p> public Test() {<br>
+              Container contentPane = getContentPane();</p>
+            <p> messagePanel.setBorder(<br>
+              BorderFactory.createTitledBorder(&quot;Update:&quot;));</p>
+            <p> messagePanel.setLayout(new BoxLayout(messagePanel, <br>
+              BoxLayout.Y_AXIS));</p>
+            <p> for(int i=0; i &lt; checkBoxes.length; ++i)<br>
+              messagePanel.add(checkBoxes[i]);</p>
+            <p> final JOptionPane pane = new JOptionPane(<br>
+              messagePanel, // message<br>
+              JOptionPane.QUESTION_MESSAGE, // messageType<br>
+              JOptionPane.OK_CANCEL_OPTION); // optionType</p>
+            <p> contentPane.setLayout(new FlowLayout());<br>
+              contentPane.add(button);</p>
+            <p> button.addActionListener(new ActionListener() {<br>
+              public void actionPerformed(ActionEvent e) {<br>
+              JDialog dialog = pane.createDialog(<br>
+              Test.this, // parentComponent<br>
+              title); // title</p>
+            <p> dialog.show(); // blocks</p>
+            <p> Integer value = (Integer)pane.getValue();</p>
+            <p> if(value.intValue() == JOptionPane.OK_OPTION)<br>
+              updateReferences();<br>
+              else<br>
+              showStatus(&quot;dialog canceled&quot;);<br>
+              }<br>
+              });<br>
+              pane.addPropertyChangeListener(<br>
+              new PropertyChangeListener() {<br>
+              public void propertyChange(PropertyChangeEvent e) {<br>
+              String name = e.getPropertyName();</p>
+            <p> if(name.equals(JOptionPane.VALUE_PROPERTY))<br>
+              System.out.println(name + &quot;:&quot; + e.getNewValue());<br>
+              }<br>
+              });<br>
+              }<br>
+              private void updateReferences() {<br>
+              showStatus(&quot;updating references&quot;);<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 14.3.9 JOptionPane类总结</p>
+            <p>&nbsp;</p>
+            <p align="center"><b>例14-14 构造各种配置的选项窗格</b></p>
+            <hr noshade size="1">
+            import java.awt.*;<br>
+            import java.awt.event.*;<br>
+            import javax.swing.*;
+            <p>public class Test extends JApplet {<br>
+              public Test() {<br>
+              Container contentPane = getContentPane();<br>
+              Object[] objects = new Object[] {<br>
+              new JLabel(&quot;JOptionPane(Object message)&quot;,<br>
+              new ImageIcon(&quot;beach_umbrella.gif&quot;),<br>
+              JLabel.LEFT),<br>
+              new JCheckBox(&quot;check me out&quot;),<br>
+              new VerboseObject(),<br>
+              };<br>
+              Object[] objects2 = new Object[] {<br>
+              &quot;JOptionPane(Object message, int messageType)&quot;,<br>
+              &quot;messageType = JOptionPane.INFORMATION_MESSAGE&quot;,<br>
+              };<br>
+              Object[] objects3 = new Object[] {<br>
+              &quot;JOptionPane(Object message, &quot; +<br>
+              &quot;int messageType, int optionsType)&quot;,<br>
+              &quot;messageType = JOptionPane.QUESTION_MESSAGE&quot;,<br>
+              &quot;optionType = JOptionPane.YES_NO_CANCEL_OPTION&quot;,<br>
+              };<br>
+              Object[] objects4 = new Object[] {<br>
+              &quot;JOptionPane(Object message, &quot; +<br>
+              &quot;int messageType, int optionsType, Icon icon)&quot;,<br>
+              &quot;messageType = JOptionPane.WARNING_MESSAGE&quot;,<br>
+              &quot;optionType = JOptionPane.OK_CANCEL_OPTION&quot;,<br>
+              &quot;icon = new ImageIcon(\&quot;ballot_box.gif\&quot;)&quot;,<br>
+              };<br>
+              Object[] objects5 = new Object[] {<br>
+              &quot;JOptionPane(Object message, &quot; +<br>
+              &quot;int messageType, int optionsType, Icon icon)&quot;,<br>
+              &quot;messageType = JOptionPane.ERROR_MESSAGE&quot;,<br>
+              &quot;optionType = JOptionPane.OK_CANCEL_OPTION&quot;,<br>
+              &quot;icon = null&quot;,<br>
+              &quot;options = \&quot;button 1\&quot;, \&quot;button 2\&quot;, 
+              &quot; +<br>
+              &quot;new JButton(\&quot;button 3\&quot;)&quot;,<br>
+              };</p>
+            <p> JOptionPane defaultPane = new JOptionPane();</p>
+            <p> JOptionPane messagePane = new JOptionPane(<br>
+              &quot;JOptionPane(Object message)&quot;);</p>
+            <p> JOptionPane objectPane = new JOptionPane(objects);</p>
+            <p> JOptionPane messageTypePane = new JOptionPane(<br>
+              objects2, JOptionPane.INFORMATION_MESSAGE);</p>
+            <p> JOptionPane messageAndOptionTypePane = new JOptionPane(<br>
+              objects3, JOptionPane.QUESTION_MESSAGE,<br>
+              JOptionPane.YES_NO_CANCEL_OPTION);</p>
+            <p> JOptionPane messageOptionAndIconPane = new JOptionPane(<br>
+              objects4, JOptionPane.WARNING_MESSAGE,<br>
+              JOptionPane.OK_CANCEL_OPTION,<br>
+              new ImageIcon(&quot;ballot_box.gif&quot;));</p>
+            <p> Object[] options = {<br>
+              &quot;button 1&quot;, &quot;button 2&quot;, new JButton(&quot;button 
+              3&quot;),<br>
+              };<br>
+              JOptionPane messageOptionIconAndOptionsPane = <br>
+              new JOptionPane(<br>
+              objects5, JOptionPane.ERROR_MESSAGE,<br>
+              JOptionPane.OK_CANCEL_OPTION,<br>
+              null,<br>
+              options,<br>
+              options[2]);</p>
+            <p> contentPane.setLayout(new BoxLayout(contentPane, <br>
+              BoxLayout.Y_AXIS));<br>
+              contentPane.add(defaultPane);<br>
+              contentPane.add(new JSeparator());<br>
+              contentPane.add(messagePane);<br>
+              contentPane.add(new JSeparator());<br>
+              contentPane.add(objectPane);<br>
+              contentPane.add(new JSeparator());<br>
+              contentPane.add(messageTypePane);<br>
+              contentPane.add(new JSeparator());<br>
+              contentPane.add(messageAndOptionTypePane);<br>
+              contentPane.add(new JSeparator());<br>
+              contentPane.add(messageOptionAndIconPane);<br>
+              contentPane.add(new JSeparator());<br>
+              contentPane.add(messageOptionIconAndOptionsPane);<br>
+              }<br>
+              }<br>
+              class VerboseObject extends Object { <br>
+              public String toString() {<br>
+              return &quot;This is what you'll see in the option pane&quot;;<br>
+              }<br>
+              }</p>
+            <hr size="1" noshade>
+            <p> 14.3.10 AWT兼容</p>
+            <p>&nbsp;</p>
+            <p> 14.4 本章回顾</p>
+            <p>&nbsp;</p>
+            <p> [<a href="index.html" target="_self">目录</a>][<a href="s13.htm">上一页</a>][<a href="s15.htm">下一页</a>](飒龙收藏/2002.5.18) 
+            </p>
+            <p>&nbsp; </p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </td>
+  </tr>
+</tbody>
+</table>
+<script language="javascript">bottomprint()</script>
+</body>
+</html>

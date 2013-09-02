@@ -1,0 +1,192 @@
+什么是泛型
+
+　　一种类型占位符，或称之为类型参数。我们知道在一个方法中，一个变量的值可以作为参数，但其实这个变量的类型本身也可以作为参数。泛型允许我们在调用的时候再指定这个类型参数是什么。在.net中，泛型能够给我们带来的两个明显好处是——类型安全和减少装箱、拆箱。
+
+　　类型安全和装箱、拆箱
+
+　　作为一种类型参数，泛型很容易给我们带来类型安全。而在以前，在.net1.1中我们要实现类型安全可以这样做 ：
+
+//假设你有一个人员集合
+
+public class Person{
+　private string _name;
+　public string Name
+　{ get { return _name; }
+　set { _name = value;}}
+}
+
+//假设你有一个人员集合
+
+public class PersonCollection : IList
+{
+　...
+　private ArrayList _Persons = new ArrayList();
+　public Person this[int index]
+　{ get { return (Person)_Persons[index]; } }
+
+　public int Add(Person item)
+　{ _Persons.Add(item);
+　　return _Persons.Count - 1;}
+
+　public void Remove(Person item)
+　{ _Persons.Remove(item); }
+
+　object IList.this[int index]
+　{ get { return _Persons[index]; }
+　set { _Persons[index] = (Person)value; }}
+
+　int IList.Add(object item)
+　{ return Add((Person)item); }
+
+　void IList.Remove(object item)
+　{ Remove((Person)item); }
+　　...
+} 
+
+　　上述代码主要采用了显性接口成员（explicit interface member implementation）技术，能够实现类型安全，但问题是：
+
+　　·产生重复代码。假设你还有一个Dog类集合，其功能相同，但为了类型安全，你必须要Copy一份代码，这样便使程序重复代码增加，当面对变化的时候，更难维护。
+
+public class DogCollection : IList
+{
+　...
+　private ArrayList _Dogs = new ArrayList();
+　public Dog this[int index]
+　{ get { return (Dog)_Dogs[index]; } }
+
+　public int Add(Dog item)
+　{ _Dogs.Add(item);
+　　return _Dogs.Count - 1;}
+
+　public void Remove(Dog item)
+　{ _Dogs.Remove(item); }
+
+　object IList.this[int index]
+　{ get { return _Dogs[index]; }
+　set { _Dogs[index] = (Dog)value; }}
+
+　int IList.Add(object item)
+　{ return Add((Dog)item); }
+
+　void IList.Remove(object item)
+　{ Remove((Dog)item); }
+　　...
+} 
+
+　　如果在泛型中，要实现类型安全，你不需要拷贝任何代码，你仅仅需要这样做：
+
+List<Person> persons = new List<Person>();
+persons.Add(new Person());
+Person person = persons[0];
+List<Dog> dogs = new List<Dog>();
+dogs.Add(new Dog());
+Dog dog = dogs[0];
+ 
+
+　　·对于值类型的对象还是需要额外的装箱、拆箱。其实对于传统的集合来说，只要其中的包含的内容涉及到值类型，就不可避免需要装箱、拆箱。请看下面的例子。
+
+public class IntCollection : IList
+{
+　...
+　private ArrayList _Ints = new ArrayList();
+　public int this[int index]
+　{ get { return (int)_Ints[index]; } }
+
+　public int Add(int item)
+　{ _Ints.Add(item);
+　　return _Ints.Count - 1;}
+
+　public void Remove(int item)
+　{ _Ints.Remove(item); }
+　　object IList.this[int index]
+　　{ get { return _Ints[index]; }
+　　set { _Ints[index] = (int)value; }}
+
+　int IList.Add(object item)
+　{ return Add((int)item); }
+
+　void IList.Remove(object item)
+　{ Remove((int)item); }
+　　...
+　}
+
+　static void Main(string[] args)
+　{ IntCollection ints = new IntCollection(); 
+　　ints.Add(5); //装箱 
+　　int i = ints[0]; //拆箱
+　} 
+
+　　少量装箱、拆箱对性能的影响不大，但是如果集合的数据量非常大，对性能还是有一定影响的。泛型能够避免对值类型的装箱、拆箱操作，您可以通过分析编译后的IL得到印证。
+
+static void Main()
+
+{
+　List<int> ints = new List<int>();
+　ints.Add(5); //不用装箱
+　int i = ints[0]; //不用拆箱
+} 
+
+　　泛型的实现
+
+　　·泛型方法
+
+static void Swap<T>(ref T a, ref T b)
+{ Console.WriteLine("You sent the Swap() method a {0}",
+　typeof(T));
+　T temp;
+　temp = a;
+　a = b;
+　b = temp;
+} 
+
+　　·泛型类、结构
+
+public class Point<T>
+{
+　private T _x;
+　private T _y;
+　public T X
+　{ get { return _x; }
+　　set { _x = value; }}
+
+　public T Y
+　{ get { return _y; }
+　　set { _y = value; }}
+
+　public override string ToString()
+　{ return string.Format("[{0}, {1}]", _x, _y); }
+} 
+
+　　泛型的Where
+
+　　泛型的Where能够对类型参数作出限定。有以下几种方式。
+
+　　·where T : struct 限制类型参数T必须继承自System.ValueType。
+　　
+　　·where T : class 限制类型参数T必须是引用类型，也就是不能继承自System.ValueType。
+
+　　·where T : new() 限制类型参数T必须有一个缺省的构造函数
+
+　　·where T : NameOfClass 限制类型参数T必须继承自某个类或实现某个接口。
+
+　　以上这些限定可以组合使用，比如： public class Point<T> where T : class, IComparable, new()
+
+　　泛型的机制
+
+　　·机制：
+
+　　C#泛型代码在被编译为IL代码和无数据时，采用特殊的占位符来表示泛型类型，并用专有的IL指令支持泛型操作。而真正的泛型实例化工作以"on-demand"的方式，发生在JIT编译时。
+
+　　·编译机制：
+
+　　1. 第一轮编译时，编译器只为Stack<T>(栈算法)类型产生“泛型版”的IL代码与元数据-----并不进行泛型类型的实例化，T在中间只充当占位符
+
+　　2. JIT编译时，当JIT编译器第一次遇到Stack<int>时，将用int替换“泛型版”IL代码与元数据中的T---进行泛型类型的实例化。CLR为所有类型参数为“引用类型”的泛型类型产生同一份代码；但如果类型参数为“值类型”，对每一个不同的“值类型”，CLR将为其产生一份独立的代码。
+
+　　泛型的一些问题
+
+　　·不支持操作符重载。我只知道这么多了
+
+　　范型的意义
+
+　　泛型的意义何在？类型安全和减少装箱、拆箱并不是泛型的意义，而是泛型带来的两个好处而已（或许在.net泛型中，这是最明显的好处了）。泛型的意义在于——把类型作为参数，它实现了代码之间的很好的横向联系，我们知道继承为代码提供了一种从上往下的纵向联系，但泛型提供了方便的横向联系（从某种程度上说，它和AOP在思想上有相通之处）。在PersonCollection例子中，我们知道Add()方法和Remove()方法的参数类型相同，但我们明确无法告诉我们的程序这一点，泛型提供了一种机制，让程序知道这些。道理虽然简单，但这样的机制或许能给我们的程序带来一些深远的变化吧。
