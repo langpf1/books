@@ -1,75 +1,22 @@
-Êı¾İ¿âĞÅÏ¢£º 
-type : sqlserver2005
-host:  20.10.80.128
-databaseName: uap65_design
-u/p:   sa/uapbd
-============================================
-65»ù×¼¿â:
-===========================================
-Êı¾İ¿âĞÅÏ¢£º 
-type : sqlserver2005
-host:  20.10.80.128
-databaseName: uap65_jzk
-u/p:   sa/uapbd
-################################################
-v65»ù×¼¿âdesignÊı¾İÔ´£º
-ae_v65_design/1@ora11g_20.10.80.165
-³¬¼¶¹ÜÀíÔ±£ºsuper 
-¹ÜÀíÔ±£º1
-¼¯ÍÅÕËºÅ£ºadmin
-ÃÜÂë£ºufsoft*123
-ÆÕÍ¨ÕËºÅ£ºdev1~6;ae_rdi,ae_olap,ae_smart,ae_dm
-ÃÜÂë:ae1234
------------------------------------
-foodmartÊı¾İÔ´£ºae_v65_foodmart/1@ora11g_20.10.80.165
-#############################################
-v65²âÊÔ¿âdesignÊı¾İÔ´£º
-ae_design/1@ora11g_20.10.80.165
-³¬¼¶¹ÜÀíÔ±£ºsuper 
-¹ÜÀíÔ±£º1
-¼¯ÍÅÕËºÅ£ºadmin
-ÃÜÂë£ºufsoft*123
-ÆÕÍ¨ÕËºÅ£ºdev1~6;ae_rdi,ae_olap,ae_smart,ae_dm
-ÃÜÂë:ae1234
-##############################################
-v63»ù×¼¿âdesignÊı¾İÔ´£º
-designÊı¾İÔ´£ºae_65_base/1@ora11g_20.10.130.235 
-³¬¼¶¹ÜÀíÔ±ÕËºÅ£ºsuper
-¹ÜÀíÔ±ÕËºÅ:1
-¼¯ÍÅ¹ÜÀíÔ±ÕËºÅ:admin
-ÃÜÂë£ºufsoft*123 
-ÆÕÍ¨ÕËºÅ£ºdev1~10
-ÃÜÂë£ºae1234
-##################################################
-zior_cube  cubemode PropertyTableModel CubeModelDesigner SchemerTreeModel 
-#############################################
-chenkund ±ÜÃâdoubleÏà¼õÎó²î
+chenkund é¿å…doubleç›¸å‡è¯¯å·®
 //        return v0 - v1;
         BigDecimal b0 = new BigDecimal(Double.toString(v0));  
         BigDecimal b1 = new BigDecimal(Double.toString(v1));
         return b0.subtract(b1).doubleValue();
 #############################################
-shell±à³ÌÄÜÁ¦¡¢ÊìÏ¤makefile±àĞ´
-ÍøÂç±à³ÌÄÜÁ¦£ºÊìÏ¤TCP/IP£¬Socket,¶àÏß³Ì¡£
+shellç¼–ç¨‹èƒ½åŠ›ã€ç†Ÿæ‚‰makefileç¼–å†™
+ç½‘ç»œç¼–ç¨‹èƒ½åŠ›ï¼šç†Ÿæ‚‰TCP/IPï¼ŒSocket,å¤šçº¿ç¨‹ã€‚
 PHP CSS JS mosh
 #############################################
-ÈçºÎÔÚeclipse console¿ØÖÆÌ¨Êä³öSQLĞÅÏ¢
-\NCHOME\ierp\bin   logger-config.properties   sql.level=ERROR¡ª¡ª>sql.level=DEBUG 
+å¦‚ä½•åœ¨eclipse consoleæ§åˆ¶å°è¾“å‡ºSQLä¿¡æ¯
+\NCHOME\ierp\bin   logger-config.properties   sql.level=ERRORâ€”â€”>sql.level=DEBUG 
 #############################################
-É¾³ıC:/TempÎÄ¼ş¼Ğ£¬²ÅÄÜÅÜant½Å±¾
+åˆ é™¤C:/Tempæ–‡ä»¶å¤¹ï¼Œæ‰èƒ½è·‘antè„šæœ¬
 #############################################
 ITML  ETL
 #############################################
 rdi start   rdi stop    > 111.log  echo %RDI_HOME% 
-ĞŞ¸Ärdi.batÎÄ¼şÖĞµÄÄÚÈİ£º-classpath %RDI_CLASSPATH% Îª£º-classpath "%RDI_CLASSPATH%"
+ä¿®æ”¹rdi.batæ–‡ä»¶ä¸­çš„å†…å®¹ï¼š-classpath %RDI_CLASSPATH% ä¸ºï¼š-classpath "%RDI_CLASSPATH%"
 #####################################################
-testNG¹Ù·½²Ö¿âµØÖ·£º
+testNGå®˜æ–¹ä»“åº“åœ°å€ï¼š
 https://github.com/cbeust/testng.git
-###############################################
-Ô°ÇøÍøÏÂÔØÈí¼ş£º
-\\ufnas1\cdserver 
-###############################################
-    µØÖ·£º20.10.130.40
-    ¶Ë¿Ú£º21
-    ÕÊºÅ£ºaeshare
-    ÃÜÂë£ºae_share
